@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Transient Sample</title>
+  <meta name="author" content="sample" />
+  <meta name="description" content="TransientWidget sample: open another app as a window, read the passed values" />
+  <meta name="autoRefresh" content="0" />
+
+  <link rel="stylesheet" type="text/css" href="../c/UWA/assets/css/standalone.css" />
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <script type="text/javascript" src="../c/UWA/js/UWA_Standalone_Alone.js"></script>
+
+  <style type="text/css">
+    .ts-page { padding: 12px; font-family: sans-serif; font-size: 13px; }
+    .ts-page h3 { margin: 12px 0 6px; font-size: 14px; }
+    .ts-row { display: flex; gap: 6px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+    .ts-row label { width: 90px; color: #555; }
+    .ts-row textarea { width: 320px; height: 60px; font: 12px monospace; }
+    .ts-received { border: 1px solid #d1d4d4; background: #fafafa; padding: 6px; font: 12px monospace; white-space: pre-wrap; }
+    .ts-log { height: 140px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; }
+  </style>
+
+  <widget:preferences>
+    <widget:preference name="sampleObjectId" type="hidden" defaultValue=""></widget:preference>
+    <widget:preference name="sampleMessage" type="hidden" defaultValue=""></widget:preference>
+  </widget:preferences>
+
+  <script type="text/javascript">
+  //<![CDATA[
+    require([
+      'UWA/Core',
+      'DS/TransientWidget/TransientWidget',
+      'DS/Controls/Button',
+      'DS/Controls/LineEditor',
+      'DS/Controls/ComboBox'
+    ], function (UWA, TransientWidget, Button, LineEditor, ComboBox) {
+      'use strict';
+
+      var logEl;
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      function row(parent, labelText) {
+        var el = UWA.createElement('div', { 'class': 'ts-row' }).inject(parent);
+        if (labelText) { UWA.createElement('label', { text: labelText }).inject(el); }
+        return el;
+      }
+
+      /*
+       * [1] 다른 앱을 창으로 열기
+       *   - showWidget(앱 ID, 제목, 열리는 앱의 설정 값, { mode, width, height })
+       *   - 넘길 키는 열리는 앱이 정합니다. OOTB 호출부에서 같은 앱을 여는 코드를 찾아 맞춥니다.
+       */
+      // #region open
+      function openApp(appId, data, mode, width, height) {
+        var options = { mode: mode };
+        if (mode === 'panel') {
+          options.width = width;
+          options.height = height;
+        }
+        TransientWidget.showWidget(appId, '', data, options);
+      }
+      // #endregion open
+
+      /*
+       * [2] 이미 창 안에서 떠 있으면 창을 또 열지 않고 새 탭으로 엽니다 (E6WCommonUI 의 프로필 보기와 같은 방식).
+       */
+      // #region guard
+      function openAppOrNewTab(appId, data, options, newTabUrl) {
+        if (TransientWidget.isWidgetOpen(widget.data.appId)) {
+          window.open(newTabUrl, '_blank');
+          return;
+        }
+        TransientWidget.showWidget(appId, '', data, options);
+      }
+      // #endregion guard
+
+      /*
+       * [3] 창으로 열린 쪽: 넘어온 값은 위젯 설정 값이므로 widget.getValue 로 읽습니다.
+       *   - 자기 자신이 창(미리보기)으로 열렸는지는 isWidgetOpen() 으로 봅니다 (widget.id 에 preview 가 있는지).
+       */
+      // #region receive
+      function readReceived() {
+        return {
+          isTransient: TransientWidget.isWidgetOpen(),
+          widgetId: widget.id,
+          sampleObjectId: widget.getValue('sampleObjectId'),
+          sampleMessage: widget.getValue('sampleMessage')
+        };
+      }
+      // #endregion receive
+
+      function build() {
+        var page = UWA.createElement('div', { 'class': 'ts-page' });
+
+        UWA.createElement('h3', { text: '받은 값 (이 위젯이 창으로 열렸을 때)' }).inject(page);
+        var receivedEl = UWA.createElement('div', { 'class': 'ts-received' }).inject(page);
+        receivedEl.textContent = JSON.stringify(readReceived(), null, 2);
+
+        UWA.createElement('h3', { text: '다른 앱 열기' }).inject(page);
+        var appIdEditor = new LineEditor({ value: 'ENOLCMT_AP', sizeInCharNumber: 20 });
+        appIdEditor.inject(row(page, '앱 ID'));
+
+        var dataEl = UWA.createElement('textarea').inject(row(page, '넘길 값'));
+        dataEl.value = JSON.stringify({ objectId: '', sampleMessage: 'from TransientSample' });
+
+        var modeCombo = new ComboBox({ elementsList: ['panel', 'transient'], value: 'panel', enableSearchFlag: false });
+        modeCombo.inject(row(page, 'mode'));
+
+        var widthEditor = new LineEditor({ value: '650', sizeInCharNumber: 6 });
+        var heightEditor = new LineEditor({ value: '800', sizeInCharNumber: 6 });
+        var sizeRow = row(page, '크기');
+        widthEditor.inject(sizeRow);
+        heightEditor.inject(sizeRow);
+
+        var actions = row(page);
+        new Button({ label: '열기', emphasize: 'primary', onClick: onOpen }).inject(actions);
+        new Button({ label: '나를 창으로 열기', onClick: onOpenSelf }).inject(actions);
+        new Button({ label: '닫기', onClick: onClose }).inject(actions);
+        new Button({ label: '숨기기', onClick: function () { TransientWidget.hide(); log('hide'); } }).inject(actions);
+        new Button({ label: '보이기', onClick: function () { TransientWidget.show(); log('show'); } }).inject(actions);
+        new Button({ label: '열려 있나', onClick: onCheck }).inject(actions);
+
+        UWA.createElement('h3', { text: '로그' }).inject(page);
+        logEl = UWA.createElement('div', { 'class': 'ts-log' }).inject(page);
+
+        function parseData() {
+          try {
+            return JSON.parse(dataEl.value || '{}');
+          } catch (e) {
+            log('넘길 값이 JSON 이 아닙니다: ' + e.message);
+            return null;
+          }
+        }
+
+        function onOpen() {
+          var data = parseData();
+          if (!data) { return; }
+          openApp(appIdEditor.value, data, modeCombo.value, parseInt(widthEditor.value, 10), parseInt(heightEditor.value, 10));
+          log('showWidget ' + appIdEditor.value + ' ' + modeCombo.value);
+        }
+
+        function onOpenSelf() {
+          var selfAppId = widget.data.appId;
+          if (!selfAppId) {
+            log('widget.data.appId 가 없습니다. 3DDashboard 에 앱으로 등록된 위젯에서만 됩니다.');
+            return;
+          }
+          openAppOrNewTab(selfAppId, { sampleObjectId: 'OBJ-0001', sampleMessage: '창으로 열림' }, { mode: 'panel', width: 600, height: 500 }, window.location.href);
+          log('showWidget (자기 자신) ' + selfAppId);
+        }
+
+        function onClose() {
+          TransientWidget.closeWidget(appIdEditor.value);
+          log('closeWidget ' + appIdEditor.value);
+        }
+
+        function onCheck() {
+          log('isWidgetOpen(' + appIdEditor.value + ') = ' + TransientWidget.isWidgetOpen(appIdEditor.value) + ', isOpen = ' + TransientWidget.isOpen);
+        }
+
+        widget.body.empty();
+        page.inject(widget.body);
+      }
+
+      widget.addEvents({ onLoad: build });
+    });
+  //]]>
+  </script>
+</head>
+<body>
+  <p>Loading...</p>
+</body>
+</html>

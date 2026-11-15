@@ -2,7 +2,7 @@
 
 `DS/Windows/Dialog` 로 제목, 내용, 아래쪽 버튼이 있는 창을 띄웁니다. `modalFlag: true` 면 뒤 화면을 어둡게 가리고 막습니다. 같은 모듈 묶음에 패널(`Panel`)과 창을 담는 틀(`ImmersiveFrame`)이 있습니다.
 
-샘플: [02_dialog.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/02_dialog.html)
+샘플: [02_dialog.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/02_dialog.html) · [04_dialog_grid.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/04_dialog_grid.html) (다이얼로그 안에 DataGridView)
 
 ::: info 근거
 Windows.js 의 Window (publishedProperties, _applyButtons, getDefaultButtonLabel, close, keydown / keyup 처리), Dialog (_applyButtons, _applyCustomButtonsDefinition, _applyCheckboxInfos, _applyModalFlag, _getDefaultPosition), Panel, ImmersiveFrame. CoreBase.js 의 WUXStandardButtonEnum, WUXStandardButtonRoleEnum, WUXCustomButtonRoleEnum. Windows_ko.js 의 번역. 호출부: AuthGenericCommands (AuthGenericDlgProgressbar), DELWebCommonControls (FormV2), CAT3DAnnotationBaseCmds. `e.dsModel.dialog.close()` 111 건. OOTB 패턴: ENXMeetingMgmt (RemoveMeeting, CreateMeetingDialog), ENXDecisionMgmt (RemoveDecision), ENOUserGroupMgmt (RemoveUsersGroup), ENXHistoryUX (HistoryDefaultDialog), ENOCharacteristicsApp (NewDialog). 사용 파일 수(2025): `DS/Windows/Dialog` 148, `DS/Windows/ImmersiveFrame` 134, `DS/UIKIT/Modal` 99, `DS/UIKIT/SuperModal` 83, `DS/TransientWidget/TransientWidget` 54, `UWA/Controls/Overlay` 11, `UWA/Controls/Popup` 10, `UWA/Controls/Lightbox` 10 (UWA 셋은 대부분 UWA 묶음 파일 자신). UIKIT.js 의 Modal / SuperModal 의존 모듈, UWA2/js/Controls/Popup.js, Overlay.js, Lightbox.js
@@ -280,11 +280,36 @@ define('DS/MyApp/View/Dialog/RemoveItems', [
 - 0 건 선택은 다이얼로그를 띄우지 않고 알림 메시지(`level: 'warning'`)로 끝냅니다 ([알림 메시지](/controls/notifications)).
 - 생성 다이얼로그(CreateMeetingDialog, NewDialog)도 같은 틀에 `content` 로 탭이나 폼을 넣습니다.
 
-::: warning OOTB 코드는 ImmersiveFrame 을 정리하지 않습니다
-위 패턴은 열 때마다 `new ImmersiveFrame()` 을 `document.body` 에 붙이고, 다이얼로그를 닫아도 틀은 남겨 둡니다. 따라 만들 때는 위젯에 틀 하나를 만들어 두고 모든 다이얼로그가 같이 씁니다.
+::: warning 열 때마다 만든 ImmersiveFrame 은 남습니다
+위 패턴(RemoveMeeting)은 열 때마다 `new ImmersiveFrame()` 을 `document.body` 에 붙이고, 다이얼로그를 닫아도 틀은 남겨 둡니다. 따라 만들 때는 위젯에 틀 하나를 만들어 두고 모든 다이얼로그가 같이 씁니다 ([샘플 04](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/04_dialog_grid.html) 가 이 방식).
 
-`close` 이벤트 안에서 `immersiveFrame.destroy()` 를 바로 부르지 않습니다. `close()` 는 `close` 이벤트를 낸 뒤 다이얼로그를 `destroy()` 하는데, 틀의 `destroy()` 도 안의 창을 `destroy()` 하므로 다이얼로그가 두 번 정리됩니다.
+ENOSubscriptionMgmt (ViewSubscriptionsDialog) 처럼 `close` 이벤트에서 `immersiveFrame.destroy()` 를 부르는 OOTB 도 있습니다. 다만 `close()` 는 `close` 이벤트를 낸 뒤 다이얼로그를 `destroy()` 하고, 틀의 `destroy()` 도 안의 창을 `destroy()` 하므로 다이얼로그가 두 번 정리됩니다. 문제가 없는지는 확인하지 않았습니다 <Badge type="danger" text="검증 필요" />.
 :::
+
+## 다이얼로그 안에 DataGridView 넣기 <Badge type="tip" text="로컬 실행 확인" />
+
+고르기 창, 목록 보기 창처럼 다이얼로그 안에 그리드를 넣을 때입니다. OOTB 는 ENOSubscriptionMgmt 의 ViewSubscriptionsDialog (구독 목록 그리드 + 툴바) 가 이 형태입니다.
+
+샘플: [04_dialog_grid.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/04_dialog_grid.html) (고르기 창, 찾기 칸 + 그리드)
+
+<<< @/../ControlsSample/04_dialog_grid.html#pick{js}
+
+내용 요소의 CSS 는 아래와 같습니다.
+
+```css
+.dlg-grid-body { position: relative; height: 100%; }
+.dlg-grid-body .grid-area { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+```
+
+- **Dialog 에 `height` 를 꼭 줍니다.** `height` 가 있으면 Dialog 가 내용 영역 높이를 `height - (제목줄 + 버튼 줄)` px 로 정합니다. 기본값 `-1` 이면 내용 영역이 `height: auto` 라서 그리드 높이가 0 이 되어 보이지 않습니다 (Window 의 `_updateContentHeight`).
+- 내용 요소는 `position: relative; height: 100%`, 그리드는 그 안에 넣습니다. 그리드를 담는 요소에 `position` 이 없으면 그리드가 페이지 전체를 덮습니다 ([기본 그리드](/datagridview/getting-started), [자주 틀리는 점](/guide/faq)).
+- `resizableFlag: true` 로 크기를 바꿔도 그리드가 따라 커집니다. 크기를 바꿀 때 Dialog 는 `resize` 이벤트를 냅니다.
+- OOTB 는 크기를 위젯 화면 크기의 80% 로 정합니다: `width` 는 `widget.getViewportDimensions().width * 0.8` (800 이 넘으면 810), `height` 는 `widget.getViewportDimensions().height * 0.8`, `minWidth: 675`, `minHeight: 500`.
+- 선택된 행은 `treeDocument.getSelectedNodes()` 로 읽고, 선택이 바뀔 때 `getXSO().onPostAdd` / `onPostRemove` 에서 `Ok` 버튼의 `disabled` 를 바꿉니다 ([우클릭 메뉴와 선택](/datagridview/context-menu#선택-변경-받기)).
+- 닫을 때 `grid.destroy()` 로 그리드를 정리합니다.
+- 그리드 위에 툴바나 찾기 칸을 두려면 그 줄의 높이를 정해 두고 그리드 영역을 `top` 으로 그만큼 내립니다. OOTB 는 그리드 요소에 `style.top = '40px'` 을 줍니다. 샘플의 `#filter` 범위가 이 형태입니다.
+
+로컬 실행(원본 webapps 를 `npm run samples` 로 띄워 Edge 로 확인)으로 확인한 것: 600 × 400 Dialog 안에 그리드가 높이 335px 로 6행 모두 보임, 선택 전 `선택` 버튼 비활성, 행을 누르면 활성, 누르면 고른 행을 돌려받고 그리드가 정리됨, 찾기 칸에 입력하면 행이 걸러짐.
 
 ## ImmersiveFrame
 

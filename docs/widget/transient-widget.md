@@ -6,6 +6,8 @@
 TransientWidget/TransientWidget.js, Controller/Transient.js, Tool/Mapping.js, Tool/TransientMessaging.js (2025, 2026 모두 난독화되지 않은 원본). 모듈 이름 사용 54 파일. 호출부: ENOChangeActionUX (`ENOWCHA_AP`, `ENOWCHG_AP`), ENORouteMgmt (`ENXROUT_AP`), LifecycleControls (`ENOLCMT_AP`), CollaborativeTasks (`ENXBPPY_AP`), E6WCommonUI / NotifAlert / SocialToolbar (`X3DPRFL_AP`), ENOChgServices (`widget.getValue("TransientCAPid")`). 옵션 집계: `mode: "panel"` 15, `mode: "transient"` 12, `height` 800 / 700, `width` 650 ~ 800
 :::
 
+샘플: [TransientSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TransientSample.html) (다른 앱 열기 / 닫기 / 숨기기, 자기 자신을 창으로 열기, 넘어온 값 읽기). 3DDashboard 에서만 창이 열립니다. 단독 실행에서는 화면만 뜨고 `showWidget` 은 아무 일도 하지 않습니다.
+
 ## 열기
 
 ```js
@@ -70,6 +72,37 @@ showWidget(appId, title, data, options)
 ::: tip 이미 창 안에서 열린 경우
 OOTB(E6WCommonUI 의 프로필 보기)는 자기 앱이 이미 미리보기 창으로 떠 있으면(`isWidgetOpen(widget.data.appId)`) 창을 또 열지 않고 `window.open(주소, '_blank')` 로 새 탭에 엽니다.
 :::
+
+## 예제
+
+### 다른 앱 열기
+
+<<< @/../WidgetSample/TransientSample.html#open{js}
+
+### 창 안에서 또 열지 않기
+
+<<< @/../WidgetSample/TransientSample.html#guard{js}
+
+`widget.data.appId` 는 3DDashboard 에 앱으로 등록된 위젯에서 자기 앱 ID 입니다 (E6WCommonUI 가 같은 값을 씀). 등록하지 않고 Run Your App 으로 연 위젯에서 값이 있는지는 확인하지 않았습니다 <Badge type="danger" text="검증 필요" />.
+
+### 창으로 열린 쪽에서 값 읽기
+
+넘긴 값은 열린 앱의 위젯 설정 값이 됩니다. 받는 위젯은 `widget:preferences` 에 같은 이름의 `hidden` 설정을 정의해 두고 `widget.getValue` 로 읽습니다.
+
+```html
+<widget:preferences>
+  <widget:preference name="sampleObjectId" type="hidden" defaultValue=""></widget:preference>
+  <widget:preference name="sampleMessage" type="hidden" defaultValue=""></widget:preference>
+</widget:preferences>
+```
+
+<<< @/../WidgetSample/TransientSample.html#receive{js}
+
+설정에 정의하지 않은 키도 `getValue` 로 읽히는지는 확인하지 않았습니다 <Badge type="danger" text="검증 필요" />. OOTB 의 `TransientCAPid` 처럼 받는 앱이 키를 정해 두는 것이 안전합니다.
+
+### 내용을 직접 그리는 창이 필요하면
+
+TransientWidget 은 등록된 앱을 여는 것이라 DataGridView 같은 컨트롤을 직접 넣을 수 없습니다. 그리드를 넣은 창은 [다이얼로그 안에 DataGridView 넣기](/controls/dialog#다이얼로그-안에-datagridview-넣기) 를 봅니다.
 
 ## Dialog 와 고르는 기준
 

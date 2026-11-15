@@ -14,6 +14,7 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | --- | --- | --- |
 | 그리드가 보이지 않음 | 그리드 높이 기본값이 `'inherit'` 라 부모 높이를 씀. 부모에 높이를 주거나 `maxVisibleRowCount` 사용 | [기본 그리드](/datagridview/getting-started#_1-화면-준비) |
 | 그리드가 페이지 전체를 덮어 제목, 버튼이 가려짐 | 높이 기본값일 때 그리드는 `position: absolute` 로 놓임. 담는 요소에 `position: relative` 를 줌 | [기본 그리드](/datagridview/getting-started#_1-화면-준비) |
+| 다이얼로그 안 그리드가 안 보임 (높이 0) | Dialog 의 height 기본값 -1 이면 내용 영역이 auto. Dialog 에 height 를 주고 내용 요소에 position: relative, height: 100% | [다이얼로그 안에 DataGridView](/controls/dialog#다이얼로그-안에-datagridview-넣기) |
 | `require` 콜백이 아예 불리지 않음 | `css!` 로 부른 CSS 가 404 면 그 `require` 전체가 실패. 네트워크 탭에서 `.css` 요청 확인 | [css!](/amd/plugins#css) |
 | 불러온 모듈 값이 `undefined` | 파일 안 `define` 이름이 틀려도 오류 없이 `undefined` 가 들어옴 | [define / require](/amd/#define-require-쓰는-법) |
 | 처음 열 때 AMD timeout | `waitSeconds` 는 끝나지 않은 요청 전체에 걸림. `dsRequireWaitSeconds` 를 늘려 확인 | [오류 메시지](/amd/#오류-메시지) |
@@ -89,7 +90,7 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | `el.addEvent('onClick')` 이 안 불림 | 요소는 `'click'`, UWA 클래스와 UIKIT 컨트롤은 `'onClick'` | [DOM 이벤트](/uwa/element#이벤트), [UIKIT](/controls/uikit#공통-사용법) |
 | 다이얼로그 버튼을 눌러도 안 닫힘 | 버튼은 클릭 이벤트만 냄. 핸들러에서 `e.dsModel.dialog.close()` | [버튼](/controls/dialog#버튼-buttons) |
 | 닫은 다이얼로그를 다시 열 수 없음 | 기본은 `close()` 때 `destroy()` 까지. 새로 만들거나 `autoCloseFlag: false` | [닫기와 다시 열기](/controls/dialog#닫기와-다시-열기) |
-| 다이얼로그를 열 때마다 ImmersiveFrame 이 쌓임 | OOTB 패턴은 열 때마다 틀을 만들고 정리하지 않음. 틀 하나를 같이 쓰고, `close` 이벤트 안에서 `frame.destroy()` 하지 않음 | [OOTB 패턴](/controls/dialog#ootb-앱의-다이얼로그-패턴) |
+| 다이얼로그를 열 때마다 ImmersiveFrame 이 쌓임 | 열 때마다 틀을 만들고 정리하지 않는 OOTB 패턴을 따름. 틀 하나를 만들어 같이 씀 | [OOTB 패턴](/controls/dialog#ootb-앱의-다이얼로그-패턴) |
 | `showWidget` 을 불러도 아무것도 안 열림 | 창은 3DDashboard 최상위 창이 그림. 단독 실행에서는 받는 곳이 없음 | [TransientWidget](/widget/transient-widget#동작-방식) |
 | 다른 위젯이 `Events.publish` 를 못 받음 | `Events`, `CSOManager` 는 같은 창 안에서만 하나. 위젯 사이는 PlatformAPI, InterCom, 끌어 놓기 | [어떤 것을 쓰나](/events/#어떤-것을-쓰나) |
 | 구독 함수 일부만 불림 | 구독 함수에서 예외가 나면 나머지는 안 불림. 기본 순서는 나중 구독이 먼저 | [PubSub 주의](/events/pubsub#주의) |
