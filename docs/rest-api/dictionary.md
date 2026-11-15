@@ -167,7 +167,7 @@ FedDictionaryAccessAPI.getNlsOfPropertiesValues(JSON.stringify({
 | `getRangeValues` | `GET 6WVocab/access/PredicateRangeValues?uri=` |
 
 - 헤더는 `Accept-Language` 만 넣고 `SecurityContext` 는 넣지 않습니다 (`RequestUtils.sendRequest` 가 `WAFData.authenticatedRequest` 를 그대로 부름).
-- `getPropertiesForClass` 는 이어 붙인 타입을 한 요청으로 보냅니다. ENOXGridCusto 는 100 개씩 나눠 부릅니다.
+- `getPropertiesForClass` 는 이어 붙인 타입을 한 요청으로 보냅니다. ENOXGridCusto 는 100 개씩 나눠 부릅니다. 이때 목록은 쉼표가 아니라 줄바꿈(`"\n"`)으로 나누고 다시 `"\n"` 으로 이어 넘깁니다 (`ENOXGridCusto.js` `getPropertiesForClass`).
 
 ## 하위 타입 (getTypeInfo)
 
@@ -358,7 +358,7 @@ POST <3DSpace>/resources/v1/modeler/dsfl/metaTypes?tenant=<플랫폼 id>
 | 6W 어휘 요청 주소 | `/resources/6WVocab/access/` | `/resources/6WVocab2/access/` (Vocabularies, 6WPredicates, PredicatesRoots, PredicateRangeValues, PredicatesNLSNames, Vocabulary6WClasses, Elements6WNLSNames) <Badge type="warning" text="2026" /> |
 | `getVocabularyClasses` 요청 | `SpaceClasses?name=` | `VocabularyClasses?name=` |
 | `ds6wg:` 번역 요청 (`FedDictionaryAccess3DSpace.getElementsNLSNames`) | 세 번째 인자가 없으면 `TermsNls`, 있으면 `ElementsNLSNames` (`getResourcesInfo` 의 3DSpace 경로는 늘 `ElementsNLSNames`) | 늘 `ElementsNLSNames` |
-| `PredicatesRaw`, `PredicateValue`, `AttributeNlsValues` | `/resources/6WVocab/access/` | 그대로 |
+| `PredicatesRaw`, `PredicateValue`, `AttributeNlsValues`, `ElementsNLSNames` (`ds6wg:` 번역), `VocabularyClasses` (2025 는 `SpaceClasses`) | `/resources/6WVocab/access/` | 그대로 |
 | `dictionary/getTypeInfo` | 27 회, 18 개 모듈 | 23 회, 19 개 모듈 (DELPPWDicoServices 빠짐, DELWebInfrastructureControls, ENOXCustomTableEditor 더해짐) |
 | `collabServices/attributes/op/read` | 16 회, 13 개 모듈 | 18 회, 15 개 모듈 |
 | `e6w/service/TypeDerivatives` | E6WCommonApps 1 곳 (POST) | 3 곳. XSRCommonComponents 가 GET `$fields=all` 로 `derivatives_NLS` 를 받음 |

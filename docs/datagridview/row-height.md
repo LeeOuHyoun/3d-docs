@@ -50,7 +50,7 @@ var grid = new DataGridView({
 | 키 | 기본값 | 값 | 만든 뒤에 바꾸기 | 설명 |
 | --- | --- | --- | --- | --- |
 | <code>autoRowHeightFlag</code> | <code>false</code> | <code>true &#124; false</code> | <code>grid.layout.setColumnAutoRowHeightFlag(컬럼, true)</code> | 이 컬럼 내용 길이에 맞춰 행 높이 자동 계산 (여러 줄 텍스트 등). getRowHeightFunction 을 직접 넣으면 그쪽이 우선. <code>dataSource</code> 와 <code>virtuallyLoadAllModelItems: true</code> 를 같이 쓰면 지원 안 됨 (예제 6) |
-| <code>allowWrapFlag</code> <Badge type="warning" text="2026" /> | <code>false</code> | <code>true &#124; false</code> | - | 셀 글자 줄바꿈 허용. autoRowHeightFlag 와 같이 쓰면 줄 수만큼 행이 커진다 |
+| <code>wrappableFlag</code> <Badge type="warning" text="2026" /> | <code>false</code> | <code>true &#124; false</code> | <code>grid.layout.setColumnWrap(컬럼, 'wrap' &#124; 'no-wrap')</code> | 셀 글자 줄바꿈 허용. true 면 컨텍스트 메뉴에 "열에서 텍스트 줄 바꿈" 이 생긴다. 줄바꿈을 켜면(`setColumnWrap(컬럼, 'wrap')`) 컬럼의 `useWrappedView` 가 true 가 되고 autoRowHeightFlag 도 같이 켜져 줄 수만큼 행이 커진다. 지금 상태는 <code>getColumnWrap(컬럼)</code>. defaultColumnDef 에 있는 <code>allowWrapFlag</code> 는 어디서도 읽지 않는다 |
 
 ### ③ 그리드 옵션 (그리드 전체 높이)
 

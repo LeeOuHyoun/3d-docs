@@ -5,7 +5,7 @@
 샘플: [01_trigger_register.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TriggerSample/01_trigger_register.mql)
 
 ::: info 근거
-`mql/12.trigger/Trigger_Sample.mql` 와 프로젝트 트리거 정의 파일, `mql/03.policy/Policy_Sample.mql`, OOTB policy 수정 파일(`Product.mql`, `Classification.mql`)의 `print policy` 결과. 코드 쪽: `jpo/emxTriggerManagerBase_mxJPO.java` (생성자의 속성 목록, `mxMain`, `resetCache`), `jpo/emxUtilBase_mxJPO.java` (`getStateNamesFromProperties`), `jpo/emxTriggerValidationBase_mxJPO.java`, `jpo/emxDomainObjectBase_mxJPO.java` (생성자)
+`mql/12.trigger/Trigger_Sample.mql` 와 프로젝트 트리거 정의 파일, `mql/03.policy/Policy_Sample.mql`, OOTB policy 수정 파일(`Product.mql`, `Classification.mql`)의 `print policy` 결과. 코드 쪽: `jpo/emxTriggerManagerBase_mxJPO.java` (생성자의 속성 목록, `mxMain`, `resetCache`), `jpo/emxUtilBase_mxJPO.java` (`getStateNamesFromProperties`), `jpo/emxTriggerValidationBase_mxJPO.java`, `jpo/emxDomainObjectBase_mxJPO.java` (생성자), xerinfra.jar `com.matrixone.apps.cache.TriggerObjectsCache.populateCache` (Active / `Error` 필터, `Float` 키 `TreeMap`)
 :::
 
 ## 1. 설정 객체 만들기
@@ -33,10 +33,10 @@ promote bus 'eService Trigger Program Parameters' 'TypeMyPartDeleteCheck' 'check
 | `eService Method Name` | JPO 메서드. 비우면 `mxMain` |
 | `eService Program Argument 1` ~ `15` | 메서드의 `args[0]` ~ `args[14]`. `${OBJECTID}` 같은 macro 나 고정 문자열. [치환 규칙](/trigger/jpo-args#macro-치환) |
 | `eService Constructor Arguments` | JPO 생성자에 넘길 값. 공백으로 나누고 macro 도 치환함 |
-| `eService Sequence Number` | 실행 순서로 쓰이는 것으로 보입니다. <Badge type="danger" text="검증 필요" /> 프로젝트는 `0`, `1`, `3`, `100` 등 |
+| `eService Sequence Number` | 같은 name 의 설정 객체끼리의 실행 순서. 작은 값부터 실행하고, 값이 겹치면 `0.1` 씩 더해 뒤로 보냄. name 이 다른 설정 객체끼리는 `input` 에 적은 순서를 따름. 프로젝트는 `0`, `1`, `3`, `100` 등 |
 | `eService Target States` | Promote / Demote 때 **다음 state** 가 이 목록에 있을 때만 실행. state 심볼릭 이름, 쉼표 구분 |
-| `eService Error Type` | `Error` / `Warning`. 아래 경고 참고 |
-| `eService Run In Background` | `true` 면 Job 으로 따로 실행하고 결과를 보지 않음 |
+| `eService Error Type` | `Error` / `Warning`. `Error` 인 것만 실행. 아래 경고 참고 |
+| `eService Run In Background` | `true` 면 Job 으로 따로 실행하고 결과를 보지 않음. JPO 일 때만 적용되고, `execute program` 으로 도는 프로그램은 이 값을 무시함 |
 | `eService Program Argument Desc 1` ... | 인자 설명. 템플릿에만 있고 실행에는 쓰지 않음 |
 
 ::: tip 생성자 인자로 객체 지정
@@ -44,7 +44,7 @@ promote bus 'eService Trigger Program Parameters' 'TypeMyPartDeleteCheck' 'check
 :::
 
 ::: warning Error Type 은 Error 로
-이 소스의 `emxTriggerManager` 는 `eService Error Type` 값을 읽기만 하고 실행 판단에는 쓰지 않습니다. 반환값 1 은 값과 상관없이 처리됩니다. 값을 보는 곳은 OOTB 트리거 검증 화면(`Warning` / `Fail` 표시)뿐입니다. 프로젝트 정의 파일은 모두 `Error` 이므로 그대로 따릅니다.
+설정 객체 캐시(`TRIGGEROBJECTS`)는 state 가 `Active` 이고 `eService Error Type` 이 `Error`(대소문자 무시)인 객체만 담습니다. `Warning` 이면 캐시에 들어가지 않아 트리거가 **아예 실행되지 않습니다**. 오류도 나지 않으므로 Check 트리거라면 막고 있다고 착각하기 쉽습니다. OOTB 트리거 검증 화면도 이 값으로 `Warning` / `Fail` 을 표시합니다. 프로젝트 정의 파일은 모두 `Error` 이므로 그대로 따릅니다.
 :::
 
 ### 이름과 revision

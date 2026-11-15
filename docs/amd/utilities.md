@@ -3,7 +3,7 @@
 ENOVIA 화면 컨트롤(WUX)이 같이 쓰는 도우미 모듈입니다. DOM 이벤트 등록, 아이콘, 크기 감지, 로그, 마우스와 터치 이벤트, 키 코드, UUID 를 위젯에서도 그대로 불러 씁니다. webapps 주소, 쿠키, `DS/WebappsUtils/Utils` 는 [WebappsUtils](/amd/webapps-utils), 객체 합치기와 타입 검사(`UWA/Core`, `UWA/Utils`)는 [Core 유틸](/uwa/core) 을 봅니다.
 
 ::: info 근거
-Utilities/Utilities.js (`DS/Utilities/*` 28 개 모듈), Logger/Logger.js (`DS/Logger/Logger`, `DS/Logger/Appenders/Quake`, `GelfHttp`), Core/Core.js (`DS/Core/Core`, `DS/Core/PointerEvents`), ResizeSensor/js/ResizeSensor.js, AmdLoader.js (Logger 의 `logPrefix`), wux.css (`nodeIsRendered`, `iframe.wux-ui-is-resized`). 앱 수는 모듈 문자열이 나오는 webapps 폴더 수 (자기 폴더 제외). 호출 수는 `define` / `require` 의 의존성 위치와 함수 인자 이름을 맞춰 `인자.함수(` 를 센 값 (자기 폴더 제외, 안쪽 함수가 같은 이름을 다시 선언한 곳 제외). 호출부: Controls, DataGridView, CollectionView, Tweakers, CfgBulkTablePresenter, ConfiguratorPanel, ENORouteMgmt, ENOXModelListView, 3DPlay 계열. 2026 은 enovia2026_webapps 의 같은 파일과 비교함
+Utilities/Utilities.js (`DS/Utilities/*` 28 개 모듈, 2026 은 30 개), Logger/Logger.js (`DS/Logger/Logger`, `DS/Logger/Appenders/Quake`, `GelfHttp`), Core/Core.js (`DS/Core/Core`, `DS/Core/PointerEvents`), UWAUtils/UWAUtils.js, ResizeSensor/js/ResizeSensor.js, AmdLoader.js (Logger 의 `logPrefix`), wux.css (`nodeIsRendered`, `iframe.wux-ui-is-resized`). 앱 수는 모듈 문자열이 나오는 webapps 폴더 수 (자기 폴더 제외). 호출 수는 `define` / `require` 의 의존성 위치와 함수 인자 이름을 맞춰 `인자.함수(` 를 센 값 (자기 폴더 제외, 안쪽 함수가 같은 이름을 다시 선언한 곳 제외). 호출부: Controls, DataGridView, CollectionView, Tweakers, CfgBulkTablePresenter, ConfiguratorPanel, ENORouteMgmt, ENOXModelListView, 3DPlay 계열. 2026 은 enovia2026_webapps 의 같은 파일과 비교함
 :::
 
 ## 한눈에
@@ -361,7 +361,7 @@ input.addEventListener('keydown', function (e) {
 
 | 함수 / 속성 | 호출 | 설명 |
 | --- | --- | --- |
-| `WUX.currentLanguage`, `WUX.currentFormatsLanguage` <Badge type="tip" text="2025" /> | 1 / 24 | 화면 언어, 날짜 / 숫자 형식 언어. [언어와 사용자 환경설정](/widget/i18n-preferences) |
+| `WUX.currentLanguage`, `WUX.currentFormatsLanguage` <Badge type="tip" text="2025" /> | 1 / 24 | 화면 언어, 날짜 / 숫자 형식 언어. 2025 전용은 `currentFormatsLanguage` 뿐이고 `currentLanguage` 는 2026 에도 있음. [언어와 사용자 환경설정](/widget/i18n-preferences) |
 | `WUX.onFormatsLanguageChange(fn)` / `offFormatsLanguageChange(fn)` <Badge type="tip" text="2025" /> | 4 / 4 | 형식 언어가 바뀔 때 |
 | `WUX.setLogLevel(n)`, `WUX.log(msg, level?)`, `WUX.warn(msg, level?)` | 0 / 4 / 1 | `level` 이 `n` 이하일 때만 콘솔 출력. 기본 `n` 은 0 이라 출력 없음 |
 | `WUX.enableWUXConsole()`, `getWUXConsole()` | 6 / 6 | 폭 200 px 의 화면 콘솔을 body 에 붙임 |
@@ -386,7 +386,23 @@ input.addEventListener('keydown', function (e) {
 | `KeyboardUtils` | `getKeyCode(이름)` 추가. 키 이름에 맞는 사용자 영역(PUA) 유니코드 글자를 돌려줌 (단축키 표시 글꼴용으로 보임 <Badge type="danger" text="검증 필요" />) |
 | `Debug` | `applyVisualDebug`, `applyCheckerboard` 추가 |
 | 새 모듈 | `DS/Utilities/LanguageUtils`, `DS/Utilities/NumberUtils` ([언어와 사용자 환경설정](/widget/i18n-preferences#_2026-변경)), `DS/Utilities/LoadingUtils` (`loadScripts`, `loadJSFiles`, `loadCSSFiles`) |
-| 옮겨짐 | `DS/Utilities/WUXUWAUtils` → `DS/UWAUtils/WUXUWAUtils` |
+| 옮겨짐 | `DS/Utilities/WUXUWAUtils` → `DS/UWAUtils/WUXUWAUtils`. UWAUtils 폴더는 2025 에도 있었지만 그때 이름은 `DS/UWAUtils/WUXUWAUtils2` (CollectionView, CoreEvents 가 씀)이고 2026 에는 없음 |
 | `DS/Core/Core` | `WUX.currentFormatsLanguage`, `onFormatsLanguageChange` 없어짐 → `WUX.regionalFormatLanguage`, `onRegionalFormatLanguageChange` |
-| 같음 | Logger, PointerEvents (상수와 함수), ResizeSensor (파일 동일), TouchUtils, UUID |
+| `DS/Core/PointerEvents` | 상수와 함수 이름은 같지만 ES `class` 로 다시 쓰였고, 이벤트 대상을 `event.composedPath()[0]` 으로 잡아 Shadow DOM 안의 요소도 찾음 (없으면 `event.target`) |
+| 같음 | Logger, ResizeSensor (파일 동일), TouchUtils, UUID |
+
+2026 `Dom.createElement` 의 `text` 는 `innerText` 로 넣습니다. `textContent` 와 달리 `\n` 이 `<br>` 로 바뀌어 줄이 나뉩니다.
+
+### LoadingUtils <Badge type="warning" text="2026" />
+
+`DS/Utilities/LoadingUtils` 는 AMD 가 아닌 파일을 `document.head` 에 태그로 넣어 불러옵니다. 2026 의 WUXRichText 가 ckeditor5 를 이것으로 부릅니다 ([외부 라이브러리](/amd/libraries)).
+
+| 함수 | 내용 |
+| --- | --- |
+| `loadScripts(urls, callback)` | ES 모듈 파일을 `<script type="module">` 로 읽고, 모듈마다 `import * as module` 하는 작은 스크립트를 붙여 내보낸 값을 받음. 모두 끝나면 `callback([{ url, status: 'success', exports } 또는 { url, status: 'error', error }])` (순서는 `urls` 순서) |
+| `loadJSFiles(urls, callback)` | 일반 스크립트를 **하나씩 차례로** 읽고 끝나면 `callback()`. 이미 `head` 에 같은 주소가 있으면 건너뛰고, 읽는 중이면 그 로드를 기다림. `urls` 배열을 비워 가며 쓰므로 넘긴 배열이 바뀜 |
+| `loadCSSFiles(urls)` | `<link rel="stylesheet">` 를 붙임. 이미 있는 주소는 건너뜀. 끝을 알려 주지 않음 |
+
+- `../` 로 시작하는 주소는 지금 페이지 주소 기준으로 바꿔서 이미 있는지 비교합니다.
+- `loadJSFiles` 와 `loadCSSFiles` 는 같은 주소를 두 번 붙이지 않지만 `loadScripts` 는 확인 없이 매번 붙입니다.
 | 쓰는 앱 (의존성 기준) | Dom 103 → 112, Utils 94 → 110, TouchUtils 77 → 83, DateUtils 4 → 48, UUID 19 → 29 |

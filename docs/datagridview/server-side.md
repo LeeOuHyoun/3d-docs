@@ -180,7 +180,7 @@ params.failCallback(message);
 
 샘플에서 2행을 선택하고 헤더를 눌러 정렬하면, 누른 직후 행이 0개가 되고 `sortModel: [{ dataIndex: 'title', sort: 'asc' }]` 로 0 ~ 199 행을 다시 요청하며, 선택은 0개가 됩니다.
 
-그룹핑에서 서버가 그룹 행을 어떤 모양으로 돌려줘야 하는지는 호출 예가 없어 확인하지 못했습니다. `wux_group: true` 인 행을 돌려주는 것으로 보입니다. <Badge type="danger" text="검증 필요" />
+그룹핑을 다시 하면 ItemModelServerSide `_doGroupingOnModel` 은 트리를 비우고(`_resetTreeDocument`) 행을 처음부터 다시 요청합니다. 돌려받은 행 중 `wux_group: true` 인 행만 하위 행이 있는 행(펼침 아이콘이 있고 펼치면 하위 행을 요청)으로 만들어지므로(`_createNodeModelFromData`), 서버는 그룹 행에 `wux_group: true` 를 넣어 돌려줍니다. 그 밖에 그룹 행의 키(제목, 합계 등)를 어떤 모양으로 넣어야 하는지는 호출 예가 없어 확인하지 못했습니다. <Badge type="danger" text="검증 필요" />
 
 `virtuallyLoadAllModelItems: true` 에서 한 번에 100행씩 0 ~ 99, 2287 ~ 2386, 4900 ~ 4999 를 불러온 뒤 `selectAll()` 을 부르면 선택 목록이 302개입니다. 불러온 300행과 함께, 라벨이 비어 있고 `options.multipleNodesRep`(대신하는 행 수, 2187 과 2513)를 가진 "자리만 잡은 행" 2개가 들어갑니다. 선택 목록을 서버로 보낼 때는 이런 행을 걸러 냅니다.
 

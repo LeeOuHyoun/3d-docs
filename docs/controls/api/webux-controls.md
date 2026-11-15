@@ -281,14 +281,14 @@ Controls.js 각 모듈의 `publishedProperties` getter (2025 는 `Object.defineP
 
 | 키 | 타입 | 기본값 | 설명 |
 | --- | --- | --- | --- |
-| <code>value</code> | <code>date</code> | 지금 | 시각. 만들 때 현재 시각으로 채워짐 |
+| <code>value</code> | <code>date</code> | 지금 | 시각. 만들 때 현재 시각으로 채워짐 (2026 에서 <code>mode: 'duration'</code> 이면 <code>0</code>) |
 | <code>precision</code> | <code>string</code> | <code>'min'</code> | <code>min</code>, <code>sec</code> |
 | <code>mode</code> | <code>string</code> | <code>'24'</code> (2026: <code>'time'</code>) | 2025: <code>24</code>, <code>12</code>, <code>duration</code>. 2026: <code>time</code> (언어 형식), <code>24</code>, <code>duration</code>. 그 밖의 값은 <code>time</code> 으로 바뀜 |
 | <code>hoursStep</code> / <code>minutesStep</code> / <code>secondsStep</code> | <code>integer</code> | <code>1</code> | 팝업 증감 단위 |
 | <code>popupVisibleFlag</code> | <code>boolean</code> | <code>false</code> | 팝업 열림 |
 | <code>allowUndefinedFlag</code> | <code>boolean</code> | <code>false</code> | 비우기 허용 |
 
-이벤트: <code>change</code>, <code>show</code>, <code>hide</code>. <code>mode: 'duration'</code> 이면 값이 숫자이고 <code>02h 30m</code> 처럼 표시됩니다. <Badge type="danger" text="검증 필요" />
+이벤트: <code>change</code>, <code>liveChange</code>, <code>show</code>, <code>hide</code>. 팝업이 열린 동안 값이 바뀌면 <code>liveChange</code> 가 오고, <code>change</code> 는 팝업을 닫을 때 열 때 값과 다르면 옵니다 (2025 는 <code>mode: 'duration'</code> 에서 <code>liveChange</code> 를 내지 않음). <code>mode: 'duration'</code> 이면 값이 숫자이고 <code>02h 30m</code> (<code>precision: 'sec'</code> 면 <code>02h 30m 05s</code>) 처럼 표시됩니다. 만들 때 값은 2025 는 모드와 상관없이 현재 시각(<code>new Date()</code>), 2026 은 duration 이면 <code>0</code> 입니다.
 
 ## Calendar
 

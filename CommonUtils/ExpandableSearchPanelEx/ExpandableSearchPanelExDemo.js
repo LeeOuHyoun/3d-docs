@@ -1,6 +1,6 @@
 define('DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
   'UWA/Core',
-  'DS/sdxENOChgGovernanceUX/custom/util/lodash',
+  'DS/lodash',
   'DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelEx',
   'DS/CommonUtils/ExpandableSearchPanelEx/SearchFieldAdapters',
   'DS/DataGridView/DataGridView',

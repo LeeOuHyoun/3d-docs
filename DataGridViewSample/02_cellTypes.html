@@ -92,6 +92,7 @@
            *   semantics.possibleValues 에 선택 목록을 넣는다.
            *   목록은 문자열 배열 또는 { label: '표시값', value: '저장값' } 배열 모두 가능
            */
+          // #region combo
           {
             text: '상태 (콤보-싱글)',
             dataIndex: 'status',
@@ -103,6 +104,7 @@
               possibleValues: ['작업중', '검토중', '승인', '폐기']
             }
           },
+          // #endregion combo
 
           /*
            * 여러 개 선택 (자동완성 칩)
@@ -116,6 +118,7 @@
            *     구분자 앞뒤에 공백이 항상 붙으므로 ',' 를 주면 "김철수 , 이영희" 로 표시된다.
            *     (CompareWidget2, DELWKOViewBehaviors, ENOXEngineer 등 ENOVIA 앱도 같은 방식으로 사용)
            */
+          // #region multi
           {
             text: '담당자 (여러 개 선택)',
             dataIndex: 'owners',
@@ -129,12 +132,14 @@
               viewOptions: { multipleValuesSeparator: ',' }
             }
           },
+          // #endregion multi
 
           /*
            * 버튼 그룹 (라디오처럼 하나 선택)
            *   typeRepresentation 'customSmallEnumMember' = 버튼 그룹 편집기 (Tweakers: editSelector)
            *   선택지가 적을 때 콤보 대신 사용
            */
+          // #region buttonGroup
           {
             text: '우선순위 (버튼그룹)',
             dataIndex: 'priority',
@@ -146,12 +151,14 @@
               possibleValues: ['높음', '보통', '낮음']
             }
           },
+          // #endregion buttonGroup
 
           /*
            * 프로그레스 바
            *   typeRepresentation 'progress' : 0~100, 단위 % 가 기본 (semantics 로 바꿀 수 있음)
            *   editableFlag: true 면 더블클릭 시 숫자 입력으로 변경 가능
            */
+          // #region progress
           {
             text: '진행률 (프로그레스)',
             dataIndex: 'progress',
@@ -160,27 +167,34 @@
             editableFlag: true,
             semantics: { minValue: 0, maxValue: 100, stepValue: 5 }
           },
+          // #endregion progress
 
           /* 체크박스 : typeRepresentation 'boolean'. EditionOnOver 로 바로 클릭해서 토글 */
+          // #region checkbox
           { text: '승인 (체크)', dataIndex: 'approved', width: 90, typeRepresentation: 'boolean', editableFlag: true, editionPolicy: 'EditionOnOver' },
+          // #endregion checkbox
 
-          /* 날짜 : typeRepresentation 'date' (시간까지는 'datetime'). 값은 Date 객체 */
+          /*
+           * 날짜 : typeRepresentation 'date' (시간까지는 'datetime'). 값은 Date 객체
+           * 정수 : typeRepresentation 'integer'. semantics 로 범위 제한
+           * 실수 : typeRepresentation 'float' (또는 'double'). units 로 단위 표시
+           */
+          // #region dateNumber
           { text: '납기 (날짜)', dataIndex: 'dueDate', width: 130, typeRepresentation: 'date', editableFlag: true },
-
-          /* 정수 : typeRepresentation 'integer'. semantics 로 범위 제한 */
           { text: '수량 (정수)', dataIndex: 'qty', width: 100, typeRepresentation: 'integer', editableFlag: true, semantics: { minValue: 0, maxValue: 999 } },
-
-          /* 실수 : typeRepresentation 'float' (또는 'double'). units 로 단위 표시 */
           { text: '중량 (실수)', dataIndex: 'weight', width: 110, typeRepresentation: 'float', editableFlag: true, semantics: { units: 'kg' } },
+          // #endregion dateNumber
 
-          /* 색상 : typeRepresentation 'color'. 값은 '#rrggbb' 문자열 */
+          /*
+           * 색상 : typeRepresentation 'color'. 값은 '#rrggbb' 문자열
+           * 링크 : typeRepresentation 'url'. 셀이 클릭 가능한 링크로 표시. 값은 { label, url } 객체 (문자열만 넣으면 빈 칸)
+           * 여러 줄 문자열 : typeRepresentation 'multilineString'
+           */
+          // #region colorLink
           { text: '색상', dataIndex: 'color', width: 90, typeRepresentation: 'color', editableFlag: true },
-
-          /* 링크 : typeRepresentation 'url'. 셀이 클릭 가능한 링크로 표시. 값은 { label, url } 객체 (문자열만 넣으면 빈 칸) */
           { text: '링크 (url)', dataIndex: 'url', width: 160, typeRepresentation: 'url' },
-
-          /* 여러 줄 문자열 : typeRepresentation 'multilineString' */
           { text: '비고 (여러 줄)', dataIndex: 'note', width: 160, typeRepresentation: 'multilineString', editableFlag: true }
+          // #endregion colorLink
         ]
       });
       grid.inject(document.getElementById('grid'));
@@ -190,6 +204,7 @@
        *   셀을 편집하면 TreeNodeModel 의 값이 바로 바뀐다.
        *   node.getAttributeValue(dataIndex) 로 읽을 수 있다.
        */
+      // #region dump
       document.getElementById('btnDump').addEventListener('click', function () {
         var rows = treeDocument.getRoots().map(function (node) {
           return {
@@ -209,6 +224,7 @@
         });
         document.getElementById('dump').textContent = JSON.stringify(rows, null, 2);
       });
+      // #endregion dump
     });
   </script>
 </body>

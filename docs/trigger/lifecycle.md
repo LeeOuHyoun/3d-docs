@@ -3,7 +3,7 @@
 객체의 state 가 바뀔 때 어떤 순서로 무엇이 실행되는지, 코드에서 state 를 바꾸는 방법입니다. policy 정의(state, 권한, 플래그)는 [Policy](/schema/policy) 에 있습니다.
 
 ::: info 근거
-프로젝트 policy 트리거 정의 파일(Promote Check / Action, Demote Action, Target States), OOTB policy 수정 파일의 `print policy` 결과. 코드 쪽: `jpo/emxTriggerManagerBase_mxJPO.java`, `jpo/emxCommonCompleteTaskBase_mxJPO.java` (Route 완료 처리), `jpo/emxRouteBase_mxJPO.java`, `jpo/emxCommonEngineeringChangeBase_mxJPO.java` (`trigger off`), `3dspace/common/emxLifecycleProcess.jsp`. `DomainObject.promote` 99 건, `setState` 72 건, `demote` 13 건 (jpo 폴더)
+프로젝트 policy 트리거 정의 파일(Promote Check / Action, Demote Action, Target States), OOTB policy 수정 파일의 `print policy` 결과. 코드 쪽: `jpo/emxTriggerManagerBase_mxJPO.java`, `jpo/emxCommonCompleteTaskBase_mxJPO.java` (Route 완료 처리), `jpo/emxRouteBase_mxJPO.java`, `jpo/emxCommonEngineeringChangeBase_mxJPO.java` (`trigger off`), `3dspace/common/emxLifecycleProcess.jsp`, xerinfra.jar `DomainObject.setState(Context, String, boolean)` 바이트코드 (플래그가 `false` 일 때만 `checksToPromoteObject`, 목표까지 `promote` / `demote` 반복). `DomainObject.promote` 99 건, `setState` 72 건, `demote` 13 건 (jpo 폴더)
 :::
 
 ## promote 한 번에 일어나는 일
@@ -31,7 +31,7 @@
 | --- | --- |
 | `obj.promote(context)` | 다음 state 로. 트리거 실행 |
 | `obj.demote(context)` | 이전 state 로. 트리거 실행 |
-| `obj.setState(context, "Release")` | 목표 state 로 바로. 거치는 전이마다 트리거가 실행되는 것으로 보입니다 <Badge type="danger" text="검증 필요" /> |
+| `obj.setState(context, "Release")` | 목표 state 까지 한 번에. 안에서 `promote` / `demote` 를 한 단계씩 반복하므로 거치는 전이마다 트리거 실행. 2 인자 호출은 `setState(context, state, true)` 와 같아 `LifeCycleUtil.checksToPromoteObject` 검사는 건너뜀 |
 | `promoteWithBL` / `demoteWithBL` | OOTB 라이프사이클 화면이 on-premise 에서 쓰는 것 |
 | `MqlUtil.mqlCommand(context, "promote bus $1", id)` | MQL 로 promote |
 | `override bus $1` | 다음 promote 의 서명 요건을 건너뜀 (OOTB 는 Route 객체에 사용) |

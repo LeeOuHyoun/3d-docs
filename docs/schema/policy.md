@@ -5,7 +5,7 @@ policy 는 객체의 **생애 주기** 를 정합니다. 어떤 state 를 어떤
 샘플: [02_policy.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/SchemaSample/02_policy.mql)
 
 ::: info 근거
-`mql/03.policy/Policy_Sample.mql`, 커스텀 policy 정의 파일(state 1 ~ 4 개, 권한 블록이 있는 파일 포함), OOTB policy 수정 파일(`Product.mql`, `Classification.mql`, `Project_Space.mql`), `mql/03.policy/` 의 policy 설계 메모(MQL 문법 전문, `AccessUtil` 권한 묶음), `mql/20.rule/*.mql`, `mql/12.trigger/Trigger_Sample.mql` 와 trigger 정의 파일. 코드 쪽: `jpo/emxAEFFullSearchBase_mxJPO.java` (`print policy ... state[...]`), `jpo/com/dassault_systemes/enovia/geographyconfiguration/ui/CountryBase_mxJPO.java` (state 심볼릭 조회)
+`mql/03.policy/Policy_Sample.mql`, 커스텀 policy 정의 파일(state 1 ~ 4 개, 권한 블록이 있는 파일 포함), OOTB policy 수정 파일(`Product.mql`, `Classification.mql`, `Project_Space.mql`), `mql/03.policy/` 의 policy 설계 메모(MQL 문법 전문, `AccessUtil` 권한 묶음), `mql/20.rule/*.mql`, `mql/12.trigger/Trigger_Sample.mql` 와 trigger 정의 파일. 코드 쪽: `jpo/emxAEFFullSearchBase_mxJPO.java` (`print policy ... state[...]`), `jpo/com/dassault_systemes/enovia/geographyconfiguration/ui/CountryBase_mxJPO.java` (state 심볼릭 조회), xerinfra.jar `TriggerObjectsCache.populateCache` 바이트코드 (`current` 가 `state_Active` 이고 `eService Error Type` 이 `Error` 인 trigger 객체만 캐시에 담음)
 :::
 
 ## 정의
@@ -306,7 +306,7 @@ add bus 'eService Trigger Program Parameters' 'MyPolicyInWorkPromoteCheck' 'chec
 | name | `접두어 + 대상 이름 + 적용 시점`. 예: `MyPolicyInWorkPromoteCheck` |
 | revision | 실행할 메서드 이름 |
 | `eService Program Name` / `eService Method Name` | JPO 클래스와 메서드 |
-| state | `Active` 여야 실행되는 것으로 보입니다. <Badge type="danger" text="검증 필요" /> 템플릿은 만든 뒤 `promote bus` 로 활성화하고, 끌 때 `demote bus` 를 씀 |
+| state | `Active` 여야 실행됩니다. 템플릿은 만든 뒤 `promote bus` 로 활성화하고, 끌 때 `demote bus` 를 씀 |
 
 위젯에서 state 를 바꾸는 방법은 [성숙도 변경, 개정](/rest-api/lifecycle) 에 있습니다.
 
@@ -331,5 +331,7 @@ print bus 'MyPart' 'MP-0000001' '1' select current current.access dump |;
 | `block`, `unblock` | state 숨기기 |
 | `action`, `check` (state 절) | 예전 방식. trigger 로 대체 |
 | `minorsequence`, `majorsequence` | 리비전을 두 단계로 나눌 때 |
+| `published` (state 절) | OOTB policy 를 `print policy` 한 결과(Classification, Product 수정 파일의 주석)에 `published false` 로만 나옴. 프로젝트 policy 에는 없음 |
+| `enforcereserveaccess` | 예약(reserve)한 사용자만 고칠 수 있게 하는 policy 설정으로 보임 <Badge type="danger" text="검증 필요" />. 원본 mql 에는 한 번도 나오지 않음 |
 
 프로젝트의 결재는 이 기능 대신 Route(`Object Route` 관계)와 trigger 로 처리하는 것으로 보입니다. <Badge type="danger" text="검증 필요" /> 결재 대상 type 마다 `Object Route` 의 from 쪽에 type 을 추가해 둔 것이 그 흔적입니다.

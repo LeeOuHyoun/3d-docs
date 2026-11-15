@@ -9,7 +9,9 @@ const PARENT_SOURCE = join(WEBAPPS, 'CollectionView', 'CollectionView.js')
 const DOCS = join(ROOT, 'docs', 'datagridview')
 const MODULE_ID = 'DS/DataGridView/DataGridView'
 const LOCALE_FILE = /_[a-z]{2}(-[A-Z]{2})?\.js$/
-const INTERNAL = [/^_/, /Default$/, /^supports/, /^(initialize|buildView|name|publishedProperties)$/]
+const INTERNAL = [/^_/, /Default$/, /^supports/, /^(initialize|buildView|name|publishedProperties|constructor)$/]
+const OBJECT_STYLE = { published: /^publishedProperties: \{$/, keysFrom: 0, method: /^([A-Za-z_$][\w$]*): (?:async )?function/ }
+const CLASS_STYLE = { published: /^static get publishedProperties\(\) \{$/, keysFrom: 1, method: /^(?:async )?([A-Za-z_$][\w$]*)\(.*\) \{/ }
 
 const walk = (dir, accept) =>
   readdirSync(dir).flatMap((name) => {
@@ -17,6 +19,15 @@ const walk = (dir, accept) =>
     if (statSync(path).isDirectory()) return walk(path, accept)
     return accept(name) ? [path] : []
   })
+
+const moduleFiles = (dir) =>
+  readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .flatMap((entry) =>
+      readdirSync(join(dir, entry.name), { withFileTypes: true })
+        .filter((file) => file.isFile() && file.name.endsWith('.js') && !LOCALE_FILE.test(file.name))
+        .map((file) => join(dir, entry.name, file.name))
+    )
 
 const indentOf = (line) => line.length - line.trimStart().length
 
@@ -30,17 +41,28 @@ const keysOfBlock = (lines, open) => {
   return keys
 }
 
+const classAnchor = (lines, className) => {
+  const named = lines.findIndex((line) => line.trim() === `name: "${className}",`)
+  if (named >= 0) return { anchor: named, depth: indentOf(lines[named]), style: OBJECT_STYLE }
+  const register = new RegExp(`addClass\\(([\\w$]+), "${className}"\\)`)
+  const registered = lines.findIndex((line) => register.test(line))
+  if (registered < 0) return undefined
+  const variable = lines[registered].match(register)[1]
+  const declared = lines.slice(0, registered).findLastIndex((line) => line.trim().startsWith(`class ${variable} `))
+  return declared < 0 ? undefined : { anchor: declared, depth: indentOf(lines[declared]) + 2, style: CLASS_STYLE }
+}
+
 const classMembers = (lines, className) => {
-  const anchor = lines.findIndex((line) => line.trim() === `name: "${className}",`)
-  if (anchor < 0) return { properties: [], methods: [] }
-  const depth = indentOf(lines[anchor])
+  const found = classAnchor(lines, className)
+  if (!found) return { properties: [], methods: [] }
+  const { anchor, depth, style } = found
   const body = []
   for (let i = anchor + 1; i < lines.length && (lines[i].trim() === '' || indentOf(lines[i]) >= depth); i++) body.push(i)
   const members = body.filter((i) => indentOf(lines[i]) === depth)
-  const published = members.find((i) => /^publishedProperties: \{$/.test(lines[i].trim()))
+  const published = members.find((i) => style.published.test(lines[i].trim()))
   return {
-    properties: published === undefined ? [] : keysOfBlock(lines, published),
-    methods: members.flatMap((i) => lines[i].trim().match(/^([A-Za-z_$][\w$]*): (?:async )?function/)?.[1] ?? [])
+    properties: published === undefined ? [] : keysOfBlock(lines, published + style.keysFrom),
+    methods: members.flatMap((i) => lines[i].trim().match(style.method)?.[1] ?? [])
   }
 }
 
@@ -69,7 +91,7 @@ const parent = existsSync(PARENT_SOURCE)
   ? classMembers(readFileSync(PARENT_SOURCE, 'utf8').split(/\r?\n/), 'CollectionView')
   : { properties: [], methods: [] }
 const docsText = walk(DOCS, (name) => name.endsWith('.md')).map((path) => readFileSync(path, 'utf8')).join('\n')
-const appTexts = walk(WEBAPPS, (name) => name.endsWith('.js') && !LOCALE_FILE.test(name))
+const appTexts = moduleFiles(WEBAPPS)
   .filter((path) => path !== SOURCE)
   .map((path) => readFileSync(path, 'utf8'))
   .filter((text) => text.includes(MODULE_ID))
@@ -91,7 +113,7 @@ const report = (title, names) => {
 
 console.log(`원본: ${SOURCE}`)
 console.log(`문서: ${DOCS}`)
-console.log(`DataGridView 를 쓰는 앱 파일: ${appTexts.length}개 (아래 숫자 = 그 이름이 나오는 앱 파일 수)`)
+console.log(`DataGridView 를 쓰는 앱 파일: ${appTexts.length}개 (모듈 폴더 바로 아래 .js 만 읽음. 아래 숫자 = 그 이름이 나오는 앱 파일 수)`)
 report('그리드 옵션 (DataGridView publishedProperties)', grid.properties)
 report('그리드 메서드 (DataGridView)', grid.methods)
 report('상속 옵션 (CollectionView publishedProperties)', parent.properties)

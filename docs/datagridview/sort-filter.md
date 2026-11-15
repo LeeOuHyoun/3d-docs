@@ -18,17 +18,7 @@ DataGridView.js 의 DataGridView `_applySortModel` / `_preEditSortModel` (sortOp
 
 그리드 옵션 `sortModel` 에 정렬 조건을 넣습니다. 배열 순서가 정렬 우선순위입니다.
 
-```js
-new DataGridView({
-  treeDocument: treeDocument,
-  columns: columns,
-  sortModel: [
-    { dataIndex: 'status', sort: 'asc' },
-    { dataIndex: 'progress', sort: 'desc' }
-  ],
-  sortOptions: { maxSortedColumnsCount: 3 }
-});
-```
+<<< @/../DataGridViewSample/04_sortFilter.html#sortModel{js}
 
 `sortOptions.maxSortedColumnsCount` 는 동시에 정렬할 수 있는 최대 컬럼 수입니다.
 
@@ -36,10 +26,7 @@ new DataGridView({
 
 `sortModel` 은 속성이라 값을 넣으면 바로 다시 정렬됩니다. 빈 배열은 정렬 해제입니다.
 
-```js
-grid.sortModel = [{ dataIndex: 'dueDate', sort: 'asc' }];
-grid.sortModel = [];
-```
+<<< @/../DataGridViewSample/04_sortFilter.html#runtimeSort{js}
 
 ::: warning 정렬은 행 순서 자체를 바꿉니다
 정렬은 화면 표시만이 아니라 TreeDocument 의 행 순서(`getRoots()`, 하위 행 포함)를 바꿉니다. 사용자가 헤더를 세 번 눌러 정렬을 풀면 정렬 전 순서로 돌아가지만, 코드에서 `grid.sortModel = []` 로 풀면 **정렬된 순서가 그대로 남습니다.** 원래 순서가 필요하면 데이터를 다시 넣거나, 순서를 뜻하는 값(순번 등)으로 다시 정렬합니다. 정렬된 상태에서 행을 끌어 옮기면 정렬이 풀리고 옮긴 뒤의 순서가 남습니다 ([드래그앤드롭](/datagridview/drag-and-drop#정렬-그룹핑-필터와-같이-쓸-때)). (로컬 실행 확인)
@@ -49,16 +36,9 @@ grid.sortModel = [];
 
 문자 순서가 아니라 업무 순서로 정렬할 때 컬럼에 `compareFunction` 을 넣습니다.
 
-```js
-var PRIORITY_ORDER = { '높음': 1, '보통': 2, '낮음': 3 };
+<<< @/../DataGridViewSample/04_sortFilter.html#priorityOrder{js}
 
-{
-  text: '우선순위', dataIndex: 'priority',
-  compareFunction: function (a, b) {
-    return (PRIORITY_ORDER[a] || 99) - (PRIORITY_ORDER[b] || 99);
-  }
-}
-```
+<<< @/../DataGridViewSample/04_sortFilter.html#compare{js}
 
 - 인자: `(값A, 값B, 행A, 행B, dataIndex)`
 - 음수 = A 가 앞, 양수 = B 가 앞, 0 = 같음
@@ -68,24 +48,13 @@ var PRIORITY_ORDER = { '높음': 1, '보통': 2, '낮음': 3 };
 
 ## 정렬 금지
 
-```js
-{ text: '비고', dataIndex: 'note', sortableFlag: false }
-```
+<<< @/../DataGridViewSample/04_sortFilter.html#noSort{js}
 
 ## 필터
 
 필터는 그리드 옵션이 아니라 **TreeDocument** 에 지정합니다. 여기서 지정한 컬럼만 헤더에 필터 기능이 생깁니다.
 
-```js
-treeDocument.setFilterModel({
-  label: { filterId: 'stringRegexp' },
-  title: { filterId: 'string' },
-  status: { filterId: 'set' },
-  progress: { filterId: 'numberWithCondition' },
-  qty: { filterId: 'number' },
-  dueDate: { filterId: 'date' }
-});
-```
+<<< @/../DataGridViewSample/04_sortFilter.html#filter{js}
 
 ::: warning
 - 키는 컬럼의 `dataIndex` 입니다. 단, 첫 트리 컬럼(`dataIndex: 'tree'`)은 `label` 로 지정합니다.

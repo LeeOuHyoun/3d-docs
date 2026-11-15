@@ -357,8 +357,8 @@ TweakerBlob 은 값 비교 없이 `value` 가 바뀔 때마다 `change` 를 보�
 | `failureCapture` / `onFailure` | `true` / - | 속성 편집기를 만들지 못했을 때 `onFailure(err)` 호출 |
 
 - 속성의 편집기 타입은 `configuration[경로].type` 이고, 없으면 값의 종류(`string`, `number`, `boolean`, `date`, `object` ...)로 정해집니다.
-- 저작 모드에서 속성을 더하거나 지우면 `change` 가 오고 `e.options` 에 `{ propertyChangeName, propertyChangePath }` 가 들어 있습니다.
-- 속성 값을 바꿀 때 안쪽 속성 편집기의 `change` 가 위로 올라오며, 이때 `e.options` 가 `{ propertyChangePath, propertyChangeName, propertyChangeValue }` 로 바뀌어 나오는 것으로 보입니다 <Badge type="danger" text="검증 필요" />.
+- 저작 모드에서 속성을 더하거나 지우면 `change` 가 오고 `e.options` 에 `{ propertyChangeName, propertyChangePath }` 가 들어 있습니다. 이때는 `propertyChangeValue` 가 없습니다.
+- 속성 값을 바꿀 때 안쪽 속성 편집기의 `change` / `liveChange` 가 위로 올라오며, 이때 `e.options` 가 `{ propertyChangePath, propertyChangeName, propertyChangeValue }` 로 바뀌어 나옵니다 (`_handleEvents`, 문서의 `onNodeModelUpdate`). 이 값은 하위 클래스에 `onNodeUpdate` 가 있을 때 채워지며, TweakerObject, TweakerUWAObject, TweakerWUXAbstract 는 모두 이 함수를 가집니다.
 
 ## TweakerObject
 

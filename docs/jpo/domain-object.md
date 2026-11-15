@@ -75,12 +75,12 @@ String status = (String) info.get("attribute[" + attrStatus + "]");
 | --- | --- |
 | 0 | `null` 또는 키 없음 |
 | 1 | `String` |
-| 2 이상 | `StringList`. 구분자로 이어 붙인 `String` 으로 오는 경우도 있는 것으로 보입니다 <Badge type="danger" text="검증 필요" /> (OOTB 에 `"\\a"` 로 자르는 코드가 있음) |
+| 2 이상 | `StringList`. 구분자 `\u0007` (`SelectConstants.cSelectDelimiter`) 로 이어 붙인 `String` 으로 오는 경우도 있습니다 (OOTB 는 `cSelectDelimiter` 나 `"\\a"` 로 자름) |
 
 ```java
 Object value = map.get(select);
 StringList ids = value instanceof StringList ? (StringList) value
-        : value == null ? new StringList() : new StringList((String) value);
+        : value == null ? new StringList() : FrameworkUtil.split((String) value, SelectConstants.cSelectDelimiter);
 ```
 
 - 값 하나만 필요하면 `getInfoList` 를 씁니다. 항상 `StringList` 입니다.
@@ -91,7 +91,7 @@ StringList ids = value instanceof StringList ? (StringList) value
 :::
 
 ::: info 근거
-`instanceof StringList` 180 건 (예: emxECPartBase_mxJPO.java 의 `SELECT_FORMAT_HASFILE` 처리). `MULTI_VALUE_LIST` 주석 처리 후 `SelectList multiValueSelects` 사용 사례: emxECPartBase_mxJPO.java (`relationship[...].from.current`)
+`instanceof StringList` 180 건 (예: emxECPartBase_mxJPO.java 의 `SELECT_FORMAT_HASFILE` 처리). `MULTI_VALUE_LIST` 주석 처리 후 `SelectList multiValueSelects` 사용 사례: emxECPartBase_mxJPO.java (`relationship[...].from.current`). eMatrixServletRMI.jar `SelectConstants.cSelectDelimiter` = `"\u0007"`. `String` 이면 이 구분자로 자르는 사례: emxPartMarkupBase_mxJPO.java (`getListValue`), emxECOBase_mxJPO.java (`DomainObject.getInfo` 여러 id 결과를 `StringUtils.split(id, "\\a")`. m1jsystem.jar `StringUtils.split` 은 정규식이라 `\a` 가 `\u0007`)
 :::
 
 ## 관계 따라가기 (getRelatedObjects)

@@ -3,7 +3,7 @@
 `/resources/v2/e6w/service/...` 는 타입에 상관없이 객체의 기본 정보를 읽고, 사람과 객체를 이름으로 찾는 3DSpace 범용 서비스입니다. 경로 목록은 [엔드포인트 목록 - e6w 서비스](/rest-api/catalog#e6w-서비스), 응답의 기본 모양은 [응답 형식 A](/rest-api/#응답-형식-a-업무-객체) 를 봅니다. 이 페이지는 요청 파라미터, `$fields` 로 받는 키, `dataelements` 키, 찾기 조건, 결과 수, 오류를 적습니다.
 
 ::: info 근거
-Foundation/Foundation.js (`FoundationAjax` 197~496행 `getParams`, `setupEnoviaServer`, `calculateFinalUrl`, `ajaxRequest`, `FoundationData.loadWidget` 1198행, `tempURI`, `setRowPref`), Foundation2/Foundation2.js (`_serviceURL` 1170행, `loadServiceData` 3111행, `getParams` 3193행, `ReferenceModel.typeAheadCallback`, `syncRead`, `syncFromServer`, ObjectInfo 묶음 요청 6939행), DocumentManagement (`ObjectInfoService`, `IndependentServiceBase._getObjects`), RDFFoundation (`ObjectProxyUtil.sendRequest`, `convertServiceResponseToFederatedFormat`). 호출부: ENOChgServices (`getAdditionObjectInfo`, `getObjectInfo`, `getAdditionSwymPersonInfo`, `getExpressionValue`), IssueServices, CfgBaseUX, VCXWebPlatform, CAT3DExpModel, ENOGantt, CollaborativeTasks, ENOXCADManageScope, FolderEditor, FolderUpload, ENOProjectMgmtModels, IssueManagement. 집계: 2025 `e6w/service/` 문자열 `ObjectInfo` 8, `PersonSearch` 5, `ExpresssionSearch` 4, `ApplicabilityTypeInfo` 3, `ObjectSearch`, `ObjectSearchByName`, `PersonSearchByName` 각 1 (Foundation2 처럼 이름만 넘겨 조립하는 호출은 빠짐). `Foundation2/FoundationV2Data` 를 쓰는 앱 6 개, `Foundation/FoundationData` 3 개
+Foundation/Foundation.js (`FoundationAjax` 197~496행 `getParams`, `setupEnoviaServer`, `calculateFinalUrl`, `ajaxRequest`, `FoundationData.loadWidget` 1198행, `tempURI`, `setRowPref`), Foundation2/Foundation2.js (`_serviceURL` 1170행, `loadServiceData` 3111행, `getParams` 3193행, `ReferenceModel.typeAheadCallback`, `syncRead`, `syncFromServer`, ObjectInfo 묶음 요청 6939행), DocumentManagement (`ObjectInfoService`, `IndependentServiceBase._getObjects`), RDFFoundation (`ObjectProxyUtil.sendRequest`, `convertServiceResponseToFederatedFormat`), WEB-INF/resources/param/ChangeOrder_Parameterization.xml (`ParameterizationExpressionImpl`). 호출부: ENOChgServices (`getAdditionObjectInfo`, `getObjectInfo`, `getAdditionSwymPersonInfo`, `getExpressionValue`), IssueServices, CfgBaseUX, VCXWebPlatform, CAT3DExpModel, ENOGantt, CollaborativeTasks, ENOXCADManageScope, FolderEditor, FolderUpload, ENOProjectMgmtModels, IssueManagement. 집계: 2025 `e6w/service/` 문자열 `ObjectInfo` 8, `PersonSearch` 5, `ExpresssionSearch` 4, `ApplicabilityTypeInfo` 3, `ObjectSearch`, `ObjectSearchByName`, `PersonSearchByName` 각 1 (Foundation2 처럼 이름만 넘겨 조립하는 호출은 빠짐). `Foundation2/FoundationV2Data` 를 쓰는 앱 6 개, `Foundation/FoundationData` 3 개
 :::
 
 샘플: [02_drag_drop.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/EventsSample/02_drag_drop.html) (놓인 객체를 `GET v2/e6w/service/ObjectInfo/{id}` 로 읽기)
@@ -170,7 +170,7 @@ function searchPerson(text) {
 | --- | --- | --- | --- |
 | `searchStr` | `<글자>*` | `kim*` | `*` 는 와일드카드. CollaborativeTasks, InstantMessagingW |
 | `searchStr` | `<글자>` | 로그인 그대로 | FolderEditor, ENOXCADManageScope |
-| `searchStr` | `<글자>*  NOT <타입 조건>` | `NOT (flattenedtaxonomies:("types/Person"))` | 타입 빼기. Foundation2, ENOProjectMgmtModels |
+| `searchStr` | `<글자>*  NOT <타입 조건>` | `NOT (flattenedtaxonomies:("types/Person"))` | 타입 빼기. Foundation2, ENOProjectMgmtModels (`Persons.typeAheadCallback`, v3 `PersonSearch` 로 보냄) |
 | `searchStr` (ByName) | 쉼표로 이은 로그인 | `user01,user02` | ENOChgServices |
 | `typeStr` | 타입, `*`, `Person` | `Workspace` | 찾을 타입. Foundation2 는 지정이 없으면 `*`, 사람 칸이면 `Person` 을 넣음 |
 
@@ -188,7 +188,7 @@ function searchPerson(text) {
 | `POST /resources/v3/e6w/service/ExpresssionSearch?tenant=...&$simpleJSON=true`, 본문 `$ids=<이름>,<이름>` | 모델에서 `get(이름)` | ENOProjectMgmtCommonComponents (`getConfigurationCenterSettings`) |
 
 - ENOChgServices 는 `CHG_CHANGE_MATURITY`, `ECMEnableDefaultChangeAnalysis` 같은 이름을 받아 화면 기능을 켜고 끕니다.
-- 값은 서버의 Expression 관리 객체(MQL `expression`)에서 오는 것으로 보입니다 <Badge type="danger" text="검증 필요" />
+- 값은 서버의 Expression 관리 객체(MQL `expression`)에서 옵니다. 예를 들어 `ECMEnableDefaultChangeAnalysis` 는 Configuration Center 설정 정의(`WEB-INF/resources/param/ChangeOrder_Parameterization.xml`)에서 `ParameterizationExpressionImpl` 과 `<Constant id="expression" value="ECMEnableDefaultChangeAnalysis" />` 로 같은 이름의 expression 에 저장됩니다. `CHG_CHANGE_MATURITY`, `ISU_AUTO_DATES` 는 이 설정 정의 파일들에 없어 어디서 만들어지는지는 확인하지 못했습니다 <Badge type="danger" text="검증 필요" />
 
 ## 그 밖의 e6w 서비스
 

@@ -71,4 +71,5 @@ Tweakers.js 의 TypeRepresentationFactory, TypeRepresentationDirectory. DataGrid
 | <code>getTemplateIdentifierFromTypeRep</code> | 인스턴스 메서드에서 static 으로 바뀜. <code>factory.getTemplateIdentifierFromTypeRep(...)</code> 은 2026 에서 오류 |
 | <code>generateTweaker</code> | 템플릿이 준비되어 있으면 편집기를 바로 반환, 아니면 Promise |
 | <code>getTweakerStaticHeight / getTweakerStaticStringFromValue</code> <Badge type="warning" text="2026" /> | 편집기를 만들지 않고 높이 / 표시 문자열 계산 |
+| <code>loadTemplateAndExecute(value, options, fn)</code> <Badge type="warning" text="2026" /> | 위 세 함수가 같이 쓰는 함수. <code>options.typeRep</code> 로 템플릿을 찾고 semantics 를 합친 뒤 <code>fn(편집기 class, 템플릿, value, semantics, options)</code> 을 부름. 템플릿 파일이 아직 안 불러졌으면 불러온 뒤 실행하는 Promise 를 돌려줌. 템플릿을 못 찾으면 <code>options.onFailure</code>. 앱에서 직접 부르는 곳은 없음 |
 | <code>directory</code> 의 부모 저장소 | 2025 에서는 부모 저장소 조회가 실제로 동작하지 않음. 2026 에서 고쳐짐 (기본 전역 저장소만 쓰면 영향 없음) |

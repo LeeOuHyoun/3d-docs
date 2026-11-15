@@ -4,7 +4,7 @@ title: 이름 색인 (A-Z)
 
 # 이름 색인 (A-Z)
 
-DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개를 알파벳 순으로 모았습니다. 이름은 아는데 어느 페이지에 있는지 모를 때 씁니다.
+DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 485개를 알파벳 순으로 모았습니다. 이름은 아는데 어느 페이지에 있는지 모를 때 씁니다.
 
 - "있는 곳" 은 그 이름이 설명된 페이지와 절입니다. 넣는 자리(그리드 옵션, `layoutOptions`, 컬럼 옵션)도 여기서 알 수 있습니다.
 - 이름의 일부만 기억나면 상단 검색(<kbd>Ctrl</kbd> + <kbd>K</kbd>)에 `HeaderHeight` 처럼 넣습니다.
@@ -29,7 +29,6 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>allColumns</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 숨긴 컬럼까지 모두 (기본은 보이는 컬럼, 화면 순서) |
 | <code>allowResetToUndefinedByUIFlag</code> | [컬럼 옵션 › 편집](/datagridview/api/column-options#편집) | 사용자가 값을 비울(undefined) 수 있음 |
 | <code>allowUnsafeHTMLContent</code> | [컬럼 옵션 › 표시 / 기능 on-off](/datagridview/api/column-options#표시-기능-on-off) | 셀 값을 HTML 로 렌더링 (보안 주의) |
-| <code>allowWrapFlag</code> | [컬럼 옵션 › 크기 / 위치](/datagridview/api/column-options#크기-위치) | 줄바꿈 허용 |
 | <code>alwaysVisibleFlag</code> | [컬럼 옵션 › 표시 / 기능 on-off](/datagridview/api/column-options#표시-기능-on-off) | 숨길 수 없는 컬럼. true 면 `visibleFlag: false` 나 `setColumnVisibleFlag(…, false)` 로도 숨겨지지 않음. `visibleFlag: false` 와 같이 쓰면 컬럼은 보이고 `getColumnVisibleFlag` 는 false, `getColumnVisibleState` 는 true |
 | <code>applyColumns</code> | [레이아웃 메서드 (grid.layout) › 컬럼 설정 바꾸기](/datagridview/api/layout-methods#컬럼-설정-바꾸기) | 컬럼 정의 객체를 직접 고친 뒤 그리드 전체에 다시 반영 |
 | <code>autoRowHeightFlag</code> | [레이아웃 메서드 (grid.layout) › 컬럼 설정 바꾸기](/datagridview/api/layout-methods#컬럼-설정-바꾸기) | 셀 타입, 행 높이 자동 |
@@ -62,6 +61,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>cellModel</code> | [컬럼 함수 › cellInfos 구조 (위 함수들의 인자)](/datagridview/api/column-functions#cellinfos-구조-위-함수들의-인자) | 현재 셀 값 (getCellInfosAt 계열에서만. 편집 가능 여부 판단 계열은 없음) |
 | <code>cellPreselectionFeedback</code> | [그리드 옵션 › 선택](/datagridview/api/grid-options#선택) | 마우스 올렸을 때(프리셀렉션) 강조 |
 | <code>cellSelection</code> | [그리드 옵션 › 선택](/datagridview/api/grid-options#선택) | 셀 선택 방식 (DataGridView 에서 기본 multiple 로 변경) |
+| <code>cellShouldBeSelected</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 그 셀이 선택 대상인지. DataGridView 는 행 셀(`rowID >= 0`)이면서 행 머리 칸이 아닐 때 true. 셀 선택과 범위 선택이 이 함수로 거름 |
 | <code>cellView</code> | [컬럼 함수 › cellInfos 구조 (위 함수들의 인자)](/datagridview/api/column-functions#cellinfos-구조-위-함수들의-인자) | onCellRequest, 이벤트 리스너에서 제공 |
 | <code>cellWidth</code> | [layoutOptions › 컬럼 너비](/datagridview/api/layout-options#컬럼-너비) | 컬럼 width 미지정 시 참고 너비 |
 | <code>change</code> | [이벤트 › 셀 편집기(Tweaker)에서 버블링되는 이벤트](/datagridview/api/events#셀-편집기-tweaker-에서-버블링되는-이벤트) | 그리드가 먼저 데이터에 반영하므로 리스너에서는 cellInfos.nodeModel 에 이미 새 값이 들어 있다 |
@@ -71,7 +71,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>children</code> | [툴바 (setToolbar)](/datagridview/api/toolbar) | 하위 메뉴 (메뉴형 버튼). `children` 의 `label` 은 `title` 로 바뀜. `dataElements.value: { menu: [{ type: 'PushItem', title, icon, action: { callback } }] }` 도 같은 메뉴이고 앱에서는 이쪽이 더 흔함 ([메뉴형 버튼](/tweakers/generated-toolbar#메뉴형-버튼)) |
 | <code>className</code> | [컬럼 옵션 › 표시 / 기능 on-off](/datagridview/api/column-options#표시-기능-on-off) | 이 컬럼의 데이터 셀에 붙일 CSS 클래스. 헤더 칸에는 붙지 않음. 컬럼 함수 `getCellClassName` 을 넣으면 쓰이지 않음 ([헤더 칸에 CSS 클래스 주기](/datagridview/header#헤더-칸에-css-클래스-주기)) |
 | <code>click</code> | [이벤트 › 일반 DOM 이벤트 (그리드 영역)](/datagridview/api/events#일반-dom-이벤트-그리드-영역) | 클릭한 행: cellInfos.nodeModel. 헤더면 rowID -1 |
-| <code>closeFind</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 찾기 실행 / 닫기 |
+| <code>closeFind</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 찾기 실행 / 닫기 ([찾기](/datagridview/find-and-print#찾기)) |
 | <code>collapse</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeNodeModel](/datagridview/api/data#treenodemodel) | 이 행 펼치기 / 접기 / 하위까지 모두 펼치기 / 펼쳐져 있는지 |
 | <code>collapseAll</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeDocument](/datagridview/api/data#treedocument) | 트리 전체 펼치기 / 접기 |
 | <code>columnDragEnabledFlag</code> | [그리드 옵션 › 드래그 / 그룹](/datagridview/api/grid-options#드래그-그룹) | 컬럼 헤더 드래그로 순서 변경 |
@@ -202,6 +202,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>getCellTooltip</code> | [컬럼 함수 › 모양](/datagridview/api/column-functions#모양) | 셀 툴팁. 없으면 그리드 기본 툴팁. ※ 그리드 옵션 <code>getCellTooltip</code> 을 넣으면 그리드 쪽만 호출되고 컬럼 쪽은 무시됨 |
 | <code>getCellTypeRepresentation</code> | [컬럼 함수 › 셀 타입 / 편집](/datagridview/api/column-functions#셀-타입-편집) | 행마다 다른 셀 타입 ([typeRepresentation](/datagridview/api/type-representation) 값) |
 | <code>getCellValue</code> | [컬럼 함수 › 값 (표시 / 저장 / 정렬)](/datagridview/api/column-functions#값-표시-저장-정렬) | grid[dataIndex] 대신 계산한 값을 표시. 화면, 찾기, 내보내기에 모두 쓰임 |
+| <code>getCellValueAsStringForFind</code> | [컬럼 함수 › 그룹핑 / 찾기](/datagridview/api/column-functions#그룹핑-찾기) | 찾기에 쓸 셀 글자. 없으면 셀에 보이는 글자로 찾음 |
 | <code>getCellValueForCopy</code> | [컬럼 함수 › 값 (표시 / 저장 / 정렬)](/datagridview/api/column-functions#값-표시-저장-정렬) | 셀을 복사(Ctrl+C)할 때 클립보드에 넣을 값 |
 | <code>getCellValueForExport</code> | [컬럼 함수 › 값 (표시 / 저장 / 정렬)](/datagridview/api/column-functions#값-표시-저장-정렬) | <code>grid.getAsCSV()</code> 로 내보낼 때 쓸 값 |
 | <code>getCellValueForSort</code> | [컬럼 함수 › 값 (표시 / 저장 / 정렬)](/datagridview/api/column-functions#값-표시-저장-정렬) | ※ 인자가 cellInfos 가 아님. 정렬에 쓸 값이 표시값과 다를 때. getCellValue 로 계산해 보여주는 컬럼은 이 함수가 있어야 정렬할 값이 생김 |
@@ -271,6 +272,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>getUseClipboardFlag</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 기본 true. `false` 로 하면 Ctrl+C / Ctrl+X / Ctrl+V 때 그리드가 셀 값을 시스템 클립보드로 복사 / 붙여넣기 하지 않음 (앱이 복사 동작을 직접 처리할 때) |
 | <code>getUUID</code> | [그리드 메서드 › 준비 시점과 크기](/datagridview/api/grid-methods#준비-시점과-크기) | 그리드마다 다른 내부 id (16). 드래그 데이터가 어느 그리드에서 왔는지 가릴 때 사용 |
 | <code>getViewportDimensions</code> | [그리드 메서드 › 준비 시점과 크기](/datagridview/api/grid-methods#준비-시점과-크기) | 스크롤되는 영역의 보이는 크기(px) |
+| <code>getVisibleCellsInViewport</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 지금 화면에 그려진 셀 id 를 키로 둔 객체 (`{ 셀id: 셀id }`). 배열이 아니므로 `Object.keys(...)` 로 돌림 |
 | <code>getVisibleOrderedColumnsIndexes</code> | [레이아웃 메서드 (grid.layout) › 컬럼 목록 읽기](/datagridview/api/layout-methods#컬럼-목록-읽기) | 보이는 컬럼만, 화면 순서대로 |
 | <code>getVisibleOrderedLeafColumns</code> | [레이아웃 메서드 (grid.layout) › 컬럼 목록 읽기](/datagridview/api/layout-methods#컬럼-목록-읽기) | 지금 보이는 컬럼만, 화면 순서대로 |
 | <code>getXSO</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeDocument](/datagridview/api/data#treedocument) | 행 선택 목록 객체. 선택 변경 알림은 [이벤트](/datagridview/api/events) |
@@ -310,7 +312,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>invalidateLayout</code> | [그리드 메서드 › 화면 갱신](/datagridview/api/grid-methods#화면-갱신) | 너비, 높이 계산을 다시 하고 그림 |
 | <code>isCellActive</code> | [그리드 메서드 › 선택](/datagridview/api/grid-methods#선택) | 이 셀이 선택되어 있는지 / 활성 셀인지 (`cellActivationFeedback: 'row'` 면 같은 행 전체가 활성) |
 | <code>isCellInEdition</code> | [그리드 메서드 › 셀 정보와 값](/datagridview/api/grid-methods#셀-정보와-값) | 이 셀이 지금 편집 중인지 |
-| <code>isCellMatchingFind</code> | [컬럼 함수 › 그룹핑 / 찾기](/datagridview/api/column-functions#그룹핑-찾기) | 찾기(setFindStr) 일치 여부 직접 판단 |
+| <code>isCellMatchingFind</code> | [컬럼 함수 › 그룹핑 / 찾기](/datagridview/api/column-functions#그룹핑-찾기) | 찾기(setFindStr) 일치 여부 직접 판단. 대소문자 구분을 끄면 찾을 문자열은 소문자로 옴 ([찾기](/datagridview/find-and-print#무엇을-찾나)) |
 | <code>isCellSelected</code> | [그리드 메서드 › 선택](/datagridview/api/grid-methods#선택) | 이 셀이 선택되어 있는지 / 활성 셀인지 (`cellActivationFeedback: 'row'` 면 같은 행 전체가 활성) |
 | <code>isColumnSelected</code> | [그리드 메서드 › 컬럼](/datagridview/api/grid-methods#컬럼) | 컬럼이 선택되어 있는지 (`columnSelection` 옵션 필요) |
 | <code>isExpanded</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeNodeModel](/datagridview/api/data#treenodemodel) | 이 행 펼치기 / 접기 / 하위까지 모두 펼치기 / 펼쳐져 있는지 |
@@ -338,6 +340,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>liveChange</code> | [이벤트 › 셀 편집기(Tweaker)에서 버블링되는 이벤트](/datagridview/api/events#셀-편집기-tweaker-에서-버블링되는-이벤트) | 데이터 반영은 컬럼 liveUpdateFlag:true 일 때만 |
 | <code>liveUpdateFlag</code> | [컬럼 옵션 › 편집](/datagridview/api/column-options#편집) | 입력 중에도 값 반영 |
 | <code>loadCustomViews</code> | [그리드 메서드 › 사용자 뷰, 일괄 수정, 인쇄](/datagridview/api/grid-methods#사용자-뷰-일괄-수정-인쇄) | 사용자 뷰 목록을 통째로 바꾸고 `current` 뷰를 적용 (10). `current` 는 순번 또는 identifier. 뷰의 형식은 [뷰 하나의 키](/datagridview/custom-views#뷰-하나의-키). `layoutDensity` 가 있는 뷰를 넣으면 그 밀도가 원래 밀도가 되어 기본 뷰로 돌아가지 않음 ([주의](/datagridview/custom-views#주의)) |
+| <code>lockUI</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 스크롤 영역에 `wux-ui-locked` 클래스를 붙여 / 떼어 셀의 마우스 입력을 막음 (CSS `pointer-events: none`). 키보드는 막지 않음. 그리드도 스크롤 중에 스스로 씀 |
 
 ## M
 
@@ -369,6 +372,8 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>onCellRequest</code> | [컬럼 함수 › 모양](/datagridview/api/column-functions#모양) | 셀 DOM 을 직접 그림. 지정하면 기본 렌더링(defaultOnCellRequest) 대신 호출. 데이터 행의 셀에서만 호출 ([셀 직접 그리기](/datagridview/custom-cell)) |
 | <code>onChange</code> | [이벤트 › 데이터(TreeDocument) 쪽 알림 — 행 선택, 값 변경은 여기서 받는 것이 정확](/datagridview/api/events#데이터-treedocument-쪽-알림-—-행-선택-값-변경은-여기서-받는-것이-정확) | onPreAdd, onPreRemove, onPreEmpty (변경 전) 도 있음 |
 | <code>onContextualEvent</code> | [그리드 옵션 › 드래그 / 그룹](/datagridview/api/grid-options#드래그-그룹) | 우클릭 메뉴 직접 구성. params.cellInfos = 우클릭한 셀, params.collectionView = 그리드 ([우클릭 메뉴](/datagridview/context-menu)) |
+| <code>onCopy</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | Ctrl+C / Ctrl+X / Ctrl+V 때 그리드가 부르는 함수. 그리드 인스턴스에 같은 이름의 함수를 넣어 바꿉니다 (`grid.onCopy = function () { ... }`. ENOPAD, FolderEditor 가 자기 복사 / 붙여넣기 명령을 부름). 기본 동작은 `onCopyDefault()` / `onCutDefault()` / `onPasteDefault()` |
+| <code>onCut</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | Ctrl+C / Ctrl+X / Ctrl+V 때 그리드가 부르는 함수. 그리드 인스턴스에 같은 이름의 함수를 넣어 바꿉니다 (`grid.onCopy = function () { ... }`. ENOPAD, FolderEditor 가 자기 복사 / 붙여넣기 명령을 부름). 기본 동작은 `onCopyDefault()` / `onCutDefault()` / `onPasteDefault()` |
 | <code>onDelayedModelDataRequest</code> | [그리드 옵션 › 데이터](/datagridview/api/grid-options#데이터) | 화면에 보이는 행 범위(<code>startNodeIndex</code>, <code>endNodeIndex</code>)를 알려 주는 콜백. 느린 컬럼 값을 보이는 행만 채울 때 ([보이는 행의 값만 나중에 채우기](/datagridview/server-side#예제-6-대안-보이는-행의-값만-나중에-채우기)) |
 | <code>onEmpty</code> | [이벤트 › 데이터(TreeDocument) 쪽 알림 — 행 선택, 값 변경은 여기서 받는 것이 정확](/datagridview/api/events#데이터-treedocument-쪽-알림-—-행-선택-값-변경은-여기서-받는-것이-정확) | onPreAdd, onPreRemove, onPreEmpty (변경 전) 도 있음 |
 | <code>onEndResizeOrOnReadyModelRequest</code> | [그리드 메서드 › 행을 나눠 불러오기](/datagridview/api/grid-methods#행을-나눠-불러오기) | 준비됐을 때와 크기가 바뀐 뒤 <code>fn({ RowMaxNumber, ColumnsMaxNumber, viewportDimensions, event })</code> / 처리 끝 알림 (2) |
@@ -378,6 +383,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>onNodeModelUpdate</code> | [이벤트 › 데이터(TreeDocument) 쪽 알림 — 행 선택, 값 변경은 여기서 받는 것이 정확](/datagridview/api/events#데이터-treedocument-쪽-알림-—-행-선택-값-변경은-여기서-받는-것이-정확) | 어떤 경로로 바뀌든 값 변경을 한 곳에서 받기 |
 | <code>onNodeUpdate</code> | [툴바 (setToolbar)](/datagridview/api/toolbar) | 값이 확정되면 호출 (검색창 Enter, 콤보 선택). `updateNodeModel` 로 항목을 바꿀 때도 매번 호출 |
 | <code>onOutOfBoundSortRequest</code> | [하위 옵션 객체 › sortOptions](/datagridview/api/sub-options#sortoptions) | 최대 개수를 넘는 정렬 요청 시 호출 |
+| <code>onPaste</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | Ctrl+C / Ctrl+X / Ctrl+V 때 그리드가 부르는 함수. 그리드 인스턴스에 같은 이름의 함수를 넣어 바꿉니다 (`grid.onCopy = function () { ... }`. ENOPAD, FolderEditor 가 자기 복사 / 붙여넣기 명령을 부름). 기본 동작은 `onCopyDefault()` / `onCutDefault()` / `onPasteDefault()` |
 | <code>onPostAdd</code> | [이벤트 › 데이터(TreeDocument) 쪽 알림 — 행 선택, 값 변경은 여기서 받는 것이 정확](/datagridview/api/events#데이터-treedocument-쪽-알림-—-행-선택-값-변경은-여기서-받는-것이-정확) | webapps 각 50회 사용. 선택 목록은 treeDocument.getSelectedNodes(). 예제: [우클릭 메뉴와 선택](/datagridview/context-menu#선택-변경-받기) |
 | <code>onPostCollapse</code> | [이벤트 › 데이터(TreeDocument) 쪽 알림 — 행 선택, 값 변경은 여기서 받는 것이 정확](/datagridview/api/events#데이터-treedocument-쪽-알림-—-행-선택-값-변경은-여기서-받는-것이-정확) | - |
 | <code>onPostExpand</code> | [이벤트 › 데이터(TreeDocument) 쪽 알림 — 행 선택, 값 변경은 여기서 받는 것이 정확](/datagridview/api/events#데이터-treedocument-쪽-알림-—-행-선택-값-변경은-여기서-받는-것이-정확) | - |
@@ -389,7 +395,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>onPreExpand</code> | [이벤트 › 데이터(TreeDocument) 쪽 알림 — 행 선택, 값 변경은 여기서 받는 것이 정확](/datagridview/api/events#데이터-treedocument-쪽-알림-—-행-선택-값-변경은-여기서-받는-것이-정확) | 하위 행 지연 로딩. 다시 등록하면 이전 콜백을 대체. 예제: [트리 구조](/datagridview/tree#펼칠-때-하위-행-불러오기) |
 | <code>onReady</code> | [그리드 메서드 › 준비 시점과 크기](/datagridview/api/grid-methods#준비-시점과-크기) | 그리드가 준비되면 `fn` 실행 (36). 이미 준비됐으면 바로 실행. inject 직후에 스크롤, 선택, 너비 맞춤을 할 때 사용 |
 | <code>onUpdate</code> | [이벤트 › 데이터(TreeDocument) 쪽 알림 — 행 선택, 값 변경은 여기서 받는 것이 정확](/datagridview/api/events#데이터-treedocument-쪽-알림-—-행-선택-값-변경은-여기서-받는-것이-정확) | 끌어서 행을 옮긴 뒤에도 불림. 이때 updateType 에 이동 표시는 없음 ([순서가 바뀐 것을 알기](/datagridview/drag-and-drop#순서가-바뀐-것을-알기)) |
-| <code>openPrintableViewWindow</code> | [그리드 메서드 › 사용자 뷰, 일괄 수정, 인쇄](/datagridview/api/grid-methods#사용자-뷰-일괄-수정-인쇄) | 인쇄용 화면을 만들어 엶. 컬럼 옵션 `printableFlag: false` 인 컬럼은 제외 |
+| <code>openPrintableViewWindow</code> | [그리드 메서드 › 사용자 뷰, 일괄 수정, 인쇄](/datagridview/api/grid-methods#사용자-뷰-일괄-수정-인쇄) | 인쇄용 화면을 만들어 엶. 컬럼 옵션 `printableFlag: false` 인 컬럼은 제외. `true` 를 주면 바로 인쇄 창 ([인쇄](/datagridview/find-and-print#인쇄)) |
 | <code>overflowPriority</code> | [툴바 (setToolbar)](/datagridview/api/toolbar) | 묶음, 순서, 공간 부족 시 드롭다운으로 넘어가는 우선순위 |
 
 ## P
@@ -397,7 +403,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | 이름 | 있는 곳 | 설명 |
 | --- | --- | --- |
 | <code>pageScrollValueTriggeringInfiniteScroll</code> | [그리드 옵션 › 데이터](/datagridview/api/grid-options#데이터) | <code>onInfiniteScroll</code> 콜백을 바닥보다 일찍 부른다. 0.5 면 스크롤할 수 있는 거리의 절반 지점 ([스크롤이 끝에 닿으면 행 더하기](/datagridview/server-side#예제-5-대안-스크롤이-끝에-닿으면-행-더하기)) |
-| <code>paginationManager</code> | [그리드 옵션 › 데이터](/datagridview/api/grid-options#데이터) | 행을 페이지로 나눠 표시. pageSize 기본 100, currentPage 기본 1, nodeDepth 기본 0 (-1 이면 모든 깊이의 행을 셈). 모듈 <code>DS/DataGridView/DataGridViewPaginationManager</code> |
+| <code>paginationManager</code> | [그리드 옵션 › 데이터](/datagridview/api/grid-options#데이터) | 행을 페이지로 나눠 표시. pageSize 기본 100, currentPage 기본 1, nodeDepth 기본 0 (-1 이면 모든 깊이의 행을 셈). 모듈 <code>DS/DataGridView/DataGridViewPaginationManager</code> ([페이지 나누기](/datagridview/find-and-print#페이지-나누기)) |
 | <code>paste</code> | [이벤트 › 일반 DOM 이벤트 (그리드 영역)](/datagridview/api/events#일반-dom-이벤트-그리드-영역) | 그리드 기본 복사/붙여넣기 전후 처리 |
 | <code>pinned</code> | [레이아웃 메서드 (grid.layout) › 컬럼 설정 바꾸기](/datagridview/api/layout-methods#컬럼-설정-바꾸기) | 고정 (`setColumnPinned` 를 거침) |
 | <code>pinned</code> | [컬럼 옵션 › 크기 / 위치](/datagridview/api/column-options#크기-위치) | 좌/우 고정 |
@@ -485,7 +491,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>setColumnVisibleFlag</code> | [레이아웃 메서드 (grid.layout) › 컬럼 보이기와 숨기기](/datagridview/api/layout-methods#컬럼-보이기와-숨기기) | 컬럼 표시 / 숨김. `columnVisibleStateChange` 이벤트 발생. `alwaysVisibleFlag: true` 인 컬럼은 숨길 수 없음 |
 | <code>setColumnWidth</code> | [레이아웃 메서드 (grid.layout) › 컬럼 너비](/datagridview/api/layout-methods#컬럼-너비) | 너비 바꾸기. `width` 는 숫자(px) 또는 `'auto'`. `minWidth` 보다 작으면 `minWidth` 로. `columnWidthChange` 이벤트 발생 |
 | <code>setFilterModel</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeDocument](/datagridview/api/data#treedocument) | 컬럼 필터 지정 ([필터](/datagridview/api/filter)) |
-| <code>setFindStr</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 찾기 실행 / 닫기 |
+| <code>setFindStr</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 찾기 실행 / 닫기 ([찾기](/datagridview/find-and-print#찾기)) |
 | <code>setIcons</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeNodeModel](/datagridview/api/data#treenodemodel) | 아이콘, 배지 읽기 / 바꾸기 |
 | <code>setLabel</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeNodeModel](/datagridview/api/data#treenodemodel) | 트리 컬럼 값 읽기 / 바꾸기 |
 | <code>setModelAt</code> | [그리드 메서드 › 셀 정보와 값](/datagridview/api/grid-methods#셀-정보와-값) | 셀 값 바꾸기. 컬럼 `setCellValue` 가 있으면 그것을 거침 |
@@ -509,7 +515,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>showMatchingCellBackgroundFlag</code> | [그리드 옵션 › 표시](/datagridview/api/grid-options#표시) | 찾기(find) 결과 셀 배경 강조 |
 | <code>showMixedStateOnParents</code> | [하위 옵션 객체 › selectionBehavior](/datagridview/api/sub-options#selectionbehavior) | 트리에서 자식 일부 선택 시 부모 체크박스 중간 상태 |
 | <code>showModelChangesFlag</code> | [그리드 옵션 › 표시](/datagridview/api/grid-options#표시) | 변경된 셀 강조 |
-| <code>showModelMassUpdateDialog</code> | [그리드 메서드 › 사용자 뷰, 일괄 수정, 인쇄](/datagridview/api/grid-methods#사용자-뷰-일괄-수정-인쇄) | 여러 행 일괄 수정 대화상자 열기. `editableFlag` 와 `massUpdateAllowedFlag` 가 모두 true 인 컬럼이 대상 |
+| <code>showModelMassUpdateDialog</code> | [그리드 메서드 › 사용자 뷰, 일괄 수정, 인쇄](/datagridview/api/grid-methods#사용자-뷰-일괄-수정-인쇄) | 여러 행 일괄 수정 대화상자 열기. `editableFlag` 와 `massUpdateAllowedFlag` 가 모두 true 인 컬럼이 대상 ([일괄 수정](/datagridview/find-and-print#일괄-수정)) |
 | <code>showNodeKPIColorFlag</code> | [그리드 옵션 › 표시](/datagridview/api/grid-options#표시) | 행 KPI 색상 표시 (컬럼 getCellKPIColor 와 같이 사용) |
 | <code>showOutlineFlag</code> | [그리드 옵션 › 표시](/datagridview/api/grid-options#표시) | 그리드 외곽선 |
 | <code>showRequiredFeedbackFlag</code> | [그리드 옵션 › 표시](/datagridview/api/grid-options#표시) | 필수 값(requiredFlag) 셀 표시 |
@@ -555,6 +561,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | 이름 | 있는 곳 | 설명 |
 | --- | --- | --- |
 | <code>uncommittedChange</code> | [이벤트 › 셀 편집기(Tweaker)에서 버블링되는 이벤트](/datagridview/api/events#셀-편집기-tweaker-에서-버블링되는-이벤트) | - |
+| <code>unlockUI</code> | [그리드 메서드 › 툴바, 그룹, 내보내기](/datagridview/api/grid-methods#툴바-그룹-내보내기) | 스크롤 영역에 `wux-ui-locked` 클래스를 붙여 / 떼어 셀의 마우스 입력을 막음 (CSS `pointer-events: none`). 키보드는 막지 않음. 그리드도 스크롤 중에 스스로 씀 |
 | <code>unselect</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeNodeModel](/datagridview/api/data#treenodemodel) | 행 선택 제어 |
 | <code>unselectAll</code> | [그리드 메서드 › 선택](/datagridview/api/grid-methods#선택) | 행, 셀, 컬럼 선택 모두 해제 |
 | <code>unselectAllOnEmptyArea</code> | [하위 옵션 객체 › selectionBehavior](/datagridview/api/sub-options#selectionbehavior) | 빈 영역 클릭 시 선택 해제 |
@@ -572,6 +579,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | <code>useLastColumnWidthAutoFlag</code> | [layoutOptions › 컬럼 너비](/datagridview/api/layout-options#컬럼-너비) | 마지막 컬럼이 남은 너비를 채움 |
 | <code>userPreferencesChange</code> | [이벤트 › 그리드 자체 이벤트 (DataGridView / CollectionView 가 fire)](/datagridview/api/events#그리드-자체-이벤트-datagridview-collectionview-가-fire) | event.options 는 빈 객체. 한 번 조작에 여러 번 남 (헤더 경계 끌기 1번, 컬럼 하나를 끌어 옮기기 6번, loadCustomViews 8번) 이므로 모아서 처리. 바뀐 내용은 grid.layout.exportPreferencesInJson() 으로 읽음 ([사용자 뷰와 화면 상태 저장](/datagridview/custom-views#이벤트와-콜백)) |
 | <code>useWidgetPreferencesFlag</code> | [그리드 옵션 › 정렬 / 필터 / 찾기](/datagridview/api/grid-options#정렬-필터-찾기) | 화면 상태를 저장하는 곳. false = 브라우저 localStorage, true = 위젯 설정. 저장 자체는 `identifier` 가 있어야 동작 ([저장 위치](/datagridview/custom-views#저장-위치)) |
+| <code>useWrappedView</code> | [컬럼 옵션 › 크기 / 위치](/datagridview/api/column-options#크기-위치) | 지금 줄바꿈으로 보이는지. <code>setColumnWrap</code> 이 바꿈 |
 
 ## V
 
@@ -591,3 +599,4 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 476개�
 | --- | --- | --- |
 | <code>width</code> | [레이아웃 메서드 (grid.layout) › 컬럼 설정 바꾸기](/datagridview/api/layout-methods#컬럼-설정-바꾸기) | 너비 (`setColumnWidth` 를 거침) |
 | <code>width</code> | [컬럼 옵션 › 크기 / 위치](/datagridview/api/column-options#크기-위치) | 너비 |
+| <code>wrappableFlag</code> | [컬럼 옵션 › 크기 / 위치](/datagridview/api/column-options#크기-위치) | 줄바꿈 허용. 켜고 끄기는 <code>layout.setColumnWrap(컬럼, 'wrap' &#124; 'no-wrap')</code>, 상태는 <code>getColumnWrap</code> ([행 높이](/datagridview/row-height)). defaultColumnDef 의 <code>allowWrapFlag</code> 는 읽는 곳이 없음 |

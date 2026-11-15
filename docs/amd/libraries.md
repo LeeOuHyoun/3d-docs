@@ -3,7 +3,7 @@
 webapps 에는 DS 코드 말고도 오픈소스(일부 상용) 라이브러리가 들어 있습니다. 대부분 DS 가 만든 작은 AMD 래퍼(`DS/폴더/모듈`)로 감싸져 있어서 위젯에서 `require` 로 바로 부를 수 있습니다. 이 페이지는 위젯에서 부를 이름, 버전, OOTB 에서 쓰는 앱 수, 주의할 점을 쓰임별로 정리합니다. 모듈 이름 규칙과 `require.config` 는 [AMD 로딩](/amd/) 에 있습니다.
 
 ::: info 근거
-래퍼 파일: Handlebars/Handlebars.js, CKEditor/CKEditor.js, vue/vue.js, vuex/vuex.js, Vuetify/Vuetify.js, vuekit/vuekit.js, vuekit3/VUEKIT.umd.js, ReactLoader/ReactLoader.js, React18Loader/React18Loader.js, ReactRedux/ReactRedux.js, ReactRouterDom/ReactRouterDom.js, ENO6WPlugins/ENO6WPlugins.js, ENOjquery/ENOjquery.js, ENOjqueryUI/jQueryUI.js, WebjQueryLib/WebjQueryLib.js, 3DXHighcharts/3DXHighcharts.js, VENHighChart/UIHighCharts.js, SMAHighcharts/SMAHighcharts.js, PDFjs/PDFjs.js, PDFLib/PDFLib.js, ZipJS2/ZipJS2.js, D3js_external, D3Cola, DagreShim, Leaflet/LeafletLoader.js, VENMathjs/VENMathjs.js, VENMathjs2/VENMathjs2.js, ENODOMPurify/ENODOMPurify.js, DSNodeSocketioClient_4.7.4, DSVideoJS, WUXRichText/WUXRichText.js. 버전은 각 라이브러리 파일의 머리 주석과 `version` 문자열에서 읽었습니다. 사용 예: TopBar, 3DPlayWidgetViews (Vue 2 + vuekit), SNSearchUX, MPFView (Vue 3 `createApp`), DELReactAppBooter (React 18), ENORouteMgmt (CKEditor), 3DPlay2DExperience (PDF.js), SMAMpaResultsChartsWebUI (Plotly). 앱 수는 `"DS/폴더/..."` 큰따옴표 문자열이 나오는 .js 파일을 webapps 최상위 폴더로 묶어 센 폴더 수입니다 (자기 폴더는 빼고, vuekit 이나 vuex 같은 래퍼 폴더도 1 로 셈). 2025 는 enovia2025 webapps, 2026 은 enovia2026_webapps 에서 같은 방식으로 셌습니다
+래퍼 파일: Handlebars/Handlebars.js, CKEditor/CKEditor.js (2026 VENCKEditor/4.25.1/ckeditor.js 의 `licenseKey` 검사), vue/vue.js, vuex/vuex.js, Vuetify/Vuetify.js, vuekit/vuekit.js, vuekit3/VUEKIT.umd.js, ReactLoader/ReactLoader.js, React18Loader/React18Loader.js, ReactRedux/ReactRedux.js, ReactRouterDom/ReactRouterDom.js, ENO6WPlugins/ENO6WPlugins.js, ENOjquery/ENOjquery.js, ENOjqueryUI/jQueryUI.js, WebjQueryLib/WebjQueryLib.js, 3DXHighcharts/3DXHighcharts.js, VENHighChart/UIHighCharts.js, SMAHighcharts/SMAHighcharts.js, PDFjs/PDFjs.js, PDFLib/PDFLib.js, ZipJS2/ZipJS2.js, D3js_external, D3Cola, DagreShim (LayoutLib/1.0.0/layout.min.js), Leaflet/LeafletLoader.js, VENMathjs/VENMathjs.js, VENMathjs2/VENMathjs2.js, ENODOMPurify/ENODOMPurify.js, DSNodeSocketioClient_4.7.4, DSVideoJS, WUXRichText/WUXRichText.js. 버전은 각 라이브러리 파일의 머리 주석과 `version` 문자열에서 읽었습니다. 사용 예: TopBar, 3DPlayWidgetViews (Vue 2 + vuekit), SNSearchUX, MPFView (Vue 3 `createApp`), DELReactAppBooter (React 18), ENORouteMgmt (CKEditor), 3DPlay2DExperience (PDF.js), SMAMpaResultsChartsWebUI (Plotly). 앱 수는 `"DS/폴더/..."` 큰따옴표 문자열이 나오는 .js 파일을 webapps 최상위 폴더로 묶어 센 폴더 수입니다 (자기 폴더는 빼고, vuekit 이나 vuex 같은 래퍼 폴더도 1 로 셈). 2025 는 enovia2025 webapps, 2026 은 enovia2026_webapps 에서 같은 방식으로 셌습니다
 :::
 
 ::: warning OOTB 라이브러리는 업그레이드 때 바뀝니다
@@ -110,7 +110,7 @@ require(['DS/vue-3.4.15/vue'], function (Vue) {
 });
 ```
 
-- 이 모듈은 Vue 를 전역 `Vue` 로 내놓지 않습니다. `runtimeGlobalName` 을 바꾸지 않으면 런타임에 컴파일한 template 이 전역 `Vue` 를 찾아 실패하는 것으로 보입니다 <Badge type="danger" text="검증 필요" />.
+- 이 모듈은 Vue 를 전역 `Vue` 로 내놓지 않습니다. `runtimeGlobalName` 을 바꾸지 않으면 런타임에 컴파일한 template 이 전역 `Vue` 를 찾아 실패합니다. 컴파일러 기본값이 `runtimeGlobalName: "Vue"` 이고, 컴파일 결과(`const _Vue = Vue` 로 시작)를 `new Function` 으로 실행하므로 래퍼 안의 지역 변수 `Vue` 가 아니라 전역을 봅니다 (vue-3.4.15/vue.js).
 - 다 쓴 뒤에는 `app.unmount()` 를 부릅니다 (MPFView 의 VueComponentWrapper).
 
 ### React
@@ -155,7 +155,7 @@ widget.addEvent('onLoad', function () {
 | `DS/ENO6WPlugins/jQuery` <Badge type="tip" text="2025" /> | jQuery 2.1.1 (`VENENO6WPlugins/plugins/jquery/latest`) | 30 / - | `noConflict()` 로 `$` 를 돌려놓음 |
 | `DS/ENO6WPlugins/jQuery_3.3.1` <Badge type="tip" text="2025" /> | 3.3.1 | 3 / - | |
 | `DS/ENO6WPlugins/jQueryUI` <Badge type="tip" text="2025" /> | jQuery UI 1.10.3 | 8 / - | |
-| `DS/ENOjquery/ENOjquery` <Badge type="warning" text="2026" /> | 3.7.1 (`VENCDjquery/latest/dist`) | - / 37 | 전역 `jQuery` 가 이미 있으면 **버전과 상관없이** 그 전역 값을 돌려줌 (3.7.1 은 `DS/ENOPlugins/ENOjquery` 쪽에만 정의됨) |
+| `DS/ENOjquery/ENOjquery` <Badge type="warning" text="2026" /> | 3.7.1 (`VENCDjquery/latest/dist`) | - / 37 | 전역 `jQuery` 가 이미 있으면 **버전과 상관없이** 그 전역 값을 돌려줌 (그 전역이 3.7.1 이 아니면 3.7.1 은 `DS/ENOPlugins/ENOjquery` 로 따로 정의됨. 전역 `jQuery` 가 없으면 이 모듈이 3.7.1 을 읽어 돌려줌) |
 | `DS/ENOjqueryUI/jQueryUI` <Badge type="warning" text="2026" /> | jQuery UI 1.14.1 (`VENCDjqueryUI/latest`) | - / 6 | CSS(`jquery-ui.min.css`)는 불러오지 않음 |
 | `DS/WebjQueryLib/WebjQuery` | 3.5.1 (`VENWebjQueryLibExt`) | 0 / 0 | 2025, 2026 모두 있음 |
 
@@ -185,7 +185,7 @@ Ext JS 와 Bryntum 은 머리 주석에 상용 라이선스 안내가 있습니�
 | `DS/D3js_external/D3js` | d3 3.5.17 (`VEND3js/3.5.17`) | 1 / 1 | 전역 `d3`. SNNavigationMap |
 | `DS/VEND3js/5.7.0/d3.min` | d3 5.7.0 | 1 / 1 | 래퍼 없이 파일 경로로 부름. SocialGlobeAPI. VEND3js 에는 3.4.10, 3.4.11, 3.5.8, 4.1.1 도 있음 |
 | `DS/D3Cola/D3Cola` | WebCola 3.0.0 | 1 / 1 | SNNavigationMap |
-| `DS/DagreShim/DagreShim` | `LayoutLib/1.0.0/layout.min` (전역 `layout`) | 1 / 1 | 이름으로 보아 dagre 계열 배치 라이브러리 <Badge type="danger" text="검증 필요" />. SNNavigationMap |
+| `DS/DagreShim/DagreShim` | dagre (`LayoutLib/1.0.0/layout.min`, dagre + graphlib UMD 묶음) | 1 / 1 | 그래프 배치 라이브러리. `DS/LayoutLib` 를 그대로 돌려줌 (전역 `layout` 객체가 이미 있으면 그것을 `DS/LayoutLib` 로 씀). shim 설정의 exports 이름은 `layout` 이지만 파일은 AMD 로 스스로 정의되고, AMD 가 없을 때 만드는 전역은 `dagre`. SNNavigationMap |
 
 ```js
 require(['DS/VENHighChart/UIHighCharts'], function (Highcharts) {
@@ -252,8 +252,8 @@ require(['DS/CKEditor/CKEditor'], function (CKEDITOR) {
 ```
 
 - 4.25.1 은 "CKEditor 4 LTS (Extended Support Model)" 판이고, 같은 폴더의 LICENSE.md 는 4.23.0 이상을 상용 라이선스 조건으로 안내합니다. 4.18.0 과 라이선스 조건이 다릅니다.
-- 4.25.1 에는 `config.licenseKey` 를 검사하는 코드가 있습니다. OOTB 에서 CKEditor 4 에 이 값을 넣는 곳은 찾지 못했고, 키가 없을 때 화면이 어떻게 되는지는 확인하지 않았습니다 <Badge type="danger" text="검증 필요" />.
-- ckeditor5 는 ES 모듈 파일이라 AMD `require` 로 부르지 않습니다. WUXRichText 는 2026 의 `DS/Utilities/LoadingUtils.loadScripts` (`<script type="module">` 로 읽음)를 씁니다. OOTB 의 Vue 앱(SocialToolbarVue)은 CKEditor 5 41.4.2 를 자기 파일 안에 묶어 넣어 따로 씁니다.
+- 4.25.1 (2026) 에는 `config.licenseKey` 를 검사하는 코드가 있습니다. 키는 ckeditor.js 의 기본 설정(`CKEDITOR.config.licenseKey`)에 들어 있고 이 키는 검사를 통과하므로, OOTB 는 따로 넣지 않습니다. 키를 빈 값이나 다른 값으로 덮어쓰면 에디터가 만들어진 직후(`instanceLoaded`) 콘솔에 `[CKEDITOR]: The license key is missing or invalid.` 를 찍고 에디터를 `destroy()` 합니다.
+- ckeditor5 는 ES 모듈 파일이라 AMD `require` 로 부르지 않습니다. WUXRichText 는 2026 의 `DS/Utilities/LoadingUtils.loadScripts` (`<script type="module">` 로 읽음, [LoadingUtils](/amd/utilities#loadingutils))를 씁니다. 화면 컨트롤 쪽에서 고르는 표는 [컨트롤 개요](/controls/#무엇을-쓸까) 에 있습니다. OOTB 의 Vue 앱(SocialToolbarVue)은 CKEditor 5 41.4.2 를 자기 파일 안에 묶어 넣어 따로 씁니다.
 
 ## 문서와 파일
 

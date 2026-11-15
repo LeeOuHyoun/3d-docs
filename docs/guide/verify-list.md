@@ -1,24 +1,23 @@
 # 검증 대기 목록
 
-본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 253 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
+본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 227 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
 
 - 각 줄 앞의 링크는 그 문장이 있는 절로 갑니다.
 - 확인했으면 원래 페이지에서 배지를 지우고 문장을 단정형으로 고칩니다. 다르게 동작하면 내용을 고칩니다.
 - 이 페이지는 `npm run docs:verify-list` 로 다시 만듭니다. 직접 고치지 않습니다.
 
-## 데이터 모델 / MQL (22)
+## 데이터 모델 / MQL (21)
 
-### Attribute, Type, Relationship, Role (2)
+### Attribute, Type, Relationship, Role (3)
 
+- [자료형](/schema/admin#자료형) : `timestamp` : `date` 와 저장 정밀도가 어떻게 다른지는 확인하지 못했습니다
 - [자료형](/schema/admin#자료형) : 키워드는 대소문자를 가리지 않는 것으로 보입니다.
 - [나중에 고치기](/schema/admin#나중에-고치기) : `mod type ... remove attribute` 를 하면 그 type 의 기존 객체에 있던 값도 사라지는 것으로 보입니다.
 
-### mql 폴더 작성 규칙 (7)
+### mql 폴더 작성 규칙 (5)
 
-- [폴더 구조](/schema/conventions#폴더-구조) : `14.tcl` : 채번용 OOTB tcl 프로그램 사본으로 보입니다
 - [본문 순서](/schema/conventions#본문-순서) : 운영에 이미 반영된 객체는 `mod` 만 다시 실행하면 되기 때문으로 보입니다.
 - [본문 순서](/schema/conventions#본문-순서) : 정의를 지우면 그 attribute 값이나 연결이 함께 사라지는 것으로 보입니다.
-- [property 블록](/schema/conventions#property-블록) : `version` : 최근 파일은 `R427` (R2025x 의 내부 릴리스 번호로 보입니다
 - [OOTB 수정 규칙](/schema/conventions#ootb-수정-규칙) : 같은 이름의 사본이 있으면 `copy` 가 실패하기 때문으로 보입니다.
 - [데이터 이관 (98.migration)](/schema/conventions#데이터-이관-98-migration) : 엑셀 같은 원본에서 한 줄 = 명령 하나로 만들어 낸 것으로 보입니다.
 - [데이터 이관 (98.migration)](/schema/conventions#데이터-이관-98-migration) : 이관한 번호와 채번기의 `eService Next Number` 가 겹치지 않도록 번호 구간을 나누거나 다음 번호를 맞춰 두어야 하는 것으로 보입니다.
@@ -42,10 +41,10 @@
 - [조건](/schema/policy#조건) : `single organization` : 객체의 조직과 사용자 로그인 컨텍스트의 조직이 같을 때로 보입니다
 - [조건](/schema/policy#조건) : `single project` : 객체의 협업공간(project)과 로그인 컨텍스트의 협업공간이 같을 때로 보입니다
 - [trigger](/schema/policy#trigger) : `Override` : 이벤트의 기본 동작 대신 실행되는 것으로 보입니다
-- [trigger](/schema/policy#trigger) : state : `Active` 여야 실행되는 것으로 보입니다.
+- [문법에는 있지만 프로젝트에서 안 쓰는 것](/schema/policy#문법에는-있지만-프로젝트에서-안-쓰는-것) : `enforcereserveaccess` : 예약(reserve)한 사용자만 고칠 수 있게 하는 policy 설정으로 보임
 - [문법에는 있지만 프로젝트에서 안 쓰는 것](/schema/policy#문법에는-있지만-프로젝트에서-안-쓰는-것) : 프로젝트의 결재는 이 기능 대신 Route(`Object Route` 관계)와 trigger 로 처리하는 것으로 보입니다.
 
-## UI 구성 요소 (28)
+## UI 구성 요소 (26)
 
 ### command, menu (4)
 
@@ -54,10 +53,9 @@
 - [창 크기](/ui-components/command-menu#창-크기) : `가로x세로` 형식(`1500x1000`)은 `emxFramework.PopupSize` 목록에 등록된 것만 쓰는 것으로 보입니다.
 - [보일지 말지: 접근 setting](/ui-components/command-menu#보일지-말지-접근-setting) : `Access Expression` : 현재 객체 기준으로 평가하는 것으로 보입니다.
 
-### portal, channel (2)
+### portal, channel (1)
 
 - [channel 정의](/ui-components/portal-channel#channel-정의) : `setting 'Height'` : 높이는 행 단위로 정해지는 것으로 보입니다
-- [탭 command](/ui-components/portal-channel#탭-command) : `portalMode` : 받는 JSP 는 이 값으로 "포털 칸 안" 인지 알고 머리글 / 버튼 배치를 바꾸는 것으로 보입니다
 
 ### settings 레퍼런스 (10)
 
@@ -78,40 +76,29 @@
 - [열 종류: Column Type, Field Type](/ui-components/table#열-종류-column-type-field-type) : 이 둘은 `Field Type` 쪽 값으로 보입니다.
 - [편집 가능한 열](/ui-components/table#편집-가능한-열) : `Field Type` `attribute` 열은 `Update ...` 가 없어도 attribute 에 바로 저장되는 것으로 보입니다.
 
-### URL 파라미터 (7)
+### URL 파라미터 (8)
 
 - [공통](/ui-components/url-parameters#공통) : `header`, `subHeader` : `UINavigatorUtil.parseHeader` 가 `objectId` 와 함께 풀어서, 키 값 안의 `$<select식>` 도 바뀌는 것으로 보입니다
 - [행과 열](/ui-components/url-parameters#행과-열) : `type` : 행 추가 / 필터에서 쓰는 타입으로 보입니다
 - [행과 열](/ui-components/url-parameters#행과-열) : `objectBased` : 행이 객체가 아닌 데이터일 때 쓰는 것으로 보입니다
 - [행과 열](/ui-components/url-parameters#행과-열) : `connectionProgram` : 행을 끼워 넣을 때 연결을 처리하는 것으로 보입니다
 - [모양](/ui-components/url-parameters#모양) : `pageSize` : 한 번에 그릴 행 수로 보입니다
+- [모양](/ui-components/url-parameters#모양) : 그래서 주소에 소문자만 주면 칸은 줄바꿈되지만 툴바에는 값이 가지 않아, 줄바꿈 버튼이 "켜기" 아이콘으로 보일 수 있습니다
 - [편집](/ui-components/url-parameters#편집) : `insertNewRow` : 새 행 추가 끄기로 보입니다
 - [편집](/ui-components/url-parameters#편집) : `editRelationship`, `resequenceRelationship` : 행 추가 / 순서 바꾸기에 쓸 관계로 보입니다
 
-### webform (상세, 편집, 생성 화면) (2)
+## JPO (9)
 
-- [필드 종류: Field Type](/ui-components/webform#필드-종류-field-type) : `Group Holder` : 다음 N 개 필드를 가로로 묶는 자리로 보임
-- [배치](/ui-components/webform#배치) : `Group Holder` + `Group Count` `2` 는 바로 다음 두 필드를 한 줄에 놓는 것으로 보입니다.
-
-## JPO (13)
-
-### 호출 종류별 인자 구조 (5)
+### 호출 종류별 인자 구조 (3)
 
 - [구조 펼치기 program](/jpo/args#구조-펼치기-program) : JPO 가 단계를 직접 처리했다는 표시로 보입니다.
-- [구조 펼치기 program](/jpo/args#구조-펼치기-program) : href 에 `expandProgram=` 을 따로 주면 루트 목록은 `program`, 펼치기는 `expandProgram` 이 맡는 것으로 보입니다.
 - [셀 스타일 (Style Function)](/jpo/args#셀-스타일-style-function) : 열 설정에 붙으므로 그 열의 셀에 적용되는 것으로 보입니다.
-- [범위 (Range Function)](/jpo/args#범위-range-function) : `fieldMap` (폼) / `columnMap` (표) : 표에서는 `columnMap` 이 오는 것으로 보입니다
-- [검사 순서](/jpo/args#검사-순서) : `GrayOut` 은 숨기지 않고 회색 비활성으로 그리라는 표시로 보입니다.
+- [postProcessJPO](/jpo/args#postprocessjpo) : `void` 는 `JPO.invoke` 가 `null` 을 돌려주므로 편집 폼에서도 실패하지 않는 것으로 보입니다.
 
-### DomainObject 와 select (3)
+### DomainObject 와 select (2)
 
-- [여러 값 select](/jpo/domain-object#여러-값-select) : 2 이상 : 구분자로 이어 붙인 `String` 으로 오는 경우도 있는 것으로 보입니다
 - [연결, 끊기](/jpo/domain-object#연결-끊기) : `DomainRelationship.connect(context, fromId, relName, toId, preserve)` : id 로 연결. `preserve=true` 면 MQL `connect ... preserve` 로 실행 (수정 일자를 바꾸지 않는 옵션으로 보입니다
 - [관계](/jpo/domain-object#관계) : `attribute[없는이름]` 처럼 이름을 틀리면 예외 없이 `null` / 빈 값이 오는 것으로 보입니다.
-
-### 다국어, 예외, 로그 (1)
-
-- [사용자에게 오류 보여 주기](/jpo/i18n-exception#사용자에게-오류-보여-주기) : `JPO.invoke` 를 거친 예외 문구에는 `System Error: #5000001: java.lang.Exception:` 같은 앞부분이 붙는 것으로 보입니다.
 
 ### JPO 개요 (1)
 
@@ -126,12 +113,11 @@
 - [UI 가 열어 주는 트랜잭션](/jpo/transaction-context#ui-가-열어-주는-트랜잭션) : 트리거는 객체를 바꾸는 MQL 명령의 트랜잭션 안에서 실행되는 것으로 보입니다.
 - [슈퍼유저로 바꾸기 (pushContext)](/jpo/transaction-context#슈퍼유저로-바꾸기-pushcontext) : 이력 (history) 의 사용자도 User Agent 로 남는 것으로 보입니다.
 
-## 트리거 (11)
+## 트리거 (8)
 
-### 채번기 (Object Generator) (3)
+### 채번기 (Object Generator) (2)
 
-- [속성](/trigger/generator#속성) :  : 호출 때 policy 를 주지 않으면 쓰는 값으로 보입니다
-- [속성](/trigger/generator#속성) :  : 위와 같은 용도로 보입니다
+- [속성](/trigger/generator#속성) :  : 기본 경로(슈퍼유저로 생성)는 `eServicecommonGenerateObject.tcl` 에 넘겨 처리하며 이 프로그램은 원본에 없음
 - [번호가 만들어지는 방식](/trigger/generator#번호가-만들어지는-방식) : `FrameworkUtil.autoName` 도 같은 방식으로 보입니다.
 
 ### 트리거 개요 (2)
@@ -143,31 +129,25 @@
 
 - [macro 치환](/trigger/jpo-args#macro-치환) : 없는 변수 : 빈 값으로 보입니다
 
-### 라이프사이클과 promote (3)
+### 라이프사이클과 promote (2)
 
 - [promote 한 번에 일어나는 일](/trigger/lifecycle#promote-한-번에-일어나는-일) : Action 이 예외를 던지면 state 변경도 남지 않는 것으로 보입니다.
-- [코드에서 state 바꾸기](/trigger/lifecycle#코드에서-state-바꾸기) : `obj.setState(context, "Release")` : 거치는 전이마다 트리거가 실행되는 것으로 보입니다
 - [서명과 자동 promote](/trigger/lifecycle#서명과-자동-promote) : `${AUTOPROMOTE}` : 트리거 안에서 자동 promote 인지 구분하는 RPE 변수로 보입니다
 
-### 트리거 등록 (2)
+### 트리거 등록 (1)
 
-- [속성](/trigger/register#속성) : `eService Sequence Number` : 실행 순서로 쓰이는 것으로 보입니다.
 - [2. admin 에 붙이기](/trigger/register#_2-admin-에-붙이기) : 내 이름만 적으면 OOTB 트리거가 빠지는 것으로 보입니다.
 
-## properties (7)
+## properties (3)
 
-### 문자열 리소스 (다국어) (2)
+### 문자열 리소스 (다국어) (1)
 
 - [파일 규칙](/properties/string-resource#파일-규칙) : `이름_koNative.properties` : 사람이 읽는 원본으로 보입니다.
-- [스키마 표시 이름](/properties/string-resource#스키마-표시-이름) : 이 키들은 `emxFrameworkStringResource` 에서만 찾는 것으로 보입니다.
 
-### 시스템 설정과 page 객체 (5)
+### 시스템 설정과 page 객체 (2)
 
-- [emxFrameworkCustom.properties](/properties/system-settings#emxframeworkcustom-properties) : OOTB 키와 같은 키 를 Custom 파일에 적으면 Custom 값이 쓰이는 것으로 보입니다.
-- [emxFrameworkCustom.properties](/properties/system-settings#emxframeworkcustom-properties) : OOTB 목록을 바꿀 때는 **전체** 를 적음 : 값 하나만 더하는 문법은 없는 것으로 보입니다.
-- [emxFrameworkCustom.properties](/properties/system-settings#emxframeworkcustom-properties) : 같은 키를 Custom 파일에 두는 편이 안전한 것으로 보입니다.
 - [앱 등록 키](/properties/system-settings#앱-등록-키) : `.Directory` : command href 의 `${SUITE_DIR}` 가 이 폴더로 바뀌는 것으로 보입니다
-- [코드에서 읽기](/properties/system-settings#코드에서-읽기) : `FrameworkProperties.getProperty(context, 키)` : 같은 결과로 보입니다
+- [앱 등록 키](/properties/system-settings#앱-등록-키) : 프로젝트처럼 Custom 에만 앱을 등록했을 때 앱 설정 파일의 키가 어느 경로로 읽히는지는 서버에서 확인해야 합니다.
 
 ## 서버 Java (18)
 
@@ -181,12 +161,15 @@
 - [서버에서 Context 만들기](/server-java/#서버에서-context-만들기) : 객체를 만드는 배치는 소유 조직과 협업공간이 여기서 정해지므로 반드시 지정합니다.
 - [JPO 에서 요청 객체 쓰기](/server-java/#jpo-에서-요청-객체-쓰기) : 분석한 `web.xml` 에는 이 등록이 없어서 실제 등록 형태는 확인하지 못했습니다.
 
-### 메일 (4)
+### 메일 (3)
 
-- [발송 실패와 업무 처리](/server-java/mail#발송-실패와-업무-처리) : 필수 값이 빠진 경우(위 표의 1, 3)는 발송 전의 검사라서 이 설정과 상관없이 예외가 나는 것으로 보입니다.
 - [시스템 오류 메일](/server-java/mail#시스템-오류-메일) : 원본에는 같은 오류를 묶거나 횟수를 제한하는 처리가 보이지 않습니다.
 - [서버에 넣기](/server-java/mail#서버에-넣기) : jar : 분석한 `WEB-INF/lib` 에는 없어서 실제 위치는 확인하지 못했습니다.
 - [서버에 넣기](/server-java/mail#서버에-넣기) : 원본 설정에는 템플릿 캐시를 켜는 키가 없어서 바로 반영되는 것으로 보입니다.
+
+### 독립 실행 이관 프로그램 (1)
+
+- [실행 bat](/server-java/migration#실행-bat) : 바깥의 `abort` 가 이미 만든 항목까지 되돌리는지, 항목 하나의 `abortTransaction` 이 바깥 트랜잭션까지 끝내는지는 `ContextUtil` 의 중첩 처리에 달려 있습니다
 
 ### 커스텀 REST 서비스 (6)
 
@@ -194,7 +177,7 @@
 - [로그인 사용자의 Context](/server-java/rest-service#로그인-사용자의-context) : 뜻은 확인하지 못했습니다.
 - [로그인 사용자의 Context](/server-java/rest-service#로그인-사용자의-context) : OOTB 서비스와 같은 틀을 쓰므로 필요한 것으로 보입니다.
 - [응답 형식](/server-java/rest-service#응답-형식) : Context 를 얻지 못한 경우(로그인 만료)도 같은 형태로 오는 것으로 보입니다.
-- [외부 시스템이 부르는 주소](/server-java/rest-service#외부-시스템이-부르는-주소) : `resources/` 아래 주소에 서버가 기본으로 로그인을 요구하는지는 확인하지 못했습니다.
+- [외부 시스템이 부르는 주소](/server-java/rest-service#외부-시스템이-부르는-주소) : 외부 시스템이 어떤 방식으로 CAS 인증을 통과해 부르는지는 확인하지 못했습니다.
 - [위젯에서 부르기](/server-java/rest-service#위젯에서-부르기) : 원본 webapps 폴더에는 이 서비스를 부르는 위젯 소스가 없어서 위 호출은 OOTB 서비스를 부르는 방식([서버 호출](/uwa/request))을 그대로 적용한 것입니다.
 
 ### 스케줄러 (4)
@@ -213,20 +196,17 @@
 - [JPO](/deploy/#jpo) : 일반적으로 알려진 MQL 은 아래 형태입니다.
 - [JPO](/deploy/#jpo) : 컴파일 결과 메시지를 꼭 확인합니다.
 - [JPO](/deploy/#jpo) : 다른 JPO 가 `${CLASS:MyPartUI}` 로 참조하는 JPO 를 고쳤으면 참조하는 쪽도 다시 컴파일해야 하는 것으로 보입니다.
-- [Reload Cache](/deploy/#reload-cache) : 로드 밸런서 뒤에 서버가 여러 대면 서버마다 실행하거나 서버 목록을 설정해야 하는 것으로 보입니다.
+- [캐시 하나만 비우기 (JPO)](/deploy/#캐시-하나만-비우기-jpo) : `emxUtil` `loadFrameworkProperty` : 다시 읽기를 일으키는 용도로 보임
 - [문자열 리소스까지 비우기](/deploy/#문자열-리소스까지-비우기) : JDK 버전이 바뀌면 필드 이름이나 접근 제한 때문에 실패할 수 있는 것으로 보입니다.
 - [커스텀 Java (src/)](/deploy/#커스텀-java-src) : 서블릿이나 필터를 직접 추가하면 제품 업데이트 때 다시 만들어지면서 사라질 수 있으므로 추가한 블록을 따로 보관해 둡니다.
 - [커스텀 리소스 (resources/custom/)](/deploy/#커스텀-리소스-resources-custom) : 메일 템플릿 (`.vm`) : 엔진 캐시 설정에 따름
 - [반영 순서](/deploy/#반영-순서) : 이 순서는 참조 관계에서 정리한 것이고 원본에 반영 절차서가 있는 것은 아닙니다.
 
-## AMD 로딩 (8)
+## AMD 로딩 (5)
 
-### 들어 있는 외부 라이브러리 (4)
+### 들어 있는 외부 라이브러리 (1)
 
-- [Vue](/amd/libraries#vue) : `runtimeGlobalName` 을 바꾸지 않으면 런타임에 컴파일한 template 이 전역 `Vue` 를 찾아 실패하는 것으로 보입니다
 - [React](/amd/libraries#react) : 한 창에서 둘을 같이 부르면 먼저 읽힌 React 가 쓰이는 것으로 보입니다
-- [차트](/amd/libraries#차트) : `DS/DagreShim/DagreShim` : 이름으로 보아 dagre 계열 배치 라이브러리
-- [편집기](/amd/libraries#편집기) : OOTB 에서 CKEditor 4 에 이 값을 넣는 곳은 찾지 못했고, 키가 없을 때 화면이 어떻게 되는지는 확인하지 않았습니다
 
 ### 공통 유틸 (DS/Utilities, Logger ...) (3)
 
@@ -285,7 +265,7 @@
 ### 위젯 (2)
 
 - [실행 환경](/widget/#실행-환경) : 3DDashboard : 대시보드의 위젯 프레임 (iframe, 주소에 `/api/widget/frame` 이 들어간 것으로 보임
-- [실행 환경](/widget/#실행-환경) : 3DDashboard 는 위젯 HTML 을 읽어 제목, 메타, 설정 항목, 본문, 스크립트를 뽑아 프레임 안에서 다시 실행하는 것으로 보입니다
+- [실행 환경](/widget/#실행-환경) : 3DDashboard 는 위젯 HTML 을 읽어 제목, 메타, 설정 항목, 본문, 스크립트를 뽑아 다시 실행하는 것으로 보입니다
 
 ### PlatformAPI (1)
 
@@ -348,25 +328,11 @@
 - [이벤트](/widget/widget-api#이벤트) : `onDestroy` : 앱 코드나 대시보드가 보내는 것으로 보입니다
 - [endEdit](/widget/widget-api#endedit) : 3DDashboard 의 설정 창은 대시보드가 그리는 것으로 보입니다.
 
-## UWA (1)
-
-### 위젯 간 통신 (InterCom) (1)
-
-- [Socket 으로 붙기](/uwa/intercom#socket-으로-붙기) : 넣어도 효과가 없는 것으로 보입니다.
-
-## 화면 컨트롤 (30)
-
-### 목록, 트리, 타일 뷰 API (1)
-
-- [TreeNodeBase](/controls/api/collection-views#treenodebase) : <code>expandAll()</code> : 두 단계까지만 펼쳐지는 것으로 보입니다
+## 화면 컨트롤 (26)
 
 ### 레이아웃 컨트롤 API (1)
 
 - [Tab](/controls/api/layout#tab) : <code>responsiveFlag</code> <Badge type="warning" text="2026" /> : 폭이 모자라면 탭 글자를 숨기고 아이콘만 남기는 것으로 보입니다
-
-### WebUX 컨트롤 API (1)
-
-- [TimePicker](/controls/api/webux-controls#timepicker) : 이벤트: <code>change</code>, <code>show</code>, <code>hide</code>. <code>mode: 'duration'</code> 이면 값이 숫자이고 <code>02h 30m</code> 처럼 표시됩니다.
 
 ### Windows API (1)
 
@@ -383,10 +349,6 @@
 ### 다이얼로그 (Windows) (1)
 
 - [OOTB 앱의 다이얼로그 패턴](/controls/dialog#ootb-앱의-다이얼로그-패턴) : 문제가 없는지는 확인하지 않았습니다
-
-### 색상, 표시 컨트롤 (1)
-
-- [UserCard](/controls/display-controls#usercard) : 형식은 ISO 2글자 국가 코드로 보입니다.
 
 ### 분할 레이아웃 (DockingElement) (2)
 
@@ -427,15 +389,11 @@
 - [3DDashboard 밖에서](/controls/properties-panel#_3ddashboard-밖에서) : 단독 실행에서는 Compass 콜백이 오지 않을 수 있어([Compass 서비스](/widget/compass-services)), 그러면 탭과 속성이 끝내 나오지 않을 것으로 보입니다
 - [주의](/controls/properties-panel#주의) : 없는 모듈은 그 탭만 비게 됩니다
 
-### WebUX 컨트롤 (1)
-
-- [값](/controls/webux-controls#값) : 입력칸에 포커스가 가면 숫자 형식(`2026/12/01`)으로 바뀌어 고치기 쉽게 됩니다.
-
 ## 이벤트, 선택, 끌어 놓기 (4)
 
 ### 끌어 놓기 (DataDragAndDrop, 3DXContent) (1)
 
-- [items[] 항목](/events/drag-and-drop#items-항목) : 검사 함수 `DS/3DXContentChecker/3DXContentChecker_v2.1` 의 `check()` 를 부르는 곳은 없어서, 실제로는 필수 키만 지키면 통하는 것으로 보입니다.
+- [items[] 항목](/events/drag-and-drop#items-항목) : 3DDashboard 셸 같은 webapps 밖에서 검사하는지는 확인하지 못했지만, 실제로는 필수 키만 지키면 통하는 것으로 보입니다.
 
 ### 이벤트, 선택, 끌어 놓기 개요 (1)
 
@@ -446,7 +404,7 @@
 - [선택 (CSOManager, HSOManager, PSOManager)](/events/selection) : `DS/Selection/HSOManager` : 강조(highlight) 목록으로 보입니다
 - [선택 (CSOManager, HSOManager, PSOManager)](/events/selection) : `DS/Selection/PSOManager` : 미리 선택(마우스 올림) 목록으로 보입니다
 
-## 3DSpace REST API (31)
+## 3DSpace REST API (29)
 
 ### 타입, 속성 정보 (dictionary) (3)
 
@@ -460,23 +418,21 @@
 - [여러 객체 예](/rest-api/e6w#여러-객체-예) : 미리 보기가 없는 객체는 타입 기본 그림 주소가 오는 것으로 보입니다
 - [객체 찾기 (ObjectSearch)](/rest-api/e6w#객체-찾기-objectsearch) : 이름 찾기도 부분 일치 결과가 섞일 수 있는 것으로 보입니다
 - [찾기 조건](/rest-api/e6w#찾기-조건) : 3DSearch 와 같은 문법이라 e6w 찾기도 인덱스를 쓰는 것으로 보입니다
-- [설정 값 읽기 (ExpresssionSearch)](/rest-api/e6w#설정-값-읽기-expresssionsearch) : 값은 서버의 Expression 관리 객체(MQL `expression`)에서 오는 것으로 보입니다
+- [설정 값 읽기 (ExpresssionSearch)](/rest-api/e6w#설정-값-읽기-expresssionsearch) : `CHG_CHANGE_MATURITY`, `ISU_AUTO_DATES` 는 이 설정 정의 파일들에 없어 어디서 만들어지는지는 확인하지 못했습니다
 - [결과 수](/rest-api/e6w#결과-수) : 이때 서버의 기본 개수는 확인하지 못했습니다
 - [주의](/rest-api/e6w#주의) : `Content-Type` 을 `application/json` 으로 보내면 `$ids` 가 읽히지 않는 것으로 보입니다
 
 ### 3DSpace REST API 공통 규칙 (2)
 
 - [URL 구성](/rest-api/#url-구성) : `tenant=` : 온프레미스에서는 생략해도 되는 것으로 보입니다
-- [쿼리 파라미터](/rest-api/#쿼리-파라미터) : `$terse` : 응답 줄이기로 보입니다
+- [쿼리 파라미터](/rest-api/#쿼리-파라미터) : `$terse` : 서버가 어떤 객체를 줄여 보내는지는 확인하지 못했습니다
 
-### 성숙도 변경, 개정 (lifecycle) (12)
+### 성숙도 변경, 개정 (lifecycle) (10)
 
 - [갈 수 있는 state](/rest-api/lifecycle#갈-수-있는-state) : state 이름과 색만 필요하면 `POST /resources/lifecycle/maturity/getStatesAttributes` 본문 `{ policies: ['<policy 이름>'] }` 를 부르고 `policies[].policyName`, `policies[].states[]` (`stateSysName`, `stateUserName`, `activeColor`, `inactiveColor`) 를 읽습니다 (IPClassifyUXUtil, ENOXVersionExplorerController, ENOChgServices). ENONextGenFilterUX 는 `{ objectids: [id] }` 로 보내고 `policies` 를 객체 하나로 읽습니다
-- [promote / demote](/rest-api/lifecycle#promote-demote) : 오래 걸리면 결과를 백그라운드 알림으로 돌리는 기준(초)으로 보입니다
 - [dslc (CAA) 성숙도 API](/rest-api/lifecycle#dslc-caa-성숙도-api) : 서버는 현재 state 와 policy 그래프로 promote 인지 demote 인지와 `tostate`, `fromstate`, `signature` 를 정한 뒤 lifecycle 과 같은 내부 함수(`maturityChange_internal`)를 부르는 것으로 보입니다
 - [dslc (CAA) 성숙도 API](/rest-api/lifecycle#dslc-caa-성숙도-api) : `nextStates` 항목이 문자열인지 객체인지는 확인하지 못했습니다
 - [오류 코드](/rest-api/lifecycle#오류-코드) : 코드 앞 세 자리가 HTTP 상태와 같은 것으로 보입니다
-- [소유자 넘기기](/rest-api/lifecycle#소유자-넘기기) : 항목에 `id`, `status`, `errorCode`, `errorMessage` 가 있는 것으로 보입니다
 - [소유자 넘기기](/rest-api/lifecycle#소유자-넘기기) : 샘플의 이 버튼은 서버에서 실행해 보지 않았습니다
 - [끝났을 때 알림](/rest-api/lifecycle#끝났을-때-알림) : 다른 OOTB 위젯이 새로 고치게 하려면 같은 모양으로 `Lifecycle.Modification` 을 보내면 될 것으로 보입니다
 - [서버에서 일어나는 일 (트리거)](/rest-api/lifecycle#서버에서-일어나는-일-트리거) : 서버 클래스(`LifecycleServices_ChangeMaturity_PLMReference_default`, `_BusinessObject`)의 문자열로 보면 한 트랜잭션 안에서 아래 검사를 하고, 하나라도 실패하면 abort 하는 것으로 보입니다
@@ -497,22 +453,12 @@
 
 - [헤더에 넣기](/rest-api/security-context#헤더에-넣기) : 두 방식이 모두 동작하는 것으로 보입니다.
 
-## DataGridView (3)
+## DataGridView (2)
 
 ### 사용자 뷰와 화면 상태 저장 (1)
 
 - [저장 위치](/datagridview/custom-views#저장-위치) : 위젯 설정에 저장한 값은 대시보드가 위젯마다 보관하므로 다른 브라우저에서 열어도 유지되는 것으로 보입니다.
 
-### 헤더 (높이, 글자, 2단 헤더) (1)
-
-- [헤더를 직접 그리기 (customHeader)](/datagridview/header#헤더를-직접-그리기-customheader) : 헤더 밖에서 컬럼 이름이 필요한 곳에 쓰입니다.
-
 ### 서버 사이드 데이터 (1)
 
-- [정렬, 필터, 찾기는 어떻게 되나](/datagridview/server-side#정렬-필터-찾기는-어떻게-되나) : 그룹핑에서 서버가 그룹 행을 어떤 모양으로 돌려줘야 하는지는 호출 예가 없어 확인하지 못했습니다. `wux_group: true` 인 행을 돌려주는 것으로 보입니다.
-
-## Tweakers (1)
-
-### 그 밖의 편집기와 보조 모듈 (1)
-
-- [TweakerObjectBase](/tweakers/more-editors#tweakerobjectbase) : 속성 값을 바꿀 때 안쪽 속성 편집기의 `change` 가 위로 올라오며, 이때 `e.options` 가 `{ propertyChangePath, propertyChangeName, propertyChangeValue }` 로 바뀌어 나오는 것으로 보입니다
+- [정렬, 필터, 찾기는 어떻게 되나](/datagridview/server-side#정렬-필터-찾기는-어떻게-되나) : 그 밖에 그룹 행의 키(제목, 합계 등)를 어떤 모양으로 넣어야 하는지는 호출 예가 없어 확인하지 못했습니다.

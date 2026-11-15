@@ -3,7 +3,7 @@
 고친 것의 종류에 따라 서버에 해야 하는 일이 다릅니다. MQL 은 실행하면 끝나지만 UI 정의는 캐시를 비워야 보이고, 커스텀 Java 와 일부 properties 는 서버를 다시 시작해야 합니다. 이 페이지는 "무엇을 고쳤으면 무엇을 해야 하는가" 를 한곳에 모읍니다.
 
 ::: info 근거
-mql/97.prod-mql, 98.migration, 99.config, 19.program 폴더. 3dspace/common/emxReloadCache.jsp 와 프로젝트가 복사해 고친 Reload Cache JSP. mql/06.command 의 Reload Cache command 정의. resources/custom/migration 의 실행 bat. resources/custom 의 properties 머리말과 메일 템플릿(.vm) 머리말. 3dspace/WEB-INF/web.xml. JPO 를 서버에 넣고 컴파일하는 명령은 소스 폴더에 예가 없습니다
+mql/97.prod-mql, 98.migration, 99.config, 19.program 폴더. 3dspace/common/emxReloadCache.jsp 와 프로젝트가 복사해 고친 Reload Cache JSP. mql/06.command 의 Reload Cache command 정의. resources/custom/migration 의 실행 bat. resources/custom 의 properties 머리말과 메일 템플릿(.vm) 머리말. 3dspace/WEB-INF/web.xml. xerinfra.jar `com.matrixone.apps.framework.ui.CacheManager` 바이트코드 (`getAppServerList` 의 `list page MCS_InstanceNumber_*`, `resetRemoteAPPServerCache`, `resetRMIServerCache` 의 단일 서버 분기), jpo/emxReloadCacheServerInfo_mxJPO.java (`APP_SERVER_LIST`, `RMI_SERVER_LIST`). JPO 를 서버에 넣고 컴파일하는 명령은 소스 폴더에 예가 없습니다
 :::
 
 ## 한눈에 보기
@@ -83,8 +83,33 @@ JSP 가 하는 일은 아래 순서입니다.
 | 5 | `CacheManager.resetRMIServerCache(context)` | `emxReloadCacheServerInfo` JPO 에 적어 둔 RMI 서버의 캐시 |
 
 ::: warning 서버가 여러 대일 때
-4, 5 번은 다른 서버 목록이 설정되어 있을 때만 동작합니다. 설정이 없으면 Reload Cache 는 **지금 접속한 서버 하나** 만 비웁니다. 로드 밸런서 뒤에 서버가 여러 대면 서버마다 실행하거나 서버 목록을 설정해야 하는 것으로 보입니다. <Badge type="danger" text="검증 필요" />
+4, 5 번은 다른 서버 목록이 설정되어 있을 때만 동작합니다. 설정이 없으면 Reload Cache 는 **지금 접속한 서버 하나** 만 비웁니다. 로드 밸런서 뒤에 서버가 여러 대면 서버마다 실행하거나 서버 목록을 설정해야 합니다.
+
+- 앱 서버 목록(4 번)은 이름이 `MCS_InstanceNumber_*` 인 page 객체의 내용에서 읽습니다. 그런 page 가 없으면 `emxReloadCacheServerInfo` JPO 의 `getAppServerList` 를 씁니다.
+- RMI 서버 목록(5 번)은 같은 JPO 의 `getRMIServerList` 입니다.
+- OOTB `emxReloadCacheServerInfo_mxJPO` 는 두 목록을 빈 배열로 둡니다 (서버 주소를 넣는 예는 주석으로만 있음). 목록이 비면 단일 서버로 보고 지금 서버만 비웁니다.
 :::
+
+### 캐시 하나만 비우기 (JPO)
+
+Reload Cache 를 돌리지 않고 캐시 하나만 비울 때는 그 캐시를 맡은 OOTB JPO 메서드를 MQL 로 부릅니다 ([MQL 에서 실행](/jpo/#mql-에서-실행-mxmain)).
+
+```text
+execute program emxTriggerManager -method resetCache;
+execute program emxUtil -method clearPersonCache;
+```
+
+| JPO 메서드 | 하는 일 |
+| --- | --- |
+| `emxTriggerManager` `resetCache` | 트리거 설정 객체와 트리거 프로그램 정보의 tenant 캐시 (`TRIGGEROBJECTS`, `TRIGGERPROGRAM`) 를 비움 ([트리거 캐시](/trigger/register#_4-캐시)) |
+| `emxUtil` `clearPersonCache` | 사람 정보 캐시 전체 (`PersonUtil.clearCache`) |
+| `emxUtil` `clearPersonCacheProperty` | 사람 한 명의 속성 하나. 인자는 `JPO.packArgs` 한 `{ userName, propertyName }` 이라 MQL 보다 `JPO.invoke` 로 부름 |
+| `emxPropertyUtil` `cacheSymbolicNames` | 심볼릭 이름을 다시 읽어 캐시에 담음 (`PropertyUtil.cacheSymbolicNames`) |
+| `emxNotificationUtil` `resetCache` | 알림 JPO 가 들고 있는 프로그램 / 나이 표(`programMap`, `ageMap`)를 비움 |
+| `emxUtil` `loadFrameworkProperty` | 비우지 않고 `eServiceSuites.DisplayedSuites` 를 한 번 읽기만 함. 다시 읽기를 일으키는 용도로 보임 <Badge type="danger" text="검증 필요" /> |
+
+- 이 JPO 들은 `execute program` 을 실행한 서버의 캐시만 비웁니다. 서버가 여러 대면 서버마다 실행합니다.
+- 다른 앱 서버가 Reload Cache 요청을 받는 `common/emxReloadRemoteAppServerCache.jsp` 는 요청 머리글로 무엇을 비울지 고릅니다. `PersonCache` 가 있으면 그 사람의 캐시, `TriggerCache: true` 면 위 `emxTriggerManager` `resetCache`, `IconPath` 가 있으면 사용자 아이콘 파일, `AdminProperty` 가 있으면 그 admin property 만, 모두 없으면 앱 서버 캐시 전체입니다.
 
 ### 문자열 리소스까지 비우기
 
@@ -162,7 +187,7 @@ java -cp "<classes>;<WEB-INF/lib>\*;<TomEE/lib>\*" -Xmx1024m -Dfile.encoding=UTF
 | `commit` | 실제로 저장 |
 
 ::: tip abort 로 먼저 돌립니다
-실행 스크립트(bat)의 기본값이 `abort` 입니다. 인자를 빼먹고 실행해도 데이터가 바뀌지 않게 한 것입니다. 로그에서 오류가 없는 것을 확인한 뒤 `commit` 으로 다시 실행합니다.
+계층 구조 이관 스크립트(bat)는 기본값이 `abort` 입니다. 인자를 빼먹고 실행해도 데이터가 바뀌지 않게 한 것입니다. 로그에서 오류가 없는 것을 확인한 뒤 `commit` 으로 다시 실행합니다. 엑셀 이관 프로그램은 `abort` 를 줘도 저장되므로 테스트 서버에서 먼저 돌립니다 ([이관 프로그램의 주의](/server-java/migration#실행-bat)).
 :::
 
 MQL 로 하는 이관은 [데이터 이관 (98.migration)](/schema/conventions#데이터-이관-98-migration) 을 봅니다. 이관 스크립트 머리말에도 "로드 후 UI 캐시 갱신 (emxReloadCache.jsp) 필요" 라고 적힌 것이 있습니다.

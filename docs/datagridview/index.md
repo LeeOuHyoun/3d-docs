@@ -96,7 +96,9 @@ require([
 | 행 추가, 삭제, 값 읽기 | `addRoot`, `remove`, `getAttributeValue` | TreeDocument, 행 | [데이터](/datagridview/api/data) |
 | 행이 아주 많을 때 나눠 불러오기 | `grid.onInfiniteScroll(...)`, `dataSource` | 그리드 메서드, 그리드 옵션 | [서버 사이드 데이터](/datagridview/server-side) |
 | 로딩 표시 | `grid.displayModalLoader()` | 그리드 메서드 | [로딩 표시](/datagridview/api/grid-methods#로딩-표시) |
-| CSV 로 내보내기, 인쇄 | `grid.getAsCSV()`, `grid.openPrintableViewWindow()` | 그리드 메서드 | [그리드 메서드](/datagridview/api/grid-methods#툴바-그룹-내보내기) |
+| CSV 로 내보내기 | `grid.getAsCSV()` | 그리드 메서드 | [그리드 메서드](/datagridview/api/grid-methods#툴바-그룹-내보내기) |
+| 인쇄 | `grid.openPrintableViewWindow()`, `printableFlag` | 그리드 메서드, 컬럼 옵션 | [인쇄](/datagridview/find-and-print#인쇄) |
+| 여러 행 값을 한 번에 바꾸기 | `grid.showModelMassUpdateDialog()`, `massUpdateAllowedFlag` | 그리드 메서드, 컬럼 옵션 | [일괄 수정](/datagridview/find-and-print#일괄-수정) |
 
 ### 기능
 
@@ -110,6 +112,8 @@ require([
 | 행을 끌어 순서 바꾸기, 끌어 놓기 | `rowDragEnabledFlag`, `onDropCell` | 그리드 옵션 | [드래그앤드롭](/datagridview/drag-and-drop) |
 | 검색창, 버튼이 있는 툴바 | `grid.setToolbar(...)` | 그리드 메서드 | [툴바](/datagridview/toolbar) |
 | 아래에 행 수, 선택 수 표시 | `grid.buildStatusBar(...)` | 그리드 메서드 | [상태바](/datagridview/status-bar) |
+| 그리드 안에서 글자 찾기 | `DS/Controls/Find`, `grid.setFindStr(...)`, `findNavigationMode` | 컨트롤, 그리드 메서드, 그리드 옵션 | [찾기](/datagridview/find-and-print#찾기) |
+| 행을 페이지로 나누기 | `paginationManager` | 그리드 옵션 | [페이지 나누기](/datagridview/find-and-print#페이지-나누기) |
 | 사용자가 바꾼 컬럼 너비, 순서 기억 | `identifier`, `useWidgetPreferencesFlag` | 그리드 옵션 | [사용자 뷰와 화면 상태 저장](/datagridview/custom-views) |
 | 특정 행으로 스크롤 | `grid.ensureNodeModelVisible(...)` | 그리드 메서드 | [스크롤과 강조](/datagridview/api/grid-methods#스크롤과-강조) |
 
@@ -175,8 +179,14 @@ enovia2025 webapps 에서 DataGridView 를 쓰는 앱 파일 119개를 기준으
 | [08_contextMenu.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/08_contextMenu.html) | 우클릭 메뉴, 선택 | [우클릭 메뉴와 선택](/datagridview/context-menu) |
 | [09_save.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/09_save.html) | 셀 단위 저장, 모아서 저장, 실패 시 되돌리기 | [저장 후 화면 반영](/datagridview/save-and-reflect) |
 | [10_customCell.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/10_customCell.html) | 셀 직접 그리기, 상태바 | [셀 직접 그리기](/datagridview/custom-cell) · [상태바](/datagridview/status-bar) |
+| [11_dragDrop.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/11_dragDrop.html) | 순서 바꾸기, 하위로 옮기기, 밖에서 받기, 밖으로 끌어 내기 | [드래그앤드롭](/datagridview/drag-and-drop) |
+| [12_header.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/12_header.html) | 헤더 높이, 2단 헤더, 헤더 직접 그리기, 만든 뒤 컬럼 바꾸기 | [헤더](/datagridview/header) · [레이아웃 메서드](/datagridview/api/layout-methods) |
+| [13_customViews.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/13_customViews.html) | 화면 상태 저장과 되돌리기, 사용자 뷰, 뷰 대화상자 | [사용자 뷰와 화면 상태 저장](/datagridview/custom-views) |
+| [14_rowGrouping.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/14_rowGrouping.html) | 묶기, 그룹 행 제목과 합계, 그룹 행 걸러내기, 다시 묶기 | [행 그룹핑](/datagridview/row-grouping) |
+| [15_serverSide.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/15_serverSide.html) | 행을 나눠 불러오기 (가짜 서버 5,000 행) | [서버 사이드 데이터](/datagridview/server-side) |
+| [16_findPrint.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/16_findPrint.html) | 찾기 막대, 페이지 나누기, 일괄 수정, 인쇄 | [찾기, 페이지, 일괄 수정, 인쇄](/datagridview/find-and-print) |
 
-01 ~ 05 는 ENOVIA 서버에서 동작을 확인했습니다. 06 ~ 10 은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.
+01 ~ 05 는 ENOVIA 서버에서 동작을 확인했습니다. 06 ~ 10 은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 11 ~ 16 은 ENOVIA 서버 없이 원본 webapps 를 내 PC 에서 띄워 동작을 확인했습니다 ([샘플을 내 PC 에서 실행하기](/guide/contributing#샘플을-내-pc-에서-실행하기)). 다르게 동작하면 원본 쪽이 맞습니다.
 
 ::: warning
 샘플은 `<3DSpace>/webapps/DataGridViewSample/` 에 두고 ENOVIA 서버 주소로 열어야 동작합니다.

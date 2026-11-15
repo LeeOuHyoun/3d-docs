@@ -3,7 +3,7 @@
 3DSpace 서버는 `/resources/...` 아래에 REST 서비스를 제공합니다. ENOVIA 화면 코드는 대부분 이것을 `WAFData.authenticatedRequest` 로 부릅니다. 이 페이지는 **화면 코드가 실제로 보내는 헤더, 파라미터, 본문, 응답 모양**을 정리합니다. 호출 함수 자체는 [서버 호출 (WAFData)](/uwa/request) 을 봅니다.
 
 ::: info 근거
-Foundation2/Foundation2.js (`applyUpdates`, `__generateUpdateWidget`, `__copyModifiedObject`, `__postprocessServerFailureMessage`), Foundation/Foundation.js `ajaxRequest`, DocumentManagement (`DocumentFoundationAjax`, `IndependentServiceBase`), VCXWebPlatform `runRequest` / `WSInformation`, IssueServices (dslib 호출), CAT3DWebStoreyComponents (dscstr 호출), DELWKOModelServices, DELPPWWebServices `getHeaders`
+Foundation2/Foundation2.js (`applyUpdates`, `__generateUpdateWidget`, `__copyModifiedObject`, `__postprocessServerFailureMessage`), Foundation/Foundation.js `ajaxRequest`, DocumentManagement (`DocumentFoundationAjax`, `IndependentServiceBase`), VCXWebPlatform `runRequest` / `WSInformation`, IssueServices (dslib 호출), CAT3DWebStoreyComponents (dscstr 호출), DELWKOModelServices, TerminologySelector (`TerminologyWebService`, assets/config/webservices.conf.json), DELPPWWebServices `getHeaders`
 :::
 
 샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) (WAFData.authenticatedRequest 감싸기), [02_drag_drop.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/EventsSample/02_drag_drop.html) (SecurityContext 헤더로 REST 호출)
@@ -130,7 +130,7 @@ Foundation, DocumentManagement 는 헤더 대신 **요청 본문 최상위에 `c
 | `$depth` | B | `$depth=20` | 구조 펼치기 깊이 |
 | `$filter` | - | `$filter=dimensionName+eq+Length` | 조건 |
 | `$definition` | A | `$definition=true` | 필드 정의 같이 받기 |
-| `$terse` | A | `$terse=true` | 응답 줄이기로 보입니다 <Badge type="danger" text="검증 필요" /> |
+| `$terse` | A | `$terse=true` | 응답 줄이기. Foundation2 는 `dataelements` 가 없는 객체를 같은 id 로 먼저 받은 객체의 `dataelements`, `relateddata`, `type` 으로 채웁니다 (`__updateIndexCacheWithOneObject`, 주석상 이것이 terse 객체). CollaborativeTasks, InstantMessagingW 가 `tasks` 에 붙임. 서버가 어떤 객체를 줄여 보내는지는 확인하지 못했습니다 <Badge type="danger" text="검증 필요" /> |
 | `e6w-lang`, `e6w-timezone` | A | `e6w-lang=ko` | 언어, 시간대 ([시간대](/widget/i18n-preferences#시간대)). Foundation2 는 `$language`, `$timezone` 로 바꿔 보냄 |
 
 ## 쓰기 본문 A
@@ -166,7 +166,7 @@ Foundation, DocumentManagement 는 헤더 대신 **요청 본문 최상위에 `c
 
 ## 쓰기 본문 B
 
-ds 서비스는 `items` 배열과 **참조 객체**를 씁니다.
+ds 서비스는 대개 `items` 배열과 **참조 객체**를 씁니다. `items` 로 감싸지 않는 서비스도 있습니다 (아래 목록).
 
 ```json
 {
@@ -185,6 +185,7 @@ ds 서비스는 `items` 배열과 **참조 객체**를 씁니다.
 ```
 
 - 참조 객체 `{ source, type, identifier, relativePath }` 는 다른 객체를 가리킬 때 씁니다. TerminologySelector 는 `source` 에 3DSpace 주소를 넣고, DELWKOModelServices 는 주소에서 `'3DSpace'` 글자를 뺀 값을 넣습니다.
+- `items` 를 쓰지 않는 예: IssueServices `dslib:ClassifiedItem` 분류 붙이기 / 떼기 (`POST`) 는 `{ ClassID, ObjectsToClassify: [참조] }` (떼기는 `ObjectsToDeclassify`), 속성 수정 (`PATCH`) 은 속성 객체에 `cestamp` 를 넣은 그대로입니다. TerminologySelector `dsbsd:.../invoke/dsbsd:attach`, `detach` (`PATCH`) 는 참조 객체 배열 그대로, DELWKOModelServices `dswo/workorder/fromprocess` (`POST`) 는 항목 배열 그대로입니다 (같은 모듈의 `invoke/dswo:CreateWorkOrderFromProcess` 는 `items`).
 - 수정은 `PATCH <리소스>/{id}` 로 보내고, 본문에 조회 때 받은 `cestamp` 를 넣습니다 (IssueServices `setClassificationAttributes`).
 - 헤더에 `ENO_CSRF_TOKEN` 을 넣습니다.
 

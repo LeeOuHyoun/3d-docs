@@ -10,7 +10,7 @@ class 는 두 가지를 만듭니다.
 | Service | `com.dassault_systemes.platform.restServices.RestService` | 주소 하나하나를 처리하는 메서드 |
 
 ::: info 근거
-프로젝트 `src/` 의 rest 패키지 (Modeler 1 개, Service 2 개) 와 그 javadoc. `ModelerBase`, `RestService` 는 jar 안의 class 라서 내부 동작은 확인하지 못했고 쓰는 쪽 코드에서 본 사용법만 적었습니다. 3dspace/WEB-INF/web.xml 에는 이 Modeler 의 등록이 없습니다
+프로젝트 `src/` 의 rest 패키지 (Modeler 1 개, Service 2 개) 와 그 javadoc. `ModelerBase`, `RestService` 는 jar 안의 class 라서 내부 동작은 확인하지 못했고 쓰는 쪽 코드에서 본 사용법만 적었습니다. 3dspace/WEB-INF/web.xml 에는 이 Modeler 의 등록이 없습니다. 인증: 같은 web.xml 의 `CAS Authentication Filter` (`url-pattern` `/*`, `skipFilterUrlPatterns` 에 프로젝트 주소 없음)
 :::
 
 ## 주소 구성
@@ -222,8 +222,8 @@ public Response createItem(@Context HttpServletRequest request, String json) {
 | 요청 기록 | 받은 JSON 원문과 처리 결과를 [외부 DB 테이블](/server-java/external-db) 에 남김. 외부 시스템과 처리 여부를 맞춰 볼 때 씀 |
 | Context 닫기 | `finally` 에서 `context.shutdown()` |
 
-::: warning 이 주소는 로그인 없이 열립니다
-`getAuthenticatedContext` 를 부르지 않는 메서드는 코드에서 사용자를 확인하지 않습니다. 원본에는 부른 쪽을 확인하는 코드(토큰, IP 확인)가 보이지 않습니다. 이런 주소를 만들 때는 서버 앞단(방화벽, 프록시)에서 막고 있는지, 메서드 안에서 공유 키를 확인할지를 먼저 정합니다. `resources/` 아래 주소에 서버가 기본으로 로그인을 요구하는지는 확인하지 못했습니다. <Badge type="danger" text="검증 필요" />
+::: warning 로그인한 사용자라면 누구나 부를 수 있습니다
+`web.xml` 의 `CAS Authentication Filter` 가 `/*` 에 걸려 있고, 로그인 없이 여는 예외 목록(`skipFilterUrlPatterns`)에는 OOTB 주소만 있습니다. 그래서 `resources/` 아래 프로젝트 주소도 기본으로 3DPassport(CAS) 로그인을 요구합니다. 하지만 `getAuthenticatedContext` 를 부르지 않는 메서드는 코드에서 사용자를 확인하지 않으므로, 로그인만 되어 있으면 **누구나** 부를 수 있습니다. 원본에는 부른 쪽을 확인하는 코드(토큰, IP 확인)가 보이지 않습니다. 이런 주소를 만들 때는 서버 앞단(방화벽, 프록시)에서 막고 있는지, 메서드 안에서 공유 키를 확인할지를 먼저 정합니다. 외부 시스템이 어떤 방식으로 CAS 인증을 통과해 부르는지는 확인하지 못했습니다. <Badge type="danger" text="검증 필요" />
 :::
 
 ## 위젯에서 부르기

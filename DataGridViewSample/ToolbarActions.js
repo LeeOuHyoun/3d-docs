@@ -22,6 +22,7 @@ define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], f
   var currentKeyword = '';
   var currentStatus = '전체';
 
+  // #region rowVisibility
   function applyRowVisibility(grid) {
     var treeDocument = grid.treeDocument;
     treeDocument.prepareUpdate();
@@ -38,9 +39,11 @@ define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], f
     });
     treeDocument.pushUpdate();
   }
+  // #endregion rowVisibility
 
   return {
     /* [+] 버튼 : 행 추가. TreeDocument 에 TreeNodeModel 을 addRoot 하면 그리드에 바로 반영된다. */
+    // #region addRow
     addRow: function (e) {
       var grid = e.context.executionContext;
       newRowCount++;
@@ -51,8 +54,10 @@ define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], f
       }));
       grid.treeDocument.pushUpdate();
     },
+    // #endregion addRow
 
     /* [휴지통] 버튼 : 선택된 행 삭제. 선택 정보는 TreeDocument 가 가지고 있다. */
+    // #region deleteSelected
     deleteSelected: function (e) {
       var grid = e.context.executionContext;
       var selectedNodes = grid.treeDocument.getSelectedNodes();
@@ -66,6 +71,7 @@ define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], f
       });
       grid.treeDocument.pushUpdate();
     },
+    // #endregion deleteSelected
 
     /* [보기] 버튼 : 선택된 행의 값을 읽어서 확인. getAttributeValue(dataIndex) 로 셀 값을 읽는다. */
     showSelected: function (e) {
@@ -77,10 +83,12 @@ define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], f
     },
 
     /* 검색창(onNodeUpdate) : 값이 확정(Enter/포커스 이동)되면 호출된다. */
+    // #region search
     searchByPartNo: function (e) {
       currentKeyword = e.context.value || '';
       applyRowVisibility(e.context.executionContext);
     },
+    // #endregion search
 
     /* 상태 콤보(onNodeUpdate) : 콤보 값이 바뀌면 호출된다. */
     filterByStatus: function (e) {

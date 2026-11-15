@@ -5,7 +5,7 @@
 샘플: [03_webform_portal.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UIComponentSample/03_webform_portal.mql)
 
 ::: info 근거
-`mql/09.webform/Form_Sample.mql`, 프로젝트 form 50 파일 (field 848 개), `PMCProjectTaskViewForm.mql`, `PMCProjectTaskCreateForm.mql`. 화면: `3dspace/common/emxForm.jsp` (`mode` 처리), `emxCreate.jsp`, `emxCreateProcess.jsp` (`submitAction`), `emxCreateBody.xsl` (`Group Name`), `scripts/emxUIFormHandler.js` (`FillProperties`). 키 목록: `framework.jar` 의 `UIFormCommon.class`, `UIForm.class` 문자열 상수. JPO 예: `jpo/emxProjectSpaceBase_mxJPO.java` 의 `getProjectPolicyRange`
+`mql/09.webform/Form_Sample.mql`, 프로젝트 form 50 파일 (field 848 개), `PMCProjectTaskViewForm.mql`, `PMCProjectTaskCreateForm.mql`. 화면: `3dspace/common/emxForm.jsp` (`mode` 처리), `emxCreate.jsp`, `emxCreateProcess.jsp` (`submitAction`), `emxCreateBody.xsl` (`Group Name`), `scripts/emxUIFormHandler.js` (`FillProperties`), `emxFormViewDisplay.jsp`, `emxFormEditDisplay.jsp` (`isGroupHolderField` → 다음 `getFieldGroupCount` 개 필드를 한 `<tr>` 에). 키 목록: `framework.jar` 의 `UIFormCommon.class`, `UIForm.class` 문자열 상수. JPO 예: `jpo/emxProjectSpaceBase_mxJPO.java` 의 `getProjectPolicyRange`
 :::
 
 ## form 정의
@@ -52,7 +52,7 @@ add property form_XX_MyPart on program eServiceSchemaVariableMapping.tcl to form
 | `program` | JPO 가 글자를 돌려줌 | `program`, `function` | 19 |
 | `Section Header` | 섹션 제목 줄 (필드 묶음 제목) | `Section Level` `1` | 44 |
 | `Section Separator` | 구분선 | - | 1 |
-| `Group Holder` | 다음 N 개 필드를 가로로 묶는 자리로 보임 <Badge type="danger" text="검증 필요" /> | `Group Count` `2` | 5 |
+| `Group Holder` | 다음 N 개 필드를 가로로 묶는 자리 (보기 / 편집 화면) | `Group Count` `2` | 5 |
 | `Dynamic` | 필드 여러 개를 JPO 로 만듦 | `Dynamic Field Program` / `Function` | 4 |
 | `Dynamic Attributes` | 타입의 attribute 를 자동으로 펼침 | `Create Exclude`, `Edit Exclude`, `View Exclude` | 2 |
 | `ClassificationPaths` | 분류 경로 (라이브러리) | - | 2 |
@@ -132,7 +132,7 @@ field
 ```
 
 - `Section Header` 다음 필드들은 그 섹션 아래에 들어갑니다.
-- `Group Holder` + `Group Count` `2` 는 바로 다음 두 필드를 한 줄에 놓는 것으로 보입니다. <Badge type="danger" text="검증 필요" />
+- `Group Holder` + `Group Count` `2` 는 바로 다음 두 필드를 한 줄에 놓습니다. 보기 / 편집 화면(`emxFormViewDisplay.jsp`, `emxFormEditDisplay.jsp`)이 Holder 를 만나면 다음 `Group Count` 개 필드를 한 행에 그립니다.
 - 생성 화면(`emxCreate.jsp`)에서는 `Group Name` 이 같은 필드끼리 가로로 묶습니다 (`emxCreateBody.xsl`). 프로젝트 생성 form 은 `Group Name` 을 253 건 씁니다.
 
 ## 보이기 조건

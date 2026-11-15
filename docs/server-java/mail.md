@@ -10,7 +10,7 @@
 | 업무 메일 | `MyApprovalMailSender`, `MySystemMailSender` | 문구를 properties 에서 읽어 위 class 들을 부름 |
 
 ::: info 근거
-프로젝트 `src/` 의 mail, email 패키지 (발송 class, 렌더러, 결재 메일 4 개, 시스템 메일 2 개, 수신자 1 개), `resources/custom/mail/*.vm`, 문구 properties, 그 javadoc 과 템플릿 머리말 주석. class 이름과 문구는 일반적인 이름으로 바꿔 적었습니다
+프로젝트 `src/` 의 mail, email 패키지 (발송 class, 렌더러, 결재 메일 4 개, 시스템 메일 2 개, 수신자 1 개), `resources/custom/mail/*.vm`, 문구 properties, 그 javadoc 과 템플릿 머리말 주석. 발송 class 의 `doProcess` (필수 값 검사는 `try` 밖, 유효 수신자 0 명 검사는 `try` 안, `catch` 에서 `mail.exception` 이 `"true"` 일 때만 다시 던짐). class 이름과 문구는 일반적인 이름으로 바꿔 적었습니다
 :::
 
 ## 보내기
@@ -77,7 +77,7 @@ try {
 | `true` | 로그를 남기고 예외를 다시 던짐. 부른 쪽의 트랜잭션이 롤백될 수 있음 |
 | 그 밖의 값 | 로그만 남기고 끝냄. 업무 처리는 계속됨 |
 
-필수 값이 빠진 경우(위 표의 1, 3)는 발송 전의 검사라서 이 설정과 상관없이 예외가 나는 것으로 보입니다. <Badge type="danger" text="검증 필요" />
+필수 값이 빠진 경우(위 표의 1)는 발송 `try` 블록 밖에서 검사하므로 이 설정과 상관없이 예외가 납니다. 받는 사람이 0 명이 된 경우(위 표의 3)는 `try` 블록 안에서 예외를 던지므로 다른 발송 실패와 똑같이 처리됩니다. `mail.exception` 이 `true` 일 때만 밖으로 나가고, 그 밖에는 로그만 남고 끝납니다.
 
 ## 수신자
 

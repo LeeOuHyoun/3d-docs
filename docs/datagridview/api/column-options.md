@@ -56,7 +56,8 @@ DataGridView.js 의 ColumnModel (`_defaultColumnDef` 기본값과 컬럼 정의 
 | <code>pinned</code> | <code>string</code> | <code>'unpinned'</code> | <code>'left' &#124; 'right' &#124; 'unpinned'</code> | 좌/우 고정 |
 | <code>alignment</code> | <code>string</code> | - | <code>'near' &#124; 'center' &#124; 'far'</code> | 셀 정렬 (왼쪽 / 가운데 / 오른쪽) |
 | <code>autoRowHeightFlag</code> | <code>boolean</code> | <code>false</code> | <code>true &#124; false</code> | 내용에 맞춰 행 높이 자동 |
-| <code>allowWrapFlag</code> <Badge type="warning" text="2026" /> | <code>boolean</code> | <code>false</code> | <code>true &#124; false</code> | 줄바꿈 허용 |
+| <code>wrappableFlag</code> <Badge type="warning" text="2026" /> | <code>boolean</code> | <code>false</code> | <code>true &#124; false</code> | 줄바꿈 허용. 켜고 끄기는 <code>layout.setColumnWrap(컬럼, 'wrap' &#124; 'no-wrap')</code>, 상태는 <code>getColumnWrap</code> ([행 높이](/datagridview/row-height)). defaultColumnDef 의 <code>allowWrapFlag</code> 는 읽는 곳이 없음 |
+| <code>useWrappedView</code> <Badge type="warning" text="2026" /> | <code>boolean</code> | <code>false</code> | <code>true &#124; false</code> | 지금 줄바꿈으로 보이는지. <code>setColumnWrap</code> 이 바꿈 |
 
 ## 표시 / 기능 on-off
 

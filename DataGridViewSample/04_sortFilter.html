@@ -39,7 +39,9 @@
       'use strict';
 
       /* 우선순위 컬럼의 사용자 정의 정렬 순서 (문자 순서가 아닌 업무 순서) */
+      // #region priorityOrder
       var PRIORITY_ORDER = { '높음': 1, '보통': 2, '낮음': 3 };
+      // #endregion priorityOrder
 
       var treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
@@ -72,6 +74,7 @@
        *     'date'               날짜 범위
        *     'dateWithCondition'  날짜 조건
        */
+      // #region filter
       treeDocument.setFilterModel({
         label:    { filterId: 'stringRegexp' },
         title:    { filterId: 'string' },
@@ -81,6 +84,7 @@
         qty:      { filterId: 'number' },
         dueDate:  { filterId: 'date' }
       });
+      // #endregion filter
       treeDocument.pushUpdate();
 
       var grid = new DataGridView({
@@ -92,11 +96,13 @@
          *                 { dataIndex: 컬럼 키, sort: 'asc' | 'desc' }
          *   sortOptions : maxSortedColumnsCount = 동시에 정렬할 수 있는 최대 컬럼 수
          */
+        // #region sortModel
         sortModel: [
           { dataIndex: 'status', sort: 'asc' },
           { dataIndex: 'progress', sort: 'desc' }
         ],
         sortOptions: { maxSortedColumnsCount: 3 },
+        // #endregion sortModel
 
         columns: [
           { text: '품번',   dataIndex: 'tree',     width: 120 },
@@ -108,6 +114,7 @@
            *   음수 = A 가 앞, 양수 = B 가 앞, 0 = 같음
            *   내림차순일 때는 그리드가 결과에 -1 을 곱해 준다.
            */
+          // #region compare
           {
             text: '우선순위',
             dataIndex: 'priority',
@@ -116,13 +123,16 @@
               return (PRIORITY_ORDER[a] || 99) - (PRIORITY_ORDER[b] || 99);
             }
           },
+          // #endregion compare
 
           { text: '진행률', dataIndex: 'progress', width: 140, typeRepresentation: 'progress' },
           { text: '수량',   dataIndex: 'qty',      width: 80,  typeRepresentation: 'integer' },
           { text: '납기',   dataIndex: 'dueDate',  width: 120, typeRepresentation: 'date' },
 
           /* 정렬 금지 컬럼 : sortableFlag: false (헤더를 눌러도 정렬되지 않음) */
+          // #region noSort
           { text: '비고 (정렬 불가)', dataIndex: 'note', width: 160, sortableFlag: false }
+          // #endregion noSort
         ]
       });
       grid.inject(document.getElementById('grid'));
@@ -131,6 +141,7 @@
        * [실행 중 정렬 변경]
        *   sortModel 은 속성이므로 값을 대입하면 바로 다시 정렬된다. 빈 배열 = 정렬 해제
        */
+      // #region runtimeSort
       document.getElementById('btnSortPriority').addEventListener('click', function () {
         grid.sortModel = [{ dataIndex: 'priority', sort: 'asc' }];
       });
@@ -140,6 +151,7 @@
       document.getElementById('btnSortClear').addEventListener('click', function () {
         grid.sortModel = [];
       });
+      // #endregion runtimeSort
     });
   </script>
 </body>

@@ -60,7 +60,7 @@ require(['UWA/Utils/InterCom'], function (InterCom) {
 - 다른 도메인 창이면 `subscribeServer` 의 세 번째 인자에 상대 origin 을 넣습니다.
 
 ::: tip isPublic
-일부 코드는 `new InterCom.Server(id, { isPublic: true })` 를 쓰지만, 2025 InterCom 코드에서는 `isPublic` 을 읽는 곳이 없습니다. 넣어도 효과가 없는 것으로 보입니다. <Badge type="danger" text="검증 필요" />
+일부 코드는 `new InterCom.Server(id, { isPublic: true })` 를 쓰지만, 2025, 2026 InterCom 코드(`UWA2/js/Utils/InterCom.js` 와 `c/UWA/js/UWA_*.js` 묶음)에서 `isPublic` 은 사용 예 주석에만 나오고 읽는 곳이 없습니다. 넣어도 효과가 없습니다.
 :::
 
 OOTB 가 붙는 서버 이름 예: `SearchComServer` ([3DSearch 에서 골라 오기](/widget/search)), `com.ds.tagger6w` ([6W 태그 연동](/widget/tagger)), `MainMenuBar` ([대시보드 상단 바](/widget/top-bar)), `com.ds.compass` ([Compass 에 선택 객체 알리기](/widget/compass-pubsub#동작-방식)).

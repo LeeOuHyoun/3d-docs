@@ -92,6 +92,7 @@
        *
        *   module 은 webapps 기준 경로다. 'DS/DataGridViewSample/ToolbarActions' -> webapps/DataGridViewSample/ToolbarActions.js
        */
+      // #region toolbar
       var toolbar = grid.setToolbar({
         entries: [
           {
@@ -163,6 +164,7 @@
         ]
       });
       document.getElementById('toolbar').appendChild(toolbar.getContent());
+      // #endregion toolbar
     });
   </script>
 </body>

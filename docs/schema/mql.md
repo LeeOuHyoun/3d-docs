@@ -102,7 +102,7 @@ connect bus 'MyPart' 'MP-0000001' '1'
 | `promote bus id` / `demote bus id` | state 이동 |
 
 ::: tip preserve
-JPO 에는 `connect bus $1 preserve relationship ...` 처럼 `preserve` 를 붙인 호출이 있습니다. 대상 객체의 수정 일시를 바꾸지 않는 옵션으로 보입니다. <Badge type="danger" text="검증 필요" />
+JPO 에는 `connect bus $1 preserve relationship ...` 처럼 `preserve` 를 붙인 호출이 있습니다. `DomainRelationship.connect(context, fromId, relName, toId, true)` 도 안에서 `connect businessobject $1 preserve relationship $2 to $3` 를 실행합니다 (xerinfra.jar `DomainRelationship` 바이트코드). 대상 객체의 수정 일시를 바꾸지 않는 옵션으로 보입니다. <Badge type="danger" text="검증 필요" />
 :::
 
 ## 조회

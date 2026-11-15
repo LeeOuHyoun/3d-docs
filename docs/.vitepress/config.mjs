@@ -113,7 +113,9 @@ const SERVER_SIDEBAR = [
       { text: '커스텀 REST 서비스', link: '/server-java/rest-service' },
       { text: '스케줄러', link: '/server-java/scheduler' },
       { text: '외부 DB (MyBatis)', link: '/server-java/external-db' },
-      { text: '메일', link: '/server-java/mail' }
+      { text: '메일', link: '/server-java/mail' },
+      { text: 'Slack 알림', link: '/server-java/slack' },
+      { text: '독립 실행 이관 프로그램', link: '/server-java/migration' }
     ]
   },
   {
@@ -329,6 +331,7 @@ const WEBAPPS_SIDEBAR = [
           { text: '드래그앤드롭', link: '/datagridview/drag-and-drop' },
           { text: '툴바', link: '/datagridview/toolbar' },
           { text: '상태바', link: '/datagridview/status-bar' },
+          { text: '찾기, 페이지, 일괄 수정, 인쇄', link: '/datagridview/find-and-print' },
           { text: '사용자 뷰와 화면 상태 저장', link: '/datagridview/custom-views' }
         ]
       },

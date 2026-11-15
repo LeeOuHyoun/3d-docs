@@ -36,7 +36,9 @@ ENOVIA(3DEXPERIENCE) 는 개발 사양서를 제공하지 않고, webapps 소스
   - <Badge type="tip" text="2025" /> 2025 에만 있음 (2026 에서 빠짐)
 - 페이지 제목 옆 배지는 내용을 어디까지 확인했는지 나타냅니다.
   - <Badge type="tip" text="서버 확인" /> 관련 샘플을 ENOVIA 서버에서 실행해 동작을 확인함
+  - <Badge type="tip" text="로컬 실행 확인" /> 관련 샘플을 ENOVIA 서버 없이 원본 webapps 로 내 PC 에서 실행해 동작을 확인함 ([샘플을 내 PC 에서 실행하기](/guide/contributing#샘플을-내-pc-에서-실행하기)). 3DSpace 서버 호출과 3DDashboard 안에서의 동작은 확인 범위 밖
   - <Badge type="info" text="원본 분석" /> 원본 소스 분석으로만 작성함. 실제 동작이 다르면 원본 쪽이 맞음
+- 본문의 "앱 N개 모듈", "앱 파일 N개" 같은 숫자는 webapps 앱 소스에서 큰따옴표로 쓴 모듈 ID(`"DS/폴더/모듈"`)나 이름이 나오는 모듈 / 파일 수입니다. 그 모듈 자신의 폴더, 주석, 날짜 백업 파일(`_YYMMDD.js`)은 세지 않습니다. 얼마나 쓰이는지 가늠하는 정도로 봅니다.
 - 본문 문장 끝의 <Badge type="danger" text="검증 필요" /> 는 원본에서 직접 확인하지 못하고 **추정한 사양** 입니다 ("~것으로 보입니다"). 실무에 쓰기 전에 서버에서 확인합니다. 전체 목록은 [검증 대기 목록](/guide/verify-list) 에 있습니다.
 
 ## 샘플 소스
@@ -55,10 +57,11 @@ ENOVIA(3DEXPERIENCE) 는 개발 사양서를 제공하지 않고, webapps 소스
 | UI 구성 요소 | [UIComponentSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/UIComponentSample) |
 | JPO | [JPOSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/JPOSample) |
 | 트리거 | [TriggerSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/TriggerSample) |
+| 공통 유틸 (DataGridView 보조 함수, 펼치는 검색 패널) | [CommonUtils](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/CommonUtils) |
 
-- 서버에서 동작을 확인한 것은 DataGridViewSample 의 01 ~ 05 입니다. DataGridViewSample 06 ~ 10 과 그 밖의 샘플은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.
+- 서버에서 동작을 확인한 것은 DataGridViewSample 의 01 ~ 05 입니다. DataGridViewSample 11 ~ 16, TweakersSample 01 ~ 05, ControlsSample 04 ~ 06 · 08 ~ 10 은 ENOVIA 서버 없이 원본 webapps 를 내 PC 에서 띄워 동작을 확인했습니다 (관련 문서에 <Badge type="tip" text="로컬 실행 확인" />). 그 밖의 샘플은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.
 - 화면 샘플(`*.html`)은 `<3DSpace>/webapps/` 아래에 폴더째 넣고 서버 주소로 엽니다. 형제 폴더의 `AmdLoader`, `Core` 등을 상대 경로로 불러오기 때문입니다.
-- 서버 샘플(`*.mql`, `*_mxJPO.java`)은 형식 예시입니다. 이름(`XX_` 접두어)을 프로젝트 규칙에 맞게 바꿔서 씁니다.
+- 서버 샘플(`*.mql`, `*_mxJPO.java`)은 형식 예시입니다. 안의 이름은 가상의 이름이고 샘플마다 모양이 다릅니다 (SchemaSample `XXMyPart`, UIComponentSample · JPOSample `XX_MyPart`, TriggerSample 접두어 없는 `MyPart`). 프로젝트 규칙([객체 이름](/schema/conventions#객체-이름))에 맞게 바꿔서 씁니다.
 
 ## 익명화
 

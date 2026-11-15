@@ -120,11 +120,11 @@ return children;
 ```
 
 - `getRelatedObjects` 의 단계 `0` 이 "끝까지" 입니다.
-- 여러 단계를 한 번에 돌려줄 때 OOTB 는 마지막에 `expandMultiLevelsJPO = "true"` 만 든 Map 을 붙입니다. 프레임워크는 돌려받은 목록의 마지막 Map 에 이 키가 있으면 목록에서 빼고 화면을 만듭니다. JPO 가 단계를 직접 처리했다는 표시로 보입니다. <Badge type="danger" text="검증 필요" /> JPO 안에서 목록 개수를 셀 때도 이 Map 을 빼야 합니다 (ENOQuestionUIBase 가 그렇게 함).
-- href 에 `expandProgram=` 을 따로 주면 루트 목록은 `program`, 펼치기는 `expandProgram` 이 맡는 것으로 보입니다. <Badge type="danger" text="검증 필요" />
+- 여러 단계를 한 번에 돌려줄 때 OOTB 는 마지막에 `expandMultiLevelsJPO = "true"` 만 든 Map 을 붙입니다. 프레임워크는 돌려받은 목록의 마지막 Map 에 이 키가 있으면 (값은 보지 않고 키가 있는지만 봄) 목록에서 빼고 화면을 만듭니다. JPO 가 단계를 직접 처리했다는 표시로 보입니다. <Badge type="danger" text="검증 필요" /> JPO 안에서 목록 개수를 셀 때도 이 Map 을 빼야 합니다 (ENOQuestionUIBase 가 그렇게 함).
+- href 에 `expandProgram=` 을 따로 주면 루트 목록은 `program`, 펼치기는 `expandProgram` 이 맡습니다. 처음 그릴 때 화면이 `firstTime=true` 를 넘기면 `program` 을, 그 뒤 펼칠 때는 `expandProgram` 을 부릅니다. 둘 다 없으면 루트 객체 하나만 그립니다.
 
 ::: info 근거
-emxCommonPartBase_mxJPO.java:700-790 (`expandLevel`, `expandMultiLevelsJPO`), 1021-1038 (`getExpandLevel`: `"All"` → 0), ENOQuestionUIBase_mxJPO.java:216, 248-258. framework.jar `UITableIndented.getChildObjects` (마지막 Map 이 `expandMultiLevelsJPO` 키를 가지면 `MapList.remove`)
+emxCommonPartBase_mxJPO.java:700-790 (`expandLevel`, `expandMultiLevelsJPO`), 1021-1038 (`getExpandLevel`: `"All"` → 0), ENOQuestionUIBase_mxJPO.java:216, 248-258. framework.jar `UITableIndented.getChildObjects` (마지막 Map 이 `expandMultiLevelsJPO` 키를 가지면 (`containsKey`) `MapList.remove`). `UITableIndented.init` (`program` / `inquiry` → `selectedProgramLabel`, `expandProgramMenu` → `selectedProgram` → `expandProgram` 순으로 `selectedProgram`, 둘 다 없으면 `getRootNodeInfoMap`), `getChildObjects` (`firstTime` 을 꺼내 `true` 면 `selectedProgramLabel`, 아니면 `selectedProgram` 실행), common/emxFreezePaneGetData.jsp:140-141 (`firstTime` 전달)
 :::
 
 ## 표 열 function
@@ -236,7 +236,7 @@ emxECPartBase_mxJPO.java:10430-10436 (getCompareType: `fieldMap.name`), 10497-10
 | --- | --- |
 | `paramMap` | `languageStr` 등 |
 | `requestMap` | 요청 파라미터 |
-| `fieldMap` (폼) / `columnMap` (표) | 정의. 표에서는 `columnMap` 이 오는 것으로 보입니다 <Badge type="danger" text="검증 필요" /> |
+| `fieldMap` (폼) / `columnMap` (표) | 정의. 폼은 `fieldMap`, 표 편집과 툴바는 `columnMap` 으로 옴 |
 
 | 돌려줄 키 | 형 | 내용 |
 | --- | --- | --- |
@@ -257,7 +257,7 @@ public HashMap getStatusRange(Context context, String[] args) throws Exception {
 ```
 
 ::: info 근거
-emxECPartBase_mxJPO.java:15450-15468 (getRevisions), 10553-10554. `put("field_choices"` 202 건, `put("field_display_choices"` 203 건. framework.jar `UIFormCommon` 상수
+emxECPartBase_mxJPO.java:15450-15468 (getRevisions), 10553-10554. `put("field_choices"` 202 건, `put("field_display_choices"` 203 건. framework.jar `UIFormCommon` 상수, `UIFormCommon.fillRangeValues(..., int, HashMap)` (int 가 0 이상이면 `columnMap`, `-1` 이면 `fieldMap`. 폼용 오버로드는 `-1` 을 넘김). 호출부: common/emxTableEdit.jsp:396, 660, common/emxToolbarInclude.inc:1954 (모두 `0`)
 :::
 
 ## 다시 읽기 (Reload Function)
@@ -386,7 +386,7 @@ public Boolean canEditMyPart(Context context, String[] args) throws Exception {
 | 5 | `Access Program` + `Access Function` (JPO) |
 
 - JPO 는 `JPO.invoke(..., Boolean.class)` 로 불립니다. `public boolean` 으로 선언해도 됩니다 (`boolean` 989 건, `Boolean` 313 건).
-- 3 ~ 5 중 하나라도 거짓이어도 `setting "Access Behavior" "disable"` 이면 `checkAccessForSettings` 는 `true` 를 돌려주고 설정 Map 에 `GrayOut` = `"true"` 를 넣습니다. `GrayOut` 은 숨기지 않고 회색 비활성으로 그리라는 표시로 보입니다. <Badge type="danger" text="검증 필요" />
+- 3 ~ 5 중 하나라도 거짓이어도 `setting "Access Behavior" "disable"` 이면 `checkAccessForSettings` 는 `true` 를 돌려주고 설정 Map 에 `GrayOut` = `"true"` 를 넣습니다. `GrayOut` 은 숨기지 않고 회색 비활성으로 그리라는 표시입니다. 툴바는 이 값이 `"true"` 면 명령을 비활성(`disable()`)으로 그립니다.
 
 ::: warning null 을 돌려주지 않습니다
 `null` 을 돌려주면 "JPO Access Program Returns NULL" 메시지로 `FrameworkException` 이 납니다. 판단할 수 없을 때는 `false` 를 돌려줍니다.
@@ -397,7 +397,7 @@ public Boolean canEditMyPart(Context context, String[] args) throws Exception {
 :::
 
 ::: info 근거
-xerinfra.jar `UINavigatorUtil.checkAccessForSettings` (설정 이름 `Licensed Product`, `Access Mask`, `Access Expression`, `Access Program`, `Access Function`, `SETTINGS`, `Access Behavior`, 문자열 "JPO Access Program Returns NULL". Mask 와 Expression 결과가 모두 참일 때만 `JPO.invoke`. 최종 결과가 거짓이고 `Access Behavior` 가 `disable` 이면 `GrayOut` 을 put 하고 참으로 바꿈), `UINavigatorUtil.checkModeTest` (`Hide Mode` 의 `Cloud`, `!Cloud`, `Mobile`, `!Mobile`, `Desktop`), emxECPartBase_mxJPO.java:4630-4637 (isMepPart), emxProjectSpaceBase_mxJPO.java:8014-8027 (isFromProgram), emxCompanyBase_mxJPO.java:1536-1556 (`SETTINGS`), emxECPartBase_mxJPO.java:10291 (`RequestValuesMap`)
+xerinfra.jar `UINavigatorUtil.checkAccessForSettings` (설정 이름 `Licensed Product`, `Access Mask`, `Access Expression`, `Access Program`, `Access Function`, `SETTINGS`, `Access Behavior`, 문자열 "JPO Access Program Returns NULL". Mask 와 Expression 결과가 모두 참일 때만 `JPO.invoke`. 최종 결과가 거짓이고 `Access Behavior` 가 `disable` 이면 `GrayOut` 을 put 하고 참으로 바꿈), `UINavigatorUtil.checkModeTest` (`Hide Mode` 의 `Cloud`, `!Cloud`, `Mobile`, `!Mobile`, `Desktop`), emxECPartBase_mxJPO.java:4630-4637 (isMepPart), emxProjectSpaceBase_mxJPO.java:8014-8027 (isFromProgram), emxCompanyBase_mxJPO.java:1536-1556 (`SETTINGS`), emxECPartBase_mxJPO.java:10291 (`RequestValuesMap`), common/emxToolbarInclude.inc:216 (`GrayOut` 읽기), common/scripts/emxUIToolbar.js:808-810, 1901-1903 (`grayout == "true"` 이면 `disable()`)
 :::
 
 ## 생성 폼 (createJPO, postProcessJPO)
@@ -441,10 +441,10 @@ public Map createMyPart(Context context, String[] args) throws Exception {
 
 | 돌려줄 키 | 내용 |
 | --- | --- |
-| `Action` | `"continue"` 면 commit, 그 밖이면 abort |
+| `Action` | `"continue"` 나 `"success"` 면 commit (대소문자 무시), 그 밖이면 abort. 편집 폼은 `"continue"` 만 commit |
 | `Message` | 알림 문구. 문자열 리소스 키면 번역해서 보여 줌 |
 
-편집 폼 (`emxFormEditProcess.jsp`) 의 `postProcessJPO` 도 같은 모양입니다. 다만 `paramMap` 에 요청 파라미터 전체와 `EditAction=done` 이 들어 있고, `requestValuesMap` 이 추가됩니다.
+편집 폼 (`emxFormEditProcess.jsp`) 의 `postProcessJPO` 도 같은 모양입니다. 다만 `paramMap` 에 요청 파라미터 전체와 `EditAction=done` 이 들어 있고, `requestValuesMap` 이 추가됩니다. 반환값 처리도 다릅니다. `"continue"` 만 commit 하고, 반환형이 맞지 않을 때 생기는 `ClassCastException` 을 봐주지 않습니다 (아래).
 
 ::: warning Message 만 돌려주면 저장이 취소됩니다
 `Action` 기본값은 `"CONTINUE"` 지만, 돌려준 Map 이 비어 있지 않으면 `Action` 을 Map 에서 다시 읽습니다. `Message` 만 넣고 `Action` 을 빼면 `null` 이 되어 **abort** 됩니다. 경고만 보여 주고 저장하려면 `Action` 에 `"continue"` 를 같이 넣습니다. 편집 폼은 `"continue"` 만 commit 하고 `"success"` 는 abort 합니다.
@@ -454,11 +454,12 @@ public Map createMyPart(Context context, String[] args) throws Exception {
 생성 후처리에서 `paramMap.objectId` 는 새로 만든 객체, `requestMap.objectId` 는 생성 화면을 연 부모 객체입니다. 바꿔 쓰면 엉뚱한 객체를 수정합니다.
 :::
 
-- 반환형을 `void` 나 `int` 로 해도 됩니다. 프레임워크가 `ClassCastException` 을 무시합니다.
+- 생성 폼은 반환형을 `void` 나 `int` 로 해도 됩니다. 프레임워크가 `ClassCastException` 을 무시합니다.
+- 편집 폼은 `ClassCastException` 을 따로 잡지 않습니다. `int` 를 돌려주면 `(HashMap)` 형변환에서 예외가 나고 abort 됩니다. `void` 는 `JPO.invoke` 가 `null` 을 돌려주므로 편집 폼에서도 실패하지 않는 것으로 보입니다. <Badge type="danger" text="검증 필요" /> 두 폼에 같이 쓰는 메서드는 `HashMap` 을 돌려줍니다.
 - 예외를 던지면 생성 전체가 abort 되고 예외 문구가 화면에 나옵니다.
 
 ::: info 근거
-common/emxCreateProcess.jsp:78 (`action = "CONTINUE"`), 172-191, 299-336, 365-378, common/emxFormEditProcess.jsp:54, 161, 210-233, 268-279, emxECPartBase_mxJPO.java:17093-17164 (createPartJPO: `TypeActual`, `put("id")`), 12938-12946 (performPostProcessActions)
+common/emxCreateProcess.jsp:78 (`action = "CONTINUE"`), 172-191, 299-336 (322-327: `ClassCastException` 무시), 365-378 (366: `continue` / `success` commit), common/emxFormEditProcess.jsp:54, 161, 210-233 (231-236: `catch (Exception)` 만 있음), 268-279 (272: `continue` 만 commit), eMatrixServletRMI.jar `matrix.db.JPO.invoke(..., Class)` (`Class` 인자는 쓰지 않고 결과 문자열이 비면 `null`), emxECPartBase_mxJPO.java:17093-17164 (createPartJPO: `TypeActual`, `put("id")`), 12938-12946 (performPostProcessActions)
 :::
 
 ## 검색 포함 / 제외 program

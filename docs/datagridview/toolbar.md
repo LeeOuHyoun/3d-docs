@@ -17,46 +17,7 @@ DataGridView.js 의 setToolbar, Tweakers.js 의 GeneratedToolbar. 호출부: ENO
 <div id="grid"></div>
 ```
 
-```js
-var toolbar = grid.setToolbar({
-  entries: [
-    {
-      id: 'searchPartNo',
-      position: 'near',
-      dataElements: {
-        typeRepresentation: 'string',
-        label: '품번 검색',
-        placeholder: '품번 입력 후 Enter',
-        value: ''
-      },
-      onNodeUpdate: { module: 'DS/MyModule/ToolbarActions', func: 'searchByPartNo' }
-    },
-    {
-      id: 'statusFilter',
-      position: 'near',
-      dataElements: {
-        typeRepresentation: 'customEnumMember',
-        label: '상태',
-        value: '전체',
-        possibleValues: ['전체', '작업중', '검토중', '승인', '폐기']
-      },
-      onNodeUpdate: { module: 'DS/MyModule/ToolbarActions', func: 'filterByStatus' }
-    },
-    {
-      id: 'addRow',
-      position: 'far',
-      dataElements: {
-        typeRepresentation: 'functionIcon',
-        label: '추가',
-        tooltip: '행 추가',
-        icon: { iconName: 'plus', fontIconFamily: 1 },
-        action: { module: 'DS/MyModule/ToolbarActions', func: 'addRow' }
-      }
-    }
-  ]
-});
-document.getElementById('toolbar').appendChild(toolbar.getContent());
-```
+<<< @/../DataGridViewSample/03_toolbar.html#toolbar{js}
 
 ## entries 항목
 
@@ -81,35 +42,18 @@ document.getElementById('toolbar').appendChild(toolbar.getContent());
 
 `action` 과 `onNodeUpdate` 는 함수를 직접 받지 않고 **AMD 모듈 이름 + 함수 이름** 으로 연결합니다. 툴바가 `require` 로 모듈을 불러서 함수를 호출합니다.
 
-```js
-define('DS/MyModule/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], function (TreeNodeModel) {
-  'use strict';
+모듈은 함수들을 객체로 돌려주는 AMD 모듈입니다. 샘플은 `define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], function (TreeNodeModel) { return { ... }; })` 안에 함수를 둡니다. 버튼(`action`)은 누를 때 불립니다.
 
-  return {
-    addRow: function (e) {
-      var grid = e.context.executionContext;
-      grid.treeDocument.addRoot(new TreeNodeModel({ label: 'NEW', grid: { title: '신규 부품' } }));
-    },
+<<< @/../DataGridViewSample/ToolbarActions.js#addRow{js}
 
-    searchByPartNo: function (e) {
-      var keyword = (e.context.value || '').toLowerCase();
-      var treeDocument = e.context.executionContext.treeDocument;
-      treeDocument.prepareUpdate();
-      treeDocument.getRoots().forEach(function (node) {
-        if (String(node.options.label).toLowerCase().indexOf(keyword) > -1) {
-          node.show();
-        } else {
-          node.hide();
-        }
-      });
-      treeDocument.pushUpdate();
-    }
-  };
-});
-```
+입력칸과 콤보(`onNodeUpdate`)는 값이 확정되면(Enter, 포커스 이동, 콤보 선택) 불립니다. 샘플은 검색어와 상태 두 조건으로 행을 보이기 / 숨기기 합니다.
 
-- `DS/MyModule/ToolbarActions` 는 AmdLoader 규칙상 `webapps/MyModule/ToolbarActions.js` 로 찾습니다.
-- 로더가 먼저 묶음 파일(`MyModule/MyModule.js`)을 찾고, 없으면 콘솔에 `Concatenated module ... not found` info 를 남긴 뒤 개별 파일을 로드합니다. 정상 동작입니다.
+<<< @/../DataGridViewSample/ToolbarActions.js#search{js}
+
+<<< @/../DataGridViewSample/ToolbarActions.js#rowVisibility{js}
+
+- `DS/DataGridViewSample/ToolbarActions` 는 AmdLoader 규칙상 `webapps/DataGridViewSample/ToolbarActions.js` 로 찾습니다. 앱에서는 자기 모듈 경로로 바꿉니다.
+- 로더가 먼저 묶음 파일(`DataGridViewSample/DataGridViewSample.js`)을 찾고, 없으면 콘솔에 `Concatenated module ... not found` info 를 남긴 뒤 개별 파일을 로드합니다. 정상 동작입니다.
 
 ### 함수 인자 e
 
@@ -124,14 +68,4 @@ define('DS/MyModule/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], function (T
 
 선택 정보는 TreeDocument 가 가지고 있습니다.
 
-```js
-deleteSelected: function (e) {
-  var treeDocument = e.context.executionContext.treeDocument;
-  var selectedNodes = treeDocument.getSelectedNodes();
-  treeDocument.prepareUpdate();
-  selectedNodes.forEach(function (node) {
-    treeDocument.removeRoot(node);
-  });
-  treeDocument.pushUpdate();
-}
-```
+<<< @/../DataGridViewSample/ToolbarActions.js#deleteSelected{js}

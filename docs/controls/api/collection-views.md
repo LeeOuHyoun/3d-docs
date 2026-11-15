@@ -211,7 +211,7 @@ Controls.js 의 ResponsiveViewAdaptor, ResponsiveTileView, ResponsiveThumbnailVi
 | <code>addChildren(nodes)</code> | 사용 금지. <code>this.children</code> 을 읽어 <code>TypeError</code> (2025, 2026) |
 | <code>removeChild(node)</code> / <code>remove()</code> / <code>removeChildren()</code> | 제거. 마지막 하위를 지우면 펼침 단추도 없어짐 |
 | <code>expand(depth?)</code> | <code>depth</code> 단계 펼침 (기본 1) |
-| <code>expandAll()</code> | 하위 펼침. 두 단계까지만 펼쳐지는 것으로 보입니다 <Badge type="danger" text="검증 필요" /> |
+| <code>expandAll()</code> | 하위 펼침. 두 단계까지만 펼칩니다 (하위 노드는 펼쳐지고, 그 아래 노드는 접힌 채). 하위 노드의 <code>expand(true)</code> 안에서 <code>_modeIsExpandAll</code> 이 <code>true--</code> 로 <code>0</code> 이 되어 더 내려가지 않음 (2025, 2026) |
 | <code>collapse()</code> | 접음. 하위 노드 화면 요소를 지움 |
 | <code>isExpanded()</code> / <code>isRoot()</code> / <code>isDrawn()</code> / <code>hasChildren()</code> | 상태 |
 | <code>getParent()</code> / <code>getRoot()</code> / <code>getTree()</code> | 부모 / 루트 노드 / 트리 |

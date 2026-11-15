@@ -80,7 +80,7 @@ if (!canRelease) {
 }
 ```
 
-- `JPO.invoke` 를 거친 예외 문구에는 `System Error: #5000001: java.lang.Exception:` 같은 앞부분이 붙는 것으로 보입니다. <Badge type="danger" text="검증 필요" /> 생성 / 편집 처리 JSP 는 이 앞부분을 잘라서 보여 줍니다.
+- `JPO.invoke` 를 거친 예외 문구에는 `System Error: #5000001: java.lang.Exception:` 같은 앞부분이 붙습니다. 생성 / 편집 처리 JSP 는 이 앞부분을 잘라서 보여 줍니다.
 - 이름 중복 같은 커널 오류는 코드 (`1500789`) 로 구분해 다른 문구로 바꿔 보여 줍니다.
 - 트리거에서는 예외 대신 `notice` 와 반환값 `1` 로 막는 방식이 일반적입니다 ([트리거](/trigger/)).
 
@@ -104,7 +104,7 @@ try {
 :::
 
 ::: info 근거
-xerinfra.jar `FrameworkException` (상위 `matrix.util.MatrixException`), eMatrixServletRMI.jar `MatrixException` (상위 `java.lang.Exception`). common/emxCreateProcess.jsp:222-258 (`1500789` → `emxFramework.Common.NotUniqueMsg`, `System Error: #5000001:` 잘라 내기, `java.lang.Exception:` 제거), common/emxFormEditProcess.jsp (`System Error: #5000001: java.lang.Exception:`), common/emxAEFSubmitJPO.jsp:40-50
+xerinfra.jar `FrameworkException` (상위 `matrix.util.MatrixException`), eMatrixServletRMI.jar `MatrixException` (상위 `java.lang.Exception`). common/emxCreateProcess.jsp:222-258 (`1500789` → `emxFramework.Common.NotUniqueMsg`, `System Error: #5000001:` 잘라 내기, `java.lang.Exception:` 제거), common/emxFormEditProcess.jsp:292-295 (`System Error: #5000001: java.lang.Exception:`), common/emxLifecycleProcess.jsp:97-102, 164-171 (오류 코드 `5000001` 이면 `#5000001:` 뒤만 표시), common/emxAEFSubmitJPO.jsp:40-50
 :::
 
 ## 로그

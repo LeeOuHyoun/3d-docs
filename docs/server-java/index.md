@@ -152,5 +152,5 @@ public class MyRequestContextFilter implements Filter {
 | [스케줄러](/server-java/scheduler) | 정해진 시각에 JPO 실행. Quartz, cron 설정 |
 | [외부 DB (MyBatis)](/server-java/external-db) | 인터페이스 테이블 조회와 상태 갱신 |
 | [메일](/server-java/mail) | 템플릿 메일 보내기, 오류 알림 메일 |
-
-Slack 알림, 독립 실행 이관 프로그램의 내부는 아직 분석하지 않았습니다. 이관 프로그램 실행 방법만 [서버 반영 절차](/deploy/#독립-실행-프로그램-이관) 에 있습니다.
+| [Slack 알림](/server-java/slack) | 봇 토큰으로 채널 메시지, 이메일로 찾은 사용자에게 DM |
+| [독립 실행 이관 프로그램](/server-java/migration) | 서버 밖에서 `main` 으로 도는 대량 이관. 결과 class, 트랜잭션, 실행 bat |

@@ -3,7 +3,7 @@
 프로젝트는 스키마와 UI 정의를 `mql/` 폴더에 **객체 하나당 파일 하나** 로 둡니다. 폴더 번호는 실행 순서이고, 파일마다 같은 헤더 템플릿과 팀 규칙이 들어 있습니다. 이 페이지는 그 구조와 규칙을 정리합니다. 이름과 값은 일반 예(`XX` 접두어)로 바꿨습니다.
 
 ::: info 근거
-`mql/` 폴더 구조와 파일 수, 각 폴더의 템플릿(`Attribute_Sample.mql`, `Type_Sample.mql`, `Policy_Sample.mql`, `RelationshipSample.mql`, `Trigger_Sample.mql`), 정의 파일의 헤더와 property 블록, `mql/97.prod-mql/template-date.mql` 와 월별 폴더, `mql/98.migration/dev`, `mql/98.migration/prd`, `mql/13.generator/*.mql`, `mql/99.config/*.xml`
+`mql/` 폴더 구조와 파일 수, 각 폴더의 템플릿(`Attribute_Sample.mql`, `Type_Sample.mql`, `Policy_Sample.mql`, `RelationshipSample.mql`, `Trigger_Sample.mql`), 정의 파일의 헤더와 property 블록, `mql/97.prod-mql/template-date.mql` 와 월별 폴더, `mql/98.migration/dev`, `mql/98.migration/prd`, `mql/13.generator/*.mql`, `mql/99.config/*.xml`, `mql/14.tcl/*.tcl` (`mod prog`), `*.tcl.code` (`# Custmizing Start` ~ `End` 블록: 날짜 prefix 계산, `mql get env 4` 번호 초기화), `properties/emxSystem.properties` (`emxFramework.HelpAbout.Version.R427`)
 :::
 
 ## 폴더 구조
@@ -18,8 +18,10 @@
 | `06.command` ~ `11.portal` | 화면: command, menu, table, webform, channel, portal | 수십 ~ 수백 |
 | `12.trigger` | trigger 설정 객체 + `mod type / policy ... add trigger` | 약 20 |
 | `13.generator` | 채번기 객체 | 약 60 |
-| `14.tcl` | 채번용 OOTB tcl 프로그램 사본으로 보입니다 <Badge type="danger" text="검증 필요" /> | 4 |
-| `19.program`, `20.rule`, `21.page` | program, rule, page | 몇 개 |
+| `14.tcl` | 채번용 OOTB tcl 프로그램(`eServicecommonObjectGenerator.tcl`, `eServicecommonGetNextNumber.tcl`)을 `mod prog` 로 덮어쓰는 수정본. 사본이 아님. 이름 prefix 를 날짜(연월 등)로 계산하고, prefix 가 바뀌면 4 번째 env 인자로 번호를 처음부터 다시 매김 | 4 |
+| `19.program` | OOTB 화면 CSS program 을 `copy prog ... _OOTB` 로 백업한 뒤 `mod prog ... code` 로 덮어씀 ([OOTB program 을 고칠 때](/deploy/#ootb-program-을-고칠-때)) | 1 |
+| `20.rule` | 여러 policy 가 같이 쓰는 권한 묶음 ([Policy 의 rule](/schema/policy#rule)) | 1 |
+| `21.page` | 프로젝트 기준정보 JSON 을 담은 page, OOTB 설정 page(`ECMConfig`, `WhereUsedDefinition`)를 백업 후 고친 것 ([page 객체](/properties/system-settings#page-객체)) | 8 |
 | `15.inquiry` ~ `18.dimension`, `22.interface` ~ `25.object` | 자리만 있고 비어 있음 | 0 |
 | `97.prod-mql` | 운영 반영용 묶음 스크립트 (월별) | |
 | `98.migration` | 데이터 이관 스크립트 (dev / prd) | |
@@ -114,7 +116,7 @@ mod type 'XXMyPart'
 
 | property | 값 | 비고 |
 | --- | --- | --- |
-| `version` | `R2025x` | 최근 파일은 `R427` (R2025x 의 내부 릴리스 번호로 보입니다 <Badge type="danger" text="검증 필요" />) |
+| `version` | `R2025x` | 최근 파일은 `R427` (R2025x 의 내부 릴리스 번호. `emxSystem.properties` 에 `emxFramework.HelpAbout.Version.R427=3DEXPERIENCE R2025x`) |
 | `application` | `Framework` | 일부 policy 는 `ProductLine` |
 | `installer` | 프로젝트 코드 (`XX`) | 템플릿의 예시 값은 실제 파일과 다름. 실제 파일 값을 따름 |
 | `original name` | 객체 이름 그대로 | |
@@ -264,6 +266,23 @@ trace off;
 ```
 
 서버별 파일이 따로 있고 서버 주소 등 내용이 서로 다르므로, 항목을 더할 때는 쓰는 파일 모두에 같이 반영합니다.
+
+여러 type 이 같이 쓰는 필드는 `<BOTYPEFIELDS>` 로 묶어 이름을 붙이고, `<BOTYPE includes>` 나 `<BOTYPE.EXTFIELDS includes>` 에서 그 이름으로 가져옵니다.
+
+```xml
+<BOTYPEFIELDS name="XXMyPartFields">
+    <FIELD name="XXMyColor" select="attribute[XXMyColor]" type="STRING"/>
+</BOTYPEFIELDS>
+<BOTYPE name="XXMyPart" includes="basic,XXMyPartFields"/>
+<BOTYPE.EXTFIELDS name="VPMReference" includes="XXMyPartFields"/>
+```
+
+| 태그 | 쓰는 때 |
+| --- | --- |
+| `<BOTYPE name includes>` | 그 type 을 색인 대상으로 정하고 필드 묶음을 붙임. `basic` 은 기본 필드 묶음 |
+| `<BOTYPEFIELDS name>` | 필드 묶음 정의. 안에 `<FIELD>` 를 여러 개 둠. `usage="path"` (경로 select 묶음), `application="..."` 이 붙은 것도 있음 |
+| `<BOTYPE.EXTFIELDS name includes>` | 이미 정의된 type(OOTB 포함)에 필드 묶음만 더함. type 정의를 다시 쓰지 않음 |
+| `<FIELD>` 속성 | `select` (값을 읽는 select 식, `CONST:값` 이면 고정 값), `type` (`STRING`, `STRING,PARAMETRIC` 등), `sixw` (검색 화면의 6W 술어), `key`, `hidden`, `onlyForSXI`, `customized`, `fts`, `searchable` |
 
 ## 새 type 추가 체크리스트
 

@@ -107,7 +107,7 @@ var treeDocument = new TreeDocument();
 ```
 
 - 범위 이름은 영문, 숫자, `-`, `_` 만 씁니다.
-- 지금은 DataGridView 의 가이드 중 트리 구조, 컬럼 함수, 우클릭 메뉴와 선택, 셀 직접 그리기, 상태바, 드래그앤드롭, 헤더, 레이아웃 메서드, 사용자 뷰, 행 그룹핑, 서버 사이드 데이터가 이 방식입니다.
+- 지금은 DataGridView 의 가이드 중 편집, 행 높이, 저장 후 화면 반영을 뺀 나머지가 이 방식입니다.
 - region 안에는 주석을 넣지 않습니다. 설명은 region 바로 위 블록 주석에 씁니다 (문서에는 region 안만 보입니다).
 - 샘플에서 그리드를 담는 요소에는 높이와 `position: relative` 를 꼭 줍니다. 그리드는 높이 기본값(`'inherit'`)일 때 자신을 `position: absolute` 로 놓아서, 없으면 페이지 전체를 덮습니다.
 
@@ -121,11 +121,12 @@ npm run docs:coverage -- <webapps 폴더 경로>
 원본 `DataGridView/DataGridView.js` 에서 그리드 옵션, 그리드 메서드, layoutOptions, 레이아웃 메서드, 컬럼 옵션과 컬럼 함수 이름을, `CollectionView/CollectionView.js` 에서 상속받는 옵션과 메서드 이름을 뽑아서 `docs/datagridview/` 에 한 번도 나오지 않는 이름을 출력합니다. 이름 앞의 숫자는 DataGridView 를 쓰는 앱 파일 중 그 이름이 나오는 파일 수라서, 숫자가 큰 것부터 문서에 보태면 됩니다.
 
 - 경로를 주지 않으면 저장소 옆의 `../enovia2025/3dspace/webapps` 를 읽습니다. 2026 과 비교하려면 2026 webapps 경로를 줍니다.
+- 사용 파일 수는 모듈 폴더 바로 아래의 `.js`(묶음 파일)만 읽어서 셉니다. 하위 폴더까지 읽으면 2026 에서 500초를 넘기기 때문입니다. 그래서 문서의 "사용" 칸(하위 폴더까지 읽어 센 값, 앱 파일 119개 기준)보다 조금 작게 나올 수 있습니다 (2025: 앱 파일 110개).
 - 원본이 들여쓰기된 상태(코드 정리 도구로 줄을 나눈 상태)여야 합니다. 한 줄로 붙은 원본에서는 이름을 뽑지 못합니다.
 - 남는 이름이 모두 문서에 있어야 하는 것은 아닙니다. 내부용 함수도 섞여 있으므로 사용 파일 수를 보고 고릅니다.
 - 컬럼 정의에서 직접 읽는 키(`customHeader`, `columnGroupShow` 처럼 기본값 표에 없는 것)는 이 스크립트가 찾지 못합니다. 원본에서 컬럼 객체를 읽는 코드를 따로 봐야 합니다.
-- 상속 옵션, 상속 메서드는 클래스가 `name: "CollectionView"` 형태로 정의된 2025 원본에서만 뽑힙니다.
-- 문서의 "사용" 칸(그리드 옵션, 컬럼 함수)도 같은 기준(이름이 나오는 앱 파일 수)으로 센 값입니다.
+- 클래스는 2025 의 `name: "CollectionView"` 객체 형태와 2026 의 ES6 `class` (`static get publishedProperties()`, `addClass(변수, "CollectionView")` 로 등록) 형태를 모두 읽습니다.
+- 문서의 "사용" 칸(그리드 옵션, 컬럼 함수)도 이름이 나오는 앱 파일 수로 센 값입니다.
 
 ## 샘플을 내 PC 에서 실행하기
 
@@ -135,6 +136,8 @@ npm run samples -- <webapps 폴더 경로>
 ```
 
 저장소 옆의 `../enovia2025/3dspace/webapps` 와 `*Sample` 폴더를 한 서버로 묶어 `http://127.0.0.1:8080/webapps/DataGridViewSample/index.html` 같은 주소로 열 수 있게 합니다. ENOVIA 서버 없이 DataGridView 같은 화면 컨트롤이 실제로 동작합니다. 3DSpace 서버를 부르는 부분(WAFData 등)과 위젯 객체(`widget`)가 필요한 샘플은 동작하지 않습니다. 포트는 `PORT=9000 npm run samples` 로 바꿉니다.
+
+CommonUtils 는 띄우지 않습니다. 현장 경로의 `DS/lodash` 를 불러 쓰는데 원본 webapps 에는 이 모듈이 없어서, 띄워도 동작하지 않습니다.
 
 ## 내 PC 에서 미리 보기
 

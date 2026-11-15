@@ -29,35 +29,13 @@
 
 ## 콤보박스 (하나 선택)
 
-```js
-{
-  text: '상태', dataIndex: 'status',
-  typeRepresentation: 'customEnumMember',
-  editableFlag: true,
-  editionPolicy: 'EditionOnClick',
-  semantics: {
-    possibleValues: ['작업중', '검토중', '승인', '폐기']
-  }
-}
-```
+<<< @/../DataGridViewSample/02_cellTypes.html#combo{js}
 
 `possibleValues` 는 문자열 배열 또는 `{ label: '표시값', value: '저장값' }` 배열 모두 됩니다.
 
 ## 여러 개 선택 (칩)
 
-```js
-{
-  text: '담당자', dataIndex: 'owners',
-  typeRepresentation: 'string',
-  editableFlag: true,
-  editionPolicy: 'EditionOnClick',
-  semantics: {
-    possibleValues: ['김철수', '이영희', '박민수', '최지훈'],
-    allowMultipleValuesFlag: true,
-    viewOptions: { multipleValuesSeparator: ',' }
-  }
-}
-```
+<<< @/../DataGridViewSample/02_cellTypes.html#multi{js}
 
 - 셀 값은 배열로 저장됩니다 (예: `['이영희', '박민수']`).
 - 셀을 누르면 오른쪽에 `...` 버튼이 생기고, 그 버튼을 누르면 고른 값이 칩으로 보이는 편집기와 목록이 열립니다.
@@ -72,72 +50,42 @@ Tweakers.js 의 TweakerBase.getStringFromValue. 구분자 앞뒤에 항상 공�
 
 선택지가 적을 때 콤보 대신 씁니다. 라디오 버튼처럼 하나만 고릅니다.
 
-```js
-{
-  text: '우선순위', dataIndex: 'priority',
-  typeRepresentation: 'customSmallEnumMember',
-  editableFlag: true,
-  editionPolicy: 'EditionOnOver',
-  semantics: { possibleValues: ['높음', '보통', '낮음'] }
-}
-```
+<<< @/../DataGridViewSample/02_cellTypes.html#buttonGroup{js}
 
 ## 프로그레스 바
 
-```js
-{
-  text: '진행률', dataIndex: 'progress',
-  typeRepresentation: 'progress',
-  editableFlag: true,
-  semantics: { minValue: 0, maxValue: 100, stepValue: 5 }
-}
-```
+<<< @/../DataGridViewSample/02_cellTypes.html#progress{js}
 
 ## 체크박스
 
-```js
-{ text: '승인', dataIndex: 'approved', typeRepresentation: 'boolean', editableFlag: true, editionPolicy: 'EditionOnOver' }
-```
+<<< @/../DataGridViewSample/02_cellTypes.html#checkbox{js}
 
 `EditionOnOver` 로 두면 클릭 한 번에 바로 토글됩니다.
 
 ## 날짜, 숫자
 
-```js
-{ text: '납기', dataIndex: 'dueDate', typeRepresentation: 'date', editableFlag: true },
-{ text: '수량', dataIndex: 'qty', typeRepresentation: 'integer', editableFlag: true, semantics: { minValue: 0, maxValue: 999 } },
-{ text: '중량', dataIndex: 'weight', typeRepresentation: 'float', editableFlag: true, semantics: { units: 'kg' } }
-```
+<<< @/../DataGridViewSample/02_cellTypes.html#dateNumber{js}
 
 날짜 셀 값은 문자열이 아니라 `Date` 객체로 넣습니다.
 
 ## 색상, 링크, 여러 줄 텍스트
 
-```js
-{ text: '색상', dataIndex: 'color', typeRepresentation: 'color', editableFlag: true },
-{ text: '링크', dataIndex: 'url', typeRepresentation: 'url' },
-{ text: '비고', dataIndex: 'note', typeRepresentation: 'multilineString', editableFlag: true }
-```
+<<< @/../DataGridViewSample/02_cellTypes.html#colorLink{js}
+
+색상 값은 `'#rrggbb'` 문자열, 링크 값은 `{ label, url }` 객체입니다. 링크에 문자열만 넣으면 빈 칸으로 보입니다.
 
 ## 행마다 다른 타입이나 목록
 
 컬럼 하나에서 행마다 셀 타입이나 콤보 목록이 달라야 하면 컬럼 함수 `getCellTypeRepresentation`, `getCellSemantics` 를 씁니다. 예제는 [컬럼 함수](/datagridview/cell-functions) 가이드, 전체 목록은 [컬럼 함수 레퍼런스](/datagridview/api/column-functions) 에 있습니다.
 
-```js
-{
-  text: '값', dataIndex: 'value', editableFlag: true,
-  getCellTypeRepresentation: function (cellInfos) {
-    return cellInfos.nodeModel.options.grid.kind === 'N' ? 'integer' : 'string';
-  }
-}
-```
+<<< @/../DataGridViewSample/07_columnFunctions.html#cellType{js}
+
+`rowOf(cellInfos)` 는 행 값을 읽는 샘플의 보조 함수입니다 ([컬럼 함수](/datagridview/cell-functions)).
 
 ## 편집한 값 읽기
 
 셀을 편집하면 행(TreeNodeModel)의 값이 바로 바뀝니다.
 
-```js
-treeDocument.getRoots().forEach(function (node) {
-  console.log(node.options.label, node.getAttributeValue('status'));
-});
-```
+<<< @/../DataGridViewSample/02_cellTypes.html#dump{js}
+
+`node.getAttributeValue(dataIndex)` 로 지금 값을 읽습니다.

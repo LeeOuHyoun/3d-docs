@@ -5,7 +5,7 @@
 샘플: [03_webform_portal.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UIComponentSample/03_webform_portal.mql)
 
 ::: info 근거
-`mql/10.channel/Channel_Sample.mql`, `mql/11.portal/Portal_Sample.mql` (배치 그림 주석), 프로젝트 channel 33 파일, portal 22 파일. 화면: `3dspace/common/emxPortal.jsp`, `emxPortalDisplay.jsp` (행 → channel → 탭 반복). `framework.jar` 의 `UIPortal.class` 문자열 상수 (`Height`, `&portalMode=true&portalCmdName=`, `Alternate OID expression`)
+`mql/10.channel/Channel_Sample.mql`, `mql/11.portal/Portal_Sample.mql` (배치 그림 주석), 프로젝트 channel 33 파일, portal 22 파일. 화면: `3dspace/common/emxPortal.jsp`, `emxPortalDisplay.jsp` (행 → channel → 탭 반복). `framework.jar` 의 `UIPortal.class` 문자열 상수 (`Height`, `&portalMode=true&portalCmdName=`, `Alternate OID expression`). `emxForm.jsp:78, 213-219, 517`, `emxTable.jsp:211-216` (`portalMode` 와 `showTabHeader` 로 `showHeader` 결정)
 :::
 
 ## 배치
@@ -75,7 +75,7 @@ add command 'XX_MyPartBOMPortalCmd'
 
 | 붙는 파라미터 | 값 |
 | --- | --- |
-| `portalMode` | `true`. 받는 JSP 는 이 값으로 "포털 칸 안" 인지 알고 머리글 / 버튼 배치를 바꾸는 것으로 보입니다 <Badge type="danger" text="검증 필요" /> |
+| `portalMode` | `true`. 받는 JSP 는 이 값으로 "포털 칸 안" 인지 알고 머리글(제목줄)을 그리지 않습니다. `showTabHeader=true` 를 함께 주면 그대로 그립니다 (`emxForm.jsp`, `emxTable.jsp`) |
 | `portalCmdName` | 탭 command 이름 |
 | `objectId` | 포털을 연 객체 id. command 에 `Alternate OID expression` 이 있으면 그 식의 객체 id |
 | `parentOID`, `relId` | 부모 객체 id, 연결 id (있을 때) |

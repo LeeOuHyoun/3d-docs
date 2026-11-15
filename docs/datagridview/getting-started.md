@@ -32,18 +32,7 @@ DataGridViewSample/01_basic.html (ENOVIA 서버에서 동작 확인), DataGridVi
 
 TreeDocument(데이터 묶음)에 TreeNodeModel(행)을 넣습니다.
 
-```js
-var treeDocument = new TreeDocument();
-treeDocument.prepareUpdate();
-[
-  { label: 'PRT-0001', grid: { title: '브라켓', owner: '김철수' } },
-  { label: 'PRT-0002', grid: { title: '샤프트', owner: '이영희' } },
-  { label: 'PRT-0003', grid: { title: '하우징', owner: '박민수' } }
-].forEach(function (row) {
-  treeDocument.addRoot(new TreeNodeModel(row));
-});
-treeDocument.pushUpdate();
-```
+<<< @/../DataGridViewSample/01_basic.html#data{js}
 
 - `label` : 첫 번째 트리 컬럼(`dataIndex: 'tree'`)에 표시되는 값
 - `grid` : 나머지 컬럼 값. 키 이름이 컬럼의 `dataIndex` 와 연결됩니다.
@@ -51,16 +40,7 @@ treeDocument.pushUpdate();
 
 ## 3. 그리드 생성
 
-```js
-new DataGridView({
-  treeDocument: treeDocument,
-  columns: [
-    { text: '품번', dataIndex: 'tree', width: 150 },
-    { text: '품명', dataIndex: 'title', width: 200 },
-    { text: '담당자', dataIndex: 'owner', width: 120 }
-  ]
-}).inject(document.getElementById('grid'));
-```
+<<< @/../DataGridViewSample/01_basic.html#grid{js}
 
 - `text` : 헤더 글자
 - `dataIndex` : 값을 가져올 키. `'tree'` 는 행의 `label` 을 보여주는 특별한 컬럼입니다.

@@ -3,10 +3,10 @@
 위젯에서 객체의 state(성숙도)를 바꾸고(promote / demote), 갈 수 있는 state 를 보여 주고, 새 revision 을 만들고(개정), 소유자를 넘기는 방법입니다. OOTB 성숙도 창을 그대로 띄우는 길과 REST 를 직접 부르는 길이 있습니다. state 가 바뀔 때 서버에서 도는 트리거는 [라이프사이클과 promote](/trigger/lifecycle), state 정의는 [Policy](/schema/policy) 에 있습니다.
 
 ::: info 근거
-- webapps (2025): LifecycleCmd/LifecycleCmd.js (`MaturityCmd`, `ReviseCmd`, `CommandBase`, `CommandMgr.executeCmd`, `SelectionUtil._createSelObj4Node`, `MessageMediator`), MaturityWidget/MaturityWidget.js (`_changeMaturity`, `_getMaturityGraph`, `_showNotification`, `_refresh`), ChangeMaturityWidget/ChangeMaturityWidget.js (`setStateUI`, `_changeMaturity`, `_getMaturityState`), ReviseWidget/ReviseWidget.js (`_executeRevise`, `reviseServiceRequest`), LifecycleServices/LifecycleServices.js (`LifecycleServicesSettings`, `LifecycleServices`, `LifecycleAlert`, `Refresh`), LifecycleControls `EditPropDialog`, ENOCollabSharingCmds `ChangeCommandBase`
+- webapps (2025): LifecycleCmd/LifecycleCmd.js (`MaturityCmd`, `ReviseCmd`, `CommandBase`, `CommandMgr.executeCmd`, `SelectionUtil._createSelObj4Node`, `MessageMediator`), MaturityWidget/MaturityWidget.js (`_changeMaturity`, `_getMaturityGraph`, `_showNotification`, `_refresh`), ChangeMaturityWidget/ChangeMaturityWidget.js (`setStateUI`, `_changeMaturity`, `_getMaturityState`), ReviseWidget/ReviseWidget.js (`_executeRevise`, `reviseServiceRequest`), LifecycleServices/LifecycleServices.js (`LifecycleServicesSettings`, `LifecycleServices`, `LifecycleAlert`, `Refresh`), LifecycleControls `EditPropDialog`, ENOCollabSharingCmds `ChangeCommandBase`, NewBranchWidget/NewBranchWidget.js (`notificationTimeout`)
 - REST 호출부: ENONextGenFilterUX (`_onSetMaturity`, `_initMaturityStateGraph`, `_reviseFilter`, `_changeOwner`), DELWKOModelServices / DELPPWModelServices (`syncMaturity`, `getCurrentStates`), FolderEditor / TeachersBookmarkEditor (`transferOwnership`), DocumentCommands (`V2/Actions/Maturity`, `NewRevision`), DocumentCommonInfra, DMUPersistence, ENOChgServices (`promoteChangeAction`, `getStatesAttributes`), IPClassifyUXUtil, IssueServices, ENOXVersionExplorerModelWebServices
 - OOTB 명령 호출부: `new MaturityCmd().executeAsync([{ physicalid }])` ENXMeetingMgmt, ENXDecisionMgmt, ENORouteMgmt, RouteWebAppUX, DocumentCommands / `executeCompactViewAsync` ENOXEngineer, ENOChgGovernanceUX, IssueManagement / `begin()` ENONextGenFilterUX, ENOXCADTemplate
-- 서버: 3dspace/WEB-INF/lib 의 DSLCRestWebServices.jar, ENOLifecycleWebServices.jar 클래스 상수 문자열 (`DSLCCAAWebServiceBase`, `MaturityCAAWebservices`, `VersionCAAWebservices`, `TransferCAAWebServices`, `CAAWebServicesUtil`, `ApplicationConfig`, `MaturityResource`, `ReviseResource`, `LifecycleServices_ChangeMaturity_*`), properties/emxENOLifecycleServicesStringResource.properties
+- 서버: 3dspace/WEB-INF/lib 의 DSLCRestWebServices.jar, ENOLifecycleWebServices.jar 클래스 상수 문자열 (`DSLCCAAWebServiceBase`, `MaturityCAAWebservices`, `VersionCAAWebservices`, `TransferCAAWebServices`, `CAAWebServicesUtil`, `ApplicationConfig`, `MaturityResource`, `ReviseResource`, `LifecycleServices_ChangeMaturity_*`), properties/emxENOLifecycleServicesStringResource.properties. 소유자 넘기기 응답: `TransferCAAWebServices.changeOwnership_CAA` 바이트코드 (항목 `Status` 로 200 / 207 / 400 을 고르고, 200 일 때만 `results` 로 감쌈)
 - 집계: 모듈 문자열이 나오는 폴더 수 `LifecycleServicesSettings` 46, `LifecycleServices` 35, `MaturityCmd` 24, `LifecycleAlert` 21, `MessageMediator` 16. 파일 수 `app_initialization(` 46, `getSecurityContextPromise(` 27, `executeAsync(` 13, `executeCompactViewAsync(` 3. 2026 은 enovia2026_webapps 의 같은 폴더와 비교
 :::
 
@@ -112,7 +112,7 @@ POST <3DSpace>/resources/lifecycle/maturity/demote?tenant=<플랫폼 id>
 - 권한이 없거나, 갈 수 없는 state 이거나, 트리거가 막아도 **HTTP 200** 으로 옵니다. `onComplete` 안에서 `status` 를 먼저 봅니다.
 - 여러 개를 보내면 일부만 성공할 수 있습니다. ChangeMaturityWidget 은 `results` 를 먼저 반영한 뒤 `status === 'failure'` 면 `report` 를 10 개까지 보여 줍니다.
 - `demote` 도 본문이 같고 `tostate` 에 이전 state 를 넣습니다 (MaturityWidget `_demote`, ChangeMaturityWidget).
-- MaturityWidget 은 본문 최상위에 `notificationTimeout: 3600` 을 넣습니다. 오래 걸리면 결과를 백그라운드 알림으로 돌리는 기준(초)으로 보입니다 <Badge type="danger" text="검증 필요" />.
+- MaturityWidget 은 본문 최상위에 `notificationTimeout: 3600` 을 넣습니다. 오래 걸리면 결과를 백그라운드 알림으로 돌리는 기준(초)입니다. MaturityWidget 은 요청 시간 제한도 같은 1시간(`36e5` ms)으로 두고, 시간이 지나면 오류 대신 "작업이 진행 중이며 끝나면 3DNotification Center 로 알림이 간다" 는 안내(`maturityTimeoutInfo`)를 띄웁니다. NewBranchWidget 도 같은 방식(`notificationTimeout: 600`, 시간 제한 600초, `notificationTimeoutInfo`)입니다.
 
 <<< @/../WidgetSample/LifecycleSample.html#change{js}
 
@@ -219,7 +219,12 @@ POST <3DSpace>/resources/v1/modeler/dslc/ownership/transfer
 | `data[]` | `{ id }` 또는 참조 객체. 한 번에 1,000 개까지 (서버 상수 `Only 1000 objects allowed to Transfer`) |
 
 - `owner`, `organization`, `collabspace` 가 모두 비면 `Empty Transfer Arguments` 오류입니다 (서버 상수).
-- 응답 `results[]` 를 TeachersBookmarkEditor 가 읽습니다. 항목에 `id`, `status`, `errorCode`, `errorMessage` 가 있는 것으로 보입니다 <Badge type="danger" text="검증 필요" />.
+- 응답 항목은 `owner`, `organization`, `collabspace`, `id`, `status` (숫자) 입니다. 실패한 항목에는 `errorReport` 가 붙고, 원래 오류에 `errorCode` 와 `errorMessage` 가 모두 있으면 `errorReport: { errorMessage }` 만 남깁니다.
+- 응답 모양은 항목 결과에 따라 달라집니다.
+  - 모두 `200`: HTTP 200, `{ results: [...] }`
+  - `200` 과 `400` 이 섞임: HTTP 207, `results` 없이 **항목 배열이 최상위**
+  - 모두 `400` 이거나 `500` 이 하나라도 있음: HTTP 400, 항목 배열이 최상위
+- TeachersBookmarkEditor 는 `results[]` 만 읽고, 항목의 `status` 가 `200` 이면 성공, 그 밖의 값이면 실패로 세어 개수만 알립니다. 일부만 실패하면 응답에 `results` 가 없으므로 최상위 배열도 처리해야 합니다.
 - 실패 문구는 `onFailure` 의 `data.message` 또는 `data.errorMessage` 에 있습니다 (FolderEditor `formatError`).
 
 <<< @/../WidgetSample/LifecycleSample.html#ownership{js}
@@ -392,6 +397,7 @@ MaturityWidget 은 `report[].error` 에 `1500168` 이나 `all requirements not s
 | LifecycleServices 버전 그래프 (`_getAncestorsPromise`) | `GET /resources/v1/dslc/versiongraph/{id}` | `POST /resources/v1/dslc/versiongraph/` 본문 `{ graphRequests: [{ id }] }` <Badge type="warning" text="2026" /> |
 | LifecycleServices `navigatePromise` | 없음 | `/resources/lifecycle/navigate/federated` 를 부름 <Badge type="warning" text="2026" /> |
 | `ReviseCmd.isTypesSupported` | `ENOCLG_LibraryReference` 만 막음 | `VPMReferenceExtPos`, `AxisSystemReference` 도 POE 역할이 없으면 막음 <Badge type="warning" text="2026" /> |
+| `ReviseFromCmd`, `NewBranchCmd`, `DuplicateCmd` 의 `isTypesSupported` | POE 역할 검사 없음 | 같은 두 타입을 POE 역할(`GrantedRolesCache.isEnabled('POE')`)이 없으면 막음 <Badge type="warning" text="2026" />. 2026 에서 이 명령들이 비활성으로 보이면 사용자 역할을 확인 |
 | `CommandMgr` | | `DS/PADServices/utils/GrantedRolesCache` 를 초기화 <Badge type="warning" text="2026" /> |
 | dslc/maturity 호출부 | DELWKOModelServices 에도 있음 (`changeState` 6 건, `getNextStates` 4 건) <Badge type="tip" text="2025" /> | DELWKOModelServices 에서 빠지고 FolderEditor `changeMaturityState` 추가 (`changeState` 5 건, `getNextStates` 2 건) |
 | LifecycleControls | | `DS/LifecycleControls/CredentialSelector` 추가 <Badge type="warning" text="2026" /> |

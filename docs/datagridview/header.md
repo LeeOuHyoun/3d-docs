@@ -5,7 +5,7 @@
 샘플: [12_header.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/12_header.html)
 
 ::: info 근거
-DataGridView.js 의 DataGridViewLayout (`_applyColumnHeaderHeight`, `getColumnHeaderHeight`, `getHeaderContainerHeight`, `_computeColumnHeadersHeight`, `setColumnOrGroupProperties`, `setColumnGroupExpandedFlag`), ColumnModel (`setColumns`, `_isColumnDisplayedByHierarchy`), DataGridViewColumnHeaderCell (`buildColumnGroupExpander`, `_applyCustomHeader`), DataGridView (`DefaultOnColumnHeaderRequest`, `getCellDefaultTooltip`). 2026 도 같습니다. 호출부: CATFLCockpitWidget, DMUControls (컬럼 그룹), DocumentFiles (customHeader). 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).
+DataGridView.js 의 DataGridViewLayout (`_applyColumnHeaderHeight`, `getColumnHeaderHeight`, `getHeaderContainerHeight`, `_computeColumnHeadersHeight`, `setColumnOrGroupProperties`, `setColumnGroupExpandedFlag`), ColumnModel (`setColumns`, `_isColumnDisplayedByHierarchy`), DataGridViewColumnHeaderCell (`buildColumnGroupExpander`, `_applyCustomHeader`), DataGridView (`DefaultOnColumnHeaderRequest`, `getCellDefaultTooltip`). 헤더 밖의 `text` 사용: `_createFirstColumnsVisibilityContextualMenu`, `_buildMassUpdateDialogAttributes`, `getAsCSV`, DataGridViewCustomViewsDialog, 2026 DataGridViewContextualMenuBuilder `_createWrapTextInColumnContextualMenu`. 2026 도 같습니다. 호출부: CATFLCockpitWidget, DMUControls (컬럼 그룹), DocumentFiles (customHeader). 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).
 :::
 
 ## 헤더의 구역
@@ -246,7 +246,7 @@ var columns = [
 | <code>getSelectionCheckBoxContainer</code> | 선택 | `(content)` → DOM 요소 | 컬럼 선택 체크박스를 넣을 자리 |
 
 - 맨 아래 줄 헤더(`rowID` -1)에만 적용됩니다. 그룹 헤더에는 적용되지 않습니다.
-- `text` 도 같이 넣어 둡니다 (원본 호출부도 그렇게 씁니다). 헤더 밖에서 컬럼 이름이 필요한 곳에 쓰입니다. <Badge type="danger" text="검증 필요" />
+- `text` 도 같이 넣어 둡니다 (원본 호출부도 그렇게 씁니다). 헤더를 직접 그려도 헤더 밖에서 컬럼 이름이 필요한 곳은 `text` 를 읽습니다. 우클릭의 컬럼 표시 메뉴, 일괄 수정 창의 항목 이름, `getAsCSV()` 의 헤더 줄(헤더 칸에서 글자를 얻지 못할 때), 사용자 뷰 대화상자의 정렬 목록(비어 있으면 `dataIndex`), 2026 의 줄바꿈 확인 창 제목입니다.
 - `customHeader` 컬럼이 하나라도 있으면 맨 아래 헤더 줄 높이가 내용 높이에 맞춰 자동으로 정해집니다 ([헤더 높이](#헤더-높이) 표).
 - 자리 함수(`get...Container`)를 넣지 않은 아이콘은 기본 자리(헤더 칸 오른쪽)에 놓입니다.
 - 헤더 칸에는 CSS 클래스 `wux-datagridview-custom-column-header` 가 붙습니다.

@@ -3,7 +3,7 @@
 화면 글자는 `...StringResource.properties` 파일에서 키로 찾아 옵니다. 스키마 이름(type, 속성, state)은 영어 그대로 저장되고, 화면에 보이는 이름만 이 파일에서 바꿉니다.
 
 ::: info 근거
-`properties/emxFrameworkStringResource.properties` (55,105 줄), `_en` (53,462 줄), `_ko` (54,492 줄), `_koNative` (52,850 줄), `_kernel`, 프로젝트 앱의 `...StringResource.properties` / `_ko`, `emxSystem.properties` 의 `eServiceSuite*.StringResourceFileId` (189 개), `emxFrameworkCustom.properties`. 코드 쪽: `jpo/` 의 `EnoviaResourceBundle.getProperty` 호출(번들 이름별 건수), `i18nNow.get*I18NString` 호출, `jpo/emxRouteBase_mxJPO.java`, `jpo/emxTriggerValidationBase_mxJPO.java`, `3dspace/common/*.jsp` 의 `emxUtil:localize` / `emxUtil:i18n` 태그, `mql/06.command` ~ `09.webform` 의 `Registered Suite` 설정
+`properties/emxFrameworkStringResource.properties` (55,105 줄), `_en` (53,462 줄), `_ko` (54,492 줄), `_koNative` (52,850 줄), `_kernel`, 프로젝트 앱의 `...StringResource.properties` / `_ko`, `emxSystem.properties` 의 `eServiceSuite*.StringResourceFileId` (189 개), `emxFrameworkCustom.properties`. 코드 쪽: `jpo/` 의 `EnoviaResourceBundle.getProperty` 호출(번들 이름별 건수), `i18nNow.get*I18NString` 호출, `jpo/emxRouteBase_mxJPO.java`, `jpo/emxTriggerValidationBase_mxJPO.java`, `3dspace/common/*.jsp` 의 `emxUtil:localize` / `emxUtil:i18n` 태그, `mql/06.command` ~ `09.webform` 의 `Registered Suite` 설정. xerinfra.jar `i18nNow.getMXI18NString`, `EnoviaResourceBundle.getMXI18NString` → `getFrameworkStringResourceProperty` 바이트코드 (공백을 `_` 로 바꾼 `emxFramework.` 키를 `emxFrameworkStringResource` 에서 조회)
 :::
 
 샘플: [MyPartTrigger_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TriggerSample/MyPartTrigger_mxJPO.java) (emxFrameworkStringResource 키를 로케일로 읽기), [XX_MyPartAction_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/JPOSample/XX_MyPartAction_mxJPO.java) (앱 문자열 리소스 읽기)
@@ -43,7 +43,7 @@ OOTB 와 프로젝트 모두 `_ko` 에 `\uXXXX` 로 적습니다. 한글을 그�
 
 - 이름 안의 **공백은 `_`** 로 바꿉니다. 괄호 같은 다른 문자는 그대로 둡니다 (`Disposition_(In_Field)`).
 - **실제 이름** 기준입니다. 심볼릭 이름(`type_Part`)이 아닙니다.
-- 이 키들은 `emxFrameworkStringResource` 에서만 찾는 것으로 보입니다. <Badge type="danger" text="검증 필요" /> OOTB 와 프로젝트 모두 이 파일에만 두고, 코드도 `"Framework"` 별칭이나 `emxFrameworkStringResource` 로 읽습니다.
+- 이 키들은 `emxFrameworkStringResource` 에서만 찾습니다. `i18nNow` / `EnoviaResourceBundle` 의 `getTypeI18NString`, `getAttributeI18NString`, `getRangeI18NString`, `getStateI18NString` 은 `emxFramework.종류.이름` 키를 만들어 이 번들만 조회합니다. OOTB 와 프로젝트 모두 이 파일에만 두고, 코드도 `"Framework"` 별칭이나 `emxFrameworkStringResource` 로 읽습니다.
 
 ```java
 String typeLabel  = i18nNow.getTypeI18NString(typeName, lang);

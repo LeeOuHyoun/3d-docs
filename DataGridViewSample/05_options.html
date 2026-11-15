@@ -190,7 +190,7 @@
             { text: '품번', dataIndex: 'tree', width: 110, pinned: s.pinned },
             { text: '품명', dataIndex: 'title', width: 110, editableFlag: true, editionPolicy: s.editionPolicy },
             { text: '상태 (콤보)', dataIndex: 'status', width: 110, typeRepresentation: 'customEnumMember', editableFlag: true, editionPolicy: s.editionPolicy, semantics: { possibleValues: ['작업중', '검토중', '승인', '폐기'] } },
-            { text: '담당자 (멀티)', dataIndex: 'owners', width: 150, typeRepresentation: 'customEnumMember', editableFlag: true, editionPolicy: s.editionPolicy, semantics: ownersSemantics },
+            { text: '담당자 (멀티)', dataIndex: 'owners', width: 150, typeRepresentation: 'string', editableFlag: true, editionPolicy: s.editionPolicy, semantics: ownersSemantics },
             progressColumn,
             { text: '승인', dataIndex: 'approved', width: 70, typeRepresentation: 'boolean', editableFlag: true, editionPolicy: s.editionPolicy },
             { text: '비고', dataIndex: 'note', width: 220, typeRepresentation: 'multilineString', editableFlag: true, editionPolicy: s.editionPolicy, autoRowHeightFlag: s.autoRowHeight }

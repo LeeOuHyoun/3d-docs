@@ -1,6 +1,6 @@
 define('DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
   'UWA/Core',
-  'DS/sdxENOChgGovernanceUX/custom/util/lodash',
+  'DS/lodash',
   'DS/Controls/Button',
   'UWA/Element',
   'css!DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelEx.css'
@@ -103,7 +103,7 @@ define('DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
     });
 
     applyStep();
-    _.head(rows).element.addClassName('espx-row--settled');
+    _.invoke(_.head(rows), 'element.addClassName', 'espx-row--settled');
 
     return { element, getValues };
   };

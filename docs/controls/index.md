@@ -29,6 +29,8 @@ Controls.js (Abstract, Button ...), Windows.js (Window, Dialog), UIKIT.js (Input
 | 게이지, 타임라인 | `DS/Controls/Gauge`, `Timeline` | - | [색상, 표시 컨트롤](/controls/display-controls) |
 | 타일 / 썸네일 카드, 간단한 트리 | `DS/Controls/ResponsiveTileView`, `TreeBase` | - | [목록, 트리, 타일 뷰](/controls/collection-views) |
 | 객체 카드, 로딩 패널, 코드 편집기 | `DS/ControlsEx/*` | - | [확장 컨트롤](/controls/controls-ex) |
+| 단계별 입력 (마법사) | `DS/ControlsEx/Wizard`, 버튼이 있는 창은 `DS/WindowsEx/WizardDialog` <Badge type="warning" text="2026" /> | - | [Wizard](/controls/controls-ex#wizard), [WizardDialog](/controls/controls-ex#wizarddialog-로-감싸기) |
+| 서식 있는 글 편집 | `DS/CKEditor/CKEditor` (CKEditor 4), 2026 `DS/WUXRichText/CKEditor` (CKEditor 5) | - | [외부 라이브러리의 편집기](/amd/libraries#편집기) |
 | 모달 다이얼로그 | `DS/Windows/Dialog` | `DS/UIKIT/Modal`, `SuperModal` | [다이얼로그](/controls/dialog) |
 | 확인 / 취소 묻기 | `DS/Windows/Dialog` + 버튼 2개 | `SuperModal.confirm` | [다이얼로그](/controls/dialog#확인-취소-묻기) |
 | 패널 탭 묶기, 가장자리 붙이기, 창 위치 저장 | `DS/Windows/Panel`, `ImmersiveFrame` | - | [창 묶기, 붙이기, 위치 저장](/controls/window-layout) |
@@ -46,7 +48,7 @@ Controls.js (Abstract, Button ...), Windows.js (Window, Dialog), UIKIT.js (Input
 정리하면 아래와 같습니다.
 
 - **새로 만드는 화면은 WebUX 를 씁니다.** DataGridView, Tweakers, Dialog 가 모두 WebUX 컨트롤로 만들어져 있어 모양과 동작(포커스, 터치 모드, 툴팁)이 맞습니다.
-- UIKIT 은 UWA 컨트롤(`UWA/Controls/Abstract`) 위에 만든 예전 계열로 보입니다. <Badge type="danger" text="검증 필요" /> 2026 에서도 남아 있지만 바뀐 것은 `rounded` 옵션, `Input/IconButton` 추가 정도입니다. WebUX 쪽은 2026 에서 코드가 ES 클래스로 다시 빌드되었고 속성도 늘었습니다.
+- UIKIT 은 UWA 컨트롤(`UWA/Controls/Abstract`) 위에 만든 예전 계열로 보입니다. <Badge type="danger" text="검증 필요" /> 2026 에서도 남아 있지만 바뀐 것은 `rounded` 옵션(`Input`, `Input/Button`, `Iconbar`), `Input/Button` 의 `lite` 모양, `Input/ButtonGroup` 의 구분선(`lite` 버튼 2 개를 가로로 놓으면 `buildLiteSeparator` 가 사이에 넣음), 이미지 주소도 아이콘으로 받는 `Input/IconButton` 추가 정도입니다. WebUX 쪽은 2026 에서 코드가 ES 클래스로 다시 빌드되었고 속성도 늘었습니다.
 - UIKIT 의 `Mask` 와 `Alert` 는 한 줄로 끝나서 지금도 많이 쓰입니다 (`Mask` 참조 668). 기존 코드를 고칠 때는 그 화면이 쓰는 계열을 따릅니다.
 
 ::: tip Tweakers 와의 관계

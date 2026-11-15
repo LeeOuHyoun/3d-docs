@@ -204,9 +204,13 @@ loadRows().then(function (rows) {
 | <code>getGroupingOptions()</code> | 객체 &#124; <code>undefined</code> | 마지막으로 groupRows 에 넘긴 객체. 한 번도 묶지 않았으면 undefined |
 | <code>createGroupingUI()</code> | 칩 컨트롤 | 컬럼 헤더를 끌어 놓아 묶는 영역(`DS/Controls/SelectionChips`)을 만들어 돌려줌. inject 는 직접 함 |
 | <code>getAsCSV(options?)</code> | <code>string</code> | 그리드 내용을 CSV 문자열로. 아래 옵션 표 참고. 행을 나눠 불러오는 그리드에서는 그 순간 불러온 행만 담김 |
-| <code>setFindStr(text, matchCase?)</code> / <code>closeFind()</code> | - | 찾기 실행 / 닫기 |
+| <code>setFindStr(text, matchCase?)</code> / <code>closeFind()</code> | - | 찾기 실행 / 닫기 ([찾기](/datagridview/find-and-print#찾기)) |
 | <code>goToNextMatchingCell()</code> / <code>goToPreviousMatchingCell()</code> | - | 찾기 결과 이동 |
 | <code>setUseClipboardFlag(flag)</code> / <code>getUseClipboardFlag()</code> | - / <code>boolean</code> | 기본 true. `false` 로 하면 Ctrl+C / Ctrl+X / Ctrl+V 때 그리드가 셀 값을 시스템 클립보드로 복사 / 붙여넣기 하지 않음 (앱이 복사 동작을 직접 처리할 때) |
+| <code>onCopy()</code> / <code>onCut()</code> / <code>onPaste()</code> | - | Ctrl+C / Ctrl+X / Ctrl+V 때 그리드가 부르는 함수. 그리드 인스턴스에 같은 이름의 함수를 넣어 바꿉니다 (`grid.onCopy = function () { ... }`. ENOPAD, FolderEditor 가 자기 복사 / 붙여넣기 명령을 부름). 기본 동작은 `onCopyDefault()` / `onCutDefault()` / `onPasteDefault()` |
+| <code>lockUI()</code> / <code>unlockUI()</code> | - | 스크롤 영역에 `wux-ui-locked` 클래스를 붙여 / 떼어 셀의 마우스 입력을 막음 (CSS `pointer-events: none`). 키보드는 막지 않음. 그리드도 스크롤 중에 스스로 씀 |
+| <code>getVisibleCellsInViewport()</code> | 객체 | 지금 화면에 그려진 셀 id 를 키로 둔 객체 (`{ 셀id: 셀id }`). 배열이 아니므로 `Object.keys(...)` 로 돌림 |
+| <code>cellShouldBeSelected(cellID)</code> | <code>boolean</code> | 그 셀이 선택 대상인지. DataGridView 는 행 셀(`rowID >= 0`)이면서 행 머리 칸이 아닐 때 true. 셀 선택과 범위 선택이 이 함수로 거름 |
 | <code>getFindableAttributes()</code> | 문자열 배열 | 지금 보이는 컬럼의 헤더 글자 목록 (화면 순서) |
 | <code>destroy()</code> | - | 그리드 정리. 위젯이 닫힐 때 호출 |
 
@@ -246,9 +250,9 @@ loadRows().then(function (rows) {
 | <code>showCustomViewsDialog()</code> | 대화상자 | 사용자 뷰 대화상자 열기 (10). 헤더 우클릭 기본 메뉴의 "테이블 보기 구성..." 과 같음 |
 | <code>DataGridView.hasPreferences(identifier)</code> | <code>boolean</code> | (정적 함수) 그 identifier 로 저장된 화면 상태가 있는지 |
 | <code>DataGridView.importJsonPreferences(identifier, json)</code> | - | (정적 함수) 그리드를 만들기 전에 화면 상태를 넣어 둠. 항상 localStorage 에 씀 ([예제](/datagridview/custom-views#예제-4-상태를-꺼내-서버에-저장하고-되살리기)) |
-| <code>showModelMassUpdateDialog()</code> | - | 여러 행 일괄 수정 대화상자 열기. `editableFlag` 와 `massUpdateAllowedFlag` 가 모두 true 인 컬럼이 대상 |
+| <code>showModelMassUpdateDialog()</code> | - | 여러 행 일괄 수정 대화상자 열기. `editableFlag` 와 `massUpdateAllowedFlag` 가 모두 true 인 컬럼이 대상 ([일괄 수정](/datagridview/find-and-print#일괄-수정)) |
 | <code>generatePrintableViewHTML()</code> | <code>string</code> | 지금 보이는 행을 인쇄용 `table` HTML 문자열로 |
-| <code>openPrintableViewWindow()</code> | - | 인쇄용 화면을 만들어 엶. 컬럼 옵션 `printableFlag: false` 인 컬럼은 제외 |
+| <code>openPrintableViewWindow()</code> | - | 인쇄용 화면을 만들어 엶. 컬럼 옵션 `printableFlag: false` 인 컬럼은 제외. `true` 를 주면 바로 인쇄 창 ([인쇄](/datagridview/find-and-print#인쇄)) |
 
 ## 드래그앤드롭
 

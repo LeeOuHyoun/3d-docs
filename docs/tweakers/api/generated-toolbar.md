@@ -29,7 +29,7 @@ Tweakers.js 의 GeneratedToolbar publishedProperties / prototype. 메서드, 이
 | <code>overflowManagement</code> | <code>'scroll'</code> | <code>'scroll' &#124; 'dropdown'</code> | 공간이 모자랄 때 스크롤 / 넘친 항목을 팝업으로 |
 | <code>direction</code> | <code>'horizontal'</code> | <code>'horizontal' &#124; 'vertical'</code> | 배치 방향 |
 | <code>typeRepresentationFactory</code> | 자동 생성 | TypeRepresentationFactory | 편집기를 만들 Factory |
-| <code>popupDisplayStyle</code> | <code>'TreeListView'</code> | <code>'TreeListView' &#124; 'Basic'</code> | 넘친 항목 팝업 모양. 2026 기본값은 <code>'DataGridView'</code> |
+| <code>popupDisplayStyle</code> | <code>'TreeListView'</code> | <code>'TreeListView' &#124; 'Basic'</code> (2026: <code>'DataGridView' &#124; 'Basic'</code>) | 넘친 항목 팝업 모양. 2026 기본값은 <code>'DataGridView'</code>. 코드는 <code>'Basic'</code> 인지만 보므로 그 밖의 값은 모두 기본 팝업(2025 TreeListView, 2026 DataGridView)이 됨 |
 | <code>addTweakersIDs</code> | <code>false</code> | <code>boolean</code> | 항목 요소에 <code>tweaker_id</code> 속성 추가 (자동 테스트용) |
 | <code>disabled / visibleFlag / touchMode / domId</code> | - | - | 공통 컨트롤 속성. <code>disabled</code> 는 모든 항목에 적용 |
 | <code>displayLabel</code> <Badge type="warning" text="2026" /> | <code>false</code> | <code>boolean</code> | 모든 항목 라벨 표시 |

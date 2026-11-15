@@ -7,7 +7,7 @@ OOTB 와 프로젝트 모두 트리거 프로그램을 직접 붙이지 않고, 
 샘플: [01_trigger_register.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TriggerSample/01_trigger_register.mql), [MyPartTrigger_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TriggerSample/MyPartTrigger_mxJPO.java)
 
 ::: info 근거
-`mql/12.trigger/*.mql` (21 개, `Trigger_Sample.mql` 템플릿 포함), `mql/03.policy/Policy_Sample.mql`, OOTB policy / type 수정 파일 안의 `print` 결과. 코드 쪽: `jpo/emxTriggerManagerBase_mxJPO.java`, `jpo/emxTriggerValidationBase_mxJPO.java`, `jpo/emxTriggerValidationResultsBase_mxJPO.java`, OOTB 트리거 JPO 의 주석에 적힌 트리거 이름
+`mql/12.trigger/*.mql` (21 개, `Trigger_Sample.mql` 템플릿 포함), `mql/03.policy/Policy_Sample.mql`, OOTB policy / type 수정 파일 안의 `print` 결과. 코드 쪽: `jpo/emxTriggerManagerBase_mxJPO.java`, `jpo/emxTriggerValidationBase_mxJPO.java`, `jpo/emxTriggerValidationResultsBase_mxJPO.java`, OOTB 트리거 JPO 의 주석에 적힌 트리거 이름, xerinfra.jar `com.matrixone.apps.cache.TriggerObjectsCache.populateCache` (Active / `Error` 필터)
 :::
 
 ## 세 층 구조
@@ -54,15 +54,15 @@ admin (type / relationship / attribute / policy 의 state)
 
 ## emxTriggerManager 가 하는 일
 
-1. `input` 의 이름마다 같은 이름의 설정 객체들을 캐시에서 꺼냅니다. revision 만 다른 객체가 여러 개면 모두 실행합니다.
-2. `eService Target States` 가 있으면, Promote / Demote 이벤트일 때 다음 state 와 비교해서 다르면 건너뜁니다.
-3. 인자 15 개의 `${...}` 를 현재 이벤트 값으로 바꿉니다.
+1. `input` 의 이름마다 같은 이름의 설정 객체들을 캐시에서 꺼냅니다. revision 만 다른 객체가 여러 개면 모두 실행합니다. 캐시에는 `Active` 이면서 `eService Error Type` 이 `Error` 인 객체만 `eService Sequence Number` 순으로 들어 있습니다.
+2. `eService Target States` 가 있으면, Promote / Demote 이벤트일 때 다음 state 와 비교해서 다르면 건너뜁니다. 값은 state 심볼릭 이름을 **쉼표로만** 이어 적습니다 (`state_Review,state_Release`). 쉼표로 자르기만 하고 공백을 지우지 않으므로 `state_Review, state_Release` 처럼 쓰면 두 번째 이름을 찾지 못해 그 state 로 갈 때 트리거가 건너뛰어집니다.
+3. 인자 15 개의 `${...}` 를 현재 이벤트 값으로 바꿉니다. **JPO 일 때만** 바꿉니다. JPO 가 아닌 프로그램(tcl 등)은 `execute program 프로그램 '인자1' ... '인자15'` 로 인자를 적힌 그대로 넘기므로, 프로그램 안에서 `get env` 로 값을 읽어야 합니다.
 4. 프로그램이 JPO 면 `JPO.invoke` 로 메서드를 부르고, 아니면 `execute program` 으로 실행합니다.
-5. `eService Run In Background` 가 `true` 면 Job 으로 넘기고 결과를 보지 않습니다.
+5. JPO 일 때만, `eService Run In Background` 가 `true` 면 `JPO.invoke` 대신 Job 으로 넘기고 결과를 보지 않습니다. `execute program` 쪽은 이 값을 보지 않습니다.
 6. 반환값이 1 이면 위 표대로 처리하고 멈춥니다.
 
 ::: tip 설정 객체는 Active 상태여야 실행됩니다
-`add bus` 만 하고 `promote bus` 를 빠뜨리면 아무 일도 일어나지 않습니다. OOTB 의 트리거 검증 화면도 `current == Active` 인 설정 객체만 찾습니다.
+`add bus` 만 하고 `promote bus` 를 빠뜨리면 아무 일도 일어나지 않습니다. `eService Error Type` 이 `Warning` 이어도 마찬가지로 실행되지 않습니다. OOTB 의 트리거 검증 화면도 `current == Active` 인 설정 객체만 찾습니다.
 :::
 
 ## 이 섹션의 문서

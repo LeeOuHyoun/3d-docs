@@ -19,7 +19,7 @@ grid.layout.setColumnPinned('tree', 'left');
 "사용" 칸은 enovia2025 webapps 에서 DataGridView 를 쓰는 앱 파일 119개 가운데 그 이름이 나오는 파일 수입니다.
 
 ::: info 근거
-DataGridView.js 의 `DS/DataGridView/layouts/DataGridViewLayout` (클래스 이름 CollectionViewDataGridLayout) 함수 정의와 `DS/DataGridView/ColumnModel` (getColumnIndex, getColumnIdentifiers, getColumnVisibleState, moveColumnOrGroup, `_isColumnDisplayedByHierarchy`). 2026 도 같은 이름입니다. 표의 반환값과 동작은 샘플을 원본 webapps 파일로 로컬에서 띄워 확인 (3DSpace 서버에서는 미확인).
+DataGridView.js 의 `DS/DataGridView/DataGridViewLayout` (클래스 이름 CollectionViewDataGridLayout) 함수 정의와 `DS/DataGridView/ColumnModel` (getColumnIndex, getColumnIdentifiers, getColumnVisibleState, moveColumnOrGroup, `_isColumnDisplayedByHierarchy`). 2026 도 같은 이름입니다. 표의 반환값과 동작은 샘플을 원본 webapps 파일로 로컬에서 띄워 확인 (3DSpace 서버에서는 미확인).
 :::
 
 ## 먼저 알아 둘 것: 컬럼을 가리키는 방법

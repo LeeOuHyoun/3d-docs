@@ -173,7 +173,7 @@ public class XX_MyPartUI_mxJPO {
 | `void` | 1,214 | 처리만 하는 메서드 |
 | `String` | 1,183 | 폼 필드 값, HTML |
 | `MapList` | 1,103 | 표 / 구조 목록 |
-| `int` | 1,075 | 트리거 (0 통과, 그 외 차단) |
+| `int` | 1,075 | 트리거 (`1` 이면 차단, 그 외 통과) |
 | `boolean` / `Boolean` | 989 / 313 | 접근 검사 |
 | `Vector` / `StringList` | 973 / 737 | 표 열 값, 검색 포함 / 제외 id |
 | `Map` / `HashMap` | 506 / 238 | 범위 값, 생성 결과 |
@@ -198,7 +198,7 @@ UI 에서 불리는 메서드에는 `@com.matrixone.apps.framework.ui.ProgramCal
 :::
 
 ::: info 근거
-properties/emxSystem.properties:5764, emxFrameworkStringResource.properties:27435. xerinfra.jar `FrameworkUtil.validateMethodBeforeInvoke(Context, String, String, Class)` 가 `Method.isAnnotationPresent` 로 검사. 호출부: common/emxAEFSubmitJPO.jsp:37
+properties/emxSystem.properties:5764, emxFrameworkStringResource.properties:27435. xerinfra.jar `FrameworkUtil.validateMethodBeforeInvoke(Context, String, String, Class)` 가 `Method.isAnnotationPresent` 로 검사. 호출부: common/emxAEFSubmitJPO.jsp:37. 트리거 반환값: emxTriggerManagerBase_mxJPO.java:321 (JPO 는 `== 1`), 347 (`execute program` 은 `"1"` 로 시작)
 :::
 
 ## 호출 흐름

@@ -5,7 +5,7 @@
 샘플: [01_attribute_type.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/SchemaSample/01_attribute_type.mql), [03_relationship_role.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/SchemaSample/03_relationship_role.mql)
 
 ::: info 근거
-`mql/01.attribute/Attribute_Sample.mql` 와 정의 파일 약 370 개, `mql/02.type/Type_Sample.mql` 와 정의 파일 약 40 개, `mql/04.relationship/RelationshipSample.mql` 와 OOTB 관계 수정 파일(`Classified_Item.mql`, `Object_Route.mql`), `mql/05.role/*.mql`, `mql/12.trigger/*.mql`, `mql/97.prod-mql/*/*.mql`. 코드 쪽: `jpo/emxCommonIssueBase_mxJPO.java` (`print type ... kindof`), 사용자 관리 JPO 의 `mod person ... assign role`
+`mql/01.attribute/Attribute_Sample.mql` 와 정의 파일 약 370 개, `mql/02.type/Type_Sample.mql` 와 정의 파일 약 40 개, `mql/04.relationship/RelationshipSample.mql` 와 OOTB 관계 수정 파일(`Classified_Item.mql`, `Object_Route.mql`), `mql/05.role/*.mql`, `mql/12.trigger/*.mql`, `mql/97.prod-mql/*/*.mql`. 코드 쪽: `jpo/emxCommonIssueBase_mxJPO.java` (`print type ... kindof`), 사용자 관리 JPO 의 `mod person ... assign role` / `remove assign role`, 업무 JPO 의 `context.isAssigned`
 :::
 
 ## attribute
@@ -36,6 +36,7 @@ add property attribute_MyColor on program eServiceSchemaVariableMapping.tcl to a
 | `real` | 실수 | `0` | 함량, 비율 등 |
 | `integer` | 정수 | `0` | |
 | `date` | 날짜 | `''` | 값 형식은 서버 설정을 따름. 예: `'12/31/9999'` |
+| `timestamp` | 시각 | 생략 | 프로젝트는 1 개 (처리 시각 기록용). `date` 와 저장 정밀도가 어떻게 다른지는 확인하지 못했습니다 <Badge type="danger" text="검증 필요" /> |
 
 `type String` 처럼 대문자로 쓴 파일도 있습니다. 키워드는 대소문자를 가리지 않는 것으로 보입니다. <Badge type="danger" text="검증 필요" />
 
@@ -222,5 +223,5 @@ role 은 정의 자체는 짧고, **쓰는 곳** 이 여러 군데입니다.
 | `VPLMViewer` | 조회 전용 |
 
 ::: tip 커스텀 role 과 OOTB role
-이 프로젝트에서 커스텀 role(`XX...Engineer`) 은 command 의 노출 조건(`isassigned`)에만 쓰이고, policy 에는 나오지 않습니다. policy 의 `user` 대상은 `VPLMCreator`, `VPLMProjectLeader` 가 대부분(각각 약 450 곳)입니다. 객체 권한은 OOTB role + 조직 / 협업공간 조건으로 거는 방식입니다. role 이름에 따른 화면 글자는 `emxFramework.Role.역할` 키에 둡니다.
+이 프로젝트에서 커스텀 role(`XX...Engineer`) 은 command 의 노출 조건(`isassigned`)과 JPO 안의 권한 검사(`context.isAssigned("XX...Engineer")`)에 쓰입니다. 사용자 관리 JPO 는 접두어로 커스텀 role 목록을 골라 사람에게 할당 / 해제합니다(`mod person ... assign role`, `remove assign role`). policy 에는 나오지 않습니다. policy 의 `user` 대상은 `VPLMCreator`, `VPLMProjectLeader` 가 대부분(각각 약 450 곳)입니다. 객체 권한은 OOTB role + 조직 / 협업공간 조건으로 거는 방식입니다. role 이름에 따른 화면 글자는 `emxFramework.Role.역할` 키에 둡니다.
 :::

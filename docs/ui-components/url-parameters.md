@@ -63,6 +63,8 @@ command 의 `href` 는 프레임워크 JSP 에 URL 파라미터로 화면을 지
 | `hideRootSelection` | `true` | 구조의 맨 위 행 체크박스 숨김 | 1 |
 | `CancelButton`, `cancelLabel` | `true`, 문자열 키 | 팝업 아래 닫기 버튼 | 2 |
 
+`cellwrap` 은 소문자로 줍니다. 표(`scripts/emxUIFreezePane.js`)와 툴바(`emxToolbarJavaScript.jsp`)가 모두 소문자 `cellwrap` 을 읽습니다. 다만 `emxIndentedTable.jsp` 는 툴바 주소를 만들 때 대문자 `cellWrap` 을 읽어 소문자 `cellwrap` 으로 넘깁니다 (244-245 줄). 그래서 주소에 소문자만 주면 칸은 줄바꿈되지만 툴바에는 값이 가지 않아, 줄바꿈 버튼이 "켜기" 아이콘으로 보일 수 있습니다 <Badge type="danger" text="검증 필요" />. 사용자가 버튼으로 바꾼 값은 브라우저 저장소(`localStorage`)에 표 이름별로 남아 주소 값보다 먼저 쓰입니다.
+
 ### 편집
 
 | 파라미터 | 값 | 설명 | 사용 |

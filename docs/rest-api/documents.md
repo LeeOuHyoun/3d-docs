@@ -21,6 +21,7 @@ DocumentManagement/DocumentManagement.js (`DocumentFoundationAjax` 1~186행, `In
 | 삭제 | DELETE | `/{docId}` |
 | 파일 목록 | GET | `/{docId}/files` |
 | 파일 추가 | POST | `/{docId}/files` |
+| 여러 파일 수정 | PUT | `/{docId}/files` |
 | 파일 수정 / 삭제 | PUT / DELETE | `/{docId}/files/{fileId}` |
 | 파일 버전 목록 | GET | `/{docId}/files/{fileId}/versions` |
 | 파일 버전 삭제 | DELETE | `/{docId}/files/{fileId}/versions/{versionId}` |
@@ -31,6 +32,8 @@ DocumentManagement/DocumentManagement.js (`DocumentFoundationAjax` 1~186행, `In
 | 필드 정의 | POST | `/` 본문 `$definition=true` (form) |
 
 그 밖에 소스에 보이는 보조 경로: `typeDerivatives`, `IsDocumentType/`, `WorkUnder/`, `typeInfo/`, `getMasterObjectInfo/`, `manageExternalURL`, `generateFileThumbnail`, `checkURLDeleteAccess`, `commentAsMandatory/`, `IsOnlineWebEditorSessionActive?documentId=`, `SendNotificationOnRequestToUnlock?lockerName=`.
+
+웹 편집기(Office 온라인 편집)를 닫을 때 DocumentWebEdition 은 `IsOnlineWebEditorSessionActive?documentId=` 로 열린 세션 수를 보고, 남은 세션이 없으면(`opened == 0`) `PUT /resources/v1/modeler/documents/deleteInterfaceOnWebEditorSessionClose?fileId=<파일 id>` 를 부릅니다. 본문은 `{ csrf }` (E6WFoundation CSRF), 머리글은 `SecurityContext` 입니다. 편집 세션 때 붙인 인터페이스를 지우는 정리 호출이고 결과는 콘솔 로그로만 남깁니다. 앱이 직접 부를 일은 없습니다.
 
 ## 조회
 

@@ -389,7 +389,7 @@ require(['DS/Controls/UserCard'], function (UserCard) {
 - `presence` 는 `online`, `offline` (기본), `away`, `busy`, `dnd`, `out` 입니다. `busy` + `subPresence: 'inCall'` / `'inMeeting'`, `dnd` + `'presenting'` 이면 상태 뒤에 세부 상태가 붙습니다.
 - `presenceDate`: `offline` / `away` 면 "~분째" 같은 지난 시간(3일 넘으면 날짜), `out` 이면 "~까지" 날짜를 붙입니다. 10초마다 다시 계산합니다.
 - `actionsFlag: true` 면 아래에 대화, 전화, 화상, 화면 공유 버튼이 생기고, `followFlag: true` 를 함께 주면 팔로우 버튼도 생깁니다. 누르면 `onChat` / `onCall` / `onVisio` / `onScreenSharing` / `onFollow` 를 카드 자신을 인자로 부릅니다.
-- `country` 는 원본 타입 표기가 `boolean` 이지만 국기와 나라 이름을 찾는 기호 문자열로 씁니다. 형식은 ISO 2글자 국가 코드로 보입니다. <Badge type="danger" text="검증 필요" />
+- `country` 는 원본 타입 표기가 `boolean` 이지만 국기와 나라 이름을 찾는 기호 문자열로 씁니다. 값은 소문자 ISO 2글자 국가 코드(`'kr'`, `'fr'`)이고, 영국 구성국 4개만 `'gb-eng'`, `'gb-nir'`, `'gb-sct'`, `'gb-wls'` 입니다. 국기는 `Core/assets/icons/flags/<값>.svg` (254개), 나라 이름은 Utilities NLS 키 `wux-country-<값>` 에서 찾고 대소문자를 바꾸지 않으므로 `'KR'` 은 찾지 못합니다 (2026 Utilities.js `_generateIconFromFlag`, `getCountryNameFromSymbol`. 국기 폴더도 2026 에만 있음).
 
 ## BaseCard
 

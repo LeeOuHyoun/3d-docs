@@ -43,6 +43,7 @@
        *   - label : 첫 번째 트리 컬럼(dataIndex: 'tree') 에 표시되는 값
        *   - grid  : 나머지 컬럼 값. 키 이름이 columns 의 dataIndex 와 연결된다.
        */
+      // #region data
       var treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
@@ -55,6 +56,7 @@
         treeDocument.addRoot(new TreeNodeModel(row));
       });
       treeDocument.pushUpdate();
+      // #endregion data
 
       /*
        * [2] 그리드 생성 : 설정은 모두 생성자 옵션으로 넣는다.
@@ -62,6 +64,7 @@
        *   - columns      : 컬럼 정의. text = 헤더 글자, dataIndex = 값을 가져올 키
        *                    dataIndex 'tree' 는 행의 label 을 보여주는 특별한 컬럼
        */
+      // #region grid
       new DataGridView({
         treeDocument: treeDocument,
         columns: [
@@ -70,6 +73,7 @@
           { text: '담당자', dataIndex: 'owner', width: 120 }
         ]
       }).inject(document.getElementById('grid'));
+      // #endregion grid
     });
   </script>
 </body>

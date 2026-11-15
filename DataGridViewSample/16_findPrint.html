@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>16. 찾기, 페이지 나누기, 일괄 수정, 인쇄</title>
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <style>
+    html, body { margin: 0; height: 100%; font-family: sans-serif; }
+    .page { display: flex; flex-direction: column; height: 100%; padding: 12px; box-sizing: border-box; }
+    .page h2 { margin: 0 0 8px; font-size: 16px; }
+    .page p { margin: 0 0 8px; font-size: 12px; color: #555; }
+    .buttons { display: flex; align-items: center; gap: 4px; margin: 0 0 6px; font-size: 12px; }
+    #find { position: relative; width: 340px; height: 30px; }
+    #grid { position: relative; flex: 1; min-height: 320px; border: 1px solid #d1d4d4; }
+    #log { height: 110px; margin: 8px 0 0; padding: 8px; overflow: auto; font-size: 12px; background: #f4f5f6; border: 1px solid #d1d4d4; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h2>16. 찾기, 페이지 나누기, 일괄 수정, 인쇄</h2>
+    <p>
+      찾기 막대에 글자를 넣으면 품번, 품명, 상태, 수량 컬럼에서 찾습니다 (담당자 컬럼은 찾기와 인쇄에서 뺐습니다). 행 50개를 20개씩 페이지로 나눴습니다.
+      <a href="index.html">목록으로</a>
+    </p>
+    <div class="buttons">
+      <div id="find"></div>
+      <label>이동 단위
+        <select id="selMode">
+          <option value="substring">substring</option>
+          <option value="cell">cell</option>
+          <option value="row">row</option>
+        </select>
+      </label>
+      <button id="btnMatched">찾은 행 보기</button>
+      <button id="btnReopen">찾기 막대 다시 열기</button>
+    </div>
+    <div class="buttons">
+      <button id="btnPrev">이전 페이지</button>
+      <button id="btnNext">다음 페이지</button>
+      <button id="btnMassUpdate">일괄 수정</button>
+      <button id="btnPrintWindow">인쇄용 화면</button>
+      <button id="btnPrint">바로 인쇄</button>
+    </div>
+    <div id="grid"></div>
+    <pre id="log"></pre>
+  </div>
+
+  <script type="text/javascript">
+    require([
+      'DS/DataGridView/DataGridView',
+      'DS/DataGridView/DataGridViewPaginationManager',
+      'DS/CollectionView/CollectionViewStatusBar',
+      'DS/Controls/Find',
+      'DS/TreeModel/TreeDocument',
+      'DS/TreeModel/TreeNodeModel'
+    ], function (DataGridView, DataGridViewPaginationManager, CollectionViewStatusBar, Find, TreeDocument, TreeNodeModel) {
+      'use strict';
+
+      var TITLES = ['브라켓', '샤프트', '하우징', '커버', '베어링'];
+      var STATES = ['작업중', '검토중', '승인'];
+      var OWNERS = ['김철수', '이영희', '박민수'];
+
+      function writeLog(text) {
+        var log = document.getElementById('log');
+        log.textContent = text + '\n' + log.textContent;
+      }
+
+      var treeDocument = new TreeDocument();
+      treeDocument.prepareUpdate();
+      for (var i = 1; i <= 50; i++) {
+        treeDocument.addRoot(new TreeNodeModel({
+          label: 'PRT-' + String(i).padStart(4, '0'),
+          grid: { title: TITLES[i % 5], status: STATES[i % 3], qty: i * 10, owner: OWNERS[i % 3] }
+        }));
+      }
+      treeDocument.pushUpdate();
+
+      /*
+       * [1] 그리드
+       *   - findNavigationMode             : 찾기 결과 이동 단위 ('substring' 글자마다, 'cell' 셀마다, 'row' 행마다)
+       *   - showMatchingCellBackgroundFlag : 찾은 셀 배경 강조
+       *   - paginationManager              : 행을 pageSize 개씩 페이지로 나눔
+       *   - findableFlag: false            : 찾기 대상에서 뺄 컬럼
+       *   - massUpdateAllowedFlag: false   : 편집은 되지만 일괄 수정 대화상자에는 넣지 않을 컬럼
+       *   - printableFlag: false           : 인쇄용 화면에서 뺄 컬럼
+       */
+      // #region grid
+      var grid = new DataGridView({
+        treeDocument: treeDocument,
+        findNavigationMode: 'substring',
+        showMatchingCellBackgroundFlag: true,
+        paginationManager: new DataGridViewPaginationManager({ pageSize: 20 }),
+        columns: [
+          { text: '품번', dataIndex: 'tree', width: 130 },
+          { text: '품명', dataIndex: 'title', width: 160, editableFlag: true, massUpdateAllowedFlag: false },
+          { text: '상태', dataIndex: 'status', width: 120, editableFlag: true },
+          { text: '수량', dataIndex: 'qty', width: 90, typeRepresentation: 'integer', editableFlag: true },
+          { text: '담당자', dataIndex: 'owner', width: 120, findableFlag: false, printableFlag: false }
+        ]
+      }).inject(document.getElementById('grid'));
+      // #endregion grid
+
+      /*
+       * [2] 상태바의 페이지 이동 칸 (STATUS.PAGINATION). 그리드에 paginationManager 가 있을 때만 보입니다.
+       */
+      // #region statusBar
+      grid.buildStatusBar([
+        { type: CollectionViewStatusBar.STATUS.PAGINATION, position: 'center' },
+        { type: CollectionViewStatusBar.STATUS.NB_ITEMS }
+      ]);
+      // #endregion statusBar
+
+      /*
+       * [3] 찾기 막대. 그리드에는 찾기 입력칸이 없으므로 DS/Controls/Find 를 붙입니다.
+       *   함수들은 relatedWidget(그리드)을 this 로 불리므로 bind 없이 넘깁니다.
+       */
+      // #region find
+      new Find({
+        displayMatchCaseToggle: true,
+        placeholder: '찾을 글자',
+        relatedWidget: grid,
+        onFindRequest: grid.setFindStr,
+        onFindPreviousResult: grid.goToPreviousMatchingCell,
+        onFindNextResult: grid.goToNextMatchingCell,
+        onFindClose: grid.closeFind
+      }).inject(document.getElementById('find'));
+      // #endregion find
+
+      /*
+       * [4] 이동 단위는 만든 뒤에도 바꿀 수 있습니다. 바꾸면 지금 찾는 글자로 다시 찾습니다.
+       */
+      // #region mode
+      document.getElementById('selMode').addEventListener('change', function (event) {
+        grid.findNavigationMode = event.target.value;
+      });
+      // #endregion mode
+
+      /*
+       * [5] 찾은 행 목록. 페이지를 나눈 그리드는 지금 페이지의 행만 찾습니다 (접힌 하위 행은 들어감).
+       */
+      // #region matched
+      document.getElementById('btnMatched').addEventListener('click', function () {
+        var rows = grid.getMatchingFindNodeModelArray() || [];
+        writeLog('찾은 행 ' + rows.length + '개: ' + rows.map(function (node) { return node.getLabel(); }).join(', '));
+      });
+      // #endregion matched
+
+      /*
+       * [6] 닫기 버튼은 찾기 막대를 숨기기만 합니다. 다시 열 때는 visibleFlag 를 켭니다.
+       */
+      // #region reopen
+      document.getElementById('btnReopen').addEventListener('click', function () {
+        grid.findWidget.visibleFlag = true;
+      });
+      // #endregion reopen
+
+      /*
+       * [7] 페이지 이동은 paginationManager.currentPage 를 바꿉니다. 전체 페이지 수는 getPageNumber() 입니다.
+       */
+      // #region pages
+      function movePage(step) {
+        var manager = grid.paginationManager;
+        var page = manager.currentPage + step;
+        if (page < 1 || page > manager.getPageNumber()) return;
+        manager.currentPage = page;
+        writeLog('페이지 ' + page + ' / ' + manager.getPageNumber());
+      }
+
+      document.getElementById('btnPrev').addEventListener('click', function () {
+        movePage(-1);
+      });
+
+      document.getElementById('btnNext').addEventListener('click', function () {
+        movePage(1);
+      });
+      // #endregion pages
+
+      /*
+       * [8] 일괄 수정 대화상자. editableFlag 와 massUpdateAllowedFlag 가 모두 true 인 컬럼(상태, 수량)만 나옵니다.
+       *   값을 넣은 줄만 "선택한 항목" 또는 "모든 항목" 에 넣습니다.
+       */
+      // #region massUpdate
+      document.getElementById('btnMassUpdate').addEventListener('click', function () {
+        grid.showModelMassUpdateDialog();
+      });
+      // #endregion massUpdate
+
+      /*
+       * [9] 인쇄. 인자 없이 부르면 새 창에 인쇄용 표를 열고, true 를 주면 숨긴 iframe 에 만들어 바로 인쇄 창을 엽니다.
+       */
+      // #region print
+      document.getElementById('btnPrintWindow').addEventListener('click', function () {
+        grid.openPrintableViewWindow();
+      });
+
+      document.getElementById('btnPrint').addEventListener('click', function () {
+        grid.openPrintableViewWindow(true);
+      });
+      // #endregion print
+    });
+  </script>
+</body>
+</html>

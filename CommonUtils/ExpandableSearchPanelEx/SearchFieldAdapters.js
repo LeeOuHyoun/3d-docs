@@ -1,6 +1,6 @@
 define('DS/CommonUtils/ExpandableSearchPanelEx/SearchFieldAdapters', [
   'UWA/Core',
-  'DS/sdxENOChgGovernanceUX/custom/util/lodash',
+  'DS/lodash',
   'DS/Controls/LineEditor',
   'DS/Controls/Toggle',
   'DS/Controls/ButtonGroup',

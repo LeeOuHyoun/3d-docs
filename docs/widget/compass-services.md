@@ -19,6 +19,8 @@ i3DXCompassPlatformServices/i3DXCompassPlatformServices.js (위임 껍데기, `i
 | `getGrantedRoles` | `DS/i3DXCompass/ServiceApi/GrantedRolesApi` |
 | `getPortfolioRole` | `DS/i3DXCompass/ServiceApi/PortfolioApi` |
 
+`getPortfolioRole(인자, 콜백)` 과 철자가 틀린 `getPortolioRole` 이 둘 다 있고 같은 일을 합니다. 둘 다 PortfolioApi 의 `getPortolioRole` (틀린 철자)을 부릅니다. 2026 도 같습니다. 새 코드는 바른 철자 `getPortfolioRole` 을 씁니다.
+
 - 3DDashboard 안에서는 대시보드가 이미 Compass 를 초기화해 두었으므로 바로 응답합니다.
 - Compass 는 My Apps 서비스 주소(`app.urls.myapps`)를 알아야 동작합니다. 단독 실행에서는 이 주소가 없어 **콜백이 영영 오지 않을 수 있습니다** (주소가 정해질 때까지 기다림). 단독 실행도 고려하면 시간 제한을 둡니다 ([3DSpace 주소와 SecurityContext](/widget/space-url)).
 - 2026 에서는 최상위 창을 찾을 때 `window.dsDashboardWindow.top` 이 있으면 그것을 먼저 씁니다.
@@ -183,7 +185,7 @@ require(['DS/i3DXCompassPlatformServices/OpenWith'], function (OpenWith) {
 | `render(dropdown)` | `addItem` / `getItem` / `removeItem` 을 가진 드롭다운 메뉴에 "연결 프로그램" 하위 메뉴로 넣음. 드롭다운에 `openWith.DROPDOWN_CONF` 항목(이름 `open-with...`)을 먼저 넣어 두어야 함 |
 | `setIndex(n)` | 드롭다운 안 위치 |
 
-- 항목은 `{ name: 앱id, text: 앱이름, icon 또는 fonticon, handler }` 입니다. `handler()` 를 부르면 Compass 로 앱 실행을 요청합니다 (`launchApp` 메시지, `origin: 'openWith'`). 안에서는 `setObject` + `setX3DContent` 를 먼저 보낸 뒤 `launchApp` 을 보냅니다 ([Compass 에 선택 객체 알리기](/widget/compass-pubsub#openwith-와의-관계)).
+- 항목은 `{ className, name: 앱id, text: 앱이름, icon 또는 fonticon, handler, launchApp }` 입니다. `className` 은 위젯 앱이면 `'app-widget app-open-with'`, 아니면 `'app-open-with'` 이고, `launchApp()` 은 `handler()` 와 같은 일을 합니다. 마지막 "다른 앱" 항목(`name: 'more-apps'`)에는 `className`, `launchApp` 이 없습니다. `handler()` 를 부르면 Compass 로 앱 실행을 요청합니다 (`launchApp` 메시지, `origin: 'openWith'`). 안에서는 `setObject` + `setX3DContent` 를 먼저 보낸 뒤 `launchApp` 을 보냅니다 ([Compass 에 선택 객체 알리기](/widget/compass-pubsub#openwith-와의-관계)).
 - 호환 판단은 `objectTaxonomies` (배열)가 있으면 그것, 없으면 `objectType` 으로 합니다. `objectType` 에 배열을 넣는 것은 콘솔에 deprecated 경고가 나옵니다.
 - 앱 목록은 대시보드 Compass 가 가진 것을 씁니다. 단독 실행에서는 앱 목록이 없어 동작하지 않습니다.
 - 3DXContent 항목에서 많이 쓰는 키: `envId` 115, `objectId` 112, `serviceId` 102, `objectType` 96, `contextId` 84, `displayName` 73, `displayType` 36 (ENOVIA 코드 집계).

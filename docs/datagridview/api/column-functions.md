@@ -68,7 +68,8 @@ DataGridView.js 의 DataGridViewLayout (`getColumnOptionValue(columnID, "함수�
 | --- | --- | --- | --- | --- | --- |
 | <code>getCellGroupingKey</code> | 11 | fn(cellInfos, dataIndex)  this=그리드 | 그룹 키 | <code>return g.dueDate.getFullYear() + '-' + (g.dueDate.getMonth() + 1);</code> | 행 그룹핑 시 묶을 기준 값 (예: 날짜를 월 단위로) ([행 그룹핑](/datagridview/row-grouping#예제-5-날짜를-월-단위로-묶기)) |
 | <code>getGroupingNodeOptions</code> | 2 | <code>'sum' &#124; 'avg' &#124; 'min' &#124; 'max' &#124; 'first' &#124; 'last'</code> 또는 fn(values)  this=그리드 | 그룹 행 칸의 값 | <code>return values.length + '명';</code> | 그룹 행의 이 컬럼 칸에 넣을 값 (합계 등). rowGroupingOptions.getGroupingNodeOptions 가 있으면 쓰이지 않음 |
-| <code>isCellMatchingFind</code> | 0 | fn(셀 값, 찾을 문자열) | boolean | - | 찾기(setFindStr) 일치 여부 직접 판단 |
+| <code>isCellMatchingFind</code> | 0 | fn(cellInfos, 찾을 문자열) | boolean | - | 찾기(setFindStr) 일치 여부 직접 판단. 대소문자 구분을 끄면 찾을 문자열은 소문자로 옴 ([찾기](/datagridview/find-and-print#무엇을-찾나)) |
+| <code>getCellValueAsStringForFind</code> | 5 | fn(cellInfos)  this=그리드 | string | - | 찾기에 쓸 셀 글자. 없으면 셀에 보이는 글자로 찾음 |
 | <code>getFindPositionsInCellString</code> | 0 | fn(셀 문자열, 찾을 문자열, 결과배열) | - | 결과배열.push({ start, end }) | 찾기 결과 강조 위치 직접 지정 |
 
 ## cellInfos 구조 (위 함수들의 인자)

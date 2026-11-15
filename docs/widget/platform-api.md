@@ -29,7 +29,7 @@ PlatformAPI/PlatformAPI.js 전체 (297 줄), MessageBus/MessageBus.js, Tenant/Te
 | `getWidgetTenant()` | `widget.getValue('x3dPlatformId')`. 위젯이 속한 플랫폼 | 위젯 값 |
 | `setTenant(id)` | 대시보드 테넌트 값 바꾸기 | `DS/Tenant/Tenant` |
 | `getApplicationConfiguration(key)` | 대시보드 설정 값 하나 (아래 표) | PublicAPI |
-| `getApplicationConfigurationBoolean(key)` <Badge type="warning" text="2026" /> | 위 값이 문자열 `'true'` 면 `true` | PublicAPI |
+| `getApplicationConfigurationBoolean(key)` <Badge type="warning" text="2026" /> | 위 값이 대소문자 상관없이 `'true'` 면 `true` (`'TRUE'` 도). 값이 없으면 `false`. 문자열이 아닌 값(예: `true`)이 오면 `toLowerCase` 가 없어 예외 | PublicAPI |
 | `getAllApplicationConfigurations()` | 설정 전체 | PublicAPI |
 | `getContextRoles(...)` / `setContextRoles(...)` | 컨텍스트 역할 | PublicAPI |
 | `getUserDashboardTemplates()` <Badge type="warning" text="2026" /> | 사용자 대시보드 템플릿 | PublicAPI |

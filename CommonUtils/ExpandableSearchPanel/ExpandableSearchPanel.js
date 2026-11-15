@@ -104,7 +104,9 @@ define('DS/CommonUtils/ExpandableSearchPanel/ExpandableSearchPanel', [
     });
 
     applyStep();
-    rows[0].element.addClassName('esp-row--settled');
+    if (rows.length) {
+      rows[0].element.addClassName('esp-row--settled');
+    }
 
     return { element, getValues };
   };

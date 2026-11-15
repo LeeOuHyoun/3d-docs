@@ -5,7 +5,7 @@
 샘플: [01_webux_form.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/01_webux_form.html)
 
 ::: info 근거
-Controls.js 의 Abstract (publishedProperties, fire, addEventListener), Button, Toggle, ButtonGroup, AbstractEditor, LineEditor, Editor, ComboBoxBase, ComboBox, DatePicker, TimePicker, Calendar, Label, Expander, Popup, ProgressBar, Loader, ModalLoader, ModalContainer. Tweakers.js 의 TweakerDate (VIEW_MODULES, _upgradeValue), TweakerBase._resolveViewModuleToApply. Core.js 의 BaseComponent (init, setProperties, inject, _applyForAdvancedSetterProperty), Core.js 의 TooltipModel. Utilities.js 의 WUXUWAUtils.generatePropertiesSettersAndGetters, Dom.generateIcon. 호출부: AuthGenericCommands, DELWebCommonControls, CAT3DAnnotationBaseCmds, ENXMeetingMgmt, ENORouteMgmt, DocumentCreateNew
+Controls.js 의 Abstract (publishedProperties, fire, addEventListener), Button, Toggle, ButtonGroup, AbstractEditor, LineEditor, Editor, ComboBoxBase, ComboBox, DatePicker, TimePicker, Calendar, Label, Expander, Popup, ProgressBar, Loader, ModalLoader, ModalContainer, `_private/DateUtilsPrivate` (2026 `parseDateAndTime`). Tweakers.js 의 TweakerDate (VIEW_MODULES, _upgradeValue), TweakerBase._resolveViewModuleToApply. Core.js 의 BaseComponent (init, setProperties, inject, _applyForAdvancedSetterProperty), Core.js 의 TooltipModel. Utilities.js 의 WUXUWAUtils.generatePropertiesSettersAndGetters, Dom.generateIcon. 호출부: AuthGenericCommands, DELWebCommonControls, CAT3DAnnotationBaseCmds, ENXMeetingMgmt, ENORouteMgmt, DocumentCreateNew
 :::
 
 ## 공통 사용법
@@ -348,7 +348,9 @@ DatePicker 는 새 값이 이전 값과 같은지 `timePickerFlag` 가 `false` �
 :::
 
 - 달력에서 날짜를 고르면 날짜만 바뀌고 시각은 이전 값의 시각(값이 없으면 지금 시각)이 남습니다. 한 개 선택이면 고르자마자 팝업이 닫힙니다.
-- 화면 글자는 브라우저 언어 형식(`2026년 12월 1일`)입니다. 입력칸에 포커스가 가면 숫자 형식(`2026/12/01`)으로 바뀌어 고치기 쉽게 됩니다. <Badge type="danger" text="검증 필요" /> 칠 때는 그 순서대로 숫자를 치고 구분자는 아무 기호나 됩니다.
+- 화면 글자는 브라우저 언어 형식(`2026년 12월 1일`)입니다. 입력칸에 포커스가 가면 숫자 형식(`2026/12/01`)으로 바뀌어 고치기 쉽게 됩니다. 칠 때는 그 순서대로 숫자를 칩니다.
+  - <Badge type="tip" text="2025" /> 숫자 사이의 기호는 대부분 구분자로 건너뜁니다(`.`, 공백 등). 단 `-` 는 숫자의 부호로 읽혀 `2026-12-01` 은 읽히지 않습니다.
+  - <Badge type="warning" text="2026" /> 구분자는 `/`(브라우저 언어의 연월일 순서)와 `-`(2 ~ 3 개일 때. 이때는 언어와 상관없이 연-월-일 순서)만 됩니다. `2026.12.01` 처럼 다른 기호를 쓰면 날짜로 읽지 못하고 이전 값으로 되돌아갑니다.
 - 언어 설정이 바뀌면(`onFormatsLanguageChange`) 다시 그립니다.
 
 ### DatePicker 옵션과 이벤트

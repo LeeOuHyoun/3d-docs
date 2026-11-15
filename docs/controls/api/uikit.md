@@ -43,7 +43,7 @@ UIKIT.js 각 모듈의 `defaultOptions`, `dispatchEvent("...")` 호출, 메서�
 
 | 키 | 기본값 | 설명 |
 | --- | --- | --- |
-| <code>className</code> | <code>'btn-default'</code> | <code>primary</code>, <code>default</code>, <code>info</code>, <code>warning</code>, <code>error</code>, <code>success</code>, <code>link</code>, <code>block</code>, <code>small</code>, <code>large</code>, <code>xsmall</code>, <code>large-icon</code> (앞에 <code>btn-</code> 자동) |
+| <code>className</code> | <code>'btn-default'</code> | <code>primary</code>, <code>default</code>, <code>info</code>, <code>warning</code>, <code>error</code>, <code>success</code>, <code>link</code>, <code>block</code>, <code>small</code>, <code>large</code>, <code>xsmall</code>, <code>large-icon</code>, <code>lite</code> <Badge type="warning" text="2026" /> (앞에 <code>btn-</code> 자동) |
 | <code>dropdownCaret</code> | <code>true</code> | <code>dropdown</code> 이 있을 때 화살표 |
 | <code>active</code> | <code>false</code> | 눌린 모양 |
 | <code>rounded</code> <Badge type="warning" text="2026" /> | <code>false</code> | 둥근 모양 |
@@ -66,6 +66,7 @@ UIKIT.js 각 모듈의 `defaultOptions`, `dispatchEvent("...")` 호출, 메서�
 | <code>active</code> <Badge type="warning" text="2026" /> | <code>false</code> | 눌린 모양 |
 | <code>rounded</code> <Badge type="warning" text="2026" /> | <code>true</code> | 둥근 모양 |
 | <code>value</code> <Badge type="warning" text="2026" /> | <code>'icon'</code> | 글자 |
+| <code>icon</code> <Badge type="warning" text="2026" /> | - | 아이콘 이름 (<code>fonticon-</code> 자동) 또는 이미지 주소. <code>.gif</code>, <code>.jpg</code>, <code>.jpeg</code>, <code>.tiff</code>, <code>.png</code>, <code>.svg</code> 로 끝나면 <code>.img-wrapper</code> 안에 <code>&lt;img&gt;</code> 로 넣고 버튼에 <code>has-image</code> 클래스를 붙임 |
 
 ## Input/Text
 
@@ -311,6 +312,7 @@ UIKIT.js 각 모듈의 `defaultOptions`, `dispatchEvent("...")` 호출, 메서�
 | <code>tooltipsPosition</code> | - | 툴팁 위치 (기본 <code>'top'</code>) |
 | <code>tooltipsTrigger</code> | - | 툴팁 조작 (기본 <code>'hover focus'</code>) |
 | <code>renderTo</code> | - | 붙일 곳 |
+| <code>rounded</code> <Badge type="warning" text="2026" /> | - | 항목과 넘침 메뉴 버튼을 둥근 <code>lite</code> 아이콘 버튼으로 그림 (<code>iconbar-items-round</code>) |
 
 메서드: <code>show()</code>, <code>getItem()</code>, <code>addItem()</code>, <code>enableItem()</code>, <code>disableItem()</code>, <code>isInjected()</code>, <code>select()</code>, <code>destroy()</code><br>이벤트: <code>onClick</code>
 

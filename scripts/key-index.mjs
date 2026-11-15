@@ -13,10 +13,13 @@ const TOPICS = {
     name: 'Tweakers',
     skipped: [],
     places: '어느 편집기의 옵션인지(공통, 문자열, 숫자 ...)도 여기서 알 수 있습니다.',
-    example: 'MultipleValues'
+    example: 'MultipleValues',
+    keyColumns: { '편집기별 속성': 1 }
   }
 }
 const CODE = /<code>(.*?)<\/code>/g
+const TICK = /`([^`]+)`/g
+const PAREN = /\([^()]*\)/g
 const CALL = /\([^()]*\)$/
 const PATH = /^[\w$.\s=]+$/
 const NAME = /([A-Za-z_$][\w$]*)$/
@@ -29,9 +32,17 @@ const nameOf = (part) => {
 const namesOf = (cell) =>
   [...cell.matchAll(CODE)].flatMap(([, code]) => code.split(' / ').flatMap((part) => nameOf(part) ?? []))
 
-const scan = (file) => {
+const withoutParens = (cell) => {
+  const next = cell.replace(PAREN, '')
+  return next === cell ? cell : withoutParens(next)
+}
+
+const keysOf = (cell) => [...withoutParens(cell).matchAll(TICK)].flatMap(([, code]) => nameOf(code) ?? [])
+
+const scan = (file, keyColumns) => {
   const link = linkOf(file)
   const entries = []
+  const owners = new Map()
   let title = ''
   let section = ''
   let anchor = ''
@@ -47,9 +58,17 @@ const scan = (file) => {
     }
     if (heading || !line.trim().startsWith('|')) continue
     const cells = splitRow(line)
-    const place = section ? `${title} › ${section}` : title
-    namesOf(cells[0]).forEach((name) => entries.push({ name, place: `[${place}](${link}${anchor})`, text: cells.at(-1).replace(/\]\(#/g, `](${link}#`) }))
+    const place = `[${section ? `${title} › ${section}` : title}](${link}${anchor})`
+    namesOf(cells[0]).forEach((name) => entries.push({ name, place, text: cells.at(-1).replace(/\]\(#/g, `](${link}#`) }))
+    const column = keyColumns[section]
+    if (column === undefined || !cells[column]) continue
+    keysOf(cells[column]).forEach((name) => {
+      const key = `${place}|${name}`
+      if (!owners.has(key)) owners.set(key, { name, place, list: [] })
+      owners.get(key).list.push(cells[0])
+    })
   }
+  owners.forEach(({ name, place, list }) => entries.push({ name, place, text: `${list.join(', ')} 의 속성` }))
   return entries
 }
 
@@ -59,7 +78,7 @@ const build = (folder) => {
   const output = join(api, 'key-index.md')
   const entries = walk(api)
     .filter((file) => ![...topic.skipped, 'key-index.md'].includes(basename(file)))
-    .flatMap(scan)
+    .flatMap((file) => scan(file, topic.keyColumns ?? {}))
     .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }) || a.place.localeCompare(b.place))
   const letters = [...new Set(entries.map((entry) => entry.name[0].toUpperCase()))]
   const sections = letters.flatMap((letter) => [
