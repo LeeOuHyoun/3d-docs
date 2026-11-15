@@ -110,6 +110,7 @@ UWA2/js/Widget.js, Environment.js, Environments/Frame.js, Environments/Standalon
 | 고른 객체를 Compass 에 알리기, 다른 앱 실행 | `DS/i3DXCompassServices/i3DXCompassPubSub` | [Compass 에 선택 객체 알리기](/widget/compass-pubsub) |
 | 대시보드 상단 바 메뉴에 명령 넣기 | `DS/TopBarProxy/TopBarProxy` | [대시보드 상단 바](/widget/top-bar) |
 | 위젯 안 3D / 2D 미리 보기 | `DS/3DPlayHelper/3DPlayHelper` | [3D / 2D 미리 보기](/widget/3dplay) |
+| 외부 서버와 실시간 주고받기 | 브라우저 `WebSocket`, `DS/DSNodeSocketioClient_4.7.4/DSNodeSocketioClient_4.7.4` | [실시간 통신 (WebSocket)](/widget/websocket) |
 
 ## 자주 틀리는 것
 
@@ -142,6 +143,7 @@ UWA2/js/Widget.js, Environment.js, Environments/Frame.js, Environments/Standalon
 | [Compass 에 선택 객체 알리기](/widget/compass-pubsub) | `setObject` / `setX3DContent`, 다른 앱 실행 요청 (`launchApp`) |
 | [대시보드 상단 바 (TopBarProxy)](/widget/top-bar) | 상단 바의 +, 공유, 도움말, 사용자 메뉴에 위젯 명령 넣기 |
 | [3D / 2D 미리 보기 (3DPlay)](/widget/3dplay) | 위젯 안에 3DPlay 미리 보기 넣기, 3DPlay 앱으로 열기 |
+| [실시간 통신 (WebSocket)](/widget/websocket) | 외부 WebSocket 서버 연결 (브라우저 WebSocket, socket.io), 3DPassport 토큰, 다시 연결, 서버와 네트워크 조건 |
 
 ## 샘플
 
@@ -156,6 +158,7 @@ UWA2/js/Widget.js, Environment.js, Environments/Frame.js, Environments/Standalon
 | [TopBarSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TopBarSample.html) | 상단 바 메뉴에 항목, 하위 메뉴, 배지 넣기 | [대시보드 상단 바](/widget/top-bar) |
 | [3DPlaySample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/3DPlaySample.html) | physicalid 의 3D / 2D 미리 보기, 3DPlay 앱으로 열기 | [3D / 2D 미리 보기](/widget/3dplay) |
 | [LifecycleSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/LifecycleSample.html) | 갈 수 있는 state, promote / demote, 개정, 소유자 넘기기, OOTB 성숙도 창 | [성숙도 변경, 개정](/rest-api/lifecycle) |
+| [WebSocketSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WebSocketSample.html) | 브라우저 WebSocket / socket.io 로 연결, 보내기와 받기, 3DPassport 토큰, 다시 연결 | [실시간 통신 (WebSocket)](/widget/websocket) |
 
 ::: warning
 샘플은 `<3DSpace>/webapps/WidgetSample/` 에 두고 ENOVIA 서버 주소로 열어야 동작합니다. 단독 실행에서는 Compass 응답이 없어 5 초 뒤 webapps 주소로 3DSpace 주소를 계산합니다. 단독 실행은 jsdom 과 모의 서버(enovia2025 webapps 파일 + 가짜 pno/person 응답)에서 NLS 요청 순서, 설정 라벨 번역, onLoad / onRefresh, SecurityContext 목록까지 확인했습니다. 실제 서버와 3DDashboard 안에서는 아직 확인하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.

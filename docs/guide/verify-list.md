@@ -1,6 +1,6 @@
 # 검증 대기 목록
 
-본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 227 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
+본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 231 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
 
 - 각 줄 앞의 링크는 그 문장이 있는 절로 갑니다.
 - 확인했으면 원래 페이지에서 배지를 지우고 문장을 단정형으로 고칩니다. 다르게 동작하면 내용을 고칩니다.
@@ -218,7 +218,7 @@
 
 - [로드될 때 하는 일](/amd/webapps-utils#로드될-때-하는-일) : 3DDashboard 위젯 프레임에서는 AmdLoader 를 프레임이 먼저 읽으므로 webapps 주소도 프레임이 정하는 것으로 보입니다.
 
-## 위젯과 플랫폼 (66)
+## 위젯과 플랫폼 (70)
 
 ### 3D / 2D 미리 보기 (3DPlay) (6)
 
@@ -322,6 +322,13 @@
 - [창 안에서 또 열지 않기](/widget/transient-widget#창-안에서-또-열지-않기) : 등록하지 않고 Run Your App 으로 연 위젯에서 값이 있는지는 확인하지 않았습니다
 - [창으로 열린 쪽에서 값 읽기](/widget/transient-widget#창으로-열린-쪽에서-값-읽기) : 설정에 정의하지 않은 키도 `getValue` 로 읽히는지는 확인하지 않았습니다
 - [Dialog 와 고르는 기준](/widget/transient-widget#dialog-와-고르는-기준) : 내 위젯을 다른 화면에서 창으로 띄우기 : TransientWidget (내 위젯이 3DDashboard 에 앱으로 등록되어 있어야 함
+
+### 실시간 통신 (WebSocket) (4)
+
+- [인증](/widget/websocket#인증) : 4. 서버 : 3DPassport 로 토큰을 확인하는 것으로 보입니다
+- [인증](/widget/websocket#인증) : `service=` 뒤의 이름은 3DPassport 에 등록된 서비스여야 하는 것으로 보입니다
+- [서버와 네트워크](/widget/websocket#서버와-네트워크) : Origin : 3DDashboard 위젯 iframe 에서 연결할 때 `Origin` 이 어떤 주소가 되는지는 확인하지 않았습니다
+- [서버와 네트워크](/widget/websocket#서버와-네트워크) : 콘텐츠 보안 정책 (CSP) : webapps 소스로는 확인할 수 없습니다
 
 ### widget 객체 (2)
 

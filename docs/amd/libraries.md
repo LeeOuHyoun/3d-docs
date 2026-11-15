@@ -332,7 +332,7 @@ require(['DS/ENODOMPurify/ENODOMPurify'], function (DOMPurify) {
 
 | 모듈 | 버전 | 쓰는 앱 (2025 / 2026) | 주의 |
 | --- | --- | --- | --- |
-| `DS/DSNodeSocketioClient_4.7.4/DSNodeSocketioClient_4.7.4` | socket.io-client 4.7.4 | 2 / 2 | 전역 `io` 가 있으면 그것. NotificationManager, RTDriver |
+| `DS/DSNodeSocketioClient_4.7.4/DSNodeSocketioClient_4.7.4` | socket.io-client 4.7.4 | 2 / 2 | 전역 `io` 가 있으면 그것. NotificationManager, RTDriver. 위젯에서 쓰는 법은 [실시간 통신 (WebSocket)](/widget/websocket) |
 | `DS/DSNodeSocketioClient/DSNodeSocketioClient` | socket.io-client 4.7.4 | 0 / 0 | 폴더 이름에 버전이 없는 쪽. 내용은 같은 4.7.4 |
 | `DS/DSVideoJS/DSVideoJS` | video.js 6.6.0 (`VENBrightcoveVideoJS/6.6.0`) | 1 / 1 | CSS 도 같이 부름. 플러그인 `DSVideoResolutionSwitcherPlugin`, `DSVideoThumbnailPlugin`. SwymUIComponents |
 | `DS/VENHammer/2.0.8/hammer` | Hammer.js 2.0.8 (터치 제스처) | 1 / 1 | UIKIT 이 씀 |

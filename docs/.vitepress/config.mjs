@@ -187,6 +187,12 @@ const WEBAPPS_SIDEBAR = [
           { text: '대시보드 상단 바 (TopBarProxy)', link: '/widget/top-bar' },
           { text: '3D / 2D 미리 보기 (3DPlay)', link: '/widget/3dplay' }
         ]
+      },
+      {
+        text: '외부 서버와 연동',
+        items: [
+          { text: '실시간 통신 (WebSocket)', link: '/widget/websocket' }
+        ]
       }
     ]
   },

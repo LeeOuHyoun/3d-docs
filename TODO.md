@@ -34,6 +34,10 @@
   - [ ] `TopBarSample.html` → `widget/top-bar` : + / 공유 / 도움말 메뉴에 항목이 들어가는지, 하위 메뉴와 배지, 위젯을 지울 때 항목이 없어지는지
   - [ ] `3DPlaySample.html` → `widget/3dplay` : 3D / 2D 미리 보기와 닫기, X3DPLAW_AP 앱 열기
   - [ ] `LifecycleSample.html` → `rest-api/lifecycle` : promote / demote 결과와 `report` 오류, dslc 요청의 CSRF, 개정, 소유자 넘기기(일부 실패 시 HTTP 207 + 최상위 배열 응답), OOTB 성숙도 창 / 개정 창
+- [ ] `WidgetSample/WebSocketSample.html` → `widget/websocket` 을 3DDashboard 위젯으로 실행. 로컬 시험 서버(ws, socket.io 4.7 에코)로 주고받기, 다시 연결, 끊기는 확인함 (배지 "로컬 실행 확인"). 확인하지 못한 것:
+  - [ ] 위젯 iframe 에서 연결할 때 서버가 받는 `Origin` 헤더 값, 대시보드 / 3DSpace 의 CSP `connect-src` 제한 여부
+  - [ ] `PlatformAPI.getApplicationConfiguration('app.urls.passport')` + `/login?service=<서비스>` 로 `access_token` 을 받을 수 있는지, 커스텀 서비스를 3DPassport 에 등록할 수 있는지와 서버에서 토큰을 확인하는 방법 (플랫폼 관리자 확인)
+  - [ ] 3DSpace 앞 리버스 프록시 뒤에 WebSocket 서버를 둘 때 Upgrade 통과
 - [ ] ControlsSample 07 (`07_properties_panel.html`) 을 3DDashboard 또는 3DSpace 서버에서 실행 → `controls/properties-panel` (원본 분석으로만 작성). 08 ~ 10 (메뉴, 자동완성, ENOX) 은 로컬 실행으로 확인함 (배지 "로컬 실행 확인"). 서버에서도 같으면 "서버 확인"으로 변경
 - [ ] `npm run docs:dev` 에서 한글 제목 앵커 확인: `.vitepress/config.mjs` 에 `markdown.anchor.slugify` 를 넣어 한글 제목 id 를 링크와 같은 NFC 로 맞춤 (기본 slugify 는 NFKD 라서 `#고르는-기준` 같은 링크가 절로 가지 않았음). 페이지 안 링크와 다른 페이지의 `#절` 링크를 몇 개 눌러 확인
 
