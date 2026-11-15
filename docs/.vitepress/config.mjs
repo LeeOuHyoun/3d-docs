@@ -169,7 +169,8 @@ const WEBAPPS_SIDEBAR = [
           { text: 'PlatformAPI', link: '/widget/platform-api' },
           { text: 'Compass 서비스', link: '/widget/compass-services' },
           { text: 'WidgetServices', link: '/widget/widget-services' },
-          { text: '3DSpace 주소와 SecurityContext', link: '/widget/space-url' }
+          { text: '3DSpace 주소와 SecurityContext', link: '/widget/space-url' },
+          { text: '다른 앱을 창으로 열기 (TransientWidget)', link: '/widget/transient-widget' }
         ]
       }
     ]

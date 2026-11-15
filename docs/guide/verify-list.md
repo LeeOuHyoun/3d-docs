@@ -1,6 +1,6 @@
 # 검증 대기 목록
 
-본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 153 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
+본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 155 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
 
 - 각 줄 앞의 링크는 그 문장이 있는 절로 갑니다.
 - 확인했으면 원래 페이지에서 배지를 지우고 문장을 단정형으로 고칩니다. 다르게 동작하면 내용을 고칩니다.
@@ -225,7 +225,7 @@
 
 - [로드될 때 하는 일](/amd/webapps-utils#로드될-때-하는-일) : 3DDashboard 위젯 프레임에서는 AmdLoader 를 프레임이 먼저 읽으므로 webapps 주소도 프레임이 정하는 것으로 보입니다.
 
-## 위젯과 플랫폼 (22)
+## 위젯과 플랫폼 (24)
 
 ### Compass 서비스 (i3DXCompassPlatformServices) (1)
 
@@ -264,6 +264,11 @@
 
 - [플랫폼 id](/widget/space-url#플랫폼-id) : 온프레미스 환경의 플랫폼 id 는 `OnPremise` 로 보입니다.
 - [목록과 기본값 받기](/widget/space-url#목록과-기본값-받기) : 3DSpace 가 여러 플랫폼을 서비스하는 환경에서 필요한 것으로 보입니다.
+
+### 다른 앱을 창으로 열기 (TransientWidget) (2)
+
+- [열기](/widget/transient-widget#열기) : <code>mode</code> : <code>'panel'</code> 은 크기를 준 창, <code>'transient'</code> 는 기본 미리보기 창으로 보입니다
+- [Dialog 와 고르는 기준](/widget/transient-widget#dialog-와-고르는-기준) : 내 위젯을 다른 화면에서 창으로 띄우기 : TransientWidget (내 위젯이 3DDashboard 에 앱으로 등록되어 있어야 함
 
 ### widget 객체 (2)
 

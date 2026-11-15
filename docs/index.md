@@ -109,6 +109,7 @@ features:
 | 그리드 옵션 이름은 아는데 어느 페이지인지 모르겠다 | [이름 색인 (A-Z)](/datagridview/api/key-index) |
 | 그리드 셀을 직접 그리거나 아래에 행 수를 보여주고 싶다 | [셀 직접 그리기](/datagridview/custom-cell) · [상태바](/datagridview/status-bar) |
 | 확인 다이얼로그, 알림 메시지를 띄우고 싶다 | [다이얼로그](/controls/dialog) · [알림](/controls/notifications) |
+| 다른 앱(속성, 변경 조치)을 지금 화면 위에 창으로 열고 싶다 | [TransientWidget](/widget/transient-widget) |
 | 위젯끼리 값을 주고받고 싶다 | [PubSub](/events/pubsub) · [PlatformAPI](/widget/platform-api) · [InterCom](/uwa/intercom) |
 | 다른 위젯과 선택을 맞추고 싶다 | [선택 (CSOManager)](/events/selection) |
 | 다른 위젯에서 끌어 온 객체를 받고 싶다 | [끌어 놓기](/events/drag-and-drop) |

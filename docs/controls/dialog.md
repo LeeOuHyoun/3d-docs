@@ -5,8 +5,28 @@
 샘플: [02_dialog.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/02_dialog.html)
 
 ::: info 근거
-Windows.js 의 Window (publishedProperties, _applyButtons, getDefaultButtonLabel, close, keydown / keyup 처리), Dialog (_applyButtons, _applyCustomButtonsDefinition, _applyCheckboxInfos, _applyModalFlag, _getDefaultPosition), Panel, ImmersiveFrame. CoreBase.js 의 WUXStandardButtonEnum, WUXStandardButtonRoleEnum, WUXCustomButtonRoleEnum. Windows_ko.js 의 번역. 호출부: AuthGenericCommands (AuthGenericDlgProgressbar), DELWebCommonControls (FormV2), CAT3DAnnotationBaseCmds. `e.dsModel.dialog.close()` 111 건
+Windows.js 의 Window (publishedProperties, _applyButtons, getDefaultButtonLabel, close, keydown / keyup 처리), Dialog (_applyButtons, _applyCustomButtonsDefinition, _applyCheckboxInfos, _applyModalFlag, _getDefaultPosition), Panel, ImmersiveFrame. CoreBase.js 의 WUXStandardButtonEnum, WUXStandardButtonRoleEnum, WUXCustomButtonRoleEnum. Windows_ko.js 의 번역. 호출부: AuthGenericCommands (AuthGenericDlgProgressbar), DELWebCommonControls (FormV2), CAT3DAnnotationBaseCmds. `e.dsModel.dialog.close()` 111 건. OOTB 패턴: ENXMeetingMgmt (RemoveMeeting, CreateMeetingDialog), ENXDecisionMgmt (RemoveDecision), ENOUserGroupMgmt (RemoveUsersGroup), ENXHistoryUX (HistoryDefaultDialog), ENOCharacteristicsApp (NewDialog). 사용 파일 수(2025): `DS/Windows/Dialog` 148, `DS/Windows/ImmersiveFrame` 134, `DS/UIKIT/Modal` 99, `DS/UIKIT/SuperModal` 83, `DS/TransientWidget/TransientWidget` 54, `UWA/Controls/Overlay` 11, `UWA/Controls/Popup` 10, `UWA/Controls/Lightbox` 10 (UWA 셋은 대부분 UWA 묶음 파일 자신). UIKIT.js 의 Modal / SuperModal 의존 모듈, UWA2/js/Controls/Popup.js, Overlay.js, Lightbox.js
 :::
+
+## 무엇으로 띄울까
+
+ENOVIA 에서 "창을 띄우는" 방법은 넷입니다. OOTB 앱의 새 화면은 대부분 `DS/Windows/Dialog` 를 씁니다.
+
+| 방법 | 바탕 | OOTB 에서 쓰는 곳 | 문서 |
+| --- | --- | --- | --- |
+| `DS/Windows/Dialog` (+ `ImmersiveFrame`) | WebUX (`DS/Windows/Window`) | ENX* / ENO* 앱의 생성, 삭제 확인, 상세 보기 다이얼로그 | 이 페이지 |
+| `DS/UIKIT/Modal`, `DS/UIKIT/SuperModal` | **UWA** (`UWA/Controls/Abstract`) | 예전 UIKIT 화면의 모달, `alert` / `confirm` / `prompt` | [UIKIT](/controls/uikit#supermodal) · [UIKIT API](/controls/api/uikit#modal) |
+| `DS/TransientWidget/TransientWidget` | PlatformAPI 메시지 | 다른 앱(속성, 변경 조치, 프로필)을 창으로 열기 | [TransientWidget](/widget/transient-widget) |
+| `UWA/Controls/Overlay`, `Lightbox` | UWA | OOTB 앱에서는 거의 쓰지 않음 (Coachmark, VCXWebComposer) | 아래 |
+
+### UWA 로 다이얼로그를 띄우는가
+
+**UWA 만으로 만든 다이얼로그 클래스는 OOTB 에서 쓰지 않습니다.** UWA 는 바탕으로만 쓰입니다.
+
+- `DS/UIKIT/Modal`, `SuperModal` 은 `UWA/Controls/Abstract` 를 상속하고 `UWA/Element`, `UWA/Event` 로 화면을 만듭니다. "UWA 기반 모달" 을 쓰려면 이것을 씁니다.
+- `DS/Windows/Dialog` 는 WebUX 클래스이고, UWA 는 `UWA/Core` (`UWA.createElement`) 정도만 씁니다. OOTB 호출부도 내용 요소를 `UWA.createElement` 로 만들어 `content` 에 넣습니다.
+- `UWA/Controls/Popup` 은 다이얼로그가 아닙니다. `url`, `width`, `height`, `left`, `top`, `toolbar`, `menubar` 같은 옵션으로 **브라우저 새 창(`window.open`)** 을 엽니다.
+- `UWA/Controls/Overlay` 는 부모 요소를 덮는 층(`exclusive`, `closeable`, `open()` / `close()` / `toggle()`), `UWA/Controls/Lightbox` 는 Overlay 에 `setContent()` / `addContent()` 를 더한 것입니다. 제목줄, 버튼, Enter / Esc 처리가 없어서 다이얼로그로 쓰려면 직접 만들어야 합니다.
 
 ## 모달 다이얼로그 열기
 
@@ -194,6 +214,77 @@ confirmDialog('삭제', 'PRT-0001 을 삭제할까요?', function (ok) { console
 ```
 
 X 버튼으로 닫힌 경우도 `close` 에서 처리합니다. UIKIT 에는 같은 일을 하는 `SuperModal.confirm` 이 있습니다 ([UIKIT](/controls/uikit#supermodal)).
+
+## OOTB 앱의 다이얼로그 패턴
+
+ENX* / ENO* 앱은 다이얼로그 하나를 모듈 하나(`DS/앱/View/Dialog/RemoveXxx` 처럼)로 만들고, 여는 함수 하나만 돌려줍니다. 삭제 확인 다이얼로그(ENXMeetingMgmt 의 RemoveMeeting)를 일반화하면 아래와 같습니다.
+
+```js
+define('DS/MyApp/View/Dialog/RemoveItems', [
+  'UWA/Core',
+  'DS/Windows/Dialog',
+  'DS/Windows/ImmersiveFrame',
+  'DS/Controls/Button',
+  'i18n!DS/MyApp/assets/nls/MyApp'
+], function (UWA, WUXDialog, WUXImmersiveFrame, WUXButton, NLS) {
+  'use strict';
+
+  var dialog;
+
+  function open(items) {
+    var deletable = items.filter(function (item) { return item.canDelete; });
+    var list = UWA.createElement('ul');
+    items.forEach(function (item) {
+      UWA.createElement('li', { text: item.title }).inject(list);
+    });
+
+    var content = UWA.createElement('div');
+    UWA.createElement('div', { text: NLS.removeWarning }).inject(content);
+    list.inject(content);
+
+    var immersiveFrame = new WUXImmersiveFrame();
+    immersiveFrame.inject(document.body);
+
+    dialog = new WUXDialog({
+      modalFlag: true,
+      width: 500,
+      height: 200,
+      title: NLS.removeHeader.replace('{count}', deletable.length),
+      content: content,
+      immersiveFrame: immersiveFrame,
+      buttons: {
+        Ok: new WUXButton({
+          label: NLS.Delete,
+          disabled: deletable.length < 1,
+          onClick: function () { removeConfirmed(deletable); }
+        }),
+        Cancel: new WUXButton({
+          onClick: function (e) { e.dsModel.dialog.close(); }
+        })
+      }
+    });
+  }
+
+  function removeConfirmed(items) {
+    console.log('삭제', items);
+    dialog.close();
+  }
+
+  return { open: open };
+});
+```
+
+- **ImmersiveFrame 을 `document.body` 에 붙이고 `immersiveFrame` 으로 넘깁니다.** 사용 횟수는 `inject(document.body)` 58, `inject(widget.body)` 17 입니다. 위젯은 자기 iframe 안에서 실행되므로 `document.body` 도 위젯 영역입니다.
+- 버튼은 표준 키(`Ok`, `Cancel`)를 쓰고 `label` 만 바꿉니다 (`Ok` 에 `NLS.Delete`). 그래서 Enter / Esc 와 primary 강조가 그대로 붙습니다.
+- 지울 수 있는 항목이 없으면 `disabled: true` 로 `Ok` 를 막고, 지울 수 없는 항목은 내용에 따로 보여줍니다.
+- 0 건 선택은 다이얼로그를 띄우지 않고 알림 메시지(`level: 'warning'`)로 끝냅니다 ([알림 메시지](/controls/notifications)).
+- 생성 다이얼로그(CreateMeetingDialog, NewDialog)도 같은 틀에 `content` 로 탭이나 폼을 넣습니다.
+
+::: warning OOTB 코드는 ImmersiveFrame 을 정리하지 않습니다
+위 패턴은 열 때마다 `new ImmersiveFrame()` 을 `document.body` 에 붙이고, 다이얼로그를 닫아도 틀은 남겨 둡니다. 따라 만들 때는 위젯에 틀 하나를 만들어 두고 모든 다이얼로그가 같이 씁니다.
+
+`close` 이벤트 안에서 `immersiveFrame.destroy()` 를 바로 부르지 않습니다. `close()` 는 `close` 이벤트를 낸 뒤 다이얼로그를 `destroy()` 하는데, 틀의 `destroy()` 도 안의 창을 `destroy()` 하므로 다이얼로그가 두 번 정리됩니다.
+:::
 
 ## ImmersiveFrame
 

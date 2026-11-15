@@ -129,6 +129,7 @@ UWA2/js/Widget.js, Environment.js, Environments/Frame.js, Environments/Standalon
 | [Compass 서비스](/widget/compass-services) | 서비스 주소, 부여된 역할, 앱 정보, 다른 앱으로 열기 |
 | [WidgetServices](/widget/widget-services) | ENOVIA 앱 공용 도우미. 플랫폼 id, 언어, 3DSpace 주소 |
 | [3DSpace 주소와 SecurityContext](/widget/space-url) | 플랫폼 id → 3DSpace 주소 → SecurityContext 를 얻는 순서 |
+| [다른 앱을 창으로 열기 (TransientWidget)](/widget/transient-widget) | 다른 앱을 지금 화면 위에 창으로 열기, 닫기, 열려 있는지 확인 |
 
 ## 샘플
 

@@ -27,6 +27,7 @@
 | `DS/i3DXCompass/ServiceApi/GrantedRolesApi`, `PortfolioApi` | 부여된 역할 조회 | [Compass 서비스](/widget/compass-services#getgrantedroles) |
 | `DS/i3DXCompassPlatformServices/OpenWith` | "다른 앱으로 열기" 메뉴 | [Compass 서비스](/widget/compass-services#openwith) |
 | `DS/WidgetServices/WidgetServices` | 3DSpace 주소, SecurityContext 보조 함수 | [WidgetServices](/widget/widget-services) |
+| `DS/TransientWidget/TransientWidget` | 다른 앱(위젯)을 창으로 열기 | [TransientWidget](/widget/transient-widget) |
 | `DS/WidgetServices/securityContextServices/SecurityContextServices` | SecurityContext 목록과 선택 값 | [WidgetServices](/widget/widget-services) · [3DSpace 주소와 SecurityContext](/widget/space-url) |
 | `RunYourApp/RunYourApp.html` | 주소를 넣으면 그 위젯으로 바뀌는 OOTB 위젯 | [Run Your App](/widget/dashboard-register#run-your-app-으로-열기) |
 | `DS/PlatformManagement/Modal/ThirdPartyApps` | Additional App 등록 창 (Platform Management) | [Additional App](/widget/dashboard-register#additional-app-으로-등록) |
@@ -52,6 +53,7 @@
 | `UWA/Class/Model`, `Collection`, `View`, `Store` | Model, Collection, View | [Model, Collection, View](/uwa/mvc) |
 | `UWA/Promise`, `UWA/Class/Promise` | Promise | [Promise](/uwa/promise) |
 | `UWA/Utils/InterCom` | 위젯 간 통신 | [InterCom](/uwa/intercom) |
+| `UWA/Controls/Popup`, `Overlay`, `Lightbox` | 브라우저 새 창, 덮는 층 (다이얼로그 아님) | [다이얼로그](/controls/dialog#uwa-로-다이얼로그를-띄우는가) |
 
 ## 화면 컨트롤
 

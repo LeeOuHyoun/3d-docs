@@ -31,6 +31,7 @@ Controls.js (Abstract, Button ...), Windows.js (Window, Dialog), UIKIT.js (Input
 | 객체 카드, 로딩 패널, 코드 편집기 | `DS/ControlsEx/*` | - | [확장 컨트롤](/controls/controls-ex) |
 | 모달 다이얼로그 | `DS/Windows/Dialog` | `DS/UIKIT/Modal`, `SuperModal` | [다이얼로그](/controls/dialog) |
 | 확인 / 취소 묻기 | `DS/Windows/Dialog` + 버튼 2개 | `SuperModal.confirm` | [다이얼로그](/controls/dialog#확인-취소-묻기) |
+| 다른 앱 화면을 창으로 열기 | `DS/TransientWidget/TransientWidget` | - | [TransientWidget](/widget/transient-widget) |
 | 로딩 가리개 | `DS/Controls/ModalLoader` | `DS/UIKIT/Mask` | [WebUX 컨트롤](/controls/webux-controls#loader-modalloader), [UIKIT](/controls/uikit#mask) |
 | 저장 완료 같은 짧은 알림 | `DS/Notifications/*` | `DS/UIKIT/Alert` | [알림 메시지](/controls/notifications) |
 | 툴팁 | 컨트롤의 `tooltipInfos` | `DS/UIKIT/Tooltip` | [WebUX 컨트롤](/controls/webux-controls#툴팁) |
@@ -131,7 +132,7 @@ webapps 2025 전체에서 모듈 이름이 나오는 횟수입니다. 많이 쓰
 | [색상, 표시 컨트롤](/controls/display-controls) | ColorPicker, ColorChooser, ColorPalette, Gauge, Timeline, Tooltip, 2026 툴팁 화면과 UserCard |
 | [목록, 트리, 타일 뷰](/controls/collection-views) | Responsive 타일 / 썸네일 카드, TreeBase, Tree, Tile, 옛 ThumbnailView / TileView |
 | [확장 컨트롤 (ControlsEx)](/controls/controls-ex) | Card, IDCard, LoadingPanel, CodeMirror, PathExplorer, Wizard, MagnitudeEditor |
-| [다이얼로그](/controls/dialog) | Dialog 열기 / 닫기, 표준 버튼, ImmersiveFrame, Panel |
+| [다이얼로그](/controls/dialog) | 무엇으로 띄울까 (Dialog / UIKIT / TransientWidget / UWA), Dialog 열기 / 닫기, 표준 버튼, OOTB 패턴, ImmersiveFrame, Panel |
 | [UIKIT](/controls/uikit) | Mask, Button, Text, Toggle, Select, Alert, Modal, SuperModal, Tooltip, Popover, Spinner, Scroller, DropdownMenu, Iconbar, Form |
 | [알림 메시지](/controls/notifications) | 화면 오른쪽 위에 뜨는 알림 (Notifications) |
 | [WebUX 컨트롤 API](/controls/api/webux-controls) | 컨트롤별 속성, 기본값, 이벤트 |
