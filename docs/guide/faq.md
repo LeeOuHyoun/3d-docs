@@ -90,6 +90,8 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | `el.addEvent('onClick')` 이 안 불림 | 요소는 `'click'`, UWA 클래스와 UIKIT 컨트롤은 `'onClick'` | [DOM 이벤트](/uwa/element#이벤트), [UIKIT](/controls/uikit#공통-사용법) |
 | 다이얼로그 버튼을 눌러도 안 닫힘 | 버튼은 클릭 이벤트만 냄. 핸들러에서 `e.dsModel.dialog.close()` | [버튼](/controls/dialog#버튼-buttons) |
 | 닫은 다이얼로그를 다시 열 수 없음 | 기본은 `close()` 때 `destroy()` 까지. 새로 만들거나 `autoCloseFlag: false` | [닫기와 다시 열기](/controls/dialog#닫기와-다시-열기) |
+| 창에 identifier 를 줬는데 위치가 저장되지 않음 | 사용자가 끌기 / 크기 조절을 놓을 때만 저장. 코드로 바꾼 값은 저장 안 됨. 숫자 identifier 는 쓰이지 않음 | [위치 저장](/controls/window-layout#위치-저장) |
+| Panel 을 위아래로 붙여 묶을 수 없음 (attachToWindow 가 -1) | 격자 묶음은 원본에서 꺼져 있음. InsideArea (탭 묶음)만 됨. Dialog 는 묶이지 않음 | [탭으로 묶기](/controls/window-layout#탭으로-묶기) |
 | 다이얼로그를 열 때마다 ImmersiveFrame 이 쌓임 | 열 때마다 틀을 만들고 정리하지 않는 OOTB 패턴을 따름. 틀 하나를 만들어 같이 씀 | [OOTB 패턴](/controls/dialog#ootb-앱의-다이얼로그-패턴) |
 | `showWidget` 을 불러도 아무것도 안 열림 | 창은 3DDashboard 최상위 창이 그림. 단독 실행에서는 받는 곳이 없음 | [TransientWidget](/widget/transient-widget#동작-방식) |
 | 다른 위젯이 `Events.publish` 를 못 받음 | `Events`, `CSOManager` 는 같은 창 안에서만 하나. 위젯 사이는 PlatformAPI, InterCom, 끌어 놓기 | [어떤 것을 쓰나](/events/#어떤-것을-쓰나) |

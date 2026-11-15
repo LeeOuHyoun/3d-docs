@@ -31,6 +31,8 @@ Controls.js (Abstract, Button ...), Windows.js (Window, Dialog), UIKIT.js (Input
 | 객체 카드, 로딩 패널, 코드 편집기 | `DS/ControlsEx/*` | - | [확장 컨트롤](/controls/controls-ex) |
 | 모달 다이얼로그 | `DS/Windows/Dialog` | `DS/UIKIT/Modal`, `SuperModal` | [다이얼로그](/controls/dialog) |
 | 확인 / 취소 묻기 | `DS/Windows/Dialog` + 버튼 2개 | `SuperModal.confirm` | [다이얼로그](/controls/dialog#확인-취소-묻기) |
+| 패널 탭 묶기, 가장자리 붙이기, 창 위치 저장 | `DS/Windows/Panel`, `ImmersiveFrame` | - | [창 묶기, 붙이기, 위치 저장](/controls/window-layout) |
+| 왼쪽 / 가운데 / 오른쪽 분할 화면 | `DS/Windows/DockingElement` | - | [분할 레이아웃](/controls/docking-element) |
 | 다른 앱 화면을 창으로 열기 | `DS/TransientWidget/TransientWidget` | - | [TransientWidget](/widget/transient-widget) |
 | 로딩 가리개 | `DS/Controls/ModalLoader` | `DS/UIKIT/Mask` | [WebUX 컨트롤](/controls/webux-controls#loader-modalloader), [UIKIT](/controls/uikit#mask) |
 | 저장 완료 같은 짧은 알림 | `DS/Notifications/*` | `DS/UIKIT/Alert` | [알림 메시지](/controls/notifications) |
@@ -136,6 +138,8 @@ webapps 2025 전체에서 모듈 이름이 나오는 횟수입니다. 많이 쓰
 | [UIKIT](/controls/uikit) | Mask, Button, Text, Toggle, Select, Alert, Modal, SuperModal, Tooltip, Popover, Spinner, Scroller, DropdownMenu, Iconbar, Form |
 | [알림 메시지](/controls/notifications) | 화면 오른쪽 위에 뜨는 알림 (Notifications) |
 | [WebUX 컨트롤 API](/controls/api/webux-controls) | 컨트롤별 속성, 기본값, 이벤트 |
-| [Windows API](/controls/api/windows) | Window, Dialog, Panel, ImmersiveFrame 속성, 메서드, 이벤트, 열거형 |
+| [창 묶기, 붙이기, 위치 저장](/controls/window-layout) | Panel 탭 묶기 / 풀기, dockWindow, identifier 위치 저장, 2026 다시 묻지 않음, ImmersiveWindow, WindowManager |
+| [분할 레이아웃 (DockingElement)](/controls/docking-element) | 3단 레이아웃, 접기 / 크기 / 숨기기, 접힘 상태 저장, 탭, 접기 막대 모양 |
+| [Windows API](/controls/api/windows) | Window, Dialog, Panel, ImmersiveWindow, WindowGroup, ImmersiveFrame, DockingElement, WindowManager 속성, 메서드, 이벤트, 열거형, localStorage 키 |
 | [UIKIT API](/controls/api/uikit) | UIKIT 모듈별 옵션, 메서드, 이벤트 |
 | [입력](/controls/api/input-controls) · [레이아웃](/controls/api/layout) · [색상, 표시](/controls/api/display-controls) · [목록, 트리, 타일 뷰](/controls/api/collection-views) API | 그룹별 컨트롤 속성, 기본값, 이벤트, 메서드 |

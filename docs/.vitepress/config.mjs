@@ -229,6 +229,8 @@ const WEBAPPS_SIDEBAR = [
           { text: '목록, 트리, 타일 뷰', link: '/controls/collection-views' },
           { text: '확장 컨트롤 (ControlsEx)', link: '/controls/controls-ex' },
           { text: '다이얼로그 (Windows)', link: '/controls/dialog' },
+          { text: '창 묶기, 붙이기, 위치 저장', link: '/controls/window-layout' },
+          { text: '분할 레이아웃 (DockingElement)', link: '/controls/docking-element' },
           { text: 'UIKIT', link: '/controls/uikit' },
           { text: '알림 메시지', link: '/controls/notifications' }
         ]

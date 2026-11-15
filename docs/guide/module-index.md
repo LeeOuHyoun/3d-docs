@@ -80,7 +80,11 @@
 | `DS/Controls/Abstract`, `DS/Controls/AbstractEditor`, `DS/Core/BaseComponent` | WebUX 컨트롤의 공통 바탕 | [WebUX 컨트롤 API](/controls/api/webux-controls) |
 | `DS/Core/TooltipModel`, `DS/Controls/TooltipModel` | 툴팁 내용 | [WebUX 컨트롤](/controls/webux-controls#툴팁) |
 | `DS/Windows/Dialog` | 모달 다이얼로그 | [다이얼로그](/controls/dialog) · [Windows API](/controls/api/windows) |
-| `DS/Windows/ImmersiveFrame`, `Panel`, `Window` | 다이얼로그를 올리는 틀, 패널 | [Windows API](/controls/api/windows) |
+| `DS/Windows/ImmersiveFrame`, `Panel`, `Window` | 다이얼로그를 올리는 틀, 패널 | [Windows API](/controls/api/windows) · [창 묶기, 붙이기](/controls/window-layout) |
+| `DS/Windows/WindowGroup`, `WindowGroupAsTab`, `WindowGroupAsGrid` | 패널 묶음 (탭 / 격자) | [창 묶기, 붙이기](/controls/window-layout#탭으로-묶기) · [API](/controls/api/windows#windowgroup-windowgroupastab-windowgroupasgrid) |
+| `DS/Windows/ImmersiveWindow` | 붙지 않는 떠 있는 창 | [창 묶기, 붙이기](/controls/window-layout#떠-있는-도구-창-immersivewindow) · [API](/controls/api/windows#immersivewindow) |
+| `DS/Windows/WindowManager`, `WindowActivator` | 활성 창, 맨 앞으로 | [창 묶기, 붙이기](/controls/window-layout#활성-창-맨-앞으로-windowmanager) · [API](/controls/api/windows#windowmanager-windowactivator) |
+| `DS/Windows/DockingElement`, `DockingElementForImmersiveFrame` | 분할 레이아웃, ImmersiveFrame 가장자리 영역 | [분할 레이아웃](/controls/docking-element) · [API](/controls/api/windows#dockingelement) |
 | `DS/Notifications/NotificationsManagerUXMessages`, `NotificationsManagerViewOnScreen` | 알림 메시지 | [알림 메시지](/controls/notifications) |
 | `DS/UIKIT/Modal`, `DS/UIKIT/SuperModal` | UIKIT 모달, 확인 창 | [UIKIT](/controls/uikit) · [UIKIT API](/controls/api/uikit) |
 | `DS/UIKIT/Mask` | 로딩 가리개 | [UIKIT](/controls/uikit#mask) |

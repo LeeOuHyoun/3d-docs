@@ -25,6 +25,7 @@
 - [x] 사이트 검색 확인: `HeaderHeight`, `Tooltip`, `VisibleFlag` 처럼 키 이름의 일부로 검색됨 (빌드 결과로 확인)
 - [ ] TweakersSample 01 ~ 05 를 ENOVIA 서버에서 실행. 로컬 실행으로는 확인함 (배지 "로컬 실행 확인"). 로컬에서 확인하지 못한 것: 슬라이더 끌기 이벤트, 달력에서 범위 밖 날짜 표시, 툴바 `onViewFocus` / `giveFocusTo` / 넘침 드롭다운, `chevronMenuIcon`, 직접 만든 편집기를 툴바에서 쓰기
 - [ ] DataGridViewSample 02 를 서버에서 다시 확인: 여러 개 선택 컬럼을 `string` 타입으로, 링크 값을 `{ label, url }` 로 바꿈 (2026-11-12, 로컬 실행으로 기존 방식의 오류를 찾음)
+- [ ] ControlsSample 04 ~ 06 (다이얼로그 안 그리드, 창 묶기 / 위치 저장, DockingElement) 을 3DDashboard 위젯 안에서 실행. 로컬 실행으로는 확인함 (배지 "로컬 실행 확인"). 로컬에서 확인하지 못한 것: DockingElement `COLLAPSER_STYLE.MOVABLE` 접기 단추가 보이는 조건, `addContent` 탭 방식, 위젯 iframe 안에서 localStorage 위치 저장
 - [ ] 확인 안 된 샘플을 서버에서 실행: EventsSample, UWASample, ControlsSample, WidgetSample. 확인한 샘플을 링크하는 페이지는 배지를 "서버 확인"으로 변경하고 `guide/index.md` 의 "샘플 소스" 설명도 수정
 
 ## 실무 검증: 샘플 작성 후 서버에서 확인

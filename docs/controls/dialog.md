@@ -138,6 +138,8 @@ function onOk(e) {
 
 체크하면 `checkboxInfos.checkFlag` 가 바뀝니다.
 
+<Badge type="warning" text="2026" /> `identifier` 와 `checkboxInfos.saveCheckStateInPreferences: true` 를 주면 체크 상태가 localStorage 에 저장되고, `Dialog.getCheckBoxInfoStateInPreferences(identifier)` 로 열기 전에 읽을 수 있습니다. 2026 은 `customButtonsDefinition` 항목에 `secondaryActions` 를 주면 분할 버튼이 됩니다. 예제는 [다시 묻지 않음 저장](/controls/window-layout#다시-묻지-않음-저장-2026) 에 있습니다.
+
 ## 닫기와 다시 열기
 
 | 방법 | 결과 |
@@ -185,9 +187,13 @@ function onOk(e) {
 | <code>visibleStateChange</code> | <code>visibleFlag</code> 변경 |
 | <code>activate</code> / <code>deactivate</code> | 맨 앞 창이 됨 / 다른 창이 앞으로 옴 |
 | <code>move</code> | 위치 변경 |
+| <code>resize</code> | 크기 변경 (<code>width</code> / <code>height</code>, 최대화, 붙는 영역). 안의 컨트롤에도 전달됨 |
+| <code>startResize</code> / <code>stopResize</code> | 사용자가 크기 조절 손잡이를 누름 / 놓음 (<code>e.options.side</code>) |
 | <code>startWindowDrag</code> / <code>windowDrag</code> / <code>stopWindowDrag</code> | 제목줄 끌기 |
 | <code>expand</code> / <code>collapse</code> | 펼침 / 접힘 |
 | <code>settingsStateChange</code> / <code>informationStateChange</code> / <code>helpTrigger</code> <Badge type="warning" text="2026" /> | 제목줄 설정 / 정보 / 도움말 버튼 |
+
+전체 이벤트(`visibilityChange`, `prePlaceChange` / `placeChange`, `contentVisibleStateChange` ...)는 [Windows API › Window](/controls/api/windows#window) 에 있습니다.
 
 ## 확인 / 취소 묻기
 
@@ -335,6 +341,7 @@ require(['DS/Windows/ImmersiveFrame', 'DS/Windows/Dialog'], function (ImmersiveF
 | `getFreeZone()` | 패널이 붙지 않은 가운데 영역 |
 | `addWindow(win)` / `removeWindow(win)` | 창 넣기 / 빼기 (보통 `immersiveFrame` 옵션으로 자동) |
 | `getDockingElement(area)` | 좌 / 우 / 위 / 아래 붙는 영역 |
+| `dockWindow(win, area)` / `undockWindow(win)` | 창 붙이기 / 떼기 ([창 붙이기](/controls/window-layout#가장자리에-붙이기)) |
 | `destroyAllWindows()` | 안의 창 모두 정리 |
 
 이벤트: `addWindow`, `removeWindow`, `freeZoneResize`.
@@ -363,3 +370,5 @@ var panel = new Panel({
 | <code>showTitleFlag</code> | <code>true</code> | 제목 표시 |
 
 `WUXDockAreaEnum`, `WUXStandardButtonEnum` 같은 열거형은 `DS/Windows/*` 를 불러오면 전역(`window`)에 생깁니다.
+
+Panel 을 탭으로 묶기, `dockWindow` 로 붙이기, `identifier` 로 위치 저장, 떠 있는 도구 창(ImmersiveWindow)은 [창 묶기, 붙이기, 위치 저장](/controls/window-layout) 에 있습니다. 창이 아닌 분할 레이아웃(왼쪽 | 가운데 | 오른쪽)은 [분할 레이아웃 (DockingElement)](/controls/docking-element) 를 봅니다.

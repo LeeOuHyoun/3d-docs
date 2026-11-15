@@ -1,6 +1,6 @@
 # 검증 대기 목록
 
-본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 158 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
+본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 161 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
 
 - 각 줄 앞의 링크는 그 문장이 있는 절로 갑니다.
 - 확인했으면 원래 페이지에서 배지를 지우고 문장을 단정형으로 고칩니다. 다르게 동작하면 내용을 고칩니다.
@@ -283,7 +283,7 @@
 
 - [Socket 으로 붙기](/uwa/intercom#socket-으로-붙기) : 넣어도 효과가 없는 것으로 보입니다.
 
-## 화면 컨트롤 (10)
+## 화면 컨트롤 (13)
 
 ### 목록, 트리, 타일 뷰 API (1)
 
@@ -296,6 +296,10 @@
 ### WebUX 컨트롤 API (1)
 
 - [TimePicker](/controls/api/webux-controls#timepicker) : 이벤트: <code>change</code>, <code>show</code>, <code>hide</code>. <code>mode: 'duration'</code> 이면 값이 숫자이고 <code>02h 30m</code> 처럼 표시됩니다.
+
+### Windows API (1)
+
+- [DockingElement.COLLAPSER_STYLE](/controls/api/windows#dockingelement-collapser-style) : <code>MOVABLE</code> : 로컬 실행에서는 영역 밖(x = -23)에 숨은 채 나타나지 않았음
 
 ### 목록, 트리, 타일 뷰 (1)
 
@@ -312,6 +316,11 @@
 ### 색상, 표시 컨트롤 (1)
 
 - [UserCard](/controls/display-controls#usercard) : 형식은 ISO 2글자 국가 코드로 보입니다.
+
+### 분할 레이아웃 (DockingElement) (2)
+
+- [한쪽 영역을 탭으로](/controls/docking-element#한쪽-영역을-탭으로) : 이 방식은 샘플로 실행하지 않았습니다
+- [접기 막대 모양](/controls/docking-element#접기-막대-모양) : Skeleton 의 CSS 나 다른 조건이 필요한 것으로 보입니다
 
 ### 화면 컨트롤 개요 (1)
 

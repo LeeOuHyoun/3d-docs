@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>05. 창 묶기, 붙이기, 위치 저장</title>
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <style>
+    html, body { margin: 0; font-family: sans-serif; }
+    .page { padding: 12px; }
+    .page h2 { margin: 0 0 8px; font-size: 16px; }
+    .page h3 { margin: 16px 0 8px; font-size: 14px; }
+    .page p { margin: 0 0 8px; font-size: 12px; color: #555; }
+    .row { display: flex; gap: 6px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
+    #frameArea { position: relative; height: 420px; border: 1px solid #d1d4d4; }
+    .bg { padding: 12px; font-size: 12px; color: #777; }
+    .panel-body { padding: 8px; font-size: 12px; }
+    #log { height: 200px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h2>05. 창 묶기, 붙이기, 위치 저장</h2>
+    <p>Panel 을 탭으로 묶고 풀기, ImmersiveFrame 가장자리에 붙이기, identifier 로 위치 저장, ImmersiveWindow, 창 이벤트를 확인합니다. <a href="index.html">목록으로</a></p>
+
+    <h3>탭으로 묶기</h3>
+    <div class="row" id="groupButtons"></div>
+    <h3>붙이기</h3>
+    <div class="row" id="dockButtons"></div>
+    <h3>위치 저장, ImmersiveWindow, 맨 앞 창</h3>
+    <div class="row" id="etcButtons"></div>
+
+    <div id="frameArea"></div>
+
+    <h3>로그</h3>
+    <div id="log"></div>
+  </div>
+
+  <script type="text/javascript">
+    require([
+      'UWA/Core',
+      'DS/Windows/ImmersiveFrame',
+      'DS/Windows/Panel',
+      'DS/Windows/ImmersiveWindow',
+      'DS/Windows/WindowManager',
+      'DS/Windows/Dialog',
+      'DS/Controls/Button'
+    ], function (UWA, ImmersiveFrame, Panel, ImmersiveWindow, WindowManager, Dialog, Button) {
+      'use strict';
+
+      var logEl = document.getElementById('log');
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      function addButton(parentId, label, fn) {
+        new Button({ label: label, onClick: fn }).inject(document.getElementById(parentId));
+      }
+
+      function textBody(text) {
+        return UWA.createElement('div', { 'class': 'panel-body', text: text });
+      }
+
+      var frame = new ImmersiveFrame();
+      frame.inject(document.getElementById('frameArea'));
+      frame.setContentInBackgroundLayer(UWA.createElement('div', { 'class': 'bg', text: '배경 층. Panel 제목줄을 다른 Panel 제목줄 위로 끌어 놓아도 탭으로 묶입니다.' }));
+
+      function watch(win) {
+        ['activate', 'move', 'resize', 'startResize', 'stopResize', 'prePlaceChange', 'placeChange', 'close'].forEach(function (name) {
+          win.addEventListener(name, function () { log(win.title + ' : ' + name); });
+        });
+        return win;
+      }
+
+      function createPanel(title, offsetX, offsetY) {
+        return watch(new Panel({
+          title: title,
+          content: textBody(title + ' 내용'),
+          immersiveFrame: frame,
+          width: 220,
+          height: 160,
+          resizableFlag: true,
+          position: { my: 'top left', at: 'top left', of: frame.getContent(), offsetX: offsetX, offsetY: offsetY }
+        }));
+      }
+
+      var panelA = createPanel('부품', 20, 20);
+      var panelB = createPanel('문서', 260, 20);
+      var panelC = createPanel('변경', 500, 20);
+
+      /*
+       * [1] 탭으로 묶기
+       *   - attachToWindow(대상 창, WUXSnapAreaEnum.InsideArea) 는 대상 창과 탭 묶음(WindowGroupAsTab)을 만듭니다.
+       *   - 묶인 창의 windowGroup 이 묶음입니다. 보이는 탭은 묶음의 currentWindows 로 바꿉니다.
+       *   - windowGroup = null 로 풀면 창이 하나 남은 묶음은 저절로 없어집니다.
+       *   - 위아래 / 좌우로 붙이는 격자 묶음(WindowGroupAsGrid)은 ImmersiveFrame 의 내부 값으로 막혀 있습니다.
+       */
+      // #region group
+      function groupAsTab(win, target) {
+        var result = win.attachToWindow(target, WUXSnapAreaEnum.InsideArea);
+        var group = win.windowGroup;
+        log('attachToWindow 결과 ' + result + ', 묶음 종류 ' + (group && WUXWindowGroupTypeEnum[group.getGroupType()]));
+        return group;
+      }
+
+      function describeGroup(win) {
+        var group = win.windowGroup;
+        if (!group) { return win.title + ' : 묶음 없음'; }
+        var titles = group.getEmbeddedWindows().map(function (w) { return w.title; });
+        return win.title + ' : ' + group.title + ' (' + titles.length + '개: ' + titles.join(', ') + ')';
+      }
+
+      function showTab(win) {
+        var group = win.windowGroup;
+        if (!group) { return; }
+        group.currentWindows = [win];
+        log('보이는 탭: ' + group.getDisplayedWindows().map(function (w) { return w.title; }).join(', '));
+      }
+
+      function ungroup(win) {
+        win.windowGroup = null;
+      }
+      // #endregion group
+
+      addButton('groupButtons', '문서를 부품에 묶기', function () { groupAsTab(panelB, panelA); log(describeGroup(panelB)); });
+      addButton('groupButtons', '변경도 묶기', function () { groupAsTab(panelC, panelA.windowGroup || panelA); log(describeGroup(panelC)); });
+      addButton('groupButtons', '부품 탭 보이기', function () { showTab(panelA); });
+      addButton('groupButtons', '문서 풀기', function () { ungroup(panelB); log(describeGroup(panelA)); });
+      addButton('groupButtons', '묶음 상태', function () { [panelA, panelB, panelC].forEach(function (w) { log(describeGroup(w)); }); });
+
+      /*
+       * [2] 붙이기
+       *   - dockWindow(창, WUXDockAreaEnum.xxx) 로 ImmersiveFrame 가장자리에 붙이고, undockWindow(창) 로 뗍니다.
+       *   - currentDockArea 를 바꿔도 같습니다. 붙일 수 있는 곳은 allowedDockAreas 가 정합니다.
+       */
+      // #region dock
+      function dock(win, area) {
+        frame.dockWindow(win, area);
+        log(win.title + ' 붙음: ' + WUXDockAreaEnum[win.currentDockArea] + ', getDockedFlag ' + win.getDockedFlag());
+      }
+
+      function undock(win) {
+        frame.undockWindow(win);
+        log(win.title + ' 뗌: ' + WUXDockAreaEnum[win.currentDockArea]);
+      }
+      // #endregion dock
+
+      addButton('dockButtons', '변경을 오른쪽에', function () { dock(panelC, WUXDockAreaEnum.RightDockArea); });
+      addButton('dockButtons', '변경 떼기', function () { undock(panelC); });
+      addButton('dockButtons', '오른쪽에 붙은 창', function () {
+        log('RightDockArea: ' + frame.getWindowsInDockingElement(WUXDockAreaEnum.RightDockArea).map(function (w) { return w.title; }).join(', '));
+      });
+
+      /*
+       * [3] 위치 저장
+       *   - identifier 에 숫자가 아닌 문자열을 주면 위치, 크기, 붙은 곳, 최대화, 묶음이 localStorage 'wux-windows-window' 에 저장되고 다음에 열 때 복원됩니다.
+       *   - deleteWindowPreferences() 로 저장 값을 지웁니다.
+       */
+      // #region saved
+      var savedPanel;
+
+      function openSavedPanel() {
+        if (savedPanel) { return; }
+        savedPanel = watch(new Panel({
+          identifier: 'sample-saved-panel',
+          title: '위치 저장',
+          content: textBody('끌어서 옮기거나 크기를 바꾼 뒤 페이지를 새로 고치고 다시 열어 보세요.'),
+          immersiveFrame: frame,
+          width: 240,
+          height: 140,
+          resizableFlag: true
+        }));
+        savedPanel.addEventListener('close', function () { savedPanel = null; });
+      }
+
+      function readSavedValue() {
+        try {
+          var all = JSON.parse(localStorage.getItem('wux-windows-window') || '{}');
+          return all['sample-saved-panel'];
+        } catch (e) {
+          return undefined;
+        }
+      }
+      // #endregion saved
+
+      addButton('etcButtons', '위치 저장 창', openSavedPanel);
+      addButton('etcButtons', '저장 값 보기', function () { log('저장 값: ' + JSON.stringify(readSavedValue())); });
+      addButton('etcButtons', '저장 값 지우기', function () {
+        if (savedPanel) { savedPanel.deleteWindowPreferences(); log('deleteWindowPreferences'); }
+      });
+
+      /*
+       * [4] ImmersiveWindow
+       *   - Panel 을 상속한 떠 있는 창입니다. 붙일 수 없고(allowedDockAreas = NoneDockArea), 배경 / 테두리 / 투명도 / 손잡이를 바꿉니다.
+       */
+      // #region immersive
+      var palette;
+
+      function openPalette() {
+        if (palette) { return; }
+        palette = watch(new ImmersiveWindow({
+          title: '도구',
+          content: textBody('배경 없는 떠 있는 창'),
+          immersiveFrame: frame,
+          width: 180,
+          useBackgroundFlag: false,
+          useGripFlag: true,
+          opacity: 0.9,
+          position: { my: 'bottom right', at: 'bottom right', of: frame.getContent(), offsetX: -20, offsetY: -20 }
+        }));
+        palette.addEventListener('close', function () { palette = null; });
+      }
+      // #endregion immersive
+
+      addButton('etcButtons', 'ImmersiveWindow', openPalette);
+
+      /*
+       * [5] 맨 앞 창
+       *   - WindowManager.getActiveWindow() 는 지금 활성인 창, bringToFront(창) 는 맨 앞으로 올립니다.
+       */
+      // #region active
+      function logActiveWindow() {
+        var active = WindowManager.getActiveWindow();
+        log('활성 창: ' + (active ? active.title : '없음'));
+      }
+      // #endregion active
+
+      addButton('etcButtons', '활성 창', logActiveWindow);
+      addButton('etcButtons', '부품을 맨 앞으로', function () { WindowManager.bringToFront(panelA); panelA.activeFlag = true; logActiveWindow(); });
+
+      /*
+       * [6] 2026: "다시 묻지 않음" 저장과 분할 버튼
+       *   - identifier 와 checkboxInfos.saveCheckStateInPreferences: true 를 주면 체크 상태가 localStorage 에 저장됩니다.
+       *   - 열기 전에 Dialog.getCheckBoxInfoStateInPreferences(identifier) 로 저장된 체크 상태를 읽습니다.
+       *   - customButtonsDefinition 항목에 secondaryActions 를 주면 DropdownButton (분할 버튼) 으로 만들어집니다.
+       */
+      // #region dontask
+      function confirmDelete(onAnswer) {
+        if (Dialog.getCheckBoxInfoStateInPreferences && Dialog.getCheckBoxInfoStateInPreferences('sample-delete-confirm') === true) {
+          onAnswer(true, '저장된 다시 묻지 않음');
+          return;
+        }
+        var dlg = new Dialog({
+          identifier: 'sample-delete-confirm',
+          title: '삭제',
+          content: textBody('PRT-0001 을 삭제합니다.'),
+          immersiveFrame: frame,
+          modalFlag: true,
+          checkboxInfos: { label: '다시 묻지 않음', checkFlag: false, saveCheckStateInPreferences: true },
+          customButtonsDefinition: [
+            {
+              label: '삭제',
+              emphasize: 'primary',
+              role: 'validate',
+              onClick: function () { dlg.close(); onAnswer(true, '삭제'); },
+              secondaryActions: [
+                { label: '하위까지 삭제', onClick: function () { dlg.close(); onAnswer(true, '하위까지 삭제'); } }
+              ]
+            },
+            { label: '취소', role: 'escape', onClick: function () { dlg.close(); onAnswer(false, '취소'); } }
+          ]
+        });
+      }
+      // #endregion dontask
+
+      addButton('etcButtons', '2026 다시 묻지 않음', function () {
+        confirmDelete(function (ok, how) { log('삭제 확인: ' + ok + ' (' + how + ')'); });
+      });
+      addButton('etcButtons', '다시 묻기로 되돌리기', function () {
+        try {
+          var all = JSON.parse(localStorage.getItem('wux-windows-window') || '{}');
+          delete all['sample-delete-confirm'];
+          localStorage.setItem('wux-windows-window', JSON.stringify(all));
+          log('sample-delete-confirm 저장 값 지움');
+        } catch (e) {
+          log('localStorage 를 쓸 수 없습니다');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
