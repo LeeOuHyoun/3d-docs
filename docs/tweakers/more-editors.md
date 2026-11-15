@@ -292,7 +292,7 @@ require(['DS/Tweakers/TweakerFile'], function (TweakerFile) {
 { text: '', dataIndex: 'thumb', width: '41px', typeRepresentation: 'image' }
 ```
 
-- `value` 는 `DS/Utilities/Dom.generateIcon` 이 받는 값입니다. `.` 이 들어 있거나 `data:image`, `blob:` 이면 이미지 경로로, 아니면 글꼴 아이콘 이름으로 봅니다. `{ iconPath }`, `{ iconName, fontIconFamily }` 객체도 됩니다.
+- `value` 는 `DS/Utilities/Dom.generateIcon` 이 받는 값입니다. `.` 이 들어 있거나 `data:image`, `blob:` 이면 이미지 경로로, 아니면 글꼴 아이콘 이름으로 봅니다. `{ iconPath }`, `{ iconName, fontIconFamily }` 객체도 됩니다 ([공통 유틸](/amd/utilities#아이콘)).
 - 값이 비면 이미지를 뗍니다. `displayStyle` 은 `simple` 하나이고 읽기 / 편집 모양이 같습니다. 셀 안쪽 여백이 0 입니다.
 
 ## TweakerBlob
@@ -543,7 +543,7 @@ require(['DS/Tweakers/TweakerBase', 'DS/Tweakers/StringViewModules'], function (
 | `TweakerFile.allowMultipleFiles` | 없어짐. 공통 `allowMultipleValuesFlag` 로 여러 파일을 정함 |
 | `TweakerVector.stepValue` | 새 키 (기본 `0.1`). 2025 는 칸에 증감 단위가 전달되지 않음 |
 | 타입 이름 `magnitude` | 템플릿 id 가 `magnitude` / `inlineMagnitude` 에서 `customMagnitude` / `inlineCustomMagnitude` 로 바뀜. 타입 이름 `customMagnitude` 추가. 편집기와 displayStyle 은 같음 |
-| TweakerDuration 읽기 글자 | 날짜를 `DS/Utilities/DateUtils.formatDateToString` 으로 씀 (2025 는 TweakerDate 의 `month: 'short'` 형식) |
+| TweakerDuration 읽기 글자 | 날짜를 `DS/Utilities/DateUtils.formatDateToString` 으로 씀 (2025 는 TweakerDate 의 `month: 'short'` 형식). [언어와 사용자 환경설정](/widget/i18n-preferences#_2026) |
 | 길이 / 물리량 숫자 표시 | `NumberUtils.formatNumberToString` 으로 언어별 소수점을 씀 (2025 는 `toFixed`) |
 | TweakerArray 한 줄 글자 | 숫자 항목이고 소수점이 `,` 인 언어면 구분자 `;` |
 | `TypeUtils.getSortingIconDefinition` | `directory` 생략 가능 |

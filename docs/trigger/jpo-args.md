@@ -127,6 +127,8 @@ OOTB 라이프사이클 화면(`emxLifecycleProcess.jsp`)은 promote 실패를 �
 
 Action 에서 1 을 돌려주면 `emxTriggerManager` 가 `emxFramework.Trigger.emxTriggerManagerBase.TriggerFail` ("트리거 프로그램 실패") 로 예외를 던집니다. 원인을 보여 주려면 Action 에서는 1 대신 **직접 메시지를 담아 예외** 를 던집니다.
 
+위젯의 OOTB 성숙도 창은 `1500168`, `all requirements not satisfied` 가 든 문구를 권한 문구로 바꿔 보여 줍니다. 트리거가 막은 이유를 위젯에 보이려면 REST 를 직접 부르고 응답의 `report[].error` 를 표시합니다 ([성숙도 변경, 개정](/rest-api/lifecycle#서버에서-일어나는-일-트리거)).
+
 ::: warning 화면이 아니라 트리거에서 막습니다
 같은 promote 라도 라이프사이클 화면, 작업 완료, Route 완료, 위젯, MQL 등 들어오는 길이 여럿입니다. 한 화면에서만 막으면 다른 길로 통과합니다. 상태 규칙은 Check 트리거에 둡니다.
 :::

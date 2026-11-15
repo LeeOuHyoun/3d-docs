@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>10. ENOVIA 공용 화면 틀 (ENOXTriptych, ENOFloatingPanel)</title>
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <link rel="stylesheet" type="text/css" href="../UIKIT/UIKIT.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <style>
+    html, body { margin: 0; font-family: sans-serif; }
+    body { min-height: 100vh; }
+    .page { padding: 12px; }
+    .page h2 { margin: 0 0 8px; font-size: 16px; }
+    .page h3 { margin: 16px 0 8px; font-size: 14px; }
+    .page p { margin: 0 0 8px; font-size: 12px; color: #555; }
+    .row { display: flex; gap: 6px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
+    #layout { position: relative; height: 420px; border: 1px solid #d1d4d4; }
+    .pane { padding: 8px; font-size: 12px; box-sizing: border-box; height: 100%; overflow: auto; }
+    .pane li { cursor: pointer; padding: 2px 0; }
+    .host { height: 100%; }
+    .detail { display: flex; flex-direction: column; height: 100%; }
+    .detail .idcard-host { flex: none; }
+    .detail .grid-host { flex: 1; position: relative; }
+    #log { height: 180px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h2>10. ENOVIA 공용 화면 틀 (ENOXTriptych, ENOXIDCard, ENOXEmptyContent, ENOFloatingPanel)</h2>
+    <p>OOTB ENOVIA 앱이 쓰는 3단 화면(ENOXTriptych)에 객체 머리글(ENOXIDCard), 빈 화면 안내(ENOXEmptyContent), 떠 있는 패널(ENOFloatingPanel)을 붙입니다. 06 샘플(DockingElement)과 같은 화면입니다. <a href="index.html">목록으로</a></p>
+
+    <div class="row" id="buttons"></div>
+    <div id="layout"></div>
+
+    <h3>로그</h3>
+    <div id="log"></div>
+  </div>
+
+  <script type="text/javascript">
+    require([
+      'UWA/Core',
+      'UWA/Class/Model',
+      'DS/CoreEvents/ModelEvents',
+      'DS/ENOXTriptych/js/ENOXTriptych',
+      'DS/ENOXIDCard/js/IDCard',
+      'DS/ENOXEmptyContent/js/ENOXEmptyContent',
+      'DS/ENOFloatingPanel/ENOFloatingPanel',
+      'DS/Controls/Button',
+      'DS/DataGridView/DataGridView',
+      'DS/TreeModel/TreeDocument',
+      'DS/TreeModel/TreeNodeModel'
+    ], function (UWA, Model, ModelEvents, ENOXTriptych, IDCard, ENOXEmptyContent, ENOFloatingPanel, Button, DataGridView, TreeDocument, TreeNodeModel) {
+      'use strict';
+
+      var logEl = document.getElementById('log');
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      function addButton(label, fn) {
+        new Button({ label: label, onClick: fn }).inject(document.getElementById('buttons'));
+      }
+
+      var PARTS = {
+        Mechanical: [
+          { name: 'PRT-0001', revision: 'A.1', title: '브라켓', owner: '김철수', state: 'IN_WORK' },
+          { name: 'PRT-0002', revision: 'B.2', title: '샤프트', owner: '이영희', state: 'RELEASED' }
+        ],
+        Electrical: [
+          { name: 'PRT-0101', revision: 'A.1', title: '커넥터', owner: '박민수', state: 'IN_WORK' },
+          { name: 'PRT-0102', revision: 'A.3', title: '하네스', owner: '최지훈', state: 'FROZEN' },
+          { name: 'PRT-0103', revision: 'C.1', title: '센서', owner: '김철수', state: 'IN_WORK' }
+        ]
+      };
+
+      var THUMBNAIL = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="90"><rect width="120" height="90" fill="#e8f1f8"/><circle cx="60" cy="45" r="24" fill="#368ec4"/></svg>'
+      );
+
+      /*
+       * [1] 3단 화면 (ENOXTriptych)
+       *   - new 로 만들고 init(옵션, 왼쪽 요소, 가운데 요소, 오른쪽 요소) 를 부릅니다. 다섯째 인자는 시작 패널(ENOXWelcomePanel) 옵션입니다.
+       *   - modelEvents 에 ModelEvents 를 주면 그 버스로 명령(triptych-show-panel 등)을 받고 알림(triptych-panel-visible 등)을 냅니다.
+       *   - container 에 이미 화면에 붙은 요소를 주면 그 요소 안에 그리고 바로 크기를 계산합니다. 주지 않으면 만든 뒤 inject(부모) 합니다.
+       *   - 왼쪽 기본값은 닫힘 / 끌기 불가 / 300px, 오른쪽 기본값은 닫힘 / 끌기 가능 / 300px / 닫기 아이콘 있음 입니다.
+       */
+      // #region layout
+      var modelEvents = new ModelEvents();
+      var leftPane = UWA.createElement('div', { 'class': 'pane' });
+      var rightPane = UWA.createElement('div', { 'class': 'pane', text: '행을 고르면 속성이 보입니다.' });
+      var emptyHost = UWA.createElement('div', { 'class': 'host' });
+
+      var triptych = new ENOXTriptych();
+      triptych.init({
+        modelEvents: modelEvents,
+        container: document.getElementById('layout'),
+        withtransition: true,
+        borderLeft: true,
+        left: { originalState: 'open', originalSize: 180, minWidth: 120, resizable: true },
+        right: { originalState: 'close', originalSize: 260, minWidth: 220 }
+      }, leftPane, emptyHost, rightPane);
+      // #endregion layout
+
+      /*
+       * [2] 빈 화면 안내 (ENOXEmptyContent)
+       *   - sentences 의 문장 사이에 "또는" 구분선이 들어갑니다. type 은 search, drop, icon, img, dom 입니다.
+       *   - text 는 innerHTML 로 들어갑니다. 사용자 입력을 넣을 때는 글자를 이스케이프합니다.
+       */
+      // #region empty
+      new ENOXEmptyContent({
+        sentences: [
+          { type: 'icon', fonticon: 'list', text: '왼쪽에서 분류를 고르세요.' },
+          { type: 'drop', text: '부품을 여기에 놓아도 됩니다.' }
+        ]
+      }).inject(emptyHost);
+      // #endregion empty
+
+      /*
+       * [3] 가운데 바꾸기와 패널 명령
+       *   - 가운데 내용은 triptych-set-content (side: 'middle') 로 바꿉니다. 'main' 이 아니라 'middle' 입니다.
+       *   - 열고 닫기는 triptych-show-panel / triptych-hide-panel / triptych-toggle-panel 에 'left' 또는 'right' 를 data 로 보냅니다.
+       *   - 크기는 triptych-set-size 에 { side, size } 를 보냅니다.
+       */
+      // #region commands
+      var detail = UWA.createElement('div', { 'class': 'detail' });
+      var idCardHost = UWA.createElement('div', { 'class': 'idcard-host' }).inject(detail);
+      var gridHost = UWA.createElement('div', { 'class': 'grid-host' }).inject(detail);
+
+      function showDetail() {
+        modelEvents.publish({ event: 'triptych-set-content', data: { side: 'middle', content: detail } });
+      }
+
+      function toggleLeft() {
+        modelEvents.publish({ event: 'triptych-toggle-panel', data: 'left' });
+      }
+
+      function toggleRight() {
+        modelEvents.publish({ event: 'triptych-toggle-panel', data: 'right' });
+      }
+
+      function widenRight() {
+        modelEvents.publish({ event: 'triptych-set-size', data: { side: 'right', size: 360 } });
+      }
+      // #endregion commands
+
+      /*
+       * [4] 알림 받기
+       *   - triptych-panel-visible / triptych-panel-hidden 의 data 는 'left' 또는 'right' 입니다. withtransition 이면 0.4 초 뒤에 납니다.
+       *   - triptych-resized 는 경계를 끄는 동안 계속 납니다. data 는 { side, width } 입니다.
+       *   - 넓이가 550px 이하가 되면 triptych-entering-mobile 이 나고 패널이 90% 넓이로 겹쳐 열립니다.
+       */
+      // #region events
+      ['triptych-panel-visible', 'triptych-panel-hidden', 'triptych-entering-mobile', 'triptych-leaving-mobile', 'triptych-clicked-overlay'].forEach(function (name) {
+        modelEvents.subscribe({ event: name }, function (data) {
+          log(name + (data === undefined ? '' : ' : ' + JSON.stringify(data)));
+        });
+      });
+
+      var lastResize = {};
+      modelEvents.subscribe({ event: 'triptych-resized' }, function (data) {
+        lastResize[data.side] = data.width;
+      });
+      // #endregion events
+
+      /*
+       * [5] 닫기 전에 묻기
+       *   - triptych-add-check-before-close 로 콜백을 등록하면 닫을 때마다 부르고, false 를 돌려주면 닫지 않습니다.
+       *   - id 로 등록하고 triptych-remove-check-before-close 에 같은 id 를 주어 지웁니다.
+       */
+      // #region check
+      var editing = false;
+
+      function canCloseRight() {
+        if (editing) {
+          log('편집 중이라 오른쪽 패널을 닫지 않습니다.');
+        }
+        return !editing;
+      }
+
+      function toggleEditing() {
+        editing = !editing;
+        if (editing) {
+          modelEvents.publish({ event: 'triptych-add-check-before-close', data: { side: 'right', id: 'my-edit', callback: canCloseRight } });
+        } else {
+          modelEvents.publish({ event: 'triptych-remove-check-before-close', data: { side: 'right', id: 'my-edit' } });
+        }
+        log('편집 중: ' + editing);
+      }
+      // #endregion check
+
+      /*
+       * [6] 객체 머리글 (ENOXIDCard)
+       *   - UWA 모델 하나를 model 로 줍니다. 모델 안에 modelEvents 가 꼭 있어야 합니다.
+       *   - withInformationButton 의 정보 아이콘은 같은 modelEvents 로 triptych-toggle-panel 'right' 를 보냅니다. 오른쪽 패널이 열리고 닫히면 아이콘 표시도 따라 바뀝니다.
+       *   - 넓이에 따라 썸네일과 속성 칸을 숨기므로 화면에 붙은 요소에 render 하고 attachResizeSensor 를 부릅니다.
+       *   - 모델 값을 set 하면 바뀐 키(이름, 버전, 썸네일, 속성 등)만 다시 그립니다. 버튼을 보일지(with... 키)는 만들 때만 읽습니다.
+       */
+      // #region idcard
+      var idCardModel = new Model({
+        modelEvents: modelEvents,
+        name: '',
+        version: '',
+        thumbnail: THUMBNAIL,
+        attributes: [],
+        withActionsButton: false,
+        withInformationButton: true,
+        withToggleMinifiedButton: true
+      });
+      var idCard = new IDCard({ model: idCardModel });
+
+      function renderIdCard() {
+        idCard.render().inject(idCardHost);
+        idCard.attachResizeSensor();
+      }
+
+      function showInIdCard(row) {
+        idCardModel.set({
+          name: row.name,
+          version: row.revision,
+          attributes: [
+            { name: '품명', value: row.title },
+            { name: '담당자', value: row.owner },
+            { name: '상태', value: row.state }
+          ]
+        });
+      }
+
+      modelEvents.subscribe({ event: 'idcard-minified' }, function () { log('idcard-minified'); });
+      modelEvents.subscribe({ event: 'idcard-expanded' }, function () { log('idcard-expanded'); });
+      // #endregion idcard
+
+      var treeDocument = new TreeDocument();
+      var grid = new DataGridView({
+        treeDocument: treeDocument,
+        rowSelection: 'single',
+        columns: [
+          { text: '품번', dataIndex: 'tree', width: 120 },
+          { text: '품명', dataIndex: 'title', width: 140 },
+          { text: '담당자', dataIndex: 'owner', width: 100 },
+          { text: '상태', dataIndex: 'state', width: 100 }
+        ]
+      });
+      grid.inject(gridHost);
+
+      var shown = false;
+
+      function showCategory(category) {
+        if (!shown) {
+          showDetail();
+          renderIdCard();
+          shown = true;
+        }
+        treeDocument.prepareUpdate();
+        treeDocument.empty();
+        PARTS[category].forEach(function (row) {
+          treeDocument.addRoot(new TreeNodeModel({ label: row.name, grid: row }));
+        });
+        treeDocument.pushUpdate();
+        log('분류: ' + category);
+      }
+
+      var list = UWA.createElement('ul', { styles: { margin: 0, paddingLeft: '16px' } }).inject(leftPane);
+      Object.keys(PARTS).forEach(function (category) {
+        UWA.createElement('li', { text: category, events: { click: function () { showCategory(category); } } }).inject(list);
+      });
+
+      treeDocument.getXSO().onPostAdd(function () {
+        var node = treeDocument.getSelectedNodes()[0];
+        if (!node) { return; }
+        var row = node.options.grid;
+        rightPane.textContent = row.name + ' / ' + row.title + ' / ' + row.owner + ' / ' + row.state;
+        showInIdCard(row);
+        modelEvents.publish({ event: 'triptych-show-panel', data: 'right' });
+      });
+
+      /*
+       * [7] 떠 있는 패널 (ENOFloatingPanel)
+       *   - UIKIT Modal 을 상속합니다. 머리줄을 끌어 옮기고, resizable 이면 오른쪽 아래 손잡이로 크기를 바꿉니다.
+       *   - events.onClose 를 주면 X / Esc 로 닫을 때 그 함수만 부릅니다. 직접 destroy() 해야 닫힙니다. 주지 않으면 스스로 destroy() 합니다.
+       *   - persistId 를 주면 위치와 크기를 localStorage 'EFP_' + persistId 에 저장하고 다음에 열 때 되살립니다.
+       *   - limitParent 를 주지 않으면 최대화할 때 위치가 그대로라 화면 밖으로 넘칩니다.
+       *   - 처음 크기는 내용에 맞춰 정해집니다. 저장된 값이 없을 때만 setNewSize 로 크기를 줍니다.
+       */
+      // #region floating
+      var floatingPanel = null;
+
+      function openFloatingPanel() {
+        if (floatingPanel) { return; }
+        floatingPanel = new ENOFloatingPanel({
+          title: '변경 이력',
+          body: '<p>PRT-0001 A.1 → A.2 (김철수)</p><p>PRT-0001 A.2 → B.1 (이영희)</p>',
+          closable: true,
+          resizable: true,
+          maximizable: true,
+          limitParent: true,
+          persistId: 'sample-history',
+          events: {
+            onClose: function () {
+              floatingPanel.destroy();
+              floatingPanel = null;
+              log('floating: onClose');
+            },
+            onResizeFloating: function () {
+              log('floating: onResizeFloating');
+            }
+          }
+        });
+        floatingPanel.inject(document.body);
+        if (!floatingPanel.isDimensionSaved()) {
+          floatingPanel.setNewSize({ width: 360, height: 220 });
+        }
+        floatingPanel.show();
+      }
+      // #endregion floating
+
+      addButton('왼쪽 열기 / 닫기', toggleLeft);
+      addButton('오른쪽 열기 / 닫기', toggleRight);
+      addButton('오른쪽 360px', widenRight);
+      addButton('편집 중 켜기 / 끄기', toggleEditing);
+      addButton('떠 있는 패널 열기', openFloatingPanel);
+      addButton('크기 보기', function () {
+        log('왼쪽 ' + triptych.getLeftPanelContainer().offsetWidth + 'px (열림 ' + triptych.getLeftOpen() + '), 가운데 ' + triptych.getMainPanelContainer().offsetWidth + 'px, 오른쪽 ' + triptych.getRightPanelContainer().offsetWidth + 'px (열림 ' + triptych.getRightOpen() + '), 마지막 resized ' + JSON.stringify(lastResize));
+      });
+    });
+  </script>
+</body>
+</html>

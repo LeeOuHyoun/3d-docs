@@ -68,7 +68,9 @@ WebappsUtils.js 묶음에는 아래 모듈도 들어 있습니다. 필요한 것
 | `DS/WebappsUtils/Promise` | 오래된 브라우저용 Promise |
 | `DS/WebappsUtils/Map` | 간단한 Map |
 | `DS/WebappsUtils/Console`, `DS/WebappsUtils/Performance` | 로그, 성능 측정 |
-| `DS/WebappsUtils/BetaOptions` | 사용자 설정(Me preferences) 읽기. 3DDashboard 최상위 창의 모듈을 부름 |
+| `DS/WebappsUtils/BetaOptions` | 사용자 설정(Me preferences) 읽기. 3DDashboard 최상위 창의 모듈을 부름. [언어와 사용자 환경설정](/widget/i18n-preferences#betaoptions-getmepreference) |
+
+`DS/Utilities/Utils` 의 debounce / throttle 과 비교는 [공통 유틸](/amd/utilities#같은-일을-하는-함수) 을 봅니다. 두 throttle 은 동작이 다릅니다.
 
 `DS/WebappsUtils` 와 `WebappsUtils/WebappsUtils` 도 같은 객체를 돌려주는 별칭입니다.
 

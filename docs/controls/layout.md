@@ -274,7 +274,7 @@ require(['DS/Controls/Flyout'], function (Flyout) {
 ```
 
 - 기본 `displayMode` (`Flyout.DISPLAY_MODE.EXPANDER`)는 버튼을 누르면 `onClick`, 옆 펼침 영역을 누르면 `extendedView` 를 엽니다. `BUTTON` 이면 버튼이 펼침을 열고 닫습니다.
-- `extendedView` 가 요소면 Popup 으로, `{ menuModel: [...] }` 이면 메뉴로 엽니다. 메뉴 항목 형식은 [메뉴 항목](/datagridview/context-menu#메뉴-항목) 과 같습니다.
+- `extendedView` 가 요소면 Popup 으로, `{ menuModel: [...] }` 이면 메뉴로 엽니다. 메뉴 항목 형식은 [메뉴](/controls/menu#항목) 에 있습니다 (DataGridView 의 [메뉴 항목](/datagridview/context-menu#메뉴-항목) 과 같음).
 - 이벤트를 내지 않습니다. `type: Flyout.TYPE.CHECK` 에서 사용자가 버튼을 눌러 바뀐 눌림 상태를 `fly.checkFlag` 로 되돌려 주는 코드도 없습니다.
 
 ## BadgesContainer

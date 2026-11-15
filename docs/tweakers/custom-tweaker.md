@@ -114,7 +114,7 @@ WAfrTweakers 는 `VIEW_MODULES` 없이 편집기 클래스의 `buildView` / `_ap
 `setValue` 는 사용자가 입력하는 중(liveChange)에도 불립니다. 이때 입력칸을 다시 쓰면 커서가 움직여 입력이 꼬입니다 (실행 확인: 조건 없이 다시 쓰게 바꾸면 `2.7` 을 입력했을 때 값이 `72`). 샘플은 입력칸의 숫자와 새 값이 같으면 입력칸을 건드리지 않습니다.
 
 ::: warning 이벤트는 Dom.addEventOnElement 로 등록합니다
-그리드는 셀 편집기의 `change` 를 받으면 **사용자 조작 중일 때만** 값을 데이터(`nodeModel`)에 넣습니다 (`Dom.isCurrentlyCalledFromUIInteraction()`). `DS/Utilities/Dom` 의 `addEventOnElement(편집기, 요소, 이벤트, 함수)` 로 등록한 함수는 진짜 사용자 이벤트일 때 이 상태를 만들어 줍니다.
+그리드는 셀 편집기의 `change` 를 받으면 **사용자 조작 중일 때만** 값을 데이터(`nodeModel`)에 넣습니다 (`Dom.isCurrentlyCalledFromUIInteraction()`). `DS/Utilities/Dom` 의 `addEventOnElement(편집기, 요소, 이벤트, 함수)` 로 등록한 함수는 진짜 사용자 이벤트일 때 이 상태를 만들어 줍니다. 인자와 해제 함수는 [공통 유틸](/amd/utilities#이벤트-등록과-해제) 을 봅니다.
 
 실행 결과 별 클릭을 `this._view.addEventListener('click', ...)` 로 받으면 편집기 값은 바뀌고 폼의 `change` 와 그리드의 `change` 이벤트도 오지만 **`nodeModel` 은 그대로**입니다. `addEventOnElement` 로 바꾸면 들어갑니다. 원본 앱 15개 중 11개가 `addEventOnElement` 를 씁니다. 파일 읽기 완료처럼 사용자 이벤트가 아닌 곳에서 값을 넣을 때는 `Dom.pushUserInteractionContext()` 와 `Dom.popUserInteractionContext()` 로 감쌉니다 (EPSSchematicsUI JSON).
 :::

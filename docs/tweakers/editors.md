@@ -76,6 +76,7 @@ Tweakers.js 의 TweakerBase (`_preEditValue`, `_applyMinValue`, possibleValues �
 - 항목을 고르거나 포커스가 빠질 때 `change` 가 옵니다. 멀티는 칩이 하나 늘 때마다 옵니다.
 - 목록 팝업은 `div.wux-controls-autoComplete-popup` 으로 `body` 아래에 붙습니다.
 - 콤보 모양을 유지하면서 검색 칸만 원하면 `TweakerEnum` 을 `displayStyle: 'searchableCombo'` 로 만듭니다 (실행 확인). 이 경우 콤보 칸이 입력 칸이 되어 글자로 걸러집니다.
+- 이 편집기는 안에서 `DS/WUXAutoComplete/AutoComplete` 를 만듭니다. 서버 검색이나 고른 객체 데이터가 필요하면 [자동완성 입력](/controls/autocomplete) 을 직접 씁니다. `viewOptions` 로 그 옵션을 넘길 수 있습니다.
 
 ## 버튼 그룹과 토글 아이콘
 

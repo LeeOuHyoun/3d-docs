@@ -236,6 +236,8 @@ require(['DS/UIKIT/Modal', 'DS/UIKIT/Input/Button'], function (Modal, Button) {
 
 메서드: `show()`, `hide()`, `toggle()`, `setHeader(c)`, `setBody(c)`, `setFooter(c)`, `getHeader()`, `getBody()`, `getFooter()`. 이벤트: `onShow`, `onHide`.
 
+이 Modal 에 끌기, 크기 조절, 위치 저장을 더한 것이 [ENOFloatingPanel](/controls/enox-components#떠-있는-패널-enofloatingpanel) 입니다.
+
 ## SuperModal
 
 알림 / 확인 / 입력 받기를 한 줄로 띄웁니다. 창은 닫힐 때 자동으로 정리됩니다.
@@ -357,6 +359,8 @@ require(['DS/UIKIT/DropdownMenu'], function (DropdownMenu) {
 
 메서드: `show()`, `hide()`, `addItem(item)`, `removeItem(name)`, `enableItem(name)`, `disableItem(name)`, `getItem(name)`, `getSelectedItems()`.
 
+WebUX 메뉴(`DS/Menu`)와 고르는 기준은 [메뉴](/controls/menu#uikit-dropdownmenu-와-고르기) 에 있습니다.
+
 ## Iconbar
 
 아이콘 버튼을 가로로 늘어놓은 툴바입니다. 넘치는 항목은 `...` 메뉴로 들어갑니다.
@@ -404,7 +408,7 @@ require(['DS/UIKIT/Form'], function (Form) {
 | `checkbox`, `radio` | Input/Toggle |
 | `date` | Input/Date |
 | `file` | Input/File |
-| `autocomplete` | Autocomplete |
+| `autocomplete` | Autocomplete. WebUX 자동완성과의 차이는 [자동완성 입력](/controls/autocomplete#비슷한-것과-고르기) |
 | `html` | 그대로 넣을 내용 |
 | `hidden` | 숨은 값 |
 | 그 밖 | `text` 로 바뀜 |

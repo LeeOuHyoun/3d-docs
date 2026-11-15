@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Compass Sample</title>
+  <meta name="author" content="sample" />
+  <meta name="description" content="i3DXCompassPubSub sample: tell the Compass which object is selected and launch an app" />
+  <meta name="autoRefresh" content="0" />
+
+  <link rel="stylesheet" type="text/css" href="../c/UWA/assets/css/standalone.css" />
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <script type="text/javascript" src="../c/UWA/js/UWA_Standalone_Alone.js"></script>
+
+  <style type="text/css">
+    .cp-page { padding: 12px; font-family: sans-serif; font-size: 13px; }
+    .cp-page h3 { margin: 12px 0 6px; font-size: 14px; }
+    .cp-note { color: #555; margin: 4px 0 8px; }
+    .cp-row { display: flex; gap: 6px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+    .cp-row label { width: 110px; color: #555; }
+    .cp-row textarea { width: 420px; height: 90px; font: 12px monospace; }
+    .cp-table { border-collapse: collapse; }
+    .cp-table th, .cp-table td { border: 1px solid #d1d4d4; padding: 4px 8px; text-align: left; }
+    .cp-table th { background: #f4f5f6; }
+    .cp-table tr.cp-item { cursor: pointer; }
+    .cp-table tr.cp-selected td { background: #d5e8f2; }
+    .cp-log { height: 160px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; white-space: pre-wrap; }
+  </style>
+
+  <script type="text/javascript">
+  //<![CDATA[
+    require([
+      'UWA/Core',
+      'DS/i3DXCompassServices/i3DXCompassPubSub',
+      'DS/Controls/Button',
+      'DS/Controls/LineEditor'
+    ], function (UWA, CompassPubSub, Button, LineEditor) {
+      'use strict';
+
+      var DEFAULT_ROWS = [
+        { objectId: 'XX-0001', objectType: 'VPMReference', displayName: 'MyProduct-01' },
+        { objectId: 'XX-0002', objectType: 'VPMReference', displayName: 'MyProduct-02' },
+        { objectId: 'XX-0003', objectType: 'Document', displayName: 'MySpec-01' }
+      ];
+
+      var rows = [];
+      var selected = [];
+      var logEl;
+      var tableHolder;
+      var contextEditor;
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      /*
+       * [1] 행 하나를 Compass 가 읽는 객체 형식으로 바꾸기
+       *   - Compass 가 쓰는 키: objectId (없으면 무시), envId (플랫폼 id), serviceId, contextId (SecurityContext), objectType.
+       *   - displayName 처럼 그 밖의 키는 Compass 가 보관만 합니다. 같은 항목을 3DXContent 의 items 에도 씁니다.
+       */
+      // #region item
+      function toCompassItem(row, contextId) {
+        return {
+          envId: widget.getValue('x3dPlatformId') || '',
+          serviceId: '3DSpace',
+          contextId: contextId || '',
+          objectId: row.objectId,
+          objectType: row.objectType,
+          displayName: row.displayName
+        };
+      }
+      // #endregion item
+
+      /*
+       * [2] 선택이 바뀔 때마다 Compass 에 알리기 (W3DDrive 와 같은 방식)
+       *   - 하나라도 고르면 setObject (첫 항목) + setX3DContent (전체), 모두 풀리면 resetObject + resetX3DContent.
+       */
+      // #region select
+      function publishSelection(items) {
+        if (!items.length) {
+          CompassPubSub.publish('resetObject');
+          CompassPubSub.publish('resetX3DContent');
+          return;
+        }
+        CompassPubSub.publish('setObject', items[0]);
+        CompassPubSub.publish('setX3DContent', {
+          protocol: '3DXContent',
+          version: '2.0',
+          source: widget.getValue('x3dAppId') || '',
+          widgetId: widget.id,
+          data: { items: items }
+        });
+      }
+      // #endregion select
+
+      /*
+       * [3] Compass 에 앱 실행 요청하기
+       *   - 셋째 인자로 함수를 주면 launchAppCallback 응답이 이 요청 것일 때만 불립니다.
+       *   - response 는 성공이면 'COMPLETE', 실패면 'no_app' 같은 오류 이름입니다.
+       */
+      // #region launch
+      function launchApp(appId, onResult) {
+        CompassPubSub.publish('launchApp', { appId: appId, widgetId: widget.id }, function (result) {
+          onResult(result.response === 'COMPLETE', result);
+        });
+      }
+      // #endregion launch
+
+      function onSelectionChange() {
+        var contextId = contextEditor.value;
+        var items = selected.map(function (row) {
+          return toCompassItem(row, contextId);
+        });
+        publishSelection(items);
+        log(items.length ? 'setObject + setX3DContent ' + JSON.stringify(items[0]) : 'resetObject + resetX3DContent');
+      }
+
+      function toggleRow(row, tr) {
+        var index = selected.indexOf(row);
+        if (index === -1) {
+          selected.push(row);
+        } else {
+          selected.splice(index, 1);
+        }
+        tr.toggleClassName('cp-selected', index === -1);
+        onSelectionChange();
+      }
+
+      function drawTable() {
+        tableHolder.empty();
+        var table = UWA.createElement('table', { 'class': 'cp-table' }).inject(tableHolder);
+        var head = UWA.createElement('tr').inject(table);
+        ['displayName', 'objectId', 'objectType'].forEach(function (text) {
+          UWA.createElement('th', { text: text }).inject(head);
+        });
+        rows.forEach(function (row) {
+          var tr = UWA.createElement('tr', { 'class': 'cp-item' }).inject(table);
+          [row.displayName, row.objectId, row.objectType].forEach(function (text) {
+            UWA.createElement('td', { text: text }).inject(tr);
+          });
+          tr.addEvent('click', function () {
+            toggleRow(row, tr);
+          });
+        });
+      }
+
+      function build() {
+        var page = UWA.createElement('div', { 'class': 'cp-page' });
+
+        UWA.createElement('div', {
+          'class': 'cp-note',
+          text: '3DDashboard 에서만 동작합니다. 행을 누르면 고르기 / 풀기가 바뀌고 그때마다 Compass 에 알립니다. objectId 는 자리 표시입니다. 실제 physicalid 로 바꾸면 Compass 에서 앱을 실행할 때 그 객체가 넘어갑니다.'
+        }).inject(page);
+
+        UWA.createElement('h3', { text: '목록' }).inject(page);
+        var rowsRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
+        UWA.createElement('label', { text: '행 (JSON)' }).inject(rowsRow);
+        var rowsEl = UWA.createElement('textarea').inject(rowsRow);
+        rowsEl.value = JSON.stringify(DEFAULT_ROWS, null, 1);
+
+        var contextRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
+        UWA.createElement('label', { text: 'contextId' }).inject(contextRow);
+        contextEditor = new LineEditor({ value: '', placeholder: 'SecurityContext (선택)', sizeInCharNumber: 40 });
+        contextEditor.inject(contextRow);
+
+        var drawRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
+        new Button({ label: '목록 다시 그리기', onClick: onRedraw }).inject(drawRow);
+        new Button({ label: '모두 풀기', onClick: onClear }).inject(drawRow);
+
+        tableHolder = UWA.createElement('div').inject(page);
+
+        UWA.createElement('h3', { text: '앱 실행 (launchApp)' }).inject(page);
+        var launchRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
+        UWA.createElement('label', { text: '앱 ID' }).inject(launchRow);
+        var appIdEditor = new LineEditor({ value: 'ENOLCMT_AP', sizeInCharNumber: 20 });
+        appIdEditor.inject(launchRow);
+        new Button({ label: '실행', emphasize: 'primary', onClick: onLaunch }).inject(launchRow);
+
+        UWA.createElement('h3', { text: '로그' }).inject(page);
+        logEl = UWA.createElement('div', { 'class': 'cp-log' }).inject(page);
+
+        function onRedraw() {
+          try {
+            rows = JSON.parse(rowsEl.value || '[]');
+          } catch (e) {
+            log('행이 JSON 이 아닙니다: ' + e.message);
+            return;
+          }
+          selected = [];
+          drawTable();
+          onSelectionChange();
+        }
+
+        function onClear() {
+          selected = [];
+          drawTable();
+          onSelectionChange();
+        }
+
+        function onLaunch() {
+          var appId = appIdEditor.value;
+          log('launchApp ' + appId);
+          launchApp(appId, function (ok, result) {
+            log('launchAppCallback ' + (ok ? '성공' : '실패') + ' ' + JSON.stringify(result));
+          });
+        }
+
+        widget.body.empty();
+        page.inject(widget.body);
+        rows = DEFAULT_ROWS.slice();
+        selected = [];
+        drawTable();
+      }
+
+      widget.addEvents({ onLoad: build });
+    });
+  //]]>
+  </script>
+</head>
+<body>
+  <p>Loading...</p>
+</body>
+</html>

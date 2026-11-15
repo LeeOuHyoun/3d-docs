@@ -33,6 +33,10 @@ Controls.js (Abstract, Button ...), Windows.js (Window, Dialog), UIKIT.js (Input
 | 확인 / 취소 묻기 | `DS/Windows/Dialog` + 버튼 2개 | `SuperModal.confirm` | [다이얼로그](/controls/dialog#확인-취소-묻기) |
 | 패널 탭 묶기, 가장자리 붙이기, 창 위치 저장 | `DS/Windows/Panel`, `ImmersiveFrame` | - | [창 묶기, 붙이기, 위치 저장](/controls/window-layout) |
 | 왼쪽 / 가운데 / 오른쪽 분할 화면 | `DS/Windows/DockingElement` | - | [분할 레이아웃](/controls/docking-element) |
+| ENOVIA 앱과 같은 3단 화면, 떠 있는 패널, 빈 화면 안내 | `DS/ENOXTriptych/js/ENOXTriptych`, `DS/ENOFloatingPanel/ENOFloatingPanel` | - | [ENOVIA 공용 화면 틀](/controls/enox-components) |
+| 객체 속성 보기 / 편집 화면 (OOTB 정보 화면) | `DS/EditPropWidget/EditPropWidget` | - | [속성 패널](/controls/properties-panel) |
+| 드롭다운 메뉴, 오른쪽 클릭 메뉴 | `DS/Menu/Menu`, `ContextualMenu` | `DS/UIKIT/DropdownMenu` | [메뉴](/controls/menu) |
+| 입력하며 고르기 (사람, 객체 찾기) | `DS/WUXAutoComplete/AutoComplete` | `DS/UIKIT/Autocomplete` | [자동완성 입력](/controls/autocomplete) |
 | 다른 앱 화면을 창으로 열기 | `DS/TransientWidget/TransientWidget` | - | [TransientWidget](/widget/transient-widget) |
 | 로딩 가리개 | `DS/Controls/ModalLoader` | `DS/UIKIT/Mask` | [WebUX 컨트롤](/controls/webux-controls#loader-modalloader), [UIKIT](/controls/uikit#mask) |
 | 저장 완료 같은 짧은 알림 | `DS/Notifications/*` | `DS/UIKIT/Alert` | [알림 메시지](/controls/notifications) |
@@ -140,6 +144,10 @@ webapps 2025 전체에서 모듈 이름이 나오는 횟수입니다. 많이 쓰
 | [WebUX 컨트롤 API](/controls/api/webux-controls) | 컨트롤별 속성, 기본값, 이벤트 |
 | [창 묶기, 붙이기, 위치 저장](/controls/window-layout) | Panel 탭 묶기 / 풀기, dockWindow, identifier 위치 저장, 2026 다시 묻지 않음, ImmersiveWindow, WindowManager |
 | [분할 레이아웃 (DockingElement)](/controls/docking-element) | 3단 레이아웃, 접기 / 크기 / 숨기기, 접힘 상태 저장, 탭, 접기 막대 모양 |
+| [속성 패널 (EditPropWidget)](/controls/properties-panel) | 생성 옵션, typeOfDisplay / selectionType, initDatas 모델, 이벤트, 저장 REST, 탭과 직접 만든 탭, 여러 객체, 정리, OOTB 정보 창 (ENOLCMT_AP), 팝업 / 도킹형, 2026 변경 |
+| [ENOVIA 공용 화면 틀 (ENOX)](/controls/enox-components) | ENOXTriptych 3단 화면, 시작 패널, ENOFloatingPanel, LinkManager / WidgetLink, ENOXIDCard, ENOXEmptyContent, W3DX Skeleton, LevelSelector |
+| [메뉴 (DS/Menu)](/controls/menu) | Menu.show, 항목 형식, 체크 / 라디오, 하위 메뉴, 키보드, ContextualMenu, UIKIT DropdownMenu 와 고르기 |
+| [자동완성 입력 (WUXAutoComplete)](/controls/autocomplete) | 하나 / 여러 개 고르기, 서버 검색, TreeDocument 후보, 자유 입력과 칩, 비슷한 것과 고르기 |
 | [Windows API](/controls/api/windows) | Window, Dialog, Panel, ImmersiveWindow, WindowGroup, ImmersiveFrame, DockingElement, WindowManager 속성, 메서드, 이벤트, 열거형, localStorage 키 |
 | [UIKIT API](/controls/api/uikit) | UIKIT 모듈별 옵션, 메서드, 이벤트 |
 | [입력](/controls/api/input-controls) · [레이아웃](/controls/api/layout) · [색상, 표시](/controls/api/display-controls) · [목록, 트리, 타일 뷰](/controls/api/collection-views) API | 그룹별 컨트롤 속성, 기본값, 이벤트, 메서드 |

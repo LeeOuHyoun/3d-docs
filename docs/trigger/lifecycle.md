@@ -48,6 +48,8 @@ String release = PropertyUtil.getSchemaProperty(context, "policy", policyName, "
 obj.setState(context, release);
 ```
 
+위젯에서 state 를 바꾸는 방법(REST, OOTB 성숙도 창)은 [성숙도 변경, 개정](/rest-api/lifecycle) 에 있습니다. 같은 트리거가 돕니다.
+
 ## Route 로 결재하고 promote
 
 프로젝트 결재는 policy 의 서명 대신 Route 로 처리합니다.

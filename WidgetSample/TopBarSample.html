@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Top Bar Sample</title>
+  <meta name="author" content="sample" />
+  <meta name="description" content="TopBarProxy sample: add widget commands to the 3DDashboard top bar menus" />
+  <meta name="autoRefresh" content="0" />
+
+  <link rel="stylesheet" type="text/css" href="../c/UWA/assets/css/standalone.css" />
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <script type="text/javascript" src="../c/UWA/js/UWA_Standalone_Alone.js"></script>
+
+  <style type="text/css">
+    .tb-page { padding: 12px; font-family: sans-serif; font-size: 13px; }
+    .tb-page h3 { margin: 12px 0 6px; font-size: 14px; }
+    .tb-note { color: #555; margin: 4px 0 8px; }
+    .tb-row { display: flex; gap: 6px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+    .tb-log { height: 160px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; white-space: pre-wrap; }
+  </style>
+
+  <script type="text/javascript">
+  //<![CDATA[
+    require([
+      'UWA/Core',
+      'DS/TopBarProxy/TopBarProxy',
+      'DS/TopBarProxy/MenuItem',
+      'DS/Controls/Button'
+    ], function (UWA, TopBarProxy, MenuItem, Button) {
+      'use strict';
+
+      var topBar;
+      var inboxItem;
+      var inboxCount = 0;
+      var logEl;
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      /*
+       * [1] 상단 바 메뉴에 위젯 명령 넣기
+       *   - id 는 widget.id 입니다. 대시보드가 이 값으로 지금 보이는 위젯의 메뉴만 보여 주는 것으로 보입니다.
+       *   - setContent 는 적은 칸(add, help ...)의 내 항목을 바꿉니다. 적지 않은 칸은 그대로 둡니다.
+       *   - onExecute 는 위젯 안에서 불립니다. 인자와 this 는 누른 항목(MenuItem)입니다.
+       */
+      // #region create
+      function createTopBar() {
+        return new TopBarProxy({ id: widget.id });
+      }
+
+      function fillMainMenus(proxy, onCommand) {
+        proxy.setContent({
+          add: [
+            {
+              label: 'My New Item',
+              fonticon: 'plus',
+              onExecute: function (item) {
+                onCommand('add', item.get('label'));
+              }
+            }
+          ],
+          help: [
+            {
+              label: 'My Widget Help',
+              onExecute: function (item) {
+                onCommand('help', item.get('label'));
+              }
+            }
+          ]
+        });
+      }
+      // #endregion create
+
+      /*
+       * [2] 하위 메뉴와 배지
+       *   - addContent 는 이미 넣은 항목 뒤에 덧붙입니다.
+       *   - MenuItem 을 직접 만들어 두면 나중에 set 으로 글자나 배지(countBadge)를 바꿀 수 있습니다. 바뀌면 상단 바로 다시 보냅니다.
+       */
+      // #region submenu
+      function addShareMenus(proxy, onCommand) {
+        var inbox = new MenuItem({
+          label: 'My Inbox',
+          countBadge: 0,
+          onExecute: function (item) {
+            onCommand('share', item.get('label'));
+          }
+        });
+        proxy.addContent({
+          share: [
+            inbox,
+            {
+              label: 'My Reports',
+              submenu: [
+                { label: 'Weekly', onExecute: function (item) { onCommand('share', item.get('label')); } },
+                { label: 'Monthly', onExecute: function (item) { onCommand('share', item.get('label')); } }
+              ]
+            }
+          ]
+        });
+        return inbox;
+      }
+
+      function setBadge(item, count) {
+        item.set('countBadge', count);
+      }
+      // #endregion submenu
+
+      /*
+       * [3] 잠시 숨기기, 비우기, 끝내기
+       *   - deactivate / activate 는 내 항목을 숨기고 다시 보입니다. 항목은 지우지 않습니다.
+       *   - empty 는 profile, add, share, home, help 칸의 내 항목을 지웁니다.
+       *   - die 뒤에 이 proxy 의 메서드를 부르면 예외가 납니다. 다시 쓰려면 새로 만듭니다.
+       */
+      // #region lifecycle
+      function showMyMenus(proxy, visible) {
+        if (visible) {
+          proxy.activate();
+        } else {
+          proxy.deactivate();
+        }
+      }
+
+      function dieOnUnload(proxy) {
+        window.addEventListener('unload', function () {
+          proxy.die();
+        });
+      }
+      // #endregion lifecycle
+
+      function onCommand(slot, label) {
+        log('onExecute [' + slot + '] ' + label);
+      }
+
+      function fillAll() {
+        fillMainMenus(topBar, onCommand);
+        inboxItem = addShareMenus(topBar, onCommand);
+        inboxCount = 0;
+      }
+
+      function build() {
+        var page = UWA.createElement('div', { 'class': 'tb-page' });
+
+        UWA.createElement('div', {
+          'class': 'tb-note',
+          text: '3DDashboard 에서만 동작합니다. 상단 바의 + 메뉴, 공유 메뉴, 도움말 메뉴에 이 위젯의 항목이 들어갑니다. 대시보드 설정에 따라 보이지 않는 칸도 있습니다. 누르면 아래 로그에 남습니다.'
+        }).inject(page);
+
+        var actions = UWA.createElement('div', { 'class': 'tb-row' }).inject(page);
+        new Button({ label: '배지 +1', emphasize: 'primary', onClick: onBadge }).inject(actions);
+        new Button({ label: '숨기기 (deactivate)', onClick: onHide }).inject(actions);
+        new Button({ label: '보이기 (activate)', onClick: onShow }).inject(actions);
+        new Button({ label: '비우기 (empty)', onClick: onEmpty }).inject(actions);
+        new Button({ label: '다시 넣기', onClick: onRefill }).inject(actions);
+
+        UWA.createElement('h3', { text: '로그' }).inject(page);
+        logEl = UWA.createElement('div', { 'class': 'tb-log' }).inject(page);
+
+        function onBadge() {
+          inboxCount += 1;
+          setBadge(inboxItem, inboxCount);
+          log('countBadge = ' + inboxCount);
+        }
+
+        function onHide() {
+          showMyMenus(topBar, false);
+          log('deactivate');
+        }
+
+        function onShow() {
+          showMyMenus(topBar, true);
+          log('activate');
+        }
+
+        function onEmpty() {
+          topBar.empty();
+          log('empty');
+        }
+
+        function onRefill() {
+          topBar.empty();
+          fillAll();
+          log('empty 후 setContent + addContent');
+        }
+
+        widget.body.empty();
+        page.inject(widget.body);
+
+        if (!topBar) {
+          topBar = createTopBar();
+          fillAll();
+          dieOnUnload(topBar);
+          log('TopBarProxy 만듦 (id ' + widget.id + ')');
+        }
+      }
+
+      widget.addEvents({ onLoad: build });
+    });
+  //]]>
+  </script>
+</head>
+<body>
+  <p>Loading...</p>
+</body>
+</html>

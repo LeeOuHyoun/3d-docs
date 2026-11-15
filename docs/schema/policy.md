@@ -308,6 +308,8 @@ add bus 'eService Trigger Program Parameters' 'MyPolicyInWorkPromoteCheck' 'chec
 | `eService Program Name` / `eService Method Name` | JPO 클래스와 메서드 |
 | state | `Active` 여야 실행되는 것으로 보입니다. <Badge type="danger" text="검증 필요" /> 템플릿은 만든 뒤 `promote bus` 로 활성화하고, 끌 때 `demote bus` 를 씀 |
 
+위젯에서 state 를 바꾸는 방법은 [성숙도 변경, 개정](/rest-api/lifecycle) 에 있습니다.
+
 ## 확인하기
 
 ```text

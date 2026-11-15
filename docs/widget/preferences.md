@@ -146,6 +146,8 @@ widget.deleteValue('lastPartId');
 | `lang` | 언어. `widget.lang` 이 없을 때 대신 읽음 | 79 |
 | `x3dSharedId` | 공유 위젯 id | 49 |
 
+사용자 전체 설정(Me 메뉴에서 정한 값)은 위젯 값이 아닙니다. [언어와 사용자 환경설정](/widget/i18n-preferences#me-환경설정-읽기) 을 봅니다.
+
 `X3DContentId` 는 `3DXContent` 형식입니다.
 
 ```js

@@ -26,10 +26,13 @@ Foundation2/Foundation2.js (`applyUpdates`, `__generateUpdateWidget`, `__copyMod
 
 | 계열 | 서비스 예 | 응답 | 쓰기 CSRF |
 | --- | --- | --- | --- |
-| **A. 업무 객체 (Foundation 형식)** | `documents`, `tasks`, `routes`, `meetings`, `subscriptions`, `projects`, `workspaces`, `e6w/service/*` | `{ success, csrf, data: [{ id, type, dataelements, relateddata }] }` | 본문의 `csrf` 또는 헤더 |
+| **A. 업무 객체 (Foundation 형식)** | `documents`, `tasks`, `routes`, `meetings`, `subscriptions`, `projects`, `workspaces`, `v2/e6w/service/*` | `{ success, csrf, data: [{ id, type, dataelements, relateddata }] }` | 본문의 `csrf` 또는 헤더 |
 | **B. ds 접두어 서비스** | `dseng`, `dslib`, `dsprcs`, `dspfl`, `dsmfg`, `dswo`, `dscstr` ... | `{ totalItems, member: [...] }` | 헤더 `ENO_CSRF_TOKEN` |
 
 B 계열은 경로가 `dslib/dslib:Class/{id}` 처럼 `서비스/서비스:리소스` 모양이고, 기능 호출은 `서비스/invoke/서비스:함수` 모양입니다.
+
+- `v3/e6w/service/*` 는 `dataelements` 없이 `data[i].name` 처럼 읽습니다 → [e6w 버전과 주소](/rest-api/e6w#버전과-주소)
+- `modeler/dslc` (CAA 성숙도, 개정, 소유자) 는 A, B 어느 모양도 아닙니다 → [성숙도 변경, 개정](/rest-api/lifecycle)
 
 ## 헤더
 
@@ -128,7 +131,7 @@ Foundation, DocumentManagement 는 헤더 대신 **요청 본문 최상위에 `c
 | `$filter` | - | `$filter=dimensionName+eq+Length` | 조건 |
 | `$definition` | A | `$definition=true` | 필드 정의 같이 받기 |
 | `$terse` | A | `$terse=true` | 응답 줄이기로 보입니다 <Badge type="danger" text="검증 필요" /> |
-| `e6w-lang`, `e6w-timezone` | A | `e6w-lang=ko` | 언어, 시간대. Foundation2 는 `$language`, `$timezone` 로 바꿔 보냄 |
+| `e6w-lang`, `e6w-timezone` | A | `e6w-lang=ko` | 언어, 시간대 ([시간대](/widget/i18n-preferences#시간대)). Foundation2 는 `$language`, `$timezone` 로 바꿔 보냄 |
 
 ## 쓰기 본문 A
 
@@ -233,3 +236,7 @@ function spaceRequest(spaceUrl, path, options) {
 | [보안 컨텍스트 (SecurityContext)](/rest-api/security-context) | `SecurityContext` 값 얻기 |
 | [엔드포인트 목록](/rest-api/catalog) | 소스에서 찾은 엔드포인트 표 |
 | [문서 (modeler/documents)](/rest-api/documents) | 가장 많이 쓰는 `modeler/documents` 상세 |
+| [성숙도 변경, 개정 (lifecycle)](/rest-api/lifecycle) | 상태 그래프, promote / demote, dslc, 개정, 소유자 넘기기, OOTB 성숙도 창 |
+| [타입, 속성 정보 (dictionary)](/rest-api/dictionary) | 타입, 속성 이름 번역, 하위 타입, 타입의 속성 목록, 객체 속성 읽기 |
+| [객체 정보, 사람과 객체 찾기 (e6w)](/rest-api/e6w) | ObjectInfo, PersonSearch, ObjectSearch, 서버 설정 값, Foundation 이 감싸는 방식 |
+| [관계 탐색 (enorelnav)](/rest-api/navigate) | 사용처(상위), 하위, 첨부 객체 받기, 관계 패턴, 개수만 받기 |

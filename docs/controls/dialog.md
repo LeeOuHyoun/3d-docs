@@ -10,14 +10,17 @@ Windows.js 의 Window (publishedProperties, _applyButtons, getDefaultButtonLabel
 
 ## 무엇으로 띄울까
 
-ENOVIA 에서 "창을 띄우는" 방법은 넷입니다. OOTB 앱의 새 화면은 대부분 `DS/Windows/Dialog` 를 씁니다.
+ENOVIA 에서 "창을 띄우는" 방법은 다섯입니다. OOTB 앱의 새 화면은 대부분 `DS/Windows/Dialog` 를 씁니다.
 
 | 방법 | 바탕 | OOTB 에서 쓰는 곳 | 문서 |
 | --- | --- | --- | --- |
 | `DS/Windows/Dialog` (+ `ImmersiveFrame`) | WebUX (`DS/Windows/Window`) | ENX* / ENO* 앱의 생성, 삭제 확인, 상세 보기 다이얼로그 | 이 페이지 |
 | `DS/UIKIT/Modal`, `DS/UIKIT/SuperModal` | **UWA** (`UWA/Controls/Abstract`) | 예전 UIKIT 화면의 모달, `alert` / `confirm` / `prompt` | [UIKIT](/controls/uikit#supermodal) · [UIKIT API](/controls/api/uikit#modal) |
 | `DS/TransientWidget/TransientWidget` | PlatformAPI 메시지 | 다른 앱(속성, 변경 조치, 프로필)을 창으로 열기 | [TransientWidget](/widget/transient-widget) |
+| `DS/ENOFloatingPanel/ENOFloatingPanel` | UIKIT Modal 상속 | 위젯 안 떠 있는 패널. 공유, 접근 권한, 속성(POPUP), 첨부 창 (38 개 앱) | [ENOVIA 공용 화면 틀](/controls/enox-components#떠-있는-패널-enofloatingpanel) |
 | `UWA/Controls/Overlay`, `Lightbox` | UWA | OOTB 앱에서는 거의 쓰지 않음 (Coachmark, VCXWebComposer) | 아래 |
+
+창이 아니라 위젯 안에 OOTB 속성 화면을 넣으려면 [속성 패널 (EditPropWidget)](/controls/properties-panel) 을 봅니다.
 
 ### UWA 로 다이얼로그를 띄우는가
 

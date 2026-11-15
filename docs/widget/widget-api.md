@@ -14,7 +14,7 @@ UWA2/js/Widget.js, Environment.js (`onRefresh`, `onEdit`, `onViewRequest`, `regi
 | --- | --- | --- |
 | `widget.id` | 위젯 인스턴스 id. 같은 대시보드에 같은 위젯을 두 번 올려도 다름. DOM id, 저장 키 접두어로 씀. 단독 실행에서는 `null` | 1,458 |
 | `widget.body` | 내용 영역 요소. UWA 메서드(`setContent`, `getElement`, `addEvent` ...)가 붙어 있음 ([DOM](/uwa/element)) | 1,222 |
-| `widget.lang` | 언어 2 글자 (`'ko'`, `'en'`). 기본값은 브라우저 언어 앞부분 | 700 |
+| `widget.lang` | 언어 2 글자 (`'ko'`, `'en'`). 기본값은 브라우저 언어 앞부분. 다른 언어 값과의 차이는 [언어와 사용자 환경설정](/widget/i18n-preferences#지금-언어-얻기) | 700 |
 | `widget.locale` | 국가 (`'kr'`, `'us'`) | 7 |
 | `widget.dir` | `'ltr'` 또는 `'rtl'` | |
 | `widget.environment` | 실행 환경. `environment.name` 이 `'frame'` (3DDashboard) 또는 `'uwa'` (단독 실행) | 136 |
@@ -65,7 +65,7 @@ widget.setBody(UWA.createElement('div', { 'class': 'my-page', text: nls.get('loa
 
 설정 정의(`addPreference` 등)는 [위젯 설정](/widget/preferences) 에 있습니다.
 
-### 이벤트
+### 이벤트 메서드
 
 | 메서드 | 설명 | 사용 |
 | --- | --- | --- |
@@ -92,6 +92,8 @@ widget.setMenu({ name: 'options/export', label: nls.get('export'), icon: 'export
 widget.addEvent('onExport', function () { ... });
 ```
 
+대시보드 상단 바 메뉴(+, 공유, 도움말)에 명령을 넣으려면 [대시보드 상단 바](/widget/top-bar) 를 봅니다.
+
 ## 이벤트
 
 | 이벤트 | 언제 | 인자 | 등록 수 |
@@ -100,7 +102,7 @@ widget.addEvent('onExport', function () { ... });
 | `onRefresh` | 새로고침 메뉴, `autoRefresh` 주기, 설정 변경 후 | - | 46 |
 | `endEdit` | 설정 창을 닫음 | - | 47 |
 | `onEdit` | 설정 창을 엶 | - | 5 |
-| `onResize` | 위젯 크기 변경 | - | 35 |
+| `onResize` | 위젯 크기 변경. 요소 하나의 크기 변화는 [공통 유틸](/amd/utilities#크기-변화-받기) | - | 35 |
 | `onViewChange` | 보기 전환이 끝남 | `{ type, previous }` | 7 |
 | `onSearch` | 대시보드 검색창에서 "이 위젯에서 검색" 으로 보입니다 | 검색어 문자열 | 37 |
 | `onResetSearch` | 위 검색을 지움 | - | 17 |

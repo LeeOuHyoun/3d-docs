@@ -10,7 +10,7 @@
 | 3DSpace | 업무 데이터를 가진 서버(웹앱). JPO, MQL, REST 가 여기서 돎 | [서버 반영 절차](/deploy/) |
 | 3DDashboard | 위젯을 올려 쓰는 화면. 위젯은 각자 iframe 에서 돎 | [위젯 개요](/widget/#실행-환경) |
 | 3DPassport | 로그인(SSO) 서버 | [서버 호출](/uwa/request) |
-| 3DCompass | 앱 목록과 서비스 주소를 알려 주는 서비스 | [i3DXCompassServices](/widget/compass-services) |
+| 3DCompass | 앱 목록과 서비스 주소를 알려 주는 서비스. 위젯이 고른 객체를 알려 두면 앱을 실행할 때 넘김 | [i3DXCompassServices](/widget/compass-services) · [Compass 에 선택 객체 알리기](/widget/compass-pubsub) |
 | Platform Management | 구성원, 역할, 앱을 관리하는 관리자 화면 | [Additional App 으로 등록](/widget/dashboard-register#additional-app-으로-등록) |
 | Additional App | 관리자가 주소를 넣어 Compass 에 추가한 앱 (위젯, 웹 페이지, PC 프로그램) | [Additional App 으로 등록](/widget/dashboard-register#additional-app-으로-등록) |
 | Run Your App | 주소를 넣으면 그 위젯으로 바뀌는 OOTB 위젯. 개발 중 확인용 | [Run Your App 으로 열기](/widget/dashboard-register#run-your-app-으로-열기) |
@@ -91,7 +91,7 @@
 | WAFData | 로그인 정보를 붙여 서버를 부르는 요청 모듈 | [서버 호출](/uwa/request) |
 | CSRF 토큰 | 3DSpace 에 쓰기 요청을 할 때 먼저 받아 헤더에 넣는 값 | [CSRF 토큰](/uwa/request#csrf-토큰-3dspace-쓰기-요청) |
 | PlatformAPI | 위젯 사이에 메시지를 주고받고 플랫폼 정보를 얻는 모듈 | [PlatformAPI](/widget/platform-api) |
-| i3DXCompassServices | 서비스 주소, 사용자, 역할을 얻는 모듈 | [i3DXCompassServices](/widget/compass-services) |
+| i3DXCompassServices | 이름이 비슷한 모듈이 둘. `DS/i3DXCompass/i3DXCompassServices` 는 서비스 주소, 사용자, 역할을 얻는 모듈, `DS/i3DXCompassServices/i3DXCompassPubSub` 은 Compass 에 고른 객체를 알리는 모듈 | [Compass 서비스](/widget/compass-services) · [Compass 에 선택 객체 알리기](/widget/compass-pubsub) |
 | WebUX (WUX), UIKIT | 화면 컨트롤의 두 계열 | [두 계열의 차이](/controls/#두-계열의-차이) |
 | DataGridView | WebUX 의 표 / 트리 그리드 | [DataGridView](/datagridview/) |
 | TreeDocument, TreeNodeModel | 그리드의 데이터 모델. 문서 하나에 행(노드)들이 달림 | [구성 요소](/datagridview/#구성-요소) |
@@ -112,6 +112,49 @@
 | Tweaker | 값 하나를 보여 주고 고치는 편집기 컨트롤 | [Tweakers](/tweakers/) |
 | XSO, CSO | 선택 목록 객체. CSO 는 그 창의 "현재 선택" | [선택](/events/selection) |
 | ModelEvents | 화면 부품 사이에서 쓰는 publish / subscribe 객체 | [ModelEvents](/events/pubsub#modelevents) |
+| 3DXContent | 앱 사이에 객체 목록을 넘기는 형식 `{ protocol, version, source, data: { items } }`. 끌어 놓기, Compass, 3DPlay 앱 열기에 씀 | [3DXContent 형식](/events/drag-and-drop#_3dxcontent-형식) |
+| X3DContentId | 다른 앱이 이 위젯을 열면서 넘긴 3DXContent 를 담는 위젯 값 (JSON 문자열) | [플랫폼이 넣어 주는 값](/widget/preferences#플랫폼이-넣어-주는-값) · [3DPlay 앱으로 열기](/widget/3dplay#_3dplay-앱으로-열기-transientwidget) |
+| in-context search | 위젯에서 3DSearch 화면을 열어 사용자가 고른 객체, 사람을 받아 오는 방식 (`RegisterContext`, `InContextSearch` 이벤트) | [3DSearch 에서 골라 오기](/widget/search) |
+| federated search | 3DSearch 서비스의 검색 REST (`<3DSearch>/federated/search`). 결과는 `results[].attributes[]` | [화면 없이 검색](/widget/search#화면-없이-검색-federated-search) |
+| precond | 3DSearch 검색에 늘 `AND` 로 붙는 조건식. 타입 제한에 씀 | [precond](/widget/search#precond) |
+| furtive 모드 | in-context search 의 고르기 모드 (`mode: 'furtive'`). 결과 아래 취소 / OK 단추 | [옵션](/widget/search#옵션) |
+| 6W 태그 | 무엇 / 누가 / 언제 / 어디서 / 왜 / 어떻게 로 나눈 태그. 3DDashboard 태그 창에서 골라 위젯 목록을 거름 | [6W 태그 연동](/widget/tagger) |
+| 태그 창 (6W Tagger) | 3DDashboard 왼쪽의 태그 목록 화면. 위젯은 TagNavigatorProxy 로 태그를 보냄 | [6W 태그 연동](/widget/tagger) |
+| sixw | 태그 분류 경로. `ds6w:what/ds6w:type` 처럼 6W 루트로 시작 | [태그 데이터](/widget/tagger#태그-데이터) |
+| 주제 (subject) | 태그를 붙이는 행의 id. OOTB 는 `pid://` + physicalid | [행 id](/widget/tagger#행-id-주제) |
+| 상단 바 (Top Bar) | 3DDashboard 맨 위 막대. 사용자 / + / 공유 / 도움말 메뉴가 있음 | [대시보드 상단 바](/widget/top-bar) |
+| 성숙도 (maturity) | 객체의 policy state. 실제 이름 `stateSysName` 과 번역 이름 `stateUserName` 이 따로 있음 | [성숙도 변경, 개정](/rest-api/lifecycle) |
+| 개정 (revise) | 같은 객체의 새 revision 을 만들기 | [성숙도 변경, 개정](/rest-api/lifecycle) |
+| dslc | lifecycle REST 묶음. `/resources/v1/modeler/dslc/` 는 CAA 웹 서비스(CSRF 필요), `/resources/v1/dslc/` 는 버전 그래프 등 | [성숙도 변경, 개정](/rest-api/lifecycle) |
+| MaturityCmd | OOTB 성숙도 창을 여는 명령 모듈 | [성숙도 변경, 개정](/rest-api/lifecycle) |
+| Collaborative Lifecycle | 성숙도, 개정, 복제, 삭제 명령을 모은 OOTB 앱 (`ENOLCMI_AP`) | [성숙도 변경, 개정](/rest-api/lifecycle) |
+| EditPropWidget (속성 패널) | OOTB 정보 화면(ID 카드, 탭, 속성 편집 / 저장)을 위젯 안에 넣는 컨트롤 | [속성 패널](/controls/properties-panel) |
+| facet (탭) | 속성 패널의 탭 하나. `FACET_*` 상수, 또는 FacetsBase 를 상속한 모듈 | [탭](/controls/properties-panel#탭-facet) |
+| ENOLCMT_AP | OOTB 정보(Information) 앱 id. EditPropWidget/EditPropWidget.html | [OOTB 정보 창](/controls/properties-panel#ootb-정보-창으로-열기) |
+| ContextualMenu | `DS/Menu/ContextualMenu`. 요소에 오른쪽 클릭 메뉴를 붙이는 모듈. 눌린 요소부터 window 까지 등록된 callback 결과를 합쳐서 엶 | [오른쪽 클릭 메뉴](/controls/menu#오른쪽-클릭-메뉴-contextualmenu) |
+| PushItem / CheckItem / RadioItem | DS/Menu 항목 종류(`type`): 일반 / 체크 / 하나만 고르기. 체크 상태는 앱이 관리 | [메뉴 항목](/controls/menu#항목) |
+| elementsTree | WUXAutoComplete 의 후보 옵션 (배열, TreeDocument, 함수, Promise) | [후보를 주는 방법](/controls/autocomplete#후보를-주는-방법) |
+| customNode | WUXAutoComplete 에서 자유 입력 글자나 후보에 없는 노드로 붙은 항목 (`node.options.customNode`) | [자유 입력과 칩](/controls/autocomplete#자유-입력과-칩) |
+| ENOX | OOTB ENOVIA 앱(ENX*, ENO*)이 같이 쓰는 화면 부품 모음 (ENOXTriptych, ENOXIDCard, ENOXEmptyContent ...). 같은 ModelEvents 의 이벤트 이름으로 서로 묶임 | [ENOVIA 공용 화면 틀](/controls/enox-components) |
+| Triptych | 왼쪽 / 가운데 / 오른쪽 3단 화면 (`DS/ENOXTriptych`) | [3단 화면](/controls/enox-components#_3단-화면-enoxtriptych) |
+| 시작 패널 (Welcome Panel) | ENX 앱 왼쪽의 "앱 설명 + 할 일 목록" 패널 | [시작 패널](/controls/enox-components#시작-패널-다섯째-인자) |
+| 위젯 연결 (Widget Link) | 사용자가 3DDashboard 에서 두 위젯을 연결하면 그 둘 사이에만 메시지를 보내는 기능 (`DS/WidgetLink/WidgetLink`) | [위젯 사이 연결](/controls/enox-components#위젯-사이-연결-linkmanager) |
+| PointerEvents | 마우스, 터치를 `DSpointerdown` 같은 같은 이름으로 바꿔 보내는 WUX 이벤트. `multipleHitCount` 로 더블 클릭 | [공통 유틸](/amd/utilities#pointerevents) |
+| WUX (전역) | `DS/Core/Core` 가 만드는 WUX 컨트롤 공통 객체 | [공통 유틸](/amd/utilities#ds-core-core-의-wux-함수) |
+| 터치 모드 | WUX 컨트롤이 터치용 크기로 그리는 상태 (`TouchUtils.getTouchMode()`) | [공통 유틸](/amd/utilities#touchutils) |
+| Me 환경설정 (Me preferences) | 사용자가 3DDashboard "Me" 메뉴에서 정한 값. 저장소(Repository)와 키로 읽음 | [언어와 사용자 환경설정](/widget/i18n-preferences#me-환경설정-읽기) |
+| 지역 형식 언어 | 2026 Me 설정 `RegionalFormatLanguage`. 날짜, 숫자 형식에 쓰는 언어 | [언어와 사용자 환경설정](/widget/i18n-preferences#_2026) |
+| swymlang | Me 메뉴에서 정한 언어를 담는 쿠키 | [언어와 사용자 환경설정](/widget/i18n-preferences#ds-uwpclientcode-i18n) |
+| VEN 폴더 | 외부 라이브러리 원본을 담은 webapps 폴더 (VENCKEditor, VENHighChart ...). 위젯은 보통 DS 래퍼 모듈(`DS/CKEditor/CKEditor`)로 부름 | [외부 라이브러리](/amd/libraries#래퍼가-하는-일) |
+| vu-kit (vuekit) | DS 의 Vue 화면 부품 모음 (`vu-btn`, `vu-modal` ...). Vue 2 는 vuekit, Vue 3 은 vuekit3 | [외부 라이브러리](/amd/libraries#vue) |
+| 3DPlay | 3D / 2D 뷰어. 위젯 안에는 `Player3DPlayWeb`, 앱 id 는 `X3DPLAW_AP` | [3D / 2D 미리 보기](/widget/3dplay) |
+| experience (3DPlay) | 3DPlay 가 타입과 usage 로 고르는 화면 모듈 (3DPlayModelViewer, 3DPlay2DExperience ...) | [타입별로 열리는 화면](/widget/3dplay#타입별로-열리는-화면) |
+| ds6wg / ds6w URI (curi) | FedDictionaryAccessAPI 의 짧은 URI. `ds6wg:<타입>`, `ds6wg:<타입>.<속성>` 은 3DSpace, `ds6w:` 는 6W 검색 속성 | [타입, 속성 정보](/rest-api/dictionary#uri-표기) |
+| e6w | 3DSpace 범용 서비스 `/resources/v2/e6w/service/...` (ObjectInfo, PersonSearch ...) | [e6w](/rest-api/e6w) |
+| ExpresssionSearch | e6w 의 서버 설정 값 읽기. s 가 세 개인 것이 실제 경로 | [e6w](/rest-api/e6w#설정-값-읽기-expresssionsearch) |
+| enoviaServer | Foundation 이 만드는 전역 객체 (tenant, SecurityContext, 서버 주소, e6w 파라미터) | [e6w](/rest-api/e6w#foundation-이-감싸는-방식) |
+| 관계 패턴 | enorelnav 에서 관계 종류를 고르는 이름. `<관계>_to` 는 하위, 첨부 쪽, `<관계>_from` 은 상위, 사용처 쪽 | [관계 탐색](/rest-api/navigate#관계-패턴) |
+| getEcosystem | 시작 객체에서 관계로 이어진 객체를 받는 enorelnav 요청 | [관계 탐색](/rest-api/navigate#getecosystem-요청) |
 
 ## 이 문서에서 쓰는 말
 

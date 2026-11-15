@@ -10,6 +10,8 @@ UWA2/js/Core.js, Utils.js, String.js, Array.js, Json.js, Utils/Client.js. Core.j
 
 ## 한눈에
 
+DS/Utilities 의 비슷한 함수(UUID, 깊은 비교, debounce)와 고르는 기준은 [공통 유틸](/amd/utilities#같은-일을-하는-함수) 을 봅니다.
+
 | 함수 | 비슷한 것 | 다른 점 |
 | --- | --- | --- |
 | `extend(target, src, deep?)` | `Object.assign`, `$.extend` | 소스는 **1 개만**. 세 번째 인자는 deep 여부 |
@@ -172,7 +174,7 @@ require(['UWA/Utils/Client'], function (Client) {
 | `Engine` | `{ name, version, ... }`. `Engine.chrome`, `Engine.edge` 처럼 이름으로도 확인 |
 | `Platform` | `{ name, ipad, tablet, windows }`. 터치가 되는 Mac 은 `ios` 로 판정 |
 | `Features` | `touch`, `touchEvents`, `pointerEvents`, `cors`, `fullscreen`, `dragAndDrop`, `flexboxCSS` ... |
-| `Locale` | `{ lang, locale, dir }` |
+| `Locale` | `{ lang, locale, dir }`. 다른 언어 값과의 차이는 [언어와 사용자 환경설정](/widget/i18n-preferences#지금-언어-얻기) |
 | 함수 | `getSize()`, `getScrolls()`, `getScrollbarWidth()`, `getOrientation()`, `isOnline()` |
 
 불러오면 `<html>` 요소에 `chrome chrome120 win64` 같은 클래스가 붙습니다. CSS 에서 브라우저별 처리에 쓸 수 있습니다.

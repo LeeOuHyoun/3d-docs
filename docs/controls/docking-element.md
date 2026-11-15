@@ -5,12 +5,12 @@
 샘플: [06_docking_element.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/06_docking_element.html)
 
 ::: info 근거
-Windows.js 의 DockingElement (publishedProperties, addContent, replaceContent, getResizeInfos, __shouldCollapserBeVisible, _saveCollapseDockingZoneFlagInPreferences, 경계 끌기 / 접기 막대 처리, `fire("dockStartResize" / "dockIsResizing" / "dockResize" / "collapse" / "expand" / "dimensionsChanged")`, COLLAPSER_STYLE). 호출부: Skeleton (왼쪽 / 오른쪽 DockingElement 를 겹쳐 3단 화면), SNResultUX (오른쪽 정보 패널), SpecTree (위쪽), IPClassifyActive, CollectionView, Tree, VCXWebTimeline (7 파일). 로컬 실행: 2025, 2026 webapps 를 `npm run samples` 로 띄워 Edge 로 확인
+Windows.js 의 DockingElement (publishedProperties, addContent, replaceContent, getResizeInfos, __shouldCollapserBeVisible, _saveCollapseDockingZoneFlagInPreferences, 경계 끌기 / 접기 막대 처리, `fire("dockStartResize" / "dockIsResizing" / "dockResize" / "collapse" / "expand" / "dimensionsChanged")`, COLLAPSER_STYLE). 호출부: Skeleton (`DS/Skeleton/SkeletonLayout`. 왼쪽 / 오른쪽 DockingElement 를 겹쳐 3단 화면), SNResultUX (오른쪽 정보 패널), SpecTree (위쪽), IPClassifyActive, CollectionView, Tree, VCXWebTimeline (7 파일). 로컬 실행: 2025, 2026 webapps 를 `npm run samples` 로 띄워 Edge 로 확인
 :::
 
 ## 3단 레이아웃
 
-DockingElement 하나는 둘로만 나눕니다. 셋으로 나누려면 하나의 나머지 영역에 다른 DockingElement 를 넣습니다. OOTB Skeleton 이 이 방식입니다.
+DockingElement 하나는 둘로만 나눕니다. 셋으로 나누려면 하나의 나머지 영역에 다른 DockingElement 를 넣습니다. OOTB `DS/Skeleton/SkeletonLayout` 이 이 방식입니다. OOTB ENX 앱의 3단 화면은 `DS/ENOXTriptych` 를 씁니다. 고르는 기준은 [ENOVIA 공용 화면 틀](/controls/enox-components#고르는-기준) 을 봅니다.
 
 <<< @/../ControlsSample/06_docking_element.html#layout{js}
 
@@ -25,6 +25,7 @@ DockingElement 하나는 둘로만 나눕니다. 셋으로 나누려면 하나�
 - 바깥 DockingElement 만 `inject` 합니다. 담는 요소에는 높이와 `position` 을 줍니다.
 - `dockingZoneSize` 가 한쪽 영역 크기(px)입니다. 사용자가 끌 때는 `minSize` ~ `maxSize` 안에서만 바뀝니다.
 - 가운데에 DataGridView 를 넣으려면 가운데 요소에 `position: relative; height: 100%` 를 줍니다 ([기본 그리드](/datagridview/getting-started)).
+- 오른쪽 영역에 OOTB 속성 화면을 넣으려면 그 영역 요소에 [속성 패널 (EditPropWidget)](/controls/properties-panel) 을 넣습니다 (영역 요소에 높이 100%).
 
 로컬 실행으로 확인한 것: 1222 × 422 영역에서 왼쪽 179px, 가운데 800px, 오른쪽 219px. 왼쪽 목록을 누르면 가운데 그리드가 바뀌고, 그리드 행을 고르면 오른쪽에 속성이 보임.
 

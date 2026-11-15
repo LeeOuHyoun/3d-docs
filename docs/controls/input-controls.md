@@ -327,7 +327,7 @@ require(['DS/Controls/SelectionChipsEditor'], function (SelectionChipsEditor) {
 입력칸은 `customValidator` 를 부르기 **전에** 비워집니다. `undefined` 나 빈 배열을 돌려주면 칩도 안 생기고 입력 글자도 없어집니다. 거부 이유를 알려 주려면 함수 안에서 따로 메시지를 띄웁니다.
 :::
 
-칩에는 `label` 만 있으므로 화면 글자와 다른 값을 보관하려면 SelectionChips 를 직접 씁니다. `getSelectedChipsValue()` 는 선택된 칩 글자 배열입니다. 속성 전체는 [API](/controls/api/input-controls#selectionchipseditor) 에 있습니다.
+칩에는 `label` 만 있으므로 화면 글자와 다른 값을 보관하려면 SelectionChips 를 직접 씁니다. `getSelectedChipsValue()` 는 선택된 칩 글자 배열입니다. 속성 전체는 [API](/controls/api/input-controls#selectionchipseditor) 에 있습니다. 후보 목록에서 골라 칩으로 넣으려면 [자동완성 입력](/controls/autocomplete) 을 씁니다.
 
 ## Find
 

@@ -1,6 +1,6 @@
 # 검증 대기 목록
 
-본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 161 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
+본문에 <Badge type="danger" text="검증 필요" /> 배지가 붙은 추정 사양 253 곳을 모은 목록입니다. 실무에 쓰기 전에 서버에서 확인합니다.
 
 - 각 줄 앞의 링크는 그 문장이 있는 절로 갑니다.
 - 확인했으면 원래 페이지에서 배지를 지우고 문장을 단정형으로 고칩니다. 다르게 동작하면 내용을 고칩니다.
@@ -219,13 +219,42 @@
 - [커스텀 리소스 (resources/custom/)](/deploy/#커스텀-리소스-resources-custom) : 메일 템플릿 (`.vm`) : 엔진 캐시 설정에 따름
 - [반영 순서](/deploy/#반영-순서) : 이 순서는 참조 관계에서 정리한 것이고 원본에 반영 절차서가 있는 것은 아닙니다.
 
-## AMD 로딩 (1)
+## AMD 로딩 (8)
+
+### 들어 있는 외부 라이브러리 (4)
+
+- [Vue](/amd/libraries#vue) : `runtimeGlobalName` 을 바꾸지 않으면 런타임에 컴파일한 template 이 전역 `Vue` 를 찾아 실패하는 것으로 보입니다
+- [React](/amd/libraries#react) : 한 창에서 둘을 같이 부르면 먼저 읽힌 React 가 쓰이는 것으로 보입니다
+- [차트](/amd/libraries#차트) : `DS/DagreShim/DagreShim` : 이름으로 보아 dagre 계열 배치 라이브러리
+- [편집기](/amd/libraries#편집기) : OOTB 에서 CKEditor 4 에 이 값을 넣는 곳은 찾지 못했고, 키가 없을 때 화면이 어떻게 되는지는 확인하지 않았습니다
+
+### 공통 유틸 (DS/Utilities, Logger ...) (3)
+
+- [로그 수준](/amd/utilities#로그-수준) : sessionStorage 는 위젯 프레임의 출처(origin) 것이어야 하므로 3DDashboard 에서는 개발자 도구 콘솔의 대상 프레임을 위젯으로 바꾸고 넣는 것으로 보입니다
+- [PointerEvents](/amd/utilities#pointerevents) : 브라우저가 펜 입력을 mouse 이벤트로도 보내므로 마우스와 같은 이벤트로 오는 것으로 보입니다
+- [2026 변경](/amd/utilities#_2026-변경) : `KeyboardUtils` : 키 이름에 맞는 사용자 영역(PUA) 유니코드 글자를 돌려줌 (단축키 표시 글꼴용으로 보임
 
 ### WebappsUtils (1)
 
 - [로드될 때 하는 일](/amd/webapps-utils#로드될-때-하는-일) : 3DDashboard 위젯 프레임에서는 AmdLoader 를 프레임이 먼저 읽으므로 webapps 주소도 프레임이 정하는 것으로 보입니다.
 
-## 위젯과 플랫폼 (26)
+## 위젯과 플랫폼 (66)
+
+### 3D / 2D 미리 보기 (3DPlay) (6)
+
+- [타입별로 열리는 화면](/widget/3dplay#타입별로-열리는-화면) : 아래 두 행은 연결 모듈 이름과 코드 흐름으로 본 동작입니다
+- [options](/widget/3dplay#options) : `loading` : 스플래시를 둔 채 화면을 미리 만듦
+- [3DPlay 앱으로 열기 (TransientWidget)](/widget/3dplay#_3dplay-앱으로-열기-transientwidget) : 3DPlay 쪽에서 이 두 값을 어떻게 쓰는지는 확인하지 않았습니다
+- [3DDashboard 밖에서](/widget/3dplay#_3ddashboard-밖에서) : `Player3DPlayWeb` : 3DSpace 데이터를 passport 인증으로 읽는 부분까지 동작하는지는 확인하지 않음
+- [3DDashboard 밖에서](/widget/3dplay#_3ddashboard-밖에서) : 3DPlaySyndication.html : 대시보드 밖에서 그려지는지는 위와 같음
+- [2026 에서 달라진 것](/widget/3dplay#_2026-에서-달라진-것) : 2026 의 두 앱 정의 중 대시보드가 실제로 어느 쪽을 쓰는지는 확인하지 않았습니다
+
+### Compass 에 선택 객체 알리기 (i3DXCompassPubSub) (4)
+
+- [Compass 가 객체로 하는 일](/widget/compass-pubsub#compass-가-객체로-하는-일) : 3DDashboard 위젯 앱 : 열린 앱은 위젯 값 `X3DContentId` 로 받는 것으로 보입니다
+- [앱 실행 (launchApp)](/widget/compass-pubsub#앱-실행-launchapp) : `silent` : 안내 없이 처리하는 것으로 보입니다
+- [네이티브 앱에 선택 넘기기 (setTypes)](/widget/compass-pubsub#네이티브-앱에-선택-넘기기-settypes) : 키 전체의 뜻은 webapps 에 없습니다
+- [OpenWith 와의 관계](/widget/compass-pubsub#openwith-와의-관계) : 호환 앱 항목을 누름 : callback 은 응답에 `error` 가 있으면 Compass 를 열고 안내하는데, Compass 응답은 `error` 가 아니라 `response` 키라서 이 안내는 나오지 않는 것으로 보입니다
 
 ### Compass 서비스 (i3DXCompassPlatformServices) (1)
 
@@ -246,6 +275,13 @@
 - [Internal 저장](/widget/dashboard-register#internal-저장) : 3DSpace `webapps/` 의 AMD 모듈을 상대 경로로 부르는 위젯은 주소가 달라져 모듈을 찾지 못하므로 External 로 등록하는 편이 안전한 것으로 보입니다.
 - [등록한 뒤](/widget/dashboard-register#등록한-뒤) : 구성원은 Compass 에서 Short Name 으로 앱을 찾아 대시보드 탭에 올리는 것으로 보입니다.
 
+### 언어와 사용자 환경설정 (I18n, MePreferences) (4)
+
+- [지금 언어 얻기](/widget/i18n-preferences#지금-언어-얻기) : 3DDashboard 가 위젯 프레임에 Me 메뉴의 언어를 넣어 주는지는 webapps 원본에 없는 대시보드 쪽 일이라 확인하지 못했습니다
+- [OOTB 가 읽는 저장소와 키](/widget/i18n-preferences#ootb-가-읽는-저장소와-키) : `LengthDisplay` 는 화면 표시용 자릿수로 보이나 `...CalcDisplay` 와의 차이는 원본에서 확인하지 못했습니다
+- [값이 바뀔 때](/widget/i18n-preferences#값이-바뀔-때) : 3DDashboard 또는 서버 알림으로 보이며, 다른 탭에서 바꾼 경우에도 오는지는 확인하지 못했습니다
+- [2026 변경](/widget/i18n-preferences#_2026-변경) : `getAppUserPreferences` 가 `openInNewTab` 말고 무엇을 돌려주는지는 확인하지 못했습니다
+
 ### 위젯 (2)
 
 - [실행 환경](/widget/#실행-환경) : 3DDashboard : 대시보드의 위젯 프레임 (iframe, 주소에 `/api/widget/frame` 이 들어간 것으로 보임
@@ -260,10 +296,45 @@
 - [getValue 가 값을 찾는 순서](/widget/preferences#getvalue-가-값을-찾는-순서) : 대시보드에서는 프레임이 값을 대시보드로 보내 위젯마다 저장하는 것으로 보입니다.
 - [설정 창 흐름](/widget/preferences#설정-창-흐름) : 2 : 대시보드가 `getPreferences()` 결과로 그리는 것으로 보임
 
+### 3DSearch 에서 객체 골라 오기 (14)
+
+- [socket_id 와 widget_id](/widget/search#socket-id-와-widget-id) : `widget_id` 에 실제 `widget.id` 를 넣고 해제하지 않으면, 그 위젯을 최대화했을 때 상단 검색창이 이 등록 정보로 "앱 안에서 찾기" 를 하는 것으로 보입니다
+- [옵션](/widget/search#옵션) : `default_with_precond` : 아니면 검색어 없이 검색창에 포커스만 주는 것으로 보입니다
+- [옵션](/widget/search#옵션) : `search_delegation` : `'3ddashboard'` 면 "이 탭에서 찾기" 쪽으로 가는 것으로 보입니다
+- [옵션](/widget/search#옵션) : `closeTransient` : `false` 면 OK 뒤 창을 닫지 않는 것으로 보입니다
+- [옵션](/widget/search#옵션) : 검색 조건도 저장된 값이 쓰여서, LifecycleWidget 처럼 등록은 빈 값으로 하고 `InContextSearch` 에만 조건을 주면 첫 검색에만 조건이 걸리는 것으로 보입니다
+- [precond](/widget/search#precond) : `flattenedtaxonomies` 는 타입 계층을 펼친 값이라 하위 타입도 걸리는 것으로 보입니다
+- [precond](/widget/search#precond) : OOTB 에서 쓰는 이름을 보고 추정한 규칙입니다
+- [동작 방식](/widget/search#동작-방식) : 3DSpace 기본 화면 : 소켓은 바로 위 창에만 붙으므로 그 창이 상단 바를 가진 창일 때만 닿는 것으로 보입니다
+- [동작 방식](/widget/search#동작-방식) : 대시보드와 origin 이 다른 iframe : InterCom 이 `postMessage` 대상 origin 을 자기 주소로 정해서 전달되지 않는 것으로 보입니다
+- [주소](/widget/search#주소) : Compass 의 3DSearch 주소가 이미 `/federated` 로 끝나는 것으로 보입니다
+- [요청 본문](/widget/search#요청-본문) : `label` : 기록용으로 보입니다
+- [요청 본문](/widget/search#요청-본문) : `with_indexing_date`, `with_synthesis`, `with_nls` : 인덱스 날짜, 태그 집계(`facets`), 번역된 이름을 같이 받는 것으로 보입니다
+- [요청 본문](/widget/search#요청-본문) : `login` 을 빼면 사용자 기본 SecurityContext 를 쓰는 것으로 보입니다
+- [응답](/widget/search#응답) : `resourceid` 는 `select_predicate` 에 넣지 않아도 오는 것으로 보입니다
+
 ### 3DSpace 주소와 SecurityContext (2)
 
 - [플랫폼 id](/widget/space-url#플랫폼-id) : 온프레미스 환경의 플랫폼 id 는 `OnPremise` 로 보입니다.
 - [목록과 기본값 받기](/widget/space-url#목록과-기본값-받기) : 3DSpace 가 여러 플랫폼을 서비스하는 환경에서 필요한 것으로 보입니다.
+
+### 6W 태그 연동 (TagNavigatorProxy) (7)
+
+- [옵션](/widget/tagger#옵션) : `widgetId` : 태그 창이 이 값으로 위젯이 있는 context(탭으로 보임
+- [옵션](/widget/tagger#옵션) : `pod` : 사용자에게 보이는 차이는 확인하지 않았습니다
+- [행 id (주제)](/widget/tagger#행-id-주제) : 사용자 태그까지 쓰려면 OOTB 형식을 따르는 것이 안전합니다
+- [메서드](/widget/tagger#메서드) : `focusOnSubjects(ids, persistTags, dataSources, options)` / `unfocus()` : 사용자가 그 행에 태그를 붙일 때 쓰는 것으로 보입니다
+- [동작 방식](/widget/tagger#동작-방식) : context 가 대시보드 탭이라는 것은 이 함수 이름으로 본 추정입니다
+- [숨길 때, 닫을 때](/widget/tagger#숨길-때-닫을-때) : 대시보드 탭을 바꿀 때 : 태그 창이 context 마다 따로 있는 것으로 보입니다
+- [2026 변경](/widget/tagger#_2026-변경) : `configurePredicates` <Badge type="warning" text="2026" /> : 처음 보일 모양을 정하는 것으로 보입니다 (`'tag'`, `'people'`, `'freeInput'` 값이 보임)
+
+### 대시보드 상단 바 (TopBarProxy) (5)
+
+- [메서드](/widget/top-bar#메서드) : `addOnSubMenuDisplayedEvent({ 칸 id: fn })` : 그 칸의 메뉴가 열릴 때 부를 함수로 보입니다
+- [동작 방식](/widget/top-bar#동작-방식) : 지금 보이는 위젯의 채널(`widget.id`)을 활성으로 하는 것으로 보입니다
+- [주의](/widget/top-bar#주의) : 상단 바에는 채널의 proxy 를 한꺼번에 지우는 `_removeProvider(채널 id)` 도 있지만 webapps 안에서 부르는 곳이 없어, 대시보드가 위젯을 지울 때 대신 정리해 주는지는 확인하지 않았습니다
+- [주의](/widget/top-bar#주의) : 같은 위젯에서 proxy 를 또 만들면 상단 바 쪽 등록이 초기화되거나 항목이 겹칠 수 있습니다
+- [2026 변경](/widget/top-bar#_2026-변경) : `enovTasks` 칸 <Badge type="warning" text="2026" /> : 위젯 항목을 넣으면 보이는지는 확인하지 않았습니다
 
 ### 다른 앱을 창으로 열기 (TransientWidget) (4)
 
@@ -283,7 +354,7 @@
 
 - [Socket 으로 붙기](/uwa/intercom#socket-으로-붙기) : 넣어도 효과가 없는 것으로 보입니다.
 
-## 화면 컨트롤 (13)
+## 화면 컨트롤 (30)
 
 ### 목록, 트리, 타일 뷰 API (1)
 
@@ -322,6 +393,15 @@
 - [한쪽 영역을 탭으로](/controls/docking-element#한쪽-영역을-탭으로) : 이 방식은 샘플로 실행하지 않았습니다
 - [접기 막대 모양](/controls/docking-element#접기-막대-모양) : Skeleton 의 CSS 나 다른 조건이 필요한 것으로 보입니다
 
+### ENOVIA 공용 화면 틀 (ENOX) (6)
+
+- [옵션](/controls/enox-components#옵션) : `pinOptions` / `pinCallback` : `DS/W3DDComponents/Views/PinView` 옵션(`widgetAppId`, `widgetData` 등)으로 대시보드에 위젯을 고정하는 것으로 보입니다
+- [옵션](/controls/enox-components#옵션) : `appNamePosition` : 1 이면 줄이지 않음
+- [LinkManager API](/controls/enox-components#linkmanager-api) : 3DDashboard 밖에서는 실행하지 않았습니다
+- [LinkManager API](/controls/enox-components#linkmanager-api) : PAD 앱이 아니면 연결 뒤 동기화 단계가 끝나지 않는 것으로 보입니다
+- [WidgetLink 직접 쓰기](/controls/enox-components#widgetlink-직접-쓰기) : 커스텀 위젯이 대시보드에서 연결 대상으로 잡히려면 연결 능력(`x3dLinkability`)이 서로 맞아야 하는데, 이 조건은 대시보드 쪽(`DS/Dashboard/WidgetLinkManager`, webapps 에 없음)에 있어 확인하지 못했습니다
+- [Skeleton](/controls/enox-components#skeleton) : 서버 목록(Collection 의 `url`, `fetch`)이 있어야 화면이 채워집니다
+
 ### 화면 컨트롤 개요 (1)
 
 - [무엇을 쓸까](/controls/#무엇을-쓸까) : UIKIT 은 UWA 컨트롤(`UWA/Controls/Abstract`) 위에 만든 예전 계열로 보입니다.
@@ -329,6 +409,23 @@
 ### 입력 컨트롤 (숫자, 칩, 검색, 파일) (1)
 
 - [직접 바꾸기와 보여 주기 (customValidator, customFormatter)](/controls/input-controls#직접-바꾸기와-보여-주기-customvalidator-customformatter) : 2026 은 화면 글자를 `NumberUtils.formatNumberToString` 으로 만들어 지역 형식이 늘 적용되는 것으로 보입니다
+
+### 메뉴 (DS/Menu) (1)
+
+- [키보드](/controls/menu#키보드) : 2025 에서 키보드 사용을 고려하면 메뉴를 열기 전에 버튼의 포커스를 빼 둡니다 (`document.activeElement.blur()`)
+
+### 속성 패널 (EditPropWidget) (10)
+
+- [보이는 모양 (typeOfDisplay)](/controls/properties-panel#보이는-모양-typeofdisplay) : `ONLY_IDENTITY_CARD` : 이름과 달리 탭 내용을 숨기는 코드는 찾지 못했습니다
+- [선택을 따라갈지 (selectionType)](/controls/properties-panel#선택을-따라갈지-selectiontype) : `RESTRICTED_SELECTION` : 실제로 어떤 메시지가 통과하는지는 확인하지 않았습니다
+- [객체 넣기 (initDatas)](/controls/properties-panel#객체-넣기-initdatas) : 직접 만든 탭을 넣었으면 샘플처럼 `initDatas(models, EditPropConstants.FACET_PROPERTIES)` 로 처음 탭을 줍니다
+- [직접 만든 탭](/controls/properties-panel#직접-만든-탭) : 이 샘플 탭은 서버에서 실행해 보지 않았습니다
+- [OOTB 정보 창으로 열기](/controls/properties-panel#ootb-정보-창으로-열기) : 이 중 무엇이 꼭 있어야 하는지는 확인하지 않았습니다
+- [OOTB 정보 창으로 열기](/controls/properties-panel#ootb-정보-창으로-열기) : 브라우저로 `<3DSpace>/webapps/EditPropWidget/EditPropWidget.html?selected=<physicalid>` 를 열어도 되는지는 확인하지 않았습니다
+- [팝업과 도킹 창](/controls/properties-panel#팝업과-도킹-창) : 이 두 모양은 실행해 보지 않았습니다
+- [고르는 기준](/controls/properties-panel#고르는-기준) : 저장 뒤 내 화면 갱신 : 다른 위젯이므로 PlatformAPI `DS/PADUtils/PADCommandProxy/refresh` 구독
+- [3DDashboard 밖에서](/controls/properties-panel#_3ddashboard-밖에서) : 단독 실행에서는 Compass 콜백이 오지 않을 수 있어([Compass 서비스](/widget/compass-services)), 그러면 탭과 속성이 끝내 나오지 않을 것으로 보입니다
+- [주의](/controls/properties-panel#주의) : 없는 모듈은 그 탭만 비게 됩니다
 
 ### WebUX 컨트롤 (1)
 
@@ -349,12 +446,52 @@
 - [선택 (CSOManager, HSOManager, PSOManager)](/events/selection) : `DS/Selection/HSOManager` : 강조(highlight) 목록으로 보입니다
 - [선택 (CSOManager, HSOManager, PSOManager)](/events/selection) : `DS/Selection/PSOManager` : 미리 선택(마우스 올림) 목록으로 보입니다
 
-## 3DSpace REST API (3)
+## 3DSpace REST API (31)
+
+### 타입, 속성 정보 (dictionary) (3)
+
+- [하위 타입 (getTypeInfo)](/rest-api/dictionary#하위-타입-gettypeinfo) : 어떤 타입이 빈 객체로 오는지는 확인하지 못했습니다
+- [dsfl/metaTypes](/rest-api/dictionary#dsfl-metatypes) : 보낸 타입 아래의 하위 타입 목록으로 보입니다
+- [주의](/rest-api/dictionary#주의) : 서버가 두 모양을 다 받는 것으로 보입니다
+
+### 객체 정보, 사람과 객체 찾기 (e6w) (7)
+
+- [버전과 주소](/rest-api/e6w#버전과-주소) : v3 는 `dataelements` 로 감싸지 않은 모양으로 보입니다 (FolderUpload, RDFFoundation 이 바로 읽음)
+- [여러 객체 예](/rest-api/e6w#여러-객체-예) : 미리 보기가 없는 객체는 타입 기본 그림 주소가 오는 것으로 보입니다
+- [객체 찾기 (ObjectSearch)](/rest-api/e6w#객체-찾기-objectsearch) : 이름 찾기도 부분 일치 결과가 섞일 수 있는 것으로 보입니다
+- [찾기 조건](/rest-api/e6w#찾기-조건) : 3DSearch 와 같은 문법이라 e6w 찾기도 인덱스를 쓰는 것으로 보입니다
+- [설정 값 읽기 (ExpresssionSearch)](/rest-api/e6w#설정-값-읽기-expresssionsearch) : 값은 서버의 Expression 관리 객체(MQL `expression`)에서 오는 것으로 보입니다
+- [결과 수](/rest-api/e6w#결과-수) : 이때 서버의 기본 개수는 확인하지 못했습니다
+- [주의](/rest-api/e6w#주의) : `Content-Type` 을 `application/json` 으로 보내면 `$ids` 가 읽히지 않는 것으로 보입니다
 
 ### 3DSpace REST API 공통 규칙 (2)
 
 - [URL 구성](/rest-api/#url-구성) : `tenant=` : 온프레미스에서는 생략해도 되는 것으로 보입니다
 - [쿼리 파라미터](/rest-api/#쿼리-파라미터) : `$terse` : 응답 줄이기로 보입니다
+
+### 성숙도 변경, 개정 (lifecycle) (12)
+
+- [갈 수 있는 state](/rest-api/lifecycle#갈-수-있는-state) : state 이름과 색만 필요하면 `POST /resources/lifecycle/maturity/getStatesAttributes` 본문 `{ policies: ['<policy 이름>'] }` 를 부르고 `policies[].policyName`, `policies[].states[]` (`stateSysName`, `stateUserName`, `activeColor`, `inactiveColor`) 를 읽습니다 (IPClassifyUXUtil, ENOXVersionExplorerController, ENOChgServices). ENONextGenFilterUX 는 `{ objectids: [id] }` 로 보내고 `policies` 를 객체 하나로 읽습니다
+- [promote / demote](/rest-api/lifecycle#promote-demote) : 오래 걸리면 결과를 백그라운드 알림으로 돌리는 기준(초)으로 보입니다
+- [dslc (CAA) 성숙도 API](/rest-api/lifecycle#dslc-caa-성숙도-api) : 서버는 현재 state 와 policy 그래프로 promote 인지 demote 인지와 `tostate`, `fromstate`, `signature` 를 정한 뒤 lifecycle 과 같은 내부 함수(`maturityChange_internal`)를 부르는 것으로 보입니다
+- [dslc (CAA) 성숙도 API](/rest-api/lifecycle#dslc-caa-성숙도-api) : `nextStates` 항목이 문자열인지 객체인지는 확인하지 못했습니다
+- [오류 코드](/rest-api/lifecycle#오류-코드) : 코드 앞 세 자리가 HTTP 상태와 같은 것으로 보입니다
+- [소유자 넘기기](/rest-api/lifecycle#소유자-넘기기) : 항목에 `id`, `status`, `errorCode`, `errorMessage` 가 있는 것으로 보입니다
+- [소유자 넘기기](/rest-api/lifecycle#소유자-넘기기) : 샘플의 이 버튼은 서버에서 실행해 보지 않았습니다
+- [끝났을 때 알림](/rest-api/lifecycle#끝났을-때-알림) : 다른 OOTB 위젯이 새로 고치게 하려면 같은 모양으로 `Lifecycle.Modification` 을 보내면 될 것으로 보입니다
+- [서버에서 일어나는 일 (트리거)](/rest-api/lifecycle#서버에서-일어나는-일-트리거) : 서버 클래스(`LifecycleServices_ChangeMaturity_PLMReference_default`, `_BusinessObject`)의 문자열로 보면 한 트랜잭션 안에서 아래 검사를 하고, 하나라도 실패하면 abort 하는 것으로 보입니다
+- [서버에서 일어나는 일 (트리거)](/rest-api/lifecycle#서버에서-일어나는-일-트리거) : 서버 클래스에 context 의 client task(notice)를 읽어 메시지에 붙이는 문자열(`getClientTasks`, `UXMessage`, `#FSMP#`)이 있어서 `report[].error` 에 들어오는 것으로 보입니다
+- [서버에서 일어나는 일 (트리거)](/rest-api/lifecycle#서버에서-일어나는-일-트리거) : dslc `changeState` 는 같은 실패를 `errorReport` (`LCERROR500002`, `Maturity Failed :` 뒤에 원인)로 돌려주는 것으로 보입니다
+- [서버에서 일어나는 일 (트리거)](/rest-api/lifecycle#서버에서-일어나는-일-트리거) : 트리거 실패 때 실제로 어떤 문자열이 오는지는 서버에서 확인하지 않았습니다
+
+### 관계 탐색 (enorelnav) (6)
+
+- [getEcosystem 요청](/rest-api/navigate#getecosystem-요청) : `restrictedMode` : 뜻은 확인하지 못함
+- [getEcosystem 요청](/rest-api/navigate#getecosystem-요청) : `trueREST` : 뜻은 확인하지 못함
+- [getEcosystem 요청](/rest-api/navigate#getecosystem-요청) : `redirectQueryToSGI` : 인덱스 쪽으로 질의를 돌리는 옵션으로 보입니다
+- [관계 패턴](/rest-api/navigate#관계-패턴) : 타입에 맞는 패턴을 서버가 고르는 것으로 보입니다
+- [주의](/rest-api/navigate#주의) : 같은 `widgetId` 를 다른 화면이나 다른 용도에 쓰면 맡긴 설정이 섞일 수 있습니다
+- [주의](/rest-api/navigate#주의) : 쓸 수 있는 패턴은 역할, 앱 설정에 따라 다른 것으로 보입니다 (`getProfiles` 가 `roles` 를 받음)
 
 ### 보안 컨텍스트 (SecurityContext) (1)
 

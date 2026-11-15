@@ -115,7 +115,7 @@ require(['DS/MyWidget/PartList'], function (PartList) {
 | webapps 주소 | 위 순서 | `window.dsDefaultWebappsBaseUrl` |
 | 경로 추가 | - | `require.config({ paths: { 'DS/MyLib': 'https://.../MyLib' } })` |
 
-`require.config({ paths })` 는 ENOVIA 코드에서도 특정 폴더만 다른 위치로 돌릴 때 씁니다 (예: 3DPlayAppHybrid 의 `'DS/VENCKEditor'`).
+`require.config({ paths })` 는 ENOVIA 코드에서도 특정 폴더만 다른 위치로 돌릴 때 씁니다 (예: 3DPlayAppHybrid 의 `'DS/VENCKEditor'`). OOTB 외부 라이브러리 래퍼(CKEditor, Highcharts, PDFjs ...)도 같은 방식으로 VEN 폴더의 경로를 잡습니다 ([래퍼가 하는 일](/amd/libraries#래퍼가-하는-일)).
 
 ## 오류 메시지
 
@@ -151,3 +151,5 @@ require(['DS/MyWidget/PartList'], function (PartList) {
 | --- | --- |
 | [플러그인 (i18n!, css!, text!)](/amd/plugins) | 다국어, 스타일, 텍스트 파일 읽기. 언어를 찾는 순서 |
 | [WebappsUtils](/amd/webapps-utils) | webapps 폴더 주소, 이미지 / 아이콘 주소 만들기 |
+| [공통 유틸 (DS/Utilities, Logger)](/amd/utilities) | DOM 이벤트, 아이콘, debounce, UUID, 로그, 마우스 / 터치 이벤트, 크기 변화 감지 |
+| [들어 있는 외부 라이브러리](/amd/libraries) | Handlebars, Vue, React, jQuery, Highcharts, CKEditor, PDF.js 등의 AMD 이름, 버전, 업그레이드 주의 |

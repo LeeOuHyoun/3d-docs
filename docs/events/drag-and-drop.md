@@ -95,7 +95,7 @@ require(['DS/DataDragAndDrop/DataDragAndDrop'], function (DnD) {
 | 키 | 필수 | 설명 |
 | --- | --- | --- |
 | `protocol` | O | 항상 `'3DXContent'` |
-| `version` | O | `'1.0'`, `'1.1'`, `'2.0'`, `'2.1'` 중 하나 |
+| `version` | O | `'1.0'`, `'1.1'`, `'2.0'`, `'2.1'` 중 하나. OOTB 에는 `'0.1'` 을 넣는 곳도 있음 (CAT3DAnnotationUtils, DMUPlayMarker 등) |
 | `source` | O | 보낸 앱 id. `widget.getValue('appId')` 나 앱 코드(`'ENOLCMT_AP'` 등) |
 | `data` | O | `{ items: [...] }` |
 | `widgetId` | - | 보낸 위젯 id |
@@ -173,7 +173,7 @@ require(['DS/DataDragAndDrop/DataDragAndDrop'], function (DnD) {
 });
 ```
 
-놓인 객체의 이름, 리비전, 상태 같은 기본 정보는 타입에 상관없이 `GET /resources/v2/e6w/service/ObjectInfo/{objectId}` 로 받을 수 있습니다. 자세한 것은 [3DSpace REST 목록](/rest-api/catalog#e6w-서비스) 을 봅니다.
+놓인 객체의 이름, 리비전, 상태 같은 기본 정보는 타입에 상관없이 `GET /resources/v2/e6w/service/ObjectInfo/{objectId}` 로 받을 수 있습니다. 자세한 것은 [e6w ObjectInfo](/rest-api/e6w#objectinfo) 와 [3DSpace REST 목록](/rest-api/catalog#e6w-서비스) 을 봅니다.
 
 ::: tip envId 가 다른 경우
 ENOChgServices 는 `envId` 가 비어 있으면 "플랫폼 정보 없음", 다르면 "플랫폼 불일치" 오류를 띄우고 놓기를 취소합니다. 다른 플랫폼의 id 로 내 3DSpace 를 부르면 찾지 못하기 때문입니다.
@@ -228,4 +228,7 @@ DnD.draggable(rowEl, {
 | Compass 로 앱 실행 | InterCom 소켓으로 `'com.ds.compass'` 서버에 `onSetX3DContent` 이벤트와 함께 보냄 |
 | 대시보드 링크 | `<3DDashboard 주소>#app:<앱id>/content:X3DContentId=<JSON 을 encodeURIComponent>` |
 
-실행 방법은 [PlatformAPI](/widget/platform-api), [InterCom](/uwa/intercom) 을 봅니다.
+| 3DSearch 에서 고른 결과 | `InContextSearch_Response` 의 `selected_data` (3DXContent 2.1. [3DSearch 에서 골라 오기](/widget/search#incontextsearch-response)) |
+| 3DPlay 앱 열기 | TransientWidget 으로 열 때 위젯 값 `X3DContentId` 로 넘김 ([3D / 2D 미리 보기](/widget/3dplay#_3dplay-앱으로-열기-transientwidget)) |
+
+실행 방법은 [PlatformAPI](/widget/platform-api), [InterCom](/uwa/intercom), [Compass 에 선택 객체 알리기](/widget/compass-pubsub) 를 봅니다.

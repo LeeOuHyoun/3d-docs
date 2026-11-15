@@ -140,7 +140,9 @@ const WEBAPPS_SIDEBAR = [
         text: '가이드',
         items: [
           { text: '플러그인 (i18n!, css!, text!)', link: '/amd/plugins' },
-          { text: 'WebappsUtils', link: '/amd/webapps-utils' }
+          { text: 'WebappsUtils', link: '/amd/webapps-utils' },
+          { text: '공통 유틸 (DS/Utilities, Logger)', link: '/amd/utilities' },
+          { text: '들어 있는 외부 라이브러리', link: '/amd/libraries' }
         ]
       }
     ]
@@ -170,7 +172,18 @@ const WEBAPPS_SIDEBAR = [
           { text: 'Compass 서비스', link: '/widget/compass-services' },
           { text: 'WidgetServices', link: '/widget/widget-services' },
           { text: '3DSpace 주소와 SecurityContext', link: '/widget/space-url' },
-          { text: '다른 앱을 창으로 열기 (TransientWidget)', link: '/widget/transient-widget' }
+          { text: '다른 앱을 창으로 열기 (TransientWidget)', link: '/widget/transient-widget' },
+          { text: '언어와 사용자 환경설정', link: '/widget/i18n-preferences' }
+        ]
+      },
+      {
+        text: '플랫폼 화면과 연동',
+        items: [
+          { text: '3DSearch 에서 골라 오기', link: '/widget/search' },
+          { text: '6W 태그 연동', link: '/widget/tagger' },
+          { text: 'Compass 에 선택 객체 알리기', link: '/widget/compass-pubsub' },
+          { text: '대시보드 상단 바 (TopBarProxy)', link: '/widget/top-bar' },
+          { text: '3D / 2D 미리 보기 (3DPlay)', link: '/widget/3dplay' }
         ]
       }
     ]
@@ -224,6 +237,8 @@ const WEBAPPS_SIDEBAR = [
         items: [
           { text: 'WebUX 컨트롤', link: '/controls/webux-controls' },
           { text: '입력 컨트롤 (숫자, 칩, 검색, 파일)', link: '/controls/input-controls' },
+          { text: '자동완성 입력 (WUXAutoComplete)', link: '/controls/autocomplete' },
+          { text: '메뉴 (DS/Menu)', link: '/controls/menu' },
           { text: '레이아웃 컨트롤', link: '/controls/layout' },
           { text: '색상, 표시 컨트롤', link: '/controls/display-controls' },
           { text: '목록, 트리, 타일 뷰', link: '/controls/collection-views' },
@@ -231,6 +246,8 @@ const WEBAPPS_SIDEBAR = [
           { text: '다이얼로그 (Windows)', link: '/controls/dialog' },
           { text: '창 묶기, 붙이기, 위치 저장', link: '/controls/window-layout' },
           { text: '분할 레이아웃 (DockingElement)', link: '/controls/docking-element' },
+          { text: '속성 패널 (EditPropWidget)', link: '/controls/properties-panel' },
+          { text: 'ENOVIA 공용 화면 틀 (ENOX)', link: '/controls/enox-components' },
           { text: 'UIKIT', link: '/controls/uikit' },
           { text: '알림 메시지', link: '/controls/notifications' }
         ]
@@ -266,7 +283,11 @@ const WEBAPPS_SIDEBAR = [
       { text: '공통 규칙', link: '/rest-api/' },
       { text: '보안 컨텍스트', link: '/rest-api/security-context' },
       { text: '엔드포인트 목록', link: '/rest-api/catalog' },
-      { text: '문서 (documents)', link: '/rest-api/documents' }
+      { text: '문서 (documents)', link: '/rest-api/documents' },
+      { text: '성숙도 변경, 개정 (lifecycle)', link: '/rest-api/lifecycle' },
+      { text: '타입, 속성 정보 (dictionary)', link: '/rest-api/dictionary' },
+      { text: '객체 정보, 사람과 객체 찾기 (e6w)', link: '/rest-api/e6w' },
+      { text: '관계 탐색 (enorelnav)', link: '/rest-api/navigate' }
     ]
   },
   {
@@ -375,6 +396,18 @@ const LOOKUP_ITEMS = [
 
 const sidebarFor = (prefixes, sidebar) => Object.fromEntries(prefixes.map((prefix) => [prefix, sidebar]))
 
+const slugifyHeading = (text) =>
+  text
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .normalize('NFC')
+    .replace(/[\u0000-\u001f]/g, '')
+    .replace(/[\s~`!@#$%^&*()\-_+=[\]{}|\\;:"'“”‘’<>,.?/]+/g, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/^(\d)/, '_$1')
+    .toLowerCase()
+
 export default defineConfig({
   lang: 'ko-KR',
   title: 'ENOVIA 분석 사양서',
@@ -383,6 +416,7 @@ export default defineConfig({
   cleanUrls: true,
   lastUpdated: true,
   markdown: {
+    anchor: { slugify: slugifyHeading },
     config: (md) => {
       md.renderer.rules.table_open = () => '<div class="table-wrap"><table>\n'
       md.renderer.rules.table_close = () => '</table></div>\n'

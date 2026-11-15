@@ -107,7 +107,12 @@
         appIdEditor.inject(row(page, '앱 ID'));
 
         var dataEl = UWA.createElement('textarea').inject(row(page, '넘길 값'));
-        dataEl.value = JSON.stringify({ objectId: '', sampleMessage: 'from TransientSample' });
+        var platformId = widget.getValue('x3dPlatformId') || 'OnPremise';
+        dataEl.value = JSON.stringify({
+          SelectedItem: [{ objectId: '', metatype: 'businessobject', source: '3DSpace', tenant: platformId }],
+          x3dPlatformId: platformId,
+          sampleMessage: 'from TransientSample'
+        });
 
         var modeCombo = new ComboBox({ elementsList: ['panel', 'transient'], value: 'panel', enableSearchFlag: false });
         modeCombo.inject(row(page, 'mode'));

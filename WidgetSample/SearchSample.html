@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Search Sample</title>
+  <meta name="author" content="sample" />
+  <meta name="description" content="3DSearch sample: pick objects or people in 3DSearch (in-context search), search by text (federated search)" />
+  <meta name="autoRefresh" content="0" />
+
+  <link rel="stylesheet" type="text/css" href="../c/UWA/assets/css/standalone.css" />
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <script type="text/javascript" src="../c/UWA/js/UWA_Standalone_Alone.js"></script>
+
+  <style type="text/css">
+    .ss-page { padding: 12px; font-family: sans-serif; font-size: 13px; }
+    .ss-page h3 { margin: 14px 0 6px; font-size: 14px; }
+    .ss-row { display: flex; gap: 6px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+    .ss-row label { width: 110px; color: #555; }
+    .ss-table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    .ss-table th, .ss-table td { border: 1px solid #d1d4d4; padding: 3px 6px; text-align: left; }
+    .ss-table th { background: #f4f5f6; }
+    .ss-empty { color: #888; }
+    .ss-log { height: 140px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; white-space: pre-wrap; }
+  </style>
+
+  <widget:preferences>
+    <widget:preference name="x3dPlatformId" type="hidden" defaultValue=""></widget:preference>
+  </widget:preferences>
+
+  <script type="text/javascript">
+  //<![CDATA[
+    require([
+      'UWA/Core',
+      'DS/SNInfraUX/SearchCom',
+      'DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices',
+      'DS/WAFData/WAFData',
+      'DS/Controls/Button',
+      'DS/Controls/LineEditor',
+      'DS/Controls/Toggle'
+    ], function (UWA, SearchCom, CompassServices, WAFData, Button, LineEditor, Toggle) {
+      'use strict';
+
+      var PICKED_COLUMNS = ['id', 'label', 'name', 'type'];
+      var FOUND_COLUMNS = ['resourceid', 'ds6w:label', 'ds6w:identifier', 'ds6w:type', 'ds6wg:revision', 'ds6w:status'];
+      var logEl;
+      var pickedEl;
+      var foundEl;
+      var picked = [];
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      function row(parent, labelText) {
+        var el = UWA.createElement('div', { 'class': 'ss-row' }).inject(parent);
+        if (labelText) { UWA.createElement('label', { text: labelText }).inject(el); }
+        return el;
+      }
+
+      function splitTypes(text) {
+        return (text || '').split(',').map(function (t) { return t.trim(); }).filter(Boolean);
+      }
+
+      function platformId() {
+        return widget.getValue('x3dPlatformId') || undefined;
+      }
+
+      function renderTable(container, rows, columns) {
+        container.empty();
+        if (!rows.length) {
+          UWA.createElement('div', { 'class': 'ss-empty', text: '없음' }).inject(container);
+          return;
+        }
+        var table = UWA.createElement('table', { 'class': 'ss-table' }).inject(container);
+        var head = UWA.createElement('tr').inject(table);
+        columns.forEach(function (c) { UWA.createElement('th', { text: c }).inject(head); });
+        rows.forEach(function (r) {
+          var tr = UWA.createElement('tr').inject(table);
+          columns.forEach(function (c) {
+            UWA.createElement('td', { text: r[c] === undefined || r[c] === null ? '' : String(r[c]) }).inject(tr);
+          });
+        });
+      }
+
+      function renderPicked() {
+        renderTable(pickedEl, picked, PICKED_COLUMNS);
+      }
+
+      /*
+       * [1] 소켓은 위젯마다 하나를 만들어 다시 씁니다.
+       *   - 같은 socket_id 로 createSocket 을 두 번 부르면 예외가 납니다 (already created).
+       *   - 결과는 옵션의 app_socket_id(= socketId) 소켓으로만 옵니다.
+       */
+      // #region socket
+      var socketId = 'XX_search_' + widget.id;
+      var socket = null;
+
+      function getSocket() {
+        if (!socket) {
+          socket = SearchCom.createSocket({ socket_id: socketId });
+          socket.addListener('Selected_Objects_search', onSelected);
+          socket.addListener('InContextSearch_Response', onResponse);
+          socket.addListener('onCloseTransient', onCloseTransient);
+        }
+        return socket;
+      }
+      // #endregion socket
+
+      /*
+       * [2] 옵션: 타입 제한은 precond, 여러 개 선택은 multiSel, 이미 받은 객체는 resourceid_not_in 으로 뺍니다.
+       *   - mode 가 'furtive' 여야 결과 아래에 취소 / OK 단추가 생기고 고른 값이 돌아옵니다.
+       */
+      // #region options
+      function typePrecond(types) {
+        return 'flattenedtaxonomies:(' + types.map(function (t) { return '"types/' + t + '"'; }).join(' OR ') + ')';
+      }
+
+      function objectOptions(title, types, multiSel, excludeIds) {
+        return {
+          app_socket_id: socketId,
+          widget_id: socketId,
+          mode: 'furtive',
+          title: title,
+          multiSel: multiSel,
+          precond: typePrecond(types),
+          default_with_precond: true,
+          default_search_criteria: '',
+          show_precond: false,
+          resourceid_not_in: excludeIds,
+          source: ['3dspace'],
+          tenant: platformId(),
+          idcard_activated: false,
+          recent_search: { types: types }
+        };
+      }
+      // #endregion options
+
+      /*
+       * [3] 사람 고르기: 타입 Person 에 활성 상태 조건을 더합니다. 받은 ds6w:identifier_value 가 로그인 이름입니다.
+       */
+      // #region person
+      function personOptions(title, multiSel) {
+        var options = objectOptions(title, ['Person'], multiSel, []);
+        options.precond = 'flattenedtaxonomies:"types/Person" AND current:"active"';
+        return options;
+      }
+      // #endregion person
+
+      /*
+       * [4] 열기: 같은 옵션을 RegisterContext(검색 규칙 저장)와 InContextSearch(3DSearch 열기, 첫 검색)에 보냅니다.
+       */
+      // #region open
+      function openSearch(options) {
+        var s = getSocket();
+        s.dispatchEvent('RegisterContext', options);
+        s.dispatchEvent('InContextSearch', options);
+      }
+      // #endregion open
+
+      /*
+       * [5] 받기: Selected_Objects_search 는 고른 결과 배열입니다 (하나도 고르지 않으면 오지 않음).
+       *   - 'ds6w:label' 같은 표시 값은 HTML 이스케이프되어 있어 원래 값인 '이름_value' 키를 씁니다.
+       */
+      // #region receive
+      function toItem(obj) {
+        return {
+          id: obj.id,
+          label: obj['ds6w:label_value'],
+          name: obj['ds6w:identifier_value'],
+          type: obj['ds6w:type_value']
+        };
+      }
+
+      function onSelected(objects) {
+        var known = picked.map(function (p) { return p.id; });
+        objects.map(toItem).forEach(function (item) {
+          if (known.indexOf(item.id) === -1) {
+            picked.push(item);
+          }
+        });
+        renderPicked();
+        log('Selected_Objects_search ' + objects.length);
+      }
+      // #endregion receive
+
+      /*
+       * [6] OK / Apply / 취소는 InContextSearch_Response 의 selected_command 로 나눕니다.
+       *   - selected_data 는 3DXContent 형식이고 취소에는 없습니다.
+       */
+      // #region response
+      function onResponse(response) {
+        var content = response.selected_data;
+        var count = content && content.data ? content.data.items.length : 0;
+        log('InContextSearch_Response ' + response.selected_command + ', 3DXContent items ' + count);
+      }
+      // #endregion response
+
+      /*
+       * [7] 닫기와 해제
+       *   - 3DSearch 창이 닫히면 onCloseTransient 가 모든 소켓에 오므로 in_apps_search.widget_id 로 내 등록인지 봅니다.
+       *   - 소켓을 버릴 때는 UnregisterContext, deleteSocket, disconnect 순서로 부릅니다.
+       */
+      // #region close
+      function unregister() {
+        if (socket) {
+          socket.dispatchEvent('UnregisterContext', { widget_id: socketId });
+        }
+      }
+
+      function onCloseTransient(data) {
+        if (data && data.in_apps_search && data.in_apps_search.widget_id === socketId) {
+          unregister();
+          log('onCloseTransient: UnregisterContext');
+        }
+      }
+
+      function destroySocket() {
+        if (!socket) {
+          return;
+        }
+        unregister();
+        SearchCom.deleteSocket(socketId);
+        socket.disconnect();
+        socket = null;
+      }
+      // #endregion close
+
+      /*
+       * [8] 3DSearch 주소: Compass 의 3DSearch 주소 끝에 /federated 가 없으면 붙입니다 (3DSearch 화면 코드와 같은 방식).
+       */
+      // #region fed-url
+      function getFederatedUrl(callback) {
+        CompassServices.getServiceUrl({
+          serviceName: '3DSearch',
+          platformId: platformId(),
+          onComplete: function (url) {
+            if (typeof url !== 'string' || !url) {
+              callback(null);
+              return;
+            }
+            callback(url.lastIndexOf('/federated') === -1 ? url + '/federated' : url);
+          },
+          onFailure: function () {
+            callback(null);
+          }
+        });
+      }
+      // #endregion fed-url
+
+      /*
+       * [9] 글자로 검색: POST <3DSearch>/federated/search
+       *   - query 는 precond 와 같은 문법입니다. 사용자 입력에서 SearchWidget 의 ForbiddenChar 와 같은 글자를 뺍니다.
+       *   - login 에 3DSpace SecurityContext 를 넣습니다 (3DSearch 화면도 넣음).
+       */
+      // #region fed-search
+      function cleanText(text) {
+        return (text || '').replace(/["#$@%*,?\\<>[\]|:]/g, ' ').trim();
+      }
+
+      function federatedSearch(baseUrl, text, types, securityContext, callback) {
+        var words = cleanText(text);
+        var parts = [];
+        if (words) {
+          parts.push('([ds6w:label]:(*' + words + '*) OR [ds6w:identifier]:(*' + words + '*))');
+        }
+        if (types.length) {
+          parts.push(typePrecond(types));
+        }
+        var body = {
+          label: 'XXSearch-' + Date.now(),
+          query: parts.length ? parts.join(' AND ') : '#all',
+          select_predicate: ['ds6w:label', 'ds6w:identifier', 'ds6w:type', 'ds6wg:revision', 'ds6w:status', 'ds6w:modified'],
+          order_field: 'relevance',
+          order_by: 'desc',
+          nresults: 20,
+          start: '0',
+          source: ['3dspace'],
+          tenant: platformId(),
+          locale: widget.lang
+        };
+        if (securityContext) {
+          body.login = { '3dspace': { SecurityContext: securityContext } };
+        }
+        WAFData.authenticatedRequest(baseUrl + '/search', {
+          method: 'POST',
+          type: 'json',
+          headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+          data: JSON.stringify(body),
+          onComplete: function (response) {
+            callback(null, response);
+          },
+          onFailure: function (error) {
+            callback(error);
+          }
+        });
+      }
+      // #endregion fed-search
+
+      /*
+       * [10] 응답 읽기: results[].attributes[] 의 name / value 를 객체로 바꿉니다.
+       *   - 같은 name 이 여러 번 오면 여러 값입니다. 소스별 오류는 성공 응답의 infos.sources[].error 에 옵니다.
+       */
+      // #region fed-parse
+      function toRows(response) {
+        return (response.results || []).map(function (result) {
+          var item = {};
+          (result.attributes || []).forEach(function (attr) {
+            var prev = item[attr.name];
+            item[attr.name] = prev === undefined ? attr.value : [].concat(prev, attr.value);
+          });
+          return item;
+        });
+      }
+
+      function sourceErrors(response) {
+        var sources = (response.infos && response.infos.sources) || [];
+        return sources.filter(function (s) {
+          return s.error;
+        }).map(function (s) {
+          return s.name + ' ' + (s.error.errorCode || '') + ' ' + (s.error.errorMessage || '');
+        });
+      }
+      // #endregion fed-parse
+
+      function build() {
+        var page = UWA.createElement('div', { 'class': 'ss-page' });
+
+        UWA.createElement('h3', { text: '3DSearch 에서 고르기 (in-context search)' }).inject(page);
+        var typesEditor = new LineEditor({ value: 'VPMReference', sizeInCharNumber: 30 });
+        typesEditor.inject(row(page, '타입 (쉼표로)'));
+        var titleEditor = new LineEditor({ value: 'Select objects', sizeInCharNumber: 30 });
+        titleEditor.inject(row(page, '제목'));
+        var optionRow = row(page, '선택');
+        var multiToggle = new Toggle({ type: 'checkbox', label: '여러 개', checkFlag: true }).inject(optionRow);
+        var excludeToggle = new Toggle({ type: 'checkbox', label: '받은 객체 빼기', checkFlag: true }).inject(optionRow);
+
+        var actions = row(page);
+        new Button({ label: '3DSearch 열기', emphasize: 'primary', onClick: onOpenObjects }).inject(actions);
+        new Button({ label: '사람 고르기', onClick: onOpenPerson }).inject(actions);
+        new Button({ label: '등록 해제', onClick: onRelease }).inject(actions);
+        new Button({ label: '목록 비우기', onClick: onClear }).inject(actions);
+
+        UWA.createElement('h3', { text: '받은 객체' }).inject(page);
+        pickedEl = UWA.createElement('div').inject(page);
+
+        UWA.createElement('h3', { text: '글자로 검색 (federated search)' }).inject(page);
+        var textEditor = new LineEditor({ value: '', placeholder: '제목이나 이름 일부', sizeInCharNumber: 30 });
+        textEditor.inject(row(page, '검색어'));
+        var contextEditor = new LineEditor({ value: '', placeholder: 'ctx::역할.조직.협업공간 (비워도 됨)', sizeInCharNumber: 40 });
+        contextEditor.inject(row(page, 'SecurityContext'));
+        new Button({ label: '검색', emphasize: 'primary', onClick: onFederatedSearch }).inject(row(page));
+        foundEl = UWA.createElement('div').inject(page);
+
+        UWA.createElement('h3', { text: '로그' }).inject(page);
+        logEl = UWA.createElement('div', { 'class': 'ss-log' }).inject(page);
+
+        renderPicked();
+        renderTable(foundEl, [], FOUND_COLUMNS);
+
+        function onOpenObjects() {
+          var types = splitTypes(typesEditor.value);
+          if (!types.length) {
+            log('타입을 넣습니다.');
+            return;
+          }
+          var exclude = excludeToggle.checkFlag ? picked.map(function (p) { return p.id; }) : [];
+          openSearch(objectOptions(titleEditor.value, types, multiToggle.checkFlag, exclude));
+          log('InContextSearch ' + types.join(', '));
+        }
+
+        function onOpenPerson() {
+          openSearch(personOptions('Select people', multiToggle.checkFlag));
+          log('InContextSearch Person');
+        }
+
+        function onRelease() {
+          destroySocket();
+          log('UnregisterContext, deleteSocket, disconnect');
+        }
+
+        function onClear() {
+          picked = [];
+          renderPicked();
+        }
+
+        function onFederatedSearch() {
+          var types = splitTypes(typesEditor.value);
+          getFederatedUrl(function (baseUrl) {
+            if (!baseUrl) {
+              log('3DSearch 주소를 얻지 못했습니다.');
+              return;
+            }
+            federatedSearch(baseUrl, textEditor.value, types, (contextEditor.value || '').trim(), function (error, response) {
+              if (error) {
+                log('federated search 실패: ' + (error.message || error));
+                return;
+              }
+              var rows = toRows(response);
+              renderTable(foundEl, rows, FOUND_COLUMNS);
+              log('federated search ' + rows.length + ' / ' + (response.infos ? response.infos.nmatches : '?'));
+              sourceErrors(response).forEach(function (e) { log('소스 오류 ' + e); });
+            });
+          });
+        }
+
+        widget.body.empty();
+        page.inject(widget.body);
+      }
+
+      widget.addEvents({ onLoad: build });
+    });
+  //]]>
+  </script>
+</head>
+<body>
+  <p>Loading...</p>
+</body>
+</html>

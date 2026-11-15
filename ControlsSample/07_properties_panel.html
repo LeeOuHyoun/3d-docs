@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>07. 속성 패널 (EditPropWidget)</title>
+  <meta name="author" content="sample" />
+  <meta name="description" content="EditPropWidget sample: show the OOTB properties panel of physicalids" />
+  <meta name="autoRefresh" content="0" />
+
+  <link rel="stylesheet" type="text/css" href="../c/UWA/assets/css/standalone.css" />
+  <link rel="stylesheet" type="text/css" href="../UIKIT/UIKIT.css" />
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <script type="text/javascript" src="../c/UWA/js/UWA_Standalone_Alone.js"></script>
+
+  <style type="text/css">
+    .page { padding: 12px; font-family: sans-serif; }
+    .page h2 { margin: 0 0 8px; font-size: 16px; }
+    .page h3 { margin: 16px 0 8px; font-size: 14px; }
+    .page p { margin: 0 0 8px; font-size: 12px; color: #555; }
+    .row { display: flex; gap: 6px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
+    .row label { width: 110px; font-size: 12px; color: #555; }
+    .panel-area { position: relative; height: 560px; border: 1px solid #d1d4d4; }
+    .log { height: 160px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; }
+    .sample-info-facet { padding: 8px; font-size: 12px; }
+    .sample-info-facet td { padding: 2px 12px 2px 0; }
+  </style>
+
+  <script type="text/javascript">
+  //<![CDATA[
+    require([
+      'UWA/Core',
+      'DS/EditPropWidget/EditPropWidget',
+      'DS/EditPropWidget/constants/EditPropConstants',
+      'DS/EditPropWidget/models/EditPropModel',
+      'DS/Controls/Button',
+      'DS/Controls/LineEditor',
+      'DS/Controls/ComboBox',
+      'DS/Controls/Toggle'
+    ], function (UWA, EditPropWidget, EditPropConstants, EditPropModel, Button, LineEditor, ComboBox, Toggle) {
+      'use strict';
+
+      var logEl;
+      var panelEl;
+      var panel = null;
+      var readOnlyNow = false;
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      function row(parent, labelText) {
+        var el = UWA.createElement('div', { 'class': 'row' }).inject(parent);
+        if (labelText) { UWA.createElement('label', { text: labelText }).inject(el); }
+        return el;
+      }
+
+      function getTenant() {
+        return widget.getValue('x3dPlatformId') || 'OnPremise';
+      }
+
+      /*
+       * [1] 패널 만들기
+       *   - selectionType: NO_SELECTION 이면 다른 앱의 선택을 따라가지 않고 initDatas 로만 내용이 바뀝니다 (기본값은 ALL_SELECTION).
+       *   - readOnly 를 주지 않으면 읽기 전용입니다. 편집하게 하려면 readOnly: false 를 줍니다.
+       *   - editMode: true 면 처음부터 편집 상태, false 면 연필(편집) 버튼으로 바꿉니다.
+       *   - facets 는 탭 후보입니다. 서버가 그 객체에 쓸 수 있다고 한 탭만 보입니다. 탭 막대가 없는 모양(ALL 이 아님)은 첫 탭만 보이므로 속성 탭 하나만 줍니다.
+       *   - 직접 만든 탭은 alwaysVisible: true 로 넣습니다 (모듈은 [5]).
+       *   - context.getSecurityContext 가 돌려준 값이 읽기 / 저장 요청의 SecurityContext 가 됩니다. 비우면 사용자에게 부여된 값 중에서 고릅니다.
+       *   - actions 는 ID 카드 오른쪽 버튼입니다. action_close_panel 은 오른쪽 끝에 놓입니다.
+       *   - 둘째 인자 widget 은 패널이 쓸 위젯 객체입니다.
+       *   - 담는 요소(.panel-area)에 높이를 줍니다. 패널은 height: 100% 로 그립니다.
+       */
+      // #region create
+      function createPanel(settings) {
+        var options = {
+          typeOfDisplay: settings.typeOfDisplay,
+          selectionType: EditPropConstants.NO_SELECTION,
+          facets: settings.typeOfDisplay === EditPropConstants.ALL ? [
+            EditPropConstants.FACET_PROPERTIES,
+            EditPropConstants.FACET_RELATIONS,
+            EditPropConstants.FACET_GENERALHISTORY,
+            {
+              require: 'DS/ControlsSample/SampleInfoFacet',
+              alwaysVisible: true,
+              facet: { name: 'sampleInfo', text: '샘플 정보', icon: 'info' },
+              options: { note: 'options 는 탭 모듈의 this.options 로 갑니다' }
+            }
+          ] : [EditPropConstants.FACET_PROPERTIES],
+          readOnly: settings.readOnly,
+          editMode: settings.editMode,
+          extraNotif: true,
+          actions: [
+            { name: 'action_close_panel', text: '닫기', icon: 'close', handler: closePanel }
+          ],
+          events: {
+            onNotification: function (e) {
+              log('onNotification ' + (e && e.eventID) + ': ' + (e && e.msg));
+            },
+            onTitleChanged: function (title) {
+              log('onTitleChanged: ' + title);
+            },
+            onDataLoaded: function () {
+              log('onDataLoaded');
+            }
+          }
+        };
+        if (settings.securityContext) {
+          options.context = {
+            getSecurityContext: function () {
+              return { SecurityContext: settings.securityContext };
+            }
+          };
+        }
+        var created = new EditPropWidget(options, widget);
+        created.inject(panelEl);
+        return created;
+      }
+      // #endregion create
+
+      /*
+       * [2] 객체 넣기
+       *   - objectId 는 physicalid 입니다. metatype 은 'businessobject' (관계는 'relationship'), source 는 '3DSpace' 입니다.
+       *   - tenant 는 플랫폼 id 입니다. 패널은 첫 객체의 tenant 를 위젯 값 x3dPlatformId 에 다시 씁니다.
+       *   - isTransient: false (기본값) 면 서버에서 속성을 읽습니다.
+       *   - onChangeAttributes 는 값을 읽어 올 때, 편집할 때, 저장 결과를 반영할 때 납니다. 저장 전 편집 중인 값은 getChangedValues() 입니다.
+       *   - onSave 는 저장이 끝나고 서버 값으로 모델을 고친 뒤 납니다.
+       *   - 여러 개를 넣으면 공통 속성을 한 번에 고치는 화면(합친 모델)이 됩니다.
+       *   - 둘째 인자는 처음 고를 탭 이름입니다. 직접 만든 탭(alwaysVisible)이 처음 탭이 되지 않게 속성 탭을 줍니다.
+       */
+      // #region data
+      function toModel(physicalId) {
+        var model = new EditPropModel({
+          objectId: physicalId,
+          metatype: 'businessobject',
+          source: '3DSpace',
+          tenant: getTenant()
+        });
+        model.set('isTransient', false);
+        model.addEvent('onChangeAttributes', function (changedModel) {
+          log('onChangeAttributes ' + physicalId + ', 편집 중: ' + Object.keys(changedModel.getChangedValues()).join(', '));
+        });
+        model.addEvent('onSave', function () {
+          log('onSave ' + physicalId);
+        });
+        return model;
+      }
+
+      function showObjects(physicalIds) {
+        panel.initDatas(physicalIds.map(toModel), EditPropConstants.FACET_PROPERTIES);
+      }
+      // #endregion data
+
+      /*
+       * [3] 다시 읽기, 읽기 전용 바꾸기, 탭 고르기, 크기, 정리
+       *   - onRefresh: 지금 객체를 서버에서 다시 읽습니다.
+       *   - setReadonlyStatus(true / false): 읽기 전용을 바꾸고 다시 그립니다.
+       *   - selectFacet(이름): 보이는 탭으로 바꿉니다. 탭 막대가 있는 ALL 에서만 됩니다.
+       *   - onResize() 는 비어 있습니다. 크기가 바뀌면 onInnerResize() 를 부릅니다.
+       *   - destroyComponent 는 탭과 선택 구독을 정리하지만 화면 요소는 남깁니다. 담는 요소를 비웁니다.
+       *   - 탭 막대가 없는 모양(ALL 이 아님)에서는 destroyComponent 가 오류를 내므로 try / catch 로 감쌉니다 (IssueManagement 와 같음).
+       */
+      // #region control
+      function refresh() {
+        panel.onRefresh();
+      }
+
+      function setReadOnly(flag) {
+        panel.setReadonlyStatus(flag);
+      }
+
+      function selectTab(name) {
+        panel.selectFacet(name);
+      }
+
+      function resizePanel() {
+        panel.onInnerResize();
+      }
+
+      function closePanel() {
+        if (!panel) {
+          return;
+        }
+        try {
+          panel.destroyComponent();
+        } catch (e) {
+          log('destroyComponent 오류: ' + e.message);
+        }
+        panelEl.empty();
+        panel = null;
+      }
+      // #endregion control
+
+      /*
+       * [4] OOTB 정보(Information) 창으로 열기
+       *   - EditPropCmdBase (LifecycleControls 의 EditPropDialog 를 그대로 물려받음) 의 launchProperties 에 선택 객체를 주는 context 를 넘깁니다.
+       *   - 3DDashboard 에서는 TransientWidget 으로 ENOLCMT_AP (EditPropWidget.html) 창이 650 x 800 으로 열립니다. 단독 실행에서는 아무것도 열리지 않습니다.
+       *   - 이 위젯이 미리보기 창(transient) 안에 떠 있으면 창 대신 위젯 안 팝업(EditPropComponent)으로 엽니다.
+       */
+      // #region ootb-window
+      function openInformationWindow(physicalIds, securityContext) {
+        require(['DS/ENOCollabSharingCmds/commands/EditPropCmd/EditPropCmdBase'], function (EditPropCmdBase) {
+          var nodes = physicalIds.map(function (id) {
+            return {
+              id: id,
+              tenant: getTenant(),
+              source: '3DSpace',
+              getID: function () { return id; }
+            };
+          });
+          new EditPropCmdBase().launchProperties({
+            getSelectedNodes: function () { return nodes; },
+            getSecurityContext: function () { return { SecurityContext: securityContext }; }
+          });
+        });
+      }
+      // #endregion ootb-window
+
+      function build() {
+        var page = UWA.createElement('div', { 'class': 'page' });
+
+        UWA.createElement('h2', { text: '07. 속성 패널 (EditPropWidget)' }).inject(page);
+        var intro = UWA.createElement('p', { text: 'physicalid 를 넣으면 OOTB 속성 화면(ID 카드, 탭, 속성 보기 / 편집 / 저장)을 아래 영역에 붙입니다. 3DSpace 데이터를 읽으므로 3DDashboard 나 3DSpace 서버에서만 동작합니다. ' }).inject(page);
+        UWA.createElement('a', { href: 'index.html', text: '목록으로' }).inject(intro);
+
+        var idEditor = new LineEditor({ placeholder: 'physicalid (여러 개는 쉼표로)', sizeInCharNumber: 48 });
+        idEditor.inject(row(page, 'physicalid'));
+
+        var scEditor = new LineEditor({ placeholder: 'ctx::VPLMProjectLeader.MyCompany.Common Space (비우면 기본값)', sizeInCharNumber: 48 });
+        scEditor.inject(row(page, 'SecurityContext'));
+
+        var displayCombo = new ComboBox({
+          elementsList: [
+            { label: 'ALL (ID 카드 + 탭)', value: EditPropConstants.ALL },
+            { label: 'ONLY_EDIT_PROPERTIES (속성만)', value: EditPropConstants.ONLY_EDIT_PROPERTIES },
+            { label: 'ONLY_IDENTITY_CARD (ID 카드 + 첫 탭)', value: EditPropConstants.ONLY_IDENTITY_CARD }
+          ],
+          value: EditPropConstants.ALL,
+          enableSearchFlag: false
+        });
+        displayCombo.inject(row(page, 'typeOfDisplay'));
+
+        var flagsRow = row(page, '옵션');
+        var readOnlyToggle = new Toggle({ type: 'checkbox', label: 'readOnly', checkFlag: false });
+        readOnlyToggle.inject(flagsRow);
+        var editModeToggle = new Toggle({ type: 'checkbox', label: 'editMode', checkFlag: false });
+        editModeToggle.inject(flagsRow);
+
+        var actions = row(page);
+        new Button({ label: '보이기', emphasize: 'primary', onClick: onShow }).inject(actions);
+        new Button({ label: '다시 읽기', onClick: ifPanel(onRefresh) }).inject(actions);
+        new Button({ label: '읽기 전용 켜기 / 끄기', onClick: ifPanel(onToggleReadOnly) }).inject(actions);
+        new Button({ label: '이력 탭', onClick: ifPanel(onSelectHistory) }).inject(actions);
+        new Button({ label: '샘플 정보 탭', onClick: ifPanel(onSelectSampleInfo) }).inject(actions);
+        new Button({ label: '모델 보기', onClick: ifPanel(onShowModels) }).inject(actions);
+        new Button({ label: '비우기', onClick: ifPanel(onClear) }).inject(actions);
+        new Button({ label: '정리 (닫기)', onClick: onClose }).inject(actions);
+        new Button({ label: 'OOTB 정보 창으로 열기', onClick: onOpenWindow }).inject(actions);
+
+        panelEl = UWA.createElement('div', { 'class': 'panel-area' }).inject(page);
+
+        UWA.createElement('h3', { text: '로그' }).inject(page);
+        logEl = UWA.createElement('div', { 'class': 'log' }).inject(page);
+
+        function readIds() {
+          return (idEditor.value || '').split(',').map(function (s) { return s.trim(); }).filter(function (s) { return s; });
+        }
+
+        function ifPanel(fn) {
+          return function () {
+            if (!panel) {
+              log('먼저 보이기를 누릅니다.');
+              return;
+            }
+            fn();
+          };
+        }
+
+        function onShow() {
+          var ids = readIds();
+          if (ids.length === 0) {
+            log('physicalid 를 넣습니다.');
+            return;
+          }
+          closePanel();
+          readOnlyNow = readOnlyToggle.checkFlag;
+          panel = createPanel({
+            typeOfDisplay: displayCombo.value,
+            readOnly: readOnlyNow,
+            editMode: editModeToggle.checkFlag,
+            securityContext: scEditor.value
+          });
+          showObjects(ids);
+          log('initDatas ' + ids.join(', ') + ' (typeOfDisplay ' + displayCombo.value + ', readOnly ' + readOnlyNow + ')');
+        }
+
+        function onRefresh() {
+          refresh();
+          log('onRefresh');
+        }
+
+        function onToggleReadOnly() {
+          readOnlyNow = !readOnlyNow;
+          setReadOnly(readOnlyNow);
+          log('setReadonlyStatus(' + readOnlyNow + ')');
+        }
+
+        function onSelectHistory() {
+          selectTab(EditPropConstants.FACET_GENERALHISTORY);
+          log('selectFacet(' + EditPropConstants.FACET_GENERALHISTORY + ')');
+        }
+
+        function onSelectSampleInfo() {
+          selectTab('sampleInfo');
+          log('selectFacet(sampleInfo)');
+        }
+
+        function onShowModels() {
+          panel.getListModel().forEach(function (model) {
+            log('model ' + model.get('objectId') + (model.isMergedModel() ? ' (합친 모델)' : '') + ', 편집 중: ' + Object.keys(model.getChangedValues()).join(', '));
+          });
+          log('getTitle: ' + panel.getTitle());
+        }
+
+        function onClear() {
+          panel.initDatas([]);
+          log('initDatas([])');
+        }
+
+        function onClose() {
+          closePanel();
+          log('closePanel');
+        }
+
+        function onOpenWindow() {
+          var ids = readIds();
+          if (ids.length === 0) {
+            log('physicalid 를 넣습니다.');
+            return;
+          }
+          openInformationWindow(ids, scEditor.value);
+          log('launchProperties ' + ids.join(', ') + ' (3DDashboard 에서만 창이 열림)');
+        }
+
+        widget.body.empty();
+        page.inject(widget.body);
+      }
+
+      widget.addEvents({
+        onLoad: build,
+        onResize: function () {
+          if (panel) { resizePanel(); }
+        }
+      });
+    });
+  //]]>
+  </script>
+
+  <script type="text/javascript">
+  //<![CDATA[
+    /*
+     * [5] 직접 만든 탭
+     *   - FacetsBase 를 상속하고 init 에서 elements.container 를 만듭니다. 패널이 이 요소를 탭 영역에 붙입니다.
+     *   - updateFacet 은 보일 객체가 바뀌었을 때 불립니다 (같은 객체면 다시 부르지 않음). getModel() 이 지금 객체의 모델입니다.
+     *   - 여러 객체를 넣으면 getModel() 이 합친 모델(isMergedModel() 이 true)입니다.
+     *   - 탭 정의([1] 의 facets)의 require 에 이 모듈 이름을 줍니다. 패널이 처음 보일 때 require 로 불러옵니다.
+     */
+    // #region facet
+    define('DS/ControlsSample/SampleInfoFacet', [
+      'UWA/Core',
+      'DS/EditPropWidget/facets/Common/FacetsBase'
+    ], function (UWA, FacetsBase) {
+      'use strict';
+
+      return FacetsBase.extend({
+        init: function () {
+          this._parent.apply(this, arguments);
+          this.elements.container = UWA.createElement('div', { 'class': 'sample-info-facet' });
+        },
+
+        updateFacet: function () {
+          var model = this.getModel();
+          var table = UWA.createElement('table');
+          this.elements.container.empty();
+          if (!model) {
+            return;
+          }
+          var rows = model.isMergedModel()
+            ? [['합친 객체', Object.keys(model.getMergingModels()).join(', ')]]
+            : [
+              ['objectId', model.get('objectId')],
+              ['metatype', model.get('metatype')],
+              ['tenant', model.get('tenant')],
+              ['source', model.get('source')],
+              ['label', model.get('label')],
+              ['tabId', this.getTabId()],
+              ['options.note', this.options.note]
+            ];
+          rows.forEach(function (pair) {
+            var tr = UWA.createElement('tr').inject(table);
+            UWA.createElement('td', { text: pair[0] }).inject(tr);
+            UWA.createElement('td', { text: pair[1] == null ? '' : String(pair[1]) }).inject(tr);
+          });
+          table.inject(this.elements.container);
+        }
+      });
+    });
+    // #endregion facet
+  //]]>
+  </script>
+</head>
+<body>
+  <p>Loading...</p>
+</body>
+</html>

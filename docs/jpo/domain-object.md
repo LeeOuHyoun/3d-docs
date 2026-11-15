@@ -136,6 +136,7 @@ MapList list = obj.getRelatedObjects(context,
 
 - 10 개 인자 (개수 제한 없음), 13 / 14 개 인자 (`Pattern` 으로 결과를 한 번 더 거르는 형태) 도 있습니다.
 - 자식 목록 (예: BOM 아래 부품) 은 `getTo=false, getFrom=true` 입니다. 상위 목록 (Where Used) 은 반대입니다.
+- 화면(webapps)에서 관계를 따라갈 때는 [관계 탐색 (enorelnav)](/rest-api/navigate) 를 봅니다.
 
 ::: tip 패턴은 실제 이름으로
 관계 / 타입 패턴에는 화면 표시 이름이 아니라 **스키마 이름** 을 넣습니다. 하드코딩하지 말고 `PropertyUtil.getSchemaProperty(context, "relationship_EBOM")` 이나 `DomainConstants.RELATIONSHIP_EBOM` 으로 얻습니다 ([심볼릭 이름](#심볼릭-이름)).

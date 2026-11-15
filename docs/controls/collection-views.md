@@ -155,7 +155,7 @@ require(['DS/Controls/ResponsiveTileView'], function (ResponsiveTileView) {
 
 ### 메뉴 (contextualMenu)
 
-`contextualMenu` 에 글자 배열을 주면 메뉴 버튼이 생깁니다. 버튼을 누르거나 카드를 우클릭하면 메뉴가 열립니다. 메뉴 항목은 `onContextMenuBuildCallback(labels)` 가 돌려준 배열입니다. 항목 형식은 [메뉴 항목](/datagridview/context-menu#메뉴-항목) 과 같습니다.
+`contextualMenu` 에 글자 배열을 주면 메뉴 버튼이 생깁니다. 버튼을 누르거나 카드를 우클릭하면 메뉴가 열립니다. 메뉴 항목은 `onContextMenuBuildCallback(labels)` 가 돌려준 배열입니다. 항목 형식은 [메뉴](/controls/menu#항목) 에 있습니다 (DataGridView 의 [메뉴 항목](/datagridview/context-menu#메뉴-항목) 과 같음).
 
 ::: warning onContextMenuBuildCallback 이 없으면 메뉴가 동작하지 않습니다
 콜백 없이 `contextualMenu` 만 주면 글자 그대로 항목이 생기지만, 누르면 콘솔에 `No action implemented on this context menu entry!` 오류만 찍힙니다.

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Tagger Sample</title>
+  <meta name="author" content="sample" />
+  <meta name="description" content="TagNavigatorProxy sample: tag a small list and filter it from the 6W tagger" />
+  <meta name="autoRefresh" content="0" />
+
+  <link rel="stylesheet" type="text/css" href="../c/UWA/assets/css/standalone.css" />
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <script type="text/javascript" src="../c/UWA/js/UWA_Standalone_Alone.js"></script>
+
+  <style type="text/css">
+    .tg-page { padding: 12px; font-family: sans-serif; font-size: 13px; }
+    .tg-page h3 { margin: 12px 0 6px; font-size: 14px; }
+    .tg-note { color: #555; margin: 4px 0 8px; }
+    .tg-status { font: 12px monospace; margin: 4px 0; }
+    .tg-row { display: flex; gap: 6px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+    .tg-table { border-collapse: collapse; }
+    .tg-table th, .tg-table td { border: 1px solid #d1d4d4; padding: 4px 8px; text-align: left; }
+    .tg-table th { background: #f4f5f6; }
+    .tg-log { height: 160px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; white-space: pre-wrap; }
+  </style>
+
+  <script type="text/javascript">
+  //<![CDATA[
+    require([
+      'UWA/Core',
+      'DS/TagNavigatorProxy/TagNavigatorProxy',
+      'DS/Controls/Button'
+    ], function (UWA, TagNavigatorProxy, Button) {
+      'use strict';
+
+      var ROWS = [
+        { id: 'XX-0001', name: 'MyBracket-01', type: 'Part', state: 'IN_WORK', stateLabel: 'In Work', owner: 'user1', modified: '2025/09/12' },
+        { id: 'XX-0002', name: 'MyBracket-02', type: 'Part', state: 'RELEASED', stateLabel: 'Released', owner: 'user2', modified: '2025/10/03' },
+        { id: 'XX-0003', name: 'MySpec-01', type: 'Document', state: 'IN_WORK', stateLabel: 'In Work', owner: 'user1', modified: '2025/10/21' },
+        { id: 'XX-0004', name: 'MySpec-02', type: 'Document', state: 'FROZEN', stateLabel: 'Frozen', owner: 'user3', modified: '2025/11/02' },
+        { id: 'XX-0005', name: 'MyChange-01', type: 'Change Action', state: 'IN_WORK', stateLabel: 'In Work', owner: 'user2', modified: '2025/11/05' },
+        { id: 'XX-0006', name: 'MyChange-02', type: 'Change Action', state: 'RELEASED', stateLabel: 'Released', owner: 'user3', modified: '2024/12/20' }
+      ];
+
+      var proxy;
+      var ready = false;
+      var rowEls = {};
+      var logEl;
+      var statusEl;
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      /*
+       * [1] 주제(subject) id 와 태그 만들기
+       *   - 키는 행을 다시 찾을 수 있는 문자열이면 됩니다. OOTB 는 3DSpace 객체에 'pid://' + physicalid 를 씁니다.
+       *   - sixw 는 'ds6w:<W>/<분류 id>' 입니다. 첫 조각은 ds6w:what, who, when, where, why, how 중 하나여야 합니다.
+       *   - object 는 문자열입니다. 날짜는 'YYYY/MM/DD' 와 type: 'date' 로 넣으면 연 / 월 / 일로 나뉘어 보입니다.
+       */
+      // #region tags
+      function subjectId(row) {
+        return 'pid://' + row.id;
+      }
+
+      function buildSubjectsTags(rows) {
+        var tags = {};
+        rows.forEach(function (row) {
+          tags[subjectId(row)] = [
+            { sixw: 'ds6w:what/ds6w:type', object: row.type, dispValue: row.type },
+            { sixw: 'ds6w:what/ds6w:status', object: row.state, dispValue: row.stateLabel },
+            { sixw: 'ds6w:who/ds6w:responsible', object: row.owner, dispValue: row.owner },
+            { sixw: 'ds6w:when/ds6w:modified', object: row.modified, type: 'date' }
+          ];
+        });
+        return tags;
+      }
+      // #endregion tags
+
+      /*
+       * [2] proxy 만들기와 고른 태그 받기 (화면에서 거르는 방식)
+       *   - widgetId 는 widget.id 를 그대로 넣습니다. 태그 창이 이 값으로 위젯이 있는 context(탭으로 보임)를 찾습니다.
+       *   - onFilterSubjectsChange 의 filteredSubjectList 는 필터가 없을 때 모든 주제입니다. 필터 유무는 allfilters 로 봅니다.
+       */
+      // #region proxy
+      function createTagger(onFilter) {
+        var tagger = TagNavigatorProxy.createProxy({
+          widgetId: widget.id,
+          filteringMode: TagNavigatorProxy.filteringMode.WithFilteringServices
+        });
+        tagger.addEvent('onFilterSubjectsChange', function (e) {
+          var hasFilter = !!e.allfilters && Object.keys(e.allfilters).length > 0;
+          onFilter(hasFilter ? e.filteredSubjectList : null, e);
+        });
+        return tagger;
+      }
+      // #endregion proxy
+
+      /*
+       * [3] 받은 주제 id 로 목록 거르기
+       *   - null 이면 필터가 없는 것이므로 모두 보입니다.
+       */
+      // #region filter
+      function applyFilter(subjectIds) {
+        ROWS.forEach(function (row) {
+          var visible = !subjectIds || subjectIds.indexOf(subjectId(row)) !== -1;
+          rowEls[row.id].style.display = visible ? '' : 'none';
+        });
+      }
+      // #endregion filter
+
+      /*
+       * [4] 목록을 가릴 때, 위젯이 닫힐 때
+       *   - 목록을 잠시 가리면 deactivate, 다시 보이면 activate 합니다 (ENOPartMgt 와 같은 방식).
+       *   - 위젯이 닫히거나 다시 읽힐 때 die 합니다 (Foundation2, ENOProjectMgmtCommonComponents 는 window.onunload).
+       */
+      // #region lifecycle
+      function setListVisible(tagger, visible) {
+        if (visible) {
+          tagger.activate();
+        } else {
+          tagger.deactivate();
+        }
+      }
+
+      function dieOnUnload(tagger) {
+        window.addEventListener('unload', function () {
+          tagger.die();
+        });
+      }
+      // #endregion lifecycle
+
+      function buildTable(parent) {
+        var table = UWA.createElement('table', { 'class': 'tg-table' }).inject(parent);
+        var head = UWA.createElement('tr').inject(table);
+        ['이름', '타입', '상태', '담당', '수정일'].forEach(function (text) {
+          UWA.createElement('th', { text: text }).inject(head);
+        });
+        ROWS.forEach(function (row) {
+          var tr = UWA.createElement('tr').inject(table);
+          [row.name, row.type, row.stateLabel, row.owner, row.modified].forEach(function (text) {
+            UWA.createElement('td', { text: text }).inject(tr);
+          });
+          rowEls[row.id] = tr;
+        });
+        return table;
+      }
+
+      function build() {
+        var page = UWA.createElement('div', { 'class': 'tg-page' });
+
+        UWA.createElement('div', {
+          'class': 'tg-note',
+          text: '3DDashboard 에서만 동작합니다. 왼쪽 태그 창(6W 태그)을 열면 아래 목록의 태그가 보이고, 태그를 고르면 목록이 걸러집니다. id 는 자리 표시입니다.'
+        }).inject(page);
+        statusEl = UWA.createElement('div', { 'class': 'tg-status', text: 'proxy 준비: 아직' }).inject(page);
+
+        UWA.createElement('h3', { text: '목록' }).inject(page);
+        var table = buildTable(page);
+
+        var actions = UWA.createElement('div', { 'class': 'tg-row' }).inject(page);
+        new Button({ label: '태그 다시 보내기', emphasize: 'primary', onClick: onSendTags }).inject(actions);
+        new Button({ label: '목록 가리기 (deactivate)', onClick: onHideList }).inject(actions);
+        new Button({ label: '목록 보이기 (activate)', onClick: onShowList }).inject(actions);
+        new Button({ label: '태그 비우기 (unsetTags)', onClick: onUnsetTags }).inject(actions);
+        new Button({ label: '현재 필터', onClick: onShowFilter }).inject(actions);
+
+        UWA.createElement('h3', { text: '로그' }).inject(page);
+        logEl = UWA.createElement('div', { 'class': 'tg-log' }).inject(page);
+
+        function onSendTags() {
+          proxy.setSubjectsTags(buildSubjectsTags(ROWS));
+          log('setSubjectsTags ' + ROWS.length + ' 건');
+        }
+
+        function onHideList() {
+          table.style.display = 'none';
+          setListVisible(proxy, false);
+          log('deactivate');
+        }
+
+        function onShowList() {
+          table.style.display = '';
+          setListVisible(proxy, true);
+          log('activate');
+        }
+
+        function onUnsetTags() {
+          proxy.unsetTags();
+          applyFilter(null);
+          log('unsetTags');
+        }
+
+        function onShowFilter() {
+          log('getCurrentFilter = ' + JSON.stringify(proxy.getCurrentFilter()));
+        }
+
+        widget.body.empty();
+        page.inject(widget.body);
+
+        if (!proxy) {
+          proxy = createTagger(function (subjectIds, e) {
+            applyFilter(subjectIds);
+            log('onFilterSubjectsChange ' + (subjectIds ? subjectIds.length + ' 건 남김' : '필터 없음') + '  allfilters = ' + JSON.stringify(e.allfilters));
+          });
+          proxy.addEvent('proxyIsReady', function () {
+            ready = true;
+            statusEl.textContent = 'proxy 준비: 됨 (widgetId ' + widget.id + ')';
+            log('proxyIsReady');
+          });
+          dieOnUnload(proxy);
+        } else if (ready) {
+          statusEl.textContent = 'proxy 준비: 됨 (widgetId ' + widget.id + ')';
+        }
+        onSendTags();
+      }
+
+      widget.addEvents({ onLoad: build });
+    });
+  //]]>
+  </script>
+</head>
+<body>
+  <p>Loading...</p>
+</body>
+</html>

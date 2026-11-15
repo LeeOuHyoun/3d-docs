@@ -101,6 +101,11 @@ sub.unsubscribe();
 
 ENOVIA 코드의 topic 예: `common.3DNotification.topic` (알림, 6 건), `im.ds.com` (메신저). 같은 위젯 안 이벤트는 [widget.dispatchEvent](/widget/widget-api#사용자-이벤트) 가 더 간단합니다.
 
+- OOTB 성숙도, 개정 명령은 끝난 뒤 `Lifecycle.Modification` 을 JSON 문자열로 보냅니다 ([성숙도 변경, 개정](/rest-api/lifecycle)).
+- Compass 와 주고받는 메시지는 `Widgets` 채널이 아니라 `com.ds.compass` 채널입니다 ([Compass 에 선택 객체 알리기](/widget/compass-pubsub)).
+- Me 설정 변경 알림 `com.ds.mep:onPrefUpdate` 는 [언어와 사용자 환경설정](/widget/i18n-preferences#값이-바뀔-때) 을 봅니다.
+- 사용자가 연결한 위젯끼리만 보내려면 [WidgetLink](/controls/enox-components#widgetlink-직접-쓰기) 를 씁니다.
+
 ## 2026 변경
 
 | 항목 | 2025 | 2026 |

@@ -12,7 +12,12 @@ TransientWidget/TransientWidget.js, Controller/Transient.js, Tool/Mapping.js, To
 
 ```js
 require(['DS/TransientWidget/TransientWidget'], function (TransientWidget) {
-  TransientWidget.showWidget('ENOLCMT_AP', '', { objectId: physicalId }, {
+  TransientWidget.showWidget('ENOLCMT_AP', '', {
+    SelectedItem: [{ objectId: physicalId, metatype: 'businessobject', source: '3DSpace', tenant: platformId }],
+    x3dPlatformId: platformId,
+    isTransient: 'true',
+    loadData: true
+  }, {
     mode: 'panel',
     width: 650,
     height: 800
@@ -23,7 +28,9 @@ require(['DS/TransientWidget/TransientWidget'], function (TransientWidget) {
 - 모듈은 클래스가 아니라 **이미 만들어진 객체 하나** 를 돌려줍니다. `new` 하지 않습니다.
 - 첫 인자는 앱 ID(`XXXXX_AP`) 또는 위젯 주소입니다. OOTB 호출은 모두 앱 ID 입니다.
 - 셋째 인자(`widgetData`)는 열리는 앱의 **위젯 설정 값** 이 됩니다. 열린 앱은 `widget.getValue('키')` 로 읽습니다 (ENOChangeActionUX 가 `{ TransientCAPid: id }` 로 열고 ENOChgServices 가 `widget.getValue("TransientCAPid")` 로 읽음).
-- 무엇을 넘길지는 **열리는 앱이 정합니다.** OOTB 앱마다 키가 다르므로(`objectId`, `TransientCAPid`, `login` / `url` ...) 같은 앱을 여는 OOTB 호출부를 찾아 키를 맞춥니다.
+- 무엇을 넘길지는 **열리는 앱이 정합니다.** OOTB 앱마다 키가 다르므로(`SelectedItem`, `TransientCAPid`, `login` / `url` ...) 같은 앱을 여는 OOTB 호출부를 찾아 키를 맞춥니다.
+- 위 예의 `ENOLCMT_AP` (OOTB 정보 앱)는 `objectId` 키를 읽지 않고 `SelectedItem` 배열과 `X3DContentId` 만 봅니다 (EditPropWidget.js 의 시작 코드, LifecycleControls `EditPropDialog._launchTransientWidget`). 넘기는 값 표와 더 쉬운 방법(`EditPropCmdBase().launchProperties`)은 [OOTB 정보 창으로 열기](/controls/properties-panel#ootb-정보-창으로-열기) 에 있습니다.
+- 3DPlay 앱(`X3DPLAW_AP`)은 `{ X3DContentId: JSON.stringify(3DXContent) }` 로 엽니다 (DMUPlayMarker, CAT3DAnnotationUtils). [3DPlay 앱으로 열기](/widget/3dplay#_3dplay-앱으로-열기-transientwidget) 를 봅니다.
 
 | 인자 | 타입 | 설명 |
 | --- | --- | --- |
@@ -36,7 +43,7 @@ require(['DS/TransientWidget/TransientWidget'], function (TransientWidget) {
 | --- | --- | --- |
 | <code>mode</code> | <code>'panel'</code>, <code>'transient'</code> | <code>'panel'</code> 은 크기를 준 창, <code>'transient'</code> 는 기본 미리보기 창으로 보입니다 <Badge type="danger" text="검증 필요" /> |
 | <code>width</code> / <code>height</code> | 650 ~ 800 / 700, 800 | <code>mode: 'panel'</code> 과 같이 씀 (px) |
-| <code>closeSearch</code> | 직접 주지 않음 | <code>showWidget</code> 이 덮어씀 (아래) |
+| <code>closeSearch</code> | 직접 주지 않음 | 주지 않으면 <code>showWidget</code> 이 채움 (아래) |
 
 ::: warning 실제로 창을 그리는 코드는 webapps 에 없습니다
 `showWidget` 은 PlatformAPI 로 `ShowWidget` 메시지를 보내기만 합니다. 메시지를 받아 창을 그리는 쪽(3DDashboard 최상위 창의 TopFrameManager)은 3DSpace webapps 에 없어서, `mode` 값의 전체 목록과 창 모양은 원본으로 확인할 수 없습니다. 위 표는 OOTB 호출부에서 쓰는 값만 적었습니다.
@@ -52,7 +59,8 @@ showWidget(appId, title, data, options)
 ```
 
 - 메시지 이름은 `Tool/Mapping.js` 에 있습니다: `ShowWidget`, `CloseWidget`, `Hide`, `Show`, `ResetWidget`, `AddModule(s)`.
-- `options.closeSearch` 는 사용자가 "새 탭에서 열기(전체 화면)" 설정을 켰는지로 정해집니다 (켜져 있지 않으면 `true`). 2025 는 Me 설정 `OpenInNewTab = FullScreenExperience`, 2026 은 `DS/Dashboard/Utils.getAppUserPreferences({ appId })` 의 `preferences.openInNewTab` 을 봅니다. <Badge type="warning" text="2026" />
+- `options.closeSearch` 를 주지 않으면 사용자가 "새 탭에서 열기(전체 화면)" 설정을 켰는지로 정해집니다 (켜져 있지 않으면 `true`). 준 값은 그대로 둡니다 (`UWA.merge`). 2025 는 Me 설정 `OpenInNewTab = FullScreenExperience`, 2026 은 `DS/Dashboard/Utils.getAppUserPreferences({ appId })` 의 `preferences.openInNewTab` 을 봅니다. <Badge type="warning" text="2026" />
+- Me 설정을 위젯에서 읽는 방법은 [언어와 사용자 환경설정](/widget/i18n-preferences#betaoptions-getmepreference) 에 있습니다.
 - 3DDashboard 밖(단독 실행)에서는 메시지를 받을 곳이 없어 아무것도 열리지 않습니다.
 
 ## 닫기, 숨기기, 열려 있는지 확인
@@ -111,3 +119,6 @@ TransientWidget 은 등록된 앱을 여는 것이라 DataGridView 같은 컨트
 | 다른 OOTB 앱 화면(속성, 변경 조치, 프로필)을 그대로 띄우기 | TransientWidget |
 | 내 위젯을 다른 화면에서 창으로 띄우기 | TransientWidget (내 위젯이 3DDashboard 에 앱으로 등록되어 있어야 함 <Badge type="danger" text="검증 필요" />) |
 | 확인 / 입력 / 목록 선택처럼 내용을 직접 그리기 | [Dialog](/controls/dialog) |
+| OOTB 속성 화면을 창이 아니라 내 위젯 안에 넣기 | [속성 패널 (EditPropWidget)](/controls/properties-panel) |
+| 성숙도를 바꾸는 OOTB 창 | TransientWidget 이 아니라 MaturityCmd ([성숙도 변경, 개정](/rest-api/lifecycle)) |
+| 내 위젯에서 고른 객체로 다른 앱 실행 | [Compass 에 선택 객체 알리기](/widget/compass-pubsub) |

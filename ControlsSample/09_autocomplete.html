@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>09. 자동완성 입력 (WUXAutoComplete)</title>
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <style>
+    html, body { margin: 0; font-family: sans-serif; }
+    .page { padding: 12px; }
+    .page h2 { margin: 0 0 8px; font-size: 16px; }
+    .page h3 { margin: 16px 0 8px; font-size: 14px; }
+    .page p { margin: 0 0 8px; font-size: 12px; color: #555; }
+    .row { display: flex; gap: 6px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
+    .form { border-collapse: collapse; font-size: 12px; }
+    .form th { text-align: left; font-weight: normal; color: #555; padding: 4px 12px 4px 0; width: 170px; }
+    .form td { padding: 4px 0; width: 420px; }
+    #log { height: 220px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; white-space: pre; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h2>09. 자동완성 입력 (WUXAutoComplete)</h2>
+    <p>배열로 하나 고르기, 서버 검색으로 여러 명 고르기(칩), TreeDocument 후보, 자유 입력 태그, 코드로 값 넣고 읽기를 보여 줍니다. 서버 검색은 setTimeout 으로 흉내 냅니다. <a href="index.html">목록으로</a></p>
+
+    <table class="form">
+      <tr><th>상태 (하나만, 배열)</th><td id="state"></td></tr>
+      <tr><th>담당자 (여러 명, 서버 검색)</th><td id="people"></td></tr>
+      <tr><th>분류 (TreeDocument)</th><td id="category"></td></tr>
+      <tr><th>태그 (자유 입력)</th><td id="tags"></td></tr>
+    </table>
+
+    <div class="row" id="buttons"></div>
+
+    <h3>로그</h3>
+    <div id="log"></div>
+  </div>
+
+  <script type="text/javascript">
+    require([
+      'DS/WUXAutoComplete/AutoComplete',
+      'DS/TreeModel/TreeDocument',
+      'DS/TreeModel/TreeNodeModel',
+      'DS/Controls/Button'
+    ], function (AutoComplete, TreeDocument, TreeNodeModel, Button) {
+      'use strict';
+
+      var logEl = document.getElementById('log');
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      function addButton(label, fn) {
+        new Button({ label: label, onClick: fn }).inject(document.getElementById('buttons'));
+      }
+
+      function labels(items) {
+        return [].concat(items || []).map(function (node) { return node.options.label; }).join(', ');
+      }
+
+      var PEOPLE = [
+        { id: 'kcs01', name: '김철수', org: '설계1팀' },
+        { id: 'lyh02', name: '이영희', org: '설계2팀' },
+        { id: 'pms03', name: '박민수', org: '생산기술팀' },
+        { id: 'cjh04', name: '최지훈', org: '품질팀' },
+        { id: 'kmj05', name: '김민지', org: '구매팀' }
+      ];
+
+      function fakeServerSearch(text) {
+        return new Promise(function (resolve) {
+          setTimeout(function () {
+            var q = text.toLowerCase();
+            resolve(PEOPLE.filter(function (p) { return p.name.indexOf(text) >= 0 || p.id.indexOf(q) >= 0; }));
+          }, 400);
+        });
+      }
+
+      /*
+       * [1] 하나만 고르기 (배열 후보)
+       *   - multiSearchMode 기본값이 true 라서 하나만 고를 때는 false 를 꼭 줍니다.
+       *   - allowFreeInputFlag 기본값도 true 입니다. 목록에 있는 값만 받으려면 false 를 줍니다.
+       *   - 배열 항목은 문자열 또는 { label, value, icon, tooltip, grid } 입니다. 그 밖의 키는 버려집니다.
+       *   - value 는 고른 항목의 value, selectedItems 는 고른 TreeNodeModel 하나입니다 (배열 아님).
+       */
+      // #region single
+      var state = new AutoComplete({
+        placeholder: '상태 고르기',
+        multiSearchMode: false,
+        allowFreeInputFlag: false,
+        elementsTree: [
+          { label: '작업 중', value: 'IN_WORK' },
+          { label: '검토 중', value: 'IN_REVIEW' },
+          { label: '승인', value: 'RELEASED' }
+        ]
+      }).inject(document.getElementById('state'));
+
+      state.addEventListener('change', function () {
+        log('상태 change: value=' + state.value + ', selectedItems=' + labels(state.selectedItems));
+      });
+      // #endregion single
+
+      /*
+       * [2] 서버에서 찾기 (여러 명, 칩)
+       *   - elementsTree 에 함수를 주면 입력 글자를 받아 부릅니다. 배열, TreeDocument, Promise 를 돌려줄 수 있습니다.
+       *   - minLengthBeforeSearch 보다 짧으면 목록을 열지 않고, typeDelayBeforeSearch(ms) 동안 입력이 멈추면 찾습니다.
+       *   - keepSearchResultsFlag: false 면 입력이 바뀔 때마다 함수를 다시 부릅니다 (true 면 앞 결과 안에서만 거름).
+       *   - 기본 filterCB 는 받은 결과를 label 에 입력 글자가 들어 있는 것만 남깁니다. 서버가 아이디로도 찾으면 filterCB 를 비웁니다.
+       *   - 항목의 grid 에 넣은 객체는 node.options.grid 로 읽습니다.
+       */
+      // #region search
+      var people = new AutoComplete({
+        placeholder: '이름이나 아이디 2글자 이상',
+        multiSearchMode: true,
+        allowFreeInputFlag: false,
+        minLengthBeforeSearch: 2,
+        typeDelayBeforeSearch: 300,
+        keepSearchResultsFlag: false,
+        filterCB: function () {},
+        elementsTree: function (text) {
+          log('서버 검색: "' + text + '"');
+          return fakeServerSearch(text).then(function (rows) {
+            return rows.map(function (p) {
+              return { label: p.name + ' (' + p.org + ')', value: p.id, grid: p };
+            });
+          });
+        }
+      }).inject(document.getElementById('people'));
+
+      people.addEventListener('change', function () {
+        var ids = (people.selectedItems || []).map(function (node) { return node.options.grid.id; });
+        log('담당자 change: id=' + ids.join(', ') + ', value=' + JSON.stringify(people.value));
+      });
+      // #endregion search
+
+      /*
+       * [3] TreeDocument 후보
+       *   - TreeDocument 를 그대로 넘기면 그 TreeDocument 의 선택 목록(XSO)이 곧 고른 값이 됩니다.
+       *   - 그리드에 쓰는 TreeDocument 를 같이 넘기면 그리드 선택도 바뀌므로 후보용 TreeDocument 를 따로 만듭니다.
+       */
+      // #region tree
+      var categoryDoc = new TreeDocument();
+      [['기구', ['브라켓', '샤프트']], ['전장', ['커넥터', '하네스']]].forEach(function (group) {
+        var parent = new TreeNodeModel({ label: group[0], value: group[0] });
+        group[1].forEach(function (name) {
+          parent.addChild(new TreeNodeModel({ label: name, value: group[0] + '/' + name }));
+        });
+        categoryDoc.addRoot(parent);
+      });
+      categoryDoc.expandAll();
+
+      var category = new AutoComplete({
+        placeholder: '분류',
+        multiSearchMode: false,
+        allowFreeInputFlag: false,
+        elementsTree: categoryDoc
+      }).inject(document.getElementById('category'));
+
+      category.addEventListener('change', function () {
+        log('분류 change: value=' + category.value + ', TreeDocument 선택=' + labels(categoryDoc.getSelectedNodes()));
+      });
+      // #endregion tree
+
+      /*
+       * [4] 자유 입력 태그
+       *   - allowFreeInputFlag: true (기본) 면 목록에 없는 글자도 Enter 로 칩이 됩니다.
+       *   - 직접 친 항목은 node.options.customNode 가 true 입니다.
+       */
+      // #region free
+      var tags = new AutoComplete({
+        placeholder: '태그 (Enter 로 추가)',
+        elementsTree: ['긴급', '검토 필요', '고객 요청']
+      }).inject(document.getElementById('tags'));
+
+      tags.addEventListener('change', function () {
+        var list = (tags.selectedItems || []).map(function (node) {
+          return node.options.label + (node.options.customNode ? ' (직접 입력)' : '');
+        });
+        log('태그 change: ' + list.join(', '));
+      });
+      // #endregion free
+
+      /*
+       * [5] 코드로 값 넣고 읽기
+       *   - value 에 값(배열 항목의 value)을 넣으면 맞는 항목을 찾아 고릅니다. 여러 개 모드는 배열로 넣습니다.
+       *   - selectedItems 에 TreeNodeModel 을 넣을 수도 있습니다. 후보에 없는 노드는 customNode 로 붙습니다.
+       *   - 코드로 바꿔도 change 가 납니다.
+       *   - getValueToCommit() 은 지금 입력 칸에 친 글자입니다.
+       */
+      // #region api
+      function setByCode() {
+        state.value = 'IN_REVIEW';
+        tags.value = ['긴급', '도면 변경'];
+        people.selectedItems = [new TreeNodeModel({ label: '외부 사용자 (협력사)', value: 'ext01', grid: { id: 'ext01', name: '외부 사용자' } })];
+      }
+
+      function readValues() {
+        log('상태 value=' + state.value + ' / 담당자 value=' + JSON.stringify(people.value) + ' / 태그 value=' + JSON.stringify(tags.value) + ' / 담당자 입력 중 글자="' + people.getValueToCommit() + '"');
+      }
+
+      function clearAll() {
+        state.value = undefined;
+        people.selectedItems = [];
+        tags.selectedItems = [];
+        category.value = undefined;
+      }
+      // #endregion api
+
+      /*
+       * [6] 이벤트
+       *   - uncommittedChange: 글자를 칠 때마다, show / hide: 후보 목록이 열리고 닫힐 때
+       */
+      // #region events
+      people.addEventListener('uncommittedChange', function () {
+        log('담당자 uncommittedChange: "' + people.getValueToCommit() + '"');
+      });
+      people.addEventListener('show', function () { log('담당자 목록 show'); });
+      people.addEventListener('hide', function () { log('담당자 목록 hide'); });
+      // #endregion events
+
+      addButton('코드로 값 넣기', setByCode);
+      addButton('값 읽기', readValues);
+      addButton('모두 비우기', clearAll);
+    });
+  </script>
+</body>
+</html>

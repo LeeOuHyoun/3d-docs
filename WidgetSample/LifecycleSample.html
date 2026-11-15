@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Lifecycle Sample</title>
+  <meta name="author" content="sample" />
+  <meta name="description" content="Lifecycle sample: next states, promote / demote, dslc changeState, revise, transfer ownership, OOTB maturity dialog" />
+  <meta name="autoRefresh" content="0" />
+
+  <link rel="stylesheet" type="text/css" href="../c/UWA/assets/css/standalone.css" />
+  <link rel="stylesheet" type="text/css" href="../Core/wux.css" />
+  <script type="text/javascript" src="../AmdLoader/AmdLoader.js"></script>
+  <script type="text/javascript" src="../c/UWA/js/UWA_Standalone_Alone.js"></script>
+
+  <style type="text/css">
+    .ls-page { padding: 12px; font-family: sans-serif; font-size: 13px; }
+    .ls-page h3 { margin: 12px 0 6px; font-size: 14px; }
+    .ls-row { display: flex; gap: 6px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+    .ls-row label { width: 110px; color: #555; }
+    .ls-box { border: 1px solid #d1d4d4; background: #fafafa; padding: 6px; font: 12px monospace; white-space: pre-wrap; min-height: 18px; }
+    .ls-compact { min-height: 40px; position: relative; }
+    .ls-result { border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; white-space: pre-wrap; max-height: 220px; overflow: auto; }
+    .ls-log { height: 140px; overflow: auto; border: 1px solid #d1d4d4; padding: 6px; font: 12px monospace; background: #fafafa; }
+  </style>
+
+  <widget:preferences>
+    <widget:preference name="x3dPlatformId" type="hidden" defaultValue=""></widget:preference>
+  </widget:preferences>
+
+  <script type="text/javascript">
+  //<![CDATA[
+    require([
+      'UWA/Core',
+      'DS/WAFData/WAFData',
+      'DS/WebappsUtils/WebappsUtils',
+      'DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices',
+      'DS/PlatformAPI/PlatformAPI',
+      'DS/Controls/Button',
+      'DS/Controls/LineEditor'
+    ], function (UWA, WAFData, WebappsUtils, CompassServices, PlatformAPI, Button, LineEditor) {
+      'use strict';
+
+      var state = { spaceUrl: '', securityContext: '', object: null, graph: null };
+      var logEl;
+
+      function log(text) {
+        logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
+      }
+
+      function row(parent, labelText) {
+        var el = UWA.createElement('div', { 'class': 'ls-row' }).inject(parent);
+        if (labelText) { UWA.createElement('label', { text: labelText }).inject(el); }
+        return el;
+      }
+
+      function getSpaceUrl() {
+        var fallback = WebappsUtils.getWebappsBaseUrl().replace(/webapps\/?$/, '');
+        return new Promise(function (resolve) {
+          var done = false;
+          function finish(url) {
+            if (!done) {
+              done = true;
+              resolve(String(url).replace(/\/$/, ''));
+            }
+          }
+          setTimeout(function () { finish(fallback); }, 5000);
+          CompassServices.getServiceUrl({
+            serviceName: '3DSpace',
+            platformId: widget.getValue('x3dPlatformId') || undefined,
+            onComplete: function (result) {
+              var url = Array.isArray(result) ? (result[0] && result[0].url) : result;
+              finish(url || fallback);
+            },
+            onFailure: function () { finish(fallback); }
+          });
+        });
+      }
+
+      function getDefaultSecurityContext() {
+        return new Promise(function (resolve, reject) {
+          WAFData.authenticatedRequest(withTenant(state.spaceUrl + '/resources/pno/person/getsecuritycontext'), {
+            type: 'json',
+            headers: { Accept: 'application/json' },
+            onComplete: function (res) {
+              var sc = res && res.SecurityContext;
+              if (!sc) {
+                reject(new Error('SecurityContext 가 비어 있습니다'));
+                return;
+              }
+              resolve(sc.indexOf('ctx::') === 0 ? sc : 'ctx::' + sc);
+            },
+            onFailure: function (error, data) { reject({ error: error, data: data }); },
+            onPassportError: function (error) { reject({ error: error }); }
+          });
+        });
+      }
+
+      /*
+       * [1] 요청 함수
+       *   - lifecycle/* 와 dslc/* 는 모두 POST + JSON 본문입니다.
+       *   - lifecycle/* 는 OOTB 처럼 ?tenant= 를 붙이고 CSRF 토큰은 보내지 않습니다.
+       *   - v1/modeler/dslc/* 는 tenant 없이, 헤더 ENO_CSRF_TOKEN 을 넣어 보냅니다.
+       */
+      // #region request
+      function tenant() {
+        return widget.getValue('x3dPlatformId') || 'OnPremise';
+      }
+
+      function withTenant(url) {
+        return url + (url.indexOf('?') < 0 ? '?' : '&') + 'tenant=' + encodeURIComponent(tenant());
+      }
+
+      function lcRequest(path, body, extraHeaders) {
+        var headers = UWA.extend({
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Accept-Language': widget.lang,
+          SecurityContext: encodeURIComponent(state.securityContext)
+        }, extraHeaders || {});
+        return new Promise(function (resolve, reject) {
+          WAFData.authenticatedRequest(state.spaceUrl + path, {
+            method: 'POST',
+            type: 'json',
+            headers: headers,
+            data: JSON.stringify(body),
+            timeout: 600000,
+            onComplete: resolve,
+            onFailure: function (error, data) { reject({ error: error, data: data }); },
+            onTimeout: function (error) { reject({ error: error }); },
+            onPassportError: function (error) { reject({ error: error }); }
+          });
+        });
+      }
+
+      function getCsrfToken() {
+        return new Promise(function (resolve, reject) {
+          WAFData.authenticatedRequest(state.spaceUrl + '/resources/v1/application/E6WFoundation/CSRF', {
+            type: 'json',
+            headers: { Accept: 'application/json' },
+            onComplete: function (res) { resolve(res.csrf.value); },
+            onFailure: function (error, data) { reject({ error: error, data: data }); },
+            onPassportError: function (error) { reject({ error: error }); }
+          });
+        });
+      }
+      // #endregion request
+
+      /*
+       * [2] 상태 그래프 읽기 (ChangeMaturityWidget, MaturityWidget 과 같은 요청)
+       *   - 성공은 status.errorMsg 가 null 일 때입니다.
+       *   - data.objects 의 policy 와 같은 이름의 data.policies 항목에 maturityGraph 가 있습니다.
+       */
+      // #region state-graph
+      function loadStateGraph(physicalId) {
+        return lcRequest(withTenant('/resources/lifecycle/maturity/getStateGraph'), {
+          data: [{ physicalid: physicalId }]
+        }, { 'X-Requested-With': 'XMLHttpRequest' }).then(function (res) {
+          if (!res || !res.status || res.status.errorMsg) {
+            throw new Error((res && res.status && res.status.errorMsg) || 'getStateGraph 실패');
+          }
+          var object = res.data.objects[0];
+          var policy = res.data.policies.filter(function (p) {
+            return object && p.name === object.policy;
+          })[0];
+          if (!policy) {
+            throw new Error('이 객체에는 성숙도 그래프가 없습니다');
+          }
+          return { object: object, graph: policy.maturityGraph };
+        });
+      }
+      // #endregion state-graph
+
+      /*
+       * [3] 갈 수 있는 상태 고르기 (ChangeMaturityWidget 드롭다운과 같은 규칙)
+       *   - 현재 상태에서 나가는 transition 의 targetState 는 promote 로 보냅니다.
+       *   - visuorder 가 하나 앞인 상태는 (transition 이 없으면) demote 로 보냅니다.
+       */
+      // #region next-states
+      function computeNextStates(object, graph) {
+        var byName = {};
+        graph.states.forEach(function (s) { byName[s.stateSysName] = s; });
+        var current = byName[object.current];
+        var list = graph.transitions.filter(function (t) {
+          return t.sourceState === object.current;
+        }).map(function (t) {
+          return { state: t.targetState, action: 'promote' };
+        });
+        var previous = graph.states.filter(function (s) {
+          return current && s.visuorder === current.visuorder - 1;
+        })[0];
+        if (previous && !list.some(function (n) { return n.state === previous.stateSysName; })) {
+          list.push({ state: previous.stateSysName, action: 'demote' });
+        }
+        return list.map(function (n) {
+          return { state: n.state, action: n.action, label: byName[n.state] ? byName[n.state].stateUserName : n.state };
+        });
+      }
+      // #endregion next-states
+
+      /*
+       * [4] promote / demote
+       *   - tostate 는 stateSysName (policy 의 실제 state 이름) 입니다.
+       *   - 업무 실패(트리거, 권한, 경로)는 HTTP 200 + status: 'failure' + report[] 로 옵니다.
+       */
+      // #region change
+      function changeMaturity(action, object, toState) {
+        return lcRequest(withTenant('/resources/lifecycle/maturity/' + action), {
+          data: [{ physicalid: object.physicalid, tostate: toState, fromstate: object.current }]
+        }, { 'X-Requested-With': 'XMLHttpRequest' }).then(function (res) {
+          if (res.status === 'failure') {
+            throw { report: res.report || [] };
+          }
+          return res.results || [];
+        });
+      }
+      // #endregion change
+
+      /*
+       * [5] 오류 문구 꺼내기
+       *   - lifecycle/* 의 업무 실패: report[].error
+       *   - dslc/* 의 실패: onFailure 의 data.errorReport[] (errorCode, errorMessage)
+       *   - 그 밖의 HTTP 오류: data.error.message, data.message, error.message
+       */
+      // #region errors
+      function errorText(e) {
+        var data = e && e.data;
+        if (typeof data === 'string') {
+          try { data = JSON.parse(data); } catch (x) { return data; }
+        }
+        if (e && e.report) {
+          return e.report.map(function (r) { return r.error; }).join('\n');
+        }
+        if (data && data.errorReport) {
+          return data.errorReport.map(function (r) { return r.errorCode + ' ' + r.errorMessage; }).join('\n');
+        }
+        if (data && data.error && data.error.message) {
+          return data.error.message;
+        }
+        if (data && (data.message || data.errorMessage)) {
+          return data.message || data.errorMessage;
+        }
+        return (e && e.error && e.error.message) || (e && e.message) || String(e);
+      }
+      // #endregion errors
+
+      /*
+       * [6] CAA 공개 API (dslc) 로 다음 상태 읽기 / 상태 바꾸기
+       *   - nextState 에 갈 state 이름을 넣으면 서버가 promote / demote 를 정합니다.
+       */
+      // #region dslc
+      function dslcGetNextStates(physicalId) {
+        return getCsrfToken().then(function (token) {
+          return lcRequest('/resources/v1/modeler/dslc/maturity/getNextStates', {
+            data: [{ id: physicalId }]
+          }, { ENO_CSRF_TOKEN: token });
+        });
+      }
+
+      function dslcChangeState(physicalId, nextState) {
+        return getCsrfToken().then(function (token) {
+          return lcRequest('/resources/v1/modeler/dslc/maturity/changeState', {
+            data: [{ id: physicalId, nextState: nextState }]
+          }, { ENO_CSRF_TOKEN: token });
+        });
+      }
+      // #endregion dslc
+
+      /*
+       * [7] 개정 (새 revision 만들기). results[0].physicalid 가 새 revision 입니다.
+       */
+      // #region revise
+      function reviseMajor(physicalId) {
+        return lcRequest(withTenant('/resources/lifecycle/revise/major'), {
+          data: [{ physicalid: physicalId }]
+        }).then(function (res) {
+          if (res.status === 'failure') {
+            throw { report: res.report || [] };
+          }
+          return res.results[0].physicalid;
+        });
+      }
+      // #endregion revise
+
+      /*
+       * [8] 소유자 넘기기 (dslc). owner 는 사람의 로그인 이름입니다.
+       */
+      // #region ownership
+      function transferOwnership(physicalId, owner) {
+        return getCsrfToken().then(function (token) {
+          return lcRequest('/resources/v1/modeler/dslc/ownership/transfer', {
+            owner: owner,
+            data: [{ id: physicalId }]
+          }, { ENO_CSRF_TOKEN: token });
+        });
+      }
+      // #endregion ownership
+
+      /*
+       * [9] OOTB 성숙도 창 (MaturityCmd)
+       *   - context.getSecurityContext() 는 { SecurityContext } 를 돌려줍니다.
+       *   - 창의 알림은 context.displayNotification 으로 옵니다.
+       *   - executeAsync 는 창이 닫히거나 변경이 끝나면 값 없이 resolve 됩니다.
+       */
+      // #region ootb-dialog
+      function lifecycleContext() {
+        return {
+          getSecurityContext: function () {
+            return { SecurityContext: state.securityContext, tenant: tenant() };
+          },
+          displayNotification: function (n) {
+            log('[' + n.eventID + '] ' + n.msg);
+          }
+        };
+      }
+
+      function openMaturityDialog(physicalId) {
+        return new Promise(function (resolve) {
+          require(['DS/LifecycleCmd/MaturityCmd'], function (MaturityCmd) {
+            new MaturityCmd({ context: lifecycleContext() })
+              .executeAsync([{ physicalid: physicalId }])
+              .then(resolve);
+          });
+        });
+      }
+      // #endregion ootb-dialog
+
+      /*
+       * [10] OOTB 작은 성숙도 표시 (ChangeMaturityWidget)
+       *   - CSS 는 직접 불러옵니다. 모듈이 자기 CSS 를 부르지 않습니다.
+       *   - 첫 변경 시도가 끝나면 resolve 됩니다. 다시 쓰려면 새로 만듭니다.
+       */
+      // #region ootb-compact
+      function showCompactView(container, physicalId) {
+        container.empty();
+        return new Promise(function (resolve) {
+          require(['DS/LifecycleCmd/MaturityCmd', 'css!DS/ChangeMaturityWidget/ChangeMaturityWidget'], function (MaturityCmd) {
+            var cmd = new MaturityCmd({ context: lifecycleContext() });
+            cmd.executeCompactViewAsync(widget, container, { SecurityContext: state.securityContext }, physicalId)
+              .then(function () {
+                resolve(cmd.changeMaturityWidget.current);
+              });
+          });
+        });
+      }
+      // #endregion ootb-compact
+
+      /*
+       * [11] OOTB 개정 창 (ReviseCmd). current, policy 를 주면 서버에서 다시 읽지 않습니다.
+       */
+      // #region ootb-revise
+      function openReviseDialog(object, onDone) {
+        require(['DS/LifecycleCmd/ReviseCmd'], function (ReviseCmd) {
+          var cmd = new ReviseCmd({ context: lifecycleContext() });
+          cmd.addEvent('ExecCompleted', onDone);
+          cmd.execute([{
+            physicalid: object.physicalid,
+            displayName: object.displayName || object.name,
+            revision: object.revision,
+            type: object.type,
+            current: object.current,
+            policy: object.policy
+          }]);
+        });
+      }
+      // #endregion ootb-revise
+
+      /*
+       * [12] OOTB 소유자 변경 창 (ENOCollabSharingCmds). 노드에는 getID, getLabel 이 꼭 있어야 합니다.
+       */
+      // #region ootb-owner
+      function openTransferOwnershipDialog(object) {
+        require(['DS/ENOCollabSharingCmds/commands/TransferOwnershipCmd/ActionBar_TransferOwnershipCmd'], function (TransferOwnershipCmd) {
+          var node = {
+            getID: function () { return object.physicalid; },
+            getLabel: function () { return object.displayName || object.name; },
+            getType: function () { return object.type; },
+            object: { type: object.type, revision: object.revision }
+          };
+          new TransferOwnershipCmd({
+            ID: 'MyTransferOwnershipCmd',
+            context: {
+              getSelectedNodes: function () { return [node]; },
+              getSecurityContext: function () { return { SecurityContext: state.securityContext }; }
+            }
+          }).begin();
+        });
+      }
+      // #endregion ootb-owner
+
+      /*
+       * [13] OOTB 명령이 끝난 뒤 대시보드에 퍼지는 알림
+       *   - Lifecycle.Modification: 데이터가 JSON 문자열입니다 (Refresh.created / modified / deleted).
+       *   - DS/PADUtils/PADCommandProxy/refresh: data.authored.modified 에 바뀐 id 가 옵니다.
+       */
+      // #region notify
+      function listenLifecycleEvents() {
+        PlatformAPI.subscribe('Lifecycle.Modification', function (data) {
+          var info = typeof data === 'string' ? JSON.parse(data) : data;
+          var refresh = info.Refresh || {};
+          ['created', 'modified', 'deleted'].forEach(function (key) {
+            (refresh[key] || []).forEach(function (item) {
+              log('Lifecycle.Modification ' + key + ' ' + item.physicalid + ' ' + (item.operation || '') + ' ' + (item.state || ''));
+            });
+          });
+        });
+        PlatformAPI.subscribe('DS/PADUtils/PADCommandProxy/refresh', function (message) {
+          var authored = message && message.data && message.data.authored;
+          log('PADCommandProxy/refresh ' + JSON.stringify(authored || message));
+        });
+      }
+      // #endregion notify
+
+      function build() {
+        var page = UWA.createElement('div', { 'class': 'ls-page' });
+
+        UWA.createElement('h3', { text: '접속 정보' }).inject(page);
+        var infoEl = UWA.createElement('div', { 'class': 'ls-box' }).inject(page);
+        var scEditor = new LineEditor({ value: '', sizeInCharNumber: 50 });
+        scEditor.inject(row(page, 'SecurityContext'));
+
+        UWA.createElement('h3', { text: '객체' }).inject(page);
+        var idRow = row(page, 'physicalid');
+        var idEditor = new LineEditor({ value: '', sizeInCharNumber: 34 });
+        idEditor.inject(idRow);
+        new Button({ label: '상태 읽기', emphasize: 'primary', onClick: onLoad }).inject(idRow);
+        var objectEl = UWA.createElement('div', { 'class': 'ls-box' }).inject(page);
+
+        UWA.createElement('h3', { text: '갈 수 있는 상태 (lifecycle/maturity)' }).inject(page);
+        var nextEl = UWA.createElement('div', { 'class': 'ls-row' }).inject(page);
+
+        UWA.createElement('h3', { text: 'CAA 공개 API (dslc)' }).inject(page);
+        var dslcRow = row(page, 'nextState');
+        var nextStateEditor = new LineEditor({ value: '', sizeInCharNumber: 16 });
+        nextStateEditor.inject(dslcRow);
+        new Button({ label: 'getNextStates', onClick: onDslcNext }).inject(dslcRow);
+        new Button({ label: 'changeState', onClick: onDslcChange }).inject(dslcRow);
+
+        UWA.createElement('h3', { text: '개정, 소유자' }).inject(page);
+        var etcRow = row(page, '새 소유자');
+        var ownerEditor = new LineEditor({ value: '', sizeInCharNumber: 16 });
+        ownerEditor.inject(etcRow);
+        new Button({ label: '소유자 넘기기', onClick: onTransfer }).inject(etcRow);
+        new Button({ label: '개정 (revise/major)', onClick: onRevise }).inject(etcRow);
+
+        UWA.createElement('h3', { text: 'OOTB 화면' }).inject(page);
+        var ootbRow = row(page);
+        new Button({ label: '성숙도 창', onClick: onMaturityDialog }).inject(ootbRow);
+        new Button({ label: '작은 성숙도 표시', onClick: onCompact }).inject(ootbRow);
+        new Button({ label: '개정 창', onClick: onReviseDialog }).inject(ootbRow);
+        new Button({ label: '소유자 변경 창', onClick: onOwnerDialog }).inject(ootbRow);
+        var compactEl = UWA.createElement('div', { 'class': 'ls-compact' }).inject(page);
+
+        UWA.createElement('h3', { text: '결과' }).inject(page);
+        var resultEl = UWA.createElement('div', { 'class': 'ls-result' }).inject(page);
+
+        UWA.createElement('h3', { text: '로그' }).inject(page);
+        logEl = UWA.createElement('div', { 'class': 'ls-log' }).inject(page);
+
+        function currentId() {
+          state.securityContext = scEditor.value;
+          return String(idEditor.value || '').trim();
+        }
+
+        function showResult(title, value) {
+          resultEl.textContent = title + '\n' + (typeof value === 'string' ? value : JSON.stringify(value, null, 2));
+        }
+
+        function showError(title, e) {
+          var text = errorText(e);
+          resultEl.textContent = title + ' 실패\n' + text;
+          log(title + ' 실패: ' + text);
+        }
+
+        function renderObject() {
+          var o = state.object;
+          nextEl.empty();
+          objectEl.textContent = o ? [o.displayName || o.name, o.revision, o.type, o.policy, o.currentStateUserName + ' (' + o.current + ')'].join(' / ') : '';
+          if (!o) {
+            return;
+          }
+          var list = computeNextStates(o, state.graph);
+          if (!list.length) {
+            UWA.createElement('span', { text: '갈 수 있는 상태가 없습니다' }).inject(nextEl);
+          }
+          list.forEach(function (n) {
+            new Button({
+              label: n.action + ': ' + n.label,
+              onClick: function () { onChange(n); }
+            }).inject(nextEl);
+          });
+        }
+
+        function reload() {
+          var id = currentId();
+          if (!id) {
+            log('physicalid 를 넣습니다');
+            return Promise.resolve();
+          }
+          return loadStateGraph(id).then(function (r) {
+            state.object = r.object;
+            state.graph = r.graph;
+            renderObject();
+            showResult('getStateGraph', r.object);
+          }).catch(function (e) {
+            state.object = null;
+            renderObject();
+            showError('getStateGraph', e);
+          });
+        }
+
+        function onLoad() {
+          reload();
+        }
+
+        function onChange(n) {
+          changeMaturity(n.action, state.object, n.state).then(function (results) {
+            showResult(n.action, results);
+            log(n.action + ' ' + n.state);
+            return reload();
+          }).catch(function (e) {
+            showError(n.action, e);
+          });
+        }
+
+        function onDslcNext() {
+          dslcGetNextStates(currentId()).then(function (res) {
+            showResult('getNextStates', res);
+          }).catch(function (e) {
+            showError('getNextStates', e);
+          });
+        }
+
+        function onDslcChange() {
+          dslcChangeState(currentId(), nextStateEditor.value).then(function (res) {
+            showResult('changeState', res);
+            return reload();
+          }).catch(function (e) {
+            showError('changeState', e);
+          });
+        }
+
+        function onTransfer() {
+          transferOwnership(currentId(), ownerEditor.value).then(function (res) {
+            showResult('ownership/transfer', res);
+          }).catch(function (e) {
+            showError('ownership/transfer', e);
+          });
+        }
+
+        function onRevise() {
+          reviseMajor(currentId()).then(function (newId) {
+            showResult('revise/major', '새 revision: ' + newId);
+            idEditor.value = newId;
+            return reload();
+          }).catch(function (e) {
+            showError('revise/major', e);
+          });
+        }
+
+        function onMaturityDialog() {
+          openMaturityDialog(currentId()).then(function () {
+            log('성숙도 창이 끝났습니다');
+            return reload();
+          });
+        }
+
+        function onCompact() {
+          showCompactView(compactEl, currentId()).then(function (current) {
+            log('작은 성숙도 표시: ' + current);
+            return reload();
+          });
+        }
+
+        function onReviseDialog() {
+          if (!state.object) {
+            log('먼저 상태 읽기를 누릅니다');
+            return;
+          }
+          openReviseDialog(state.object, function () {
+            log('개정 창이 끝났습니다');
+          });
+        }
+
+        function onOwnerDialog() {
+          if (!state.object) {
+            log('먼저 상태 읽기를 누릅니다');
+            return;
+          }
+          openTransferOwnershipDialog(state.object);
+        }
+
+        widget.body.empty();
+        page.inject(widget.body);
+        listenLifecycleEvents();
+
+        getSpaceUrl().then(function (url) {
+          state.spaceUrl = url;
+          infoEl.textContent = '3DSpace: ' + url + '\ntenant: ' + tenant();
+          return getDefaultSecurityContext();
+        }).then(function (sc) {
+          scEditor.value = sc;
+          state.securityContext = sc;
+          log('준비됨');
+        }).catch(function (e) {
+          log('SecurityContext 를 읽지 못했습니다: ' + errorText(e));
+        });
+      }
+
+      widget.addEvents({ onLoad: build });
+    });
+  //]]>
+  </script>
+</head>
+<body>
+  <p>Loading...</p>
+</body>
+</html>

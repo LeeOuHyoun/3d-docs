@@ -23,6 +23,21 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | 로딩 가리개(ModalLoader)가 안 사라짐 | `removeModalLoader` 는 `displayModalLoader` 에 준 **같은 글자**로 지움 | [Loader, ModalLoader](/controls/webux-controls#loader-modalloader) |
 | `The given container is not positionned...` 예외 | 대상 요소에 `position: relative` 를 줌 | [Loader, ModalLoader](/controls/webux-controls#loader-modalloader) |
 | 아이콘이 빈 칸 | 아이콘 이름이 글꼴마다 다름 (`floppy` 는 3DS 글꼴, FontAwesome 은 `floppy-o`) | [아이콘](/controls/webux-controls#아이콘) |
+| 단독 실행에서 3DSearch 가 안 열림 | 받는 쪽(상단 3DSearch)이 3DDashboard 최상위 창에 있음. 대시보드 위젯에서만 동작 | [3DSearch 동작 방식](/widget/search#동작-방식) |
+| 태그 창에 위젯 태그가 하나도 안 보임 | `object` 에 숫자나 빈 값이 섞이면 개수 계산에서 오류가 나 그 호출의 태그가 모두 빠짐. `String(n)` 으로 넣고 `sixw` 는 `ds6w:what/...` 처럼 6W 루트로 시작 | [6W 태그 연동](/widget/tagger#주의) |
+| 위젯을 닫은 뒤에도 상단 바에 그 위젯 항목이 남는 것 같음 | 항목 함수(onExecute)는 위젯 안에서 실행됨. 끝낼 때 `die()` 로 지움 (대시보드가 대신 지우는지는 검증 필요) | [대시보드 상단 바](/widget/top-bar#주의) |
+| 속성 패널에 ID 카드만 보이고 탭 내용이 안 보임 | 담는 요소에 높이가 없음. 패널은 `height: 100%` 와 absolute 로 그림 | [패널 만들기](/controls/properties-panel#패널-만들기) |
+| 속성 패널에 편집 버튼과 저장이 안 나옴 | `readOnly` 를 안 주면 읽기 전용. `readOnly: false` 를 줌 | [생성 옵션](/controls/properties-panel#생성-옵션) |
+| 속성만 보이는 패널에서 저장 성공 / 오류 메시지가 안 보임 | `ALL` 이 아니면 메시지를 붙일 곳이 없음. `events.onNotification` 에서 직접 띄움 | [typeOfDisplay](/controls/properties-panel#보이는-모양-typeofdisplay) |
+| 작은 성숙도 표시(ChangeMaturityWidget)가 모양 없이 나옴 | 이 모듈은 자기 CSS 를 부르지 않음. `css!DS/ChangeMaturityWidget/ChangeMaturityWidget` 을 같이 require | [성숙도 변경, 개정](/rest-api/lifecycle#작은-성숙도-표시-changematuritywidget) |
+| `DSpointer...` 이벤트가 오지 않음, 글꼴 아이콘이 안 보임 | `DS/Core/Core` 를 읽지 않아 PointerEvents 가 초기화되지 않고 wux.css 가 없음. 의존성에 추가 | [공통 유틸](/amd/utilities#어떻게-부르나) |
+| ENOXTriptych 패널이 300px 로 보이고 가운데가 오른쪽 패널 밑으로 들어감 | `container` 없이 만들면 넓이 0 에서 계산하고, inject 뒤에 다시 계산하지 않음. `container` 에 화면에 붙은 요소를 주거나, 붙인 뒤 `triptych-set-size` 를 보냄 | [Triptych 주의](/controls/enox-components#triptych-주의) |
+| ENOXIDCard 썸네일이 보이지 않음 | 넓이가 868px 보다 좁거나, 화면에 붙기 전에 render 함. 붙은 요소에 `render().inject()` 후 `attachResizeSensor()` | [객체 머리글](/controls/enox-components#객체-머리글-enoxidcard) |
+| 떠 있는 패널을 최대화하자 화면 밖으로 나가 닫기 단추가 안 보임 | `limitParent` 가 기본값(false)이면 위치를 그대로 둔 채 키움. `limitParent: true` 를 줌 | [떠 있는 패널](/controls/enox-components#떠-있는-패널-enofloatingpanel) |
+| 하위 메뉴가 안 열리고 콘솔에 `Invalid content, menu must contain at least one item.` | Promise 를 돌려주는 보통 함수를 submenu 에 줌. `async function` 으로 씀 | [하위 메뉴](/controls/menu#하위-메뉴) |
+| 2026 으로 올린 뒤 `DS/ENO6WPlugins/jQuery` 등이 404 / scripterror | 2026 에는 ENO6WPlugins, VENENO6WPlugins, JSZipTools, SPYTempVenHC 폴더가 없음. CKEditor 는 같은 이름 안에서 4.18.0 → 4.25.1-lts 로 바뀜. OOTB 처럼 `DS/ENOjquery/ENOjquery` 로 바꾸거나 라이브러리를 내 폴더에 넣음 | [외부 라이브러리](/amd/libraries) |
+| `Handlebars helper '...' has already been registered!` | Handlebars 객체는 한 창에 하나이고, `DS/Handlebars/Handlebars` 가 같은 이름의 재등록을 막음. 이름에 앱 접두어를 붙이고 한 번만 등록 | [Handlebars](/amd/libraries#템플릿-handlebars) |
+| 3DPlay 미리 보기를 닫거나 바꿀 때 콘솔에 `Experience is not ready` | 준비(ExperienceReady) 전에 `dispose()` 하면 experience 를 정리하지 않고 스플래시만 지움. 준비 뒤에 바꾸거나 닫음 | [3DPlay](/widget/3dplay#다른-객체로-바꾸기와-닫기) |
 | 새 타입의 상세 화면이 안 나옴 | 프로젝트 타입은 `type_새타입` menu 를 만들어 `Tree` menu 에 넣어야 함 | [객체 트리 menu](/ui-components/command-menu#객체-트리-menu-type-menu) |
 
 ## 설정이 오류 없이 무시될 때
@@ -67,6 +82,11 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | Additional App 의 Type 을 못 바꿈 | 수정 창에서 Type 은 비활성. 지우고 다시 등록 | [입력 항목](/widget/dashboard-register#입력-항목) |
 | Internal 로 올린 위젯이 js, css 를 못 찾음 | HTML 한 장만 올라감. `webapps/` 모듈을 쓰는 위젯은 External (주소) 로 등록 | [Internal 저장](/widget/dashboard-register#internal-저장) |
 | `widget.mutate` 가 `do not support` 오류 | 프레임 안 `widget` 에는 `mutate` 가 없음. 부모 창의 위젯 인스턴스로 호출 | [Run Your App 동작](/widget/dashboard-register#동작) |
+| `triptych-toggle-panel` 로 왼쪽을 열려 했는데 오른쪽이 움직임 | data 를 `{ side: 'left' }` 객체로 보냄. 문자열 `'left'` / `'right'` 로 보냄 | [Triptych 주의](/controls/enox-components#triptych-주의) |
+| `Dom.createElement` 로 만든 요소에 class, 글자가 안 들어감 (2026 은 콘솔 경고) | 옵션 이름이 버전마다 다름 (`class` / `html` 과 `className` / `text`). `UWA.createElement` 사용 | [요소 만들기와 찾기](/amd/utilities#요소-만들기와-찾기) |
+| `DS/PDFjs/PDFjs` 가 오래된 PDF.js 로 동작 | `window.PDFJS_VERSION` 이 없으면 1.9.426. 처음 부르기 전에 `'2.13.216'` 등을 넣음 (OOTB 방식) | [문서와 파일](/amd/libraries#문서와-파일) |
+| 자동완성이 칩으로 여러 개를 받고, 목록에 없는 글자도 값이 됨 | `multiSearchMode`, `allowFreeInputFlag` 기본값이 true. false 를 줌 | [하나만 고르기](/controls/autocomplete#하나만-고르기) |
+| 자동완성 배열 후보에 넣은 id, type 이 고른 노드에 없음 | 배열 항목은 label, value, icon(s), tooltip, typeRepresentation, grid 만 남음. grid 에 넣음 | [하나만 고르기](/controls/autocomplete#하나만-고르기) |
 
 ### 3DSpace 서버 (settings, MQL)
 
@@ -117,6 +137,19 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | 콜백에서 `this._parent()` 가 엉뚱하게 동작 | 메서드 실행 중에만 유효. 먼저 변수에 담음 | [상속과 _parent](/uwa/class#상속과-parent) |
 | `onXxx` 메서드가 저절로 불림 | 이벤트 이름과 같은 메서드는 `dispatchEvent` 때 자동 호출 | [클래스 Events](/uwa/class#events) |
 | 지운 View 의 `render` 가 계속 불림 | `destroy()` 는 `stopListening()` 을 안 부름. 직접 부름 | [View](/uwa/mvc#view) |
+| 3DSearch 에서 OK 를 눌러도 결과가 안 옴 | `app_socket_id` 가 소켓 id 와 다르거나, `mode` 가 `'furtive'` 가 아니거나, `RegisterContext` 없이 `InContextSearch` 만 보냄. 같은 옵션을 둘 다 보냄 | [3DSearch 옵션](/widget/search#옵션) |
+| 다른 위젯의 Compass 응답을 내 것으로 처리함 / 다른 위젯의 Compass 구독이 사라짐 | top 창 MessageBus 하나를 대시보드 전체가 씀. 응답의 `widgetId` 를 확인하고, `unsubscribe(topic)` 은 남의 구독까지 지우므로 쓰지 않음 | [Compass 에 선택 객체 알리기](/widget/compass-pubsub#주의) |
+| 속성 패널 내용이 다른 위젯의 선택으로 바뀜 | `selectionType` 기본값이 `ALL_SELECTION`. `NO_SELECTION` 을 줌 | [selectionType](/controls/properties-panel#선택을-따라갈지-selectiontype) |
+| 오른쪽 클릭 메뉴 callback 이 두 번 불림 (서버 요청 두 번) | 부모와 자식 요소(그리드를 감싼 요소 포함)에 ContextualMenu 를 따로 등록함. 바깥 한 곳에 등록하고 `e.info.target` 으로 나눔 | [오른쪽 클릭 메뉴](/controls/menu#오른쪽-클릭-메뉴-contextualmenu) |
+| 2025 에서 메뉴 항목을 누르면 콘솔에 `ReferenceError: item is not defined` | submenu 가 함수인 항목을 하위 메뉴가 만들어지기 전에 누름 (2025 원본 오류, 2026 고침). 그런 항목에 action 을 두지 않음 | [하위 메뉴](/controls/menu#하위-메뉴) |
+| 2025 에서 Enter 로 메뉴 항목을 고르면 메뉴가 다시 열림 | 메뉴를 연 WebUX Button 에 포커스가 남아 같은 Enter 를 받음. 2026 은 생기지 않음 | [키보드](/controls/menu#키보드) |
+| 서버 검색 결과가 자동완성 목록에 안 보이고 "개체를 찾을 수 없음" | 기본 filterCB 가 결과를 label 로 다시 거름. `filterCB: function () {}` 와 `keepSearchResultsFlag: false` | [서버에서 찾기](/controls/autocomplete#서버에서-찾기) |
+| 자동완성에서 고를 때마다 그리드 선택이 바뀜 | 그리드의 TreeDocument 를 elementsTree 로 넘김. 후보용 TreeDocument 를 따로 만듦 | [TreeDocument 후보](/controls/autocomplete#treedocument-후보) |
+| ENOFloatingPanel 의 X / Esc 를 눌러도 닫히지 않음 | 옵션 `events.onClose` 가 있으면 자동 destroy 하지 않음. 그 안에서 `destroy()` 를 부름 | [떠 있는 패널](/controls/enox-components#떠-있는-패널-enofloatingpanel) |
+| Esc 한 번에 떠 있는 패널이 모두 닫힘 | 패널마다 document 에 Esc 처리기를 검. `escapeToClose: false` 로 만들고 직접 처리 | [떠 있는 패널](/controls/enox-components#떠-있는-패널-enofloatingpanel) |
+| `LinkManager.subscribe` 가 아무것도 받지 못함 / `publish` 가 TypeError | `ENOWidgetLinkEvents.json` 에 등록된 토픽만 처리함. 직접 만든 토픽은 WidgetLink 나 PlatformAPI 로 | [위젯 사이 연결](/controls/enox-components#위젯-사이-연결-linkmanager) |
+| 크기 리스너 하나를 지웠더니 다른 리스너가 멈춤 | `Dom.removeResizeObserver` 가 항상 첫 항목을 지움 (2026 도 같음). 요소당 하나만 | [크기 변화 받기](/amd/utilities#크기-변화-받기) |
+| 단독 실행에서 Me 설정 읽은 뒤 코드가 안 돎 | 2025 `BetaOptions.getMePreference` 는 대시보드 최상위 창이 없으면 Promise 가 끝나지 않음 | [BetaOptions](/widget/i18n-preferences#betaoptions-getmepreference) |
 
 ## 값이 이상할 때
 
@@ -131,6 +164,15 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | WAFData 오류에서 상태 코드를 못 찾음 | `onFailure(error, data, headers)`. 상태 코드는 `error.message` 안에만 | [서버 호출 주의](/uwa/request#주의) |
 | REST 가 200 인데 처리가 안 됨 | 실패도 200 으로 오는 경우가 있음. `res.success` 를 먼저 확인 | [REST 오류](/rest-api/#오류) |
 | REST 가 SecurityContext 로 거부함 | 컨텍스트 문자열에는 `title` 이 아니라 `name` | [SecurityContext 형식](/rest-api/security-context#형식) |
+| `/resources/v1/modeler/dslc/...` 호출만 실패함 (lifecycle 호출은 됨) | dslc (CAA) 는 서버가 `ENO_CSRF_TOKEN` 헤더를 검사함. 토큰을 받아 헤더에 넣음 | [성숙도 변경, 개정](/rest-api/lifecycle#rest-묶음) |
+| 트리거가 막은 이유 대신 "성숙도를 변경하는 데 필요한 허가가 없습니다" 가 보임 | OOTB 성숙도 창이 `1500168`, `all requirements not satisfied` 가 든 문구를 권한 문구로 바꿈. REST 를 직접 부르고 `report[].error` 를 표시 | [서버에서 일어나는 일](/rest-api/lifecycle#서버에서-일어나는-일-트리거) |
+| federated search 결과가 비었는데 오류가 없음 | 소스별 오류는 성공 응답의 `infos.sources[].error` 에 옴 (`FS_AUTHENTICATION_ERROR` 등) | [federated search 응답](/widget/search#응답) |
+| 3DSearch 에서 받은 제목에 `&amp;` 가 보임 | 표시 값(`ds6w:label`)은 HTML 이스케이프됨. `ds6w:label_value` 처럼 `_value` 키를 씀 | [받는 데이터](/widget/search#받는-데이터) |
+| getTypeInfo 의 하위 타입 목록에 기준 타입이 섞임 | 응답 키에 보낸 타입도 들어 있음. 하위 타입이 있는지는 키가 2 개 이상인지로 보고, 목록에서는 직접 뺌 | [타입, 속성 정보](/rest-api/dictionary#주의) |
+| PersonSearchByName 에 다른 사람이 같이 옴 | 검색 가능한 칸에 그 로그인이 들어 있는 사람도 옴. `dataelements.name === 로그인` 으로 다시 거름 | [e6w](/rest-api/e6w#사람-찾기-personsearch) |
+| enorelnav 결과에 다른 화면의 관계 설정이 섞임 | 세션 방식은 `setPreferences` 를 `widgetId` 로 다시 찾음. 한 번에 부를 때는 `widgetId` 에 시각을 붙여 새로 만들고, 세션이 끝나면 `clear` 를 부름 | [관계 탐색](/rest-api/navigate#주의) |
+| v3 e6w 결과에서 `dataelements` 가 undefined | v3 는 `data[i].name` 처럼 바로 읽음. v2 와 읽는 위치가 다름 | [e6w 버전과 주소](/rest-api/e6w#버전과-주소) |
+| OOTB 정보 창(ENOLCMT_AP)이 "아이템을 선택하지 않음" 으로 열림 | `objectId` 키는 읽지 않음. `SelectedItem` 배열을 넘기거나 `EditPropCmdBase().launchProperties` 를 씀 | [OOTB 정보 창](/controls/properties-panel#ootb-정보-창으로-열기) |
 | 3DSpace 주소에 포트가 빠짐 | `get3DSpaceUrl()` 대체값은 포트 없이 `/3DSpace`. Compass 응답이 없었다는 뜻 | [get3DSpaceUrlAsync](/widget/widget-services#get3dspaceurlasync) |
 | 한국어 JSON 이 있는데 영어가 나옴 | `폴더_en.js` 묶음이 있으면 JSON 으로 안 넘어감. 언어는 `widget.lang` 이 아니라 로더 설정 | [언어를 찾는 순서](/amd/plugins#언어를-찾는-순서) |
 | 그리드 행을 rowID 로 다시 찾으니 다른 행 | rowID 는 펼침, 정렬, 필터로 바뀜. `nodeModel` 을 보관 | [cellID 와 rowID](/datagridview/api/grid-methods#먼저-알아-둘-것-cellid-와-rowid) |
@@ -148,6 +190,14 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | 그리드 행을 끌어 옮겼더니 정렬이 풀림 | 기본 이동이 `sortModel` 을 `[]` 로 비움. 그룹핑 중에는 순서 바꾸기가 꺼짐 | [정렬, 그룹핑, 필터와 같이 쓸 때](/datagridview/drag-and-drop#정렬-그룹핑-필터와-같이-쓸-때) |
 | 목록 그리드에서 끌어 놓은 행이 다른 행의 하위로 들어감 | 행 가운데에 놓으면 하위로 넣는 것이 기본. `shouldAcceptDrop` 에서 `dropPosition === 'middle'` 을 거절 | [행 순서 바꾸기](/datagridview/drag-and-drop#예제-1-행-순서-바꾸기) |
 | 그리드 `cellInfos.droppedNodes` 가 undefined | 같은 그리드 안에서 옮길 때만 들어 있음. 다른 곳에서 온 것은 `event.dataTransfer` 로 읽음 | [콜백이 받는 인자](/datagridview/drag-and-drop#콜백이-받는-인자) |
+| 체크 / 라디오 메뉴 항목을 눌러도 표시가 안 바뀜 | Menu 는 state 를 바꾸지 않음. 앱이 값을 갖고 열 때마다 항목을 새로 만들고, 열어 둔 채면 `Menu.updateModel` | [체크와 라디오 항목](/controls/menu#체크와-라디오-항목) |
+| 자동완성에서 Enter 를 누르면 목록 항목이 아니라 친 글자가 들어감 | 자유 입력이 켜져 있으면 친 글자 행이 맨 위에 미리 골라짐. ↓ 로 옮기거나 클릭 | [자유 입력과 칩](/controls/autocomplete#자유-입력과-칩) |
+| 속성 패널 destroyComponent 에서 `reading 'destroy'` 오류 | `ALL` 이 아니면 탭 막대가 없음. try / catch 로 감싼 뒤 담는 요소를 비움 | [정리](/controls/properties-panel#다시-읽기-읽기-전용-크기-정리) |
+| ENOXEmptyContent 문장의 태그가 그대로 해석됨 | `text` 를 innerHTML 로 넣음. 사용자 입력은 이스케이프 | [빈 화면 안내](/controls/enox-components#빈-화면-안내-enoxemptycontent) |
+| `Utils.clamp` 결과가 이상함 | 인자 순서가 (최소, 최대, 값) | [Utils](/amd/utilities#utils) |
+| 언어를 바꿨더니 위젯만 다시 읽히고 계정 언어는 그대로 | `I18n.setCurrentLanguage` 는 Me 설정 창 전용 (쿠키 + 2025 는 다시 읽기) | [I18n](/widget/i18n-preferences#ds-uwpclientcode-i18n) |
+| 2026 에서 형식 언어가 `undefined`, 바꿔도 반영 안 됨 | `WUX.currentFormatsLanguage` 가 없어지고 `LanguageUtils.regionalFormatLanguage` 로 바뀜 | [2026](/widget/i18n-preferences#_2026) |
+| 꺼진 Me 설정이 켜진 것처럼 동작 | `readPreferences` 값은 `'false'` 같은 문자열 | [Me 환경설정 읽기](/widget/i18n-preferences#me-환경설정-읽기) |
 | select 결과가 String 이었다 StringList 였다 함 | 값이 하나면 String, 여럿이면 StringList | [여러 값 select](/jpo/domain-object#여러-값-select) |
 | attribute 값이 계속 비어 있음 | 이름 오타도 예외 없이 빈 값. MQL `print bus ... select ... dump` 로 확인 | [관계](/jpo/domain-object#관계) |
 | 저장 함수에서 이전 값이 `null` | 이전 값 (`Old value`) 은 편집 폼만 넘김. 표 셀 저장과 생성 폼은 저장 전에 직접 읽음 | [저장](/jpo/args#저장-update-function) |

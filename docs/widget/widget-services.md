@@ -29,7 +29,7 @@ require(['DS/WidgetServices/WidgetServices'], function (WidgetServices) {
 | `addWidgetResizeEvent(fn)` / `removeWidgetResizeEvent(fn)` | `onResize` |
 | `getTenantID(default?)` | `widget.getValue('x3dPlatformId')` → 서버가 넣은 `enoviaServerCAWidget.tenant` → `default` |
 | `setTenantID(id)` | `x3dPlatformId` 저장 |
-| `getLanguage()` | `COMPASS_CONFIG.lang` → `widget.lang` → `widget.getValue('lang')` → 최상위 창 `dsLang` → `'en'` |
+| `getLanguage()` | `COMPASS_CONFIG.lang` → `widget.lang` → `widget.getValue('lang')` → 최상위 창 `dsLang` → `'en'`. `widget.lang`, `I18n.getCurrentLanguage()` 와의 차이는 [언어와 사용자 환경설정](/widget/i18n-preferences#지금-언어-얻기) |
 | `get3DSpaceUrlAsync(opts)` | 3DSpace 주소 (아래) |
 | `get3DSwymUrlAsync(opts)`, `get3DSearchUrlAsync(opts)`, `getCompassUrlAsync(opts)` | 각 서비스 주소. 실패하면 `''` |
 | `getSourceUrlAsync({ source: '서비스이름', ... })` | 임의 서비스 주소 |

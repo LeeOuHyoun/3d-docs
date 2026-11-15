@@ -68,6 +68,8 @@ require(['DS/CoreEvents/Events'], function (Events) {
 | `information-panel-close` | 18 | 정보 패널 |
 | `license:error` | - | WAFData 가 라이선스 오류 시 발행 ([서버 호출](/uwa/request#promise-로-감싸기)) |
 
+3DPlay 는 `/<ctx>/ASSET/LOADINGFINISHED/` 처럼 ctx 를 앞에 붙인 이름으로 publish 합니다 ([3DPlay 이벤트](/widget/3dplay#이벤트-options-callbacks)).
+
 ## ModelEvents
 
 `new ModelEvents(options)` 로 버스를 만들고 여러 화면 조각에 같은 객체를 넘겨 씁니다. 다른 모듈과 이름이 겹칠 걱정이 없습니다.

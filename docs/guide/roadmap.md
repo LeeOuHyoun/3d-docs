@@ -47,6 +47,8 @@ ENOVIA 개발이 처음이라면 아래 순서로 읽습니다. 화면 하나는
 | 6 | [DataGridView](/datagridview/) | 목록 / 트리 그리드 |
 | 7 | [Tweakers](/tweakers/) | 셀, 툴바, 폼에 쓰이는 편집기와 사용자 타입 |
 | 8 | [이벤트, 선택, 끌어 놓기](/events/) | 위젯 간 연동, 다른 위젯에서 끌어 온 객체 받기 |
+| 9 | [3DSearch 에서 골라 오기](/widget/search) · [6W 태그](/widget/tagger) · [Compass 에 알리기](/widget/compass-pubsub) | 3DDashboard 공용 화면(검색, 태그 창, Compass)과 연동 |
+| 10 | [성숙도 변경, 개정](/rest-api/lifecycle) · [속성 패널](/controls/properties-panel) | 위젯에서 객체 상태 바꾸기, OOTB 속성 화면 넣기 |
 
 ## 막혔을 때
 

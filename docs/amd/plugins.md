@@ -88,6 +88,8 @@ require.config({ config: { i18n: { locale: widget.lang } } });
 `locale` 을 `devkey` 로 두면 모든 값이 키 이름으로, `devtrace` 면 `모듈.키` 로, `devsymbol` 이면 `¤¤¤` 로 바뀝니다. 화면의 어느 글자가 어느 키인지 찾을 때 씁니다. 영어 묶음(`폴더_en.js`)이 있는 폴더에서만 바뀝니다.
 :::
 
+위젯에서 지금 언어를 얻는 다른 방법은 [언어와 사용자 환경설정](/widget/i18n-preferences#지금-언어-얻기) 을 봅니다.
+
 ### 돌려받는 객체
 
 | 키 | 설명 |

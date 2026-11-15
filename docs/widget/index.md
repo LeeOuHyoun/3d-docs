@@ -104,6 +104,12 @@ UWA2/js/Widget.js, Environment.js, Environments/Frame.js, Environments/Standalon
 | 3DSpace 주소, SecurityContext 를 한 번에 (ENOVIA 앱 공용 도우미) | `DS/WidgetServices/WidgetServices` | [WidgetServices](/widget/widget-services) |
 | 3DSpace REST 호출 | `DS/WAFData/WAFData` | [서버 호출](/uwa/request) |
 | 3DSpace 주소 + SecurityContext 를 얻는 순서 정리 | - | [3DSpace 주소와 SecurityContext](/widget/space-url) |
+| 사용자 언어, 날짜 형식, Me 환경설정 | `DS/UWPClientCode/I18n`, `DS/MePreferencesClientAPI/MePreferencesClientAPI` | [언어와 사용자 환경설정](/widget/i18n-preferences) |
+| 3DSearch 에서 사용자가 고른 객체 / 사람 | `DS/SNInfraUX/SearchCom` | [3DSearch 에서 골라 오기](/widget/search) |
+| 태그 창(6W)으로 위젯 목록 거르기 | `DS/TagNavigatorProxy/TagNavigatorProxy` | [6W 태그 연동](/widget/tagger) |
+| 고른 객체를 Compass 에 알리기, 다른 앱 실행 | `DS/i3DXCompassServices/i3DXCompassPubSub` | [Compass 에 선택 객체 알리기](/widget/compass-pubsub) |
+| 대시보드 상단 바 메뉴에 명령 넣기 | `DS/TopBarProxy/TopBarProxy` | [대시보드 상단 바](/widget/top-bar) |
+| 위젯 안 3D / 2D 미리 보기 | `DS/3DPlayHelper/3DPlayHelper` | [3D / 2D 미리 보기](/widget/3dplay) |
 
 ## 자주 틀리는 것
 
@@ -130,6 +136,12 @@ UWA2/js/Widget.js, Environment.js, Environments/Frame.js, Environments/Standalon
 | [WidgetServices](/widget/widget-services) | ENOVIA 앱 공용 도우미. 플랫폼 id, 언어, 3DSpace 주소 |
 | [3DSpace 주소와 SecurityContext](/widget/space-url) | 플랫폼 id → 3DSpace 주소 → SecurityContext 를 얻는 순서 |
 | [다른 앱을 창으로 열기 (TransientWidget)](/widget/transient-widget) | 다른 앱을 지금 화면 위에 창으로 열기, 닫기, 열려 있는지 확인 |
+| [언어와 사용자 환경설정](/widget/i18n-preferences) | 지금 언어 얻기, 날짜와 숫자 쓰기, 시간대, Me 환경설정 읽기와 변경 알림, 2026 지역 형식 언어 |
+| [3DSearch 에서 골라 오기](/widget/search) | 3DSearch 를 열어 고른 객체 / 사람 받기 (SearchCom), 화면 없이 검색 (federated search) |
+| [6W 태그 연동](/widget/tagger) | 목록에 6W 태그 붙이기, 태그 창에서 고르면 거르기 (TagNavigatorProxy) |
+| [Compass 에 선택 객체 알리기](/widget/compass-pubsub) | `setObject` / `setX3DContent`, 다른 앱 실행 요청 (`launchApp`) |
+| [대시보드 상단 바 (TopBarProxy)](/widget/top-bar) | 상단 바의 +, 공유, 도움말, 사용자 메뉴에 위젯 명령 넣기 |
+| [3D / 2D 미리 보기 (3DPlay)](/widget/3dplay) | 위젯 안에 3DPlay 미리 보기 넣기, 3DPlay 앱으로 열기 |
 
 ## 샘플
 
@@ -137,6 +149,13 @@ UWA2/js/Widget.js, Environment.js, Environments/Frame.js, Environments/Standalon
 | --- | --- | --- |
 | [WidgetSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.html) | 위젯 HTML, `widget:preferences` (hidden, range, boolean, list) | [위젯 설정](/widget/preferences) |
 | [WidgetSample.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) | `i18n!` / `css!`, onLoad / onRefresh / endEdit / onResize / onViewChange, `addPreference` 로 SecurityContext 목록 추가, 3DSpace 주소 얻기 | [widget 객체](/widget/widget-api), [3DSpace 주소와 SecurityContext](/widget/space-url) |
+| [TransientSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TransientSample.html) | 다른 앱을 창으로 열기 / 닫기 / 숨기기, 넘어온 값 읽기 | [TransientWidget](/widget/transient-widget) |
+| [SearchSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/SearchSample.html) | 3DSearch 열기(타입 제한, 여러 개 선택), 받은 객체, 사람 고르기, 글자로 검색 | [3DSearch 에서 골라 오기](/widget/search) |
+| [TaggerSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TaggerSample.html) | 목록에 태그 붙이기, 태그 창에서 고르면 거르기 | [6W 태그 연동](/widget/tagger) |
+| [CompassSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/CompassSample.html) | 행을 고르면 setObject / setX3DContent, launchApp | [Compass 에 선택 객체 알리기](/widget/compass-pubsub) |
+| [TopBarSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TopBarSample.html) | 상단 바 메뉴에 항목, 하위 메뉴, 배지 넣기 | [대시보드 상단 바](/widget/top-bar) |
+| [3DPlaySample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/3DPlaySample.html) | physicalid 의 3D / 2D 미리 보기, 3DPlay 앱으로 열기 | [3D / 2D 미리 보기](/widget/3dplay) |
+| [LifecycleSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/LifecycleSample.html) | 갈 수 있는 state, promote / demote, 개정, 소유자 넘기기, OOTB 성숙도 창 | [성숙도 변경, 개정](/rest-api/lifecycle) |
 
 ::: warning
 샘플은 `<3DSpace>/webapps/WidgetSample/` 에 두고 ENOVIA 서버 주소로 열어야 동작합니다. 단독 실행에서는 Compass 응답이 없어 5 초 뒤 webapps 주소로 3DSpace 주소를 계산합니다. 단독 실행은 jsdom 과 모의 서버(enovia2025 webapps 파일 + 가짜 pno/person 응답)에서 NLS 요청 순서, 설정 라벨 번역, onLoad / onRefresh, SecurityContext 목록까지 확인했습니다. 실제 서버와 3DDashboard 안에서는 아직 확인하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.

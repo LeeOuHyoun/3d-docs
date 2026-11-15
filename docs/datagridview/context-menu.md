@@ -36,6 +36,8 @@ DataGridView.js 의 publishedProperties `onContextualEvent` (기본값 = `buildD
 `onContextualEvent` 는 2025 에서 DataGridView 에, 2026 에서 부모인 CollectionView 에 정의되어 있습니다. 정의 위치만 옮겨졌고 두 버전 모두 그리드 옵션으로 씁니다.
 :::
 
+그리드를 감싼 요소에 ContextualMenu 를 또 등록하면 callback 이 두 번 불립니다 ([메뉴](/controls/menu#오른쪽-클릭-메뉴-contextualmenu)).
+
 ## 메뉴 항목
 
 <<< @/../DataGridViewSample/08_contextMenu.html#rowMenu{js}
@@ -48,6 +50,8 @@ DataGridView.js 의 publishedProperties `onContextualEvent` (기본값 = `buildD
 | `state` | `'enabled'` / `'disabled'` / `'selected'` / `'unselected'` | 비활성, 체크 상태. <code>'selected&#124;disabled'</code> 처럼 <code>&#124;</code> 로 이어 씀 |
 | `action` | `{ callback: function (e) { ... }, context: 값 }` | 눌렀을 때 호출. `context` 에 넣은 값은 `e.context` 로 받음 |
 | `submenu` | 항목 배열 | 하위 메뉴 |
+
+항목 키 전체(`fonticon`, `accelerator`, `tooltip`, `CollectionItem`), 하위 메뉴 주의, 키보드는 [메뉴 (DS/Menu)](/controls/menu#항목) 에 있습니다. `state` 의 `'enabled'`, `'unselected'` 는 Menu 가 따로 처리하지 않는 값입니다 (넣지 않은 것과 같음). `onContextualEvent` 는 항목 배열을 주는 Promise 를 돌려줘도 됩니다.
 
 ## 그리드 기본 메뉴 쓰기
 

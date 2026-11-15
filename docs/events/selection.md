@@ -13,7 +13,7 @@ Selection/Selection.js (XSO 1~470행, 각 매니저 473행~). 호출부: SPYUI (
 :::
 
 ::: warning 위젯 사이 공유가 아닙니다
-같은 창 안에서만 하나입니다. 다른 위젯의 선택을 받으려면 [PlatformAPI](/widget/platform-api) 나 [InterCom](/uwa/intercom) 을 씁니다. ENOVIA 코드에서 CSOManager 는 주로 3D 뷰어(`pathElement`) 선택에 쓰입니다.
+같은 창 안에서만 하나입니다. 다른 위젯의 선택을 받으려면 [PlatformAPI](/widget/platform-api) 나 [InterCom](/uwa/intercom) 을 씁니다. ENOVIA 코드에서 CSOManager 는 주로 3D 뷰어(`pathElement`) 선택에 쓰입니다. 고른 객체를 Compass 에 알리려면 [Compass 에 선택 객체 알리기](/widget/compass-pubsub) 를 봅니다.
 :::
 
 ## 기본 사용

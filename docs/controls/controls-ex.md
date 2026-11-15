@@ -155,7 +155,7 @@ TweakersEx 의 카드 보기는 URL 객체 값의 `func` / `module` / `argument`
 
 ## IDCard
 
-`DS/ControlsEx/IDCard` 는 객체 화면 맨 위의 머리글입니다. 배너, 그림, 제목, 부제, 설명, 배지, 그리고 오른쪽 툴바(상태 콤보, 사용자 명령, 정보 / 접기 / 홈 버튼)로 되어 있습니다. 툴바는 [GeneratedToolbar](/tweakers/generated-toolbar) 입니다.
+`DS/ControlsEx/IDCard` 는 객체 화면 맨 위의 머리글입니다. 배너, 그림, 제목, 부제, 설명, 배지, 그리고 오른쪽 툴바(상태 콤보, 사용자 명령, 정보 / 접기 / 홈 버튼)로 되어 있습니다. 툴바는 [GeneratedToolbar](/tweakers/generated-toolbar) 입니다. ENX 앱이 3단 화면과 같이 쓰는 머리글은 `DS/ENOXIDCard/js/IDCard` 입니다 ([비교](/controls/enox-components#controlsex-idcard-와-비교)).
 
 ```js
 require(['DS/ControlsEx/IDCard'], function (IDCard) {
@@ -183,7 +183,7 @@ require(['DS/ControlsEx/IDCard'], function (IDCard) {
 });
 ```
 
-ENOProjectMgmtCommonComponents 는 `new IDCard({ isFoldedFlag: true, infoVisibleFlag: true, identifier: '...' })` 로 만든 뒤 `titleText`, `titleIcon`, `pictureSrc`, `subTitle` 을 데이터가 오면 채우고, `infoClicked` 로 오른쪽 속성 패널을 엽니다.
+ENOProjectMgmtCommonComponents 는 `new IDCard({ isFoldedFlag: true, infoVisibleFlag: true, identifier: '...' })` 로 만든 뒤 `titleText`, `titleIcon`, `pictureSrc`, `subTitle` 을 데이터가 오면 채우고, `infoClicked` 로 오른쪽 속성 패널을 엽니다. OOTB 속성 화면(ID 카드 + 탭)을 통째로 넣으려면 [속성 패널 (EditPropWidget)](/controls/properties-panel) 을 씁니다.
 
 ### 툴바 버튼과 접기
 
@@ -376,7 +376,7 @@ DELWebUXControls 의 DELProgressBar 는 `LoadingPanel.inherit({ publishedPropert
 
 ## CodeMirror
 
-`DS/ControlsEx/CodeMirror` 는 webapps 의 `CodeMirrorV5.47` 을 감싼 코드 편집기입니다. 만들 때 `mode` 에 맞는 CodeMirror 스크립트(`CodeMirrorV5.47/mode/<mode>/<mode>.js`)와 기본 addon(괄호 닫기, 찾기, 주석, 자동완성), CSS 를 **비동기로** 불러온 뒤 편집기를 만듭니다. TweakersEx 의 TweakerCode 가 이 컨트롤을 씁니다.
+`DS/ControlsEx/CodeMirror` 는 webapps 의 `CodeMirrorV5.47` 을 감싼 코드 편집기입니다. 만들 때 `mode` 에 맞는 CodeMirror 스크립트(`CodeMirrorV5.47/mode/<mode>/<mode>.js`)와 기본 addon(괄호 닫기, 찾기, 주석, 자동완성), CSS 를 **비동기로** 불러온 뒤 편집기를 만듭니다. TweakersEx 의 TweakerCode 가 이 컨트롤을 씁니다. webapps 에는 CodeMirror 5.47.0(`CodeMirrorV5.47/`, 이 컨트롤이 씀)과 5.15.2(`CodeMirror/`, EPSSchematicsUI 가 씀)가 같이 있습니다 ([편집기](/amd/libraries#편집기)).
 
 ```js
 require(['DS/ControlsEx/CodeMirror'], function (CodeMirror) {

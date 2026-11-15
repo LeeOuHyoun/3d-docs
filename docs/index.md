@@ -54,12 +54,12 @@ features:
 
 | 분야 | 내용 | 문서 |
 | --- | --- | --- |
-| AMD 로딩 | 모듈 이름 규칙, `i18n!` · `css!` · `text!` 플러그인 | [개요](/amd/) · [플러그인](/amd/plugins) · [WebappsUtils](/amd/webapps-utils) |
-| 위젯과 플랫폼 | `widget` 객체, 설정, 플랫폼 서비스 | [개요](/widget/) · [widget 객체](/widget/widget-api) · [설정](/widget/preferences) · [대시보드에 올리기](/widget/dashboard-register) · [PlatformAPI](/widget/platform-api) · [Compass 서비스](/widget/compass-services) · [WidgetServices](/widget/widget-services) · [3DSpace 주소, SecurityContext](/widget/space-url) |
+| AMD 로딩 | 모듈 이름 규칙, `i18n!` · `css!` · `text!` 플러그인, 공통 유틸, 들어 있는 외부 라이브러리 | [개요](/amd/) · [플러그인](/amd/plugins) · [WebappsUtils](/amd/webapps-utils) · [공통 유틸](/amd/utilities) · [외부 라이브러리](/amd/libraries) |
+| 위젯과 플랫폼 | `widget` 객체, 설정, 플랫폼 서비스, 플랫폼 화면(3DSearch, 6W 태그, Compass, 상단 바) 연동 | [개요](/widget/) · [widget 객체](/widget/widget-api) · [설정](/widget/preferences) · [대시보드에 올리기](/widget/dashboard-register) · [PlatformAPI](/widget/platform-api) · [Compass 서비스](/widget/compass-services) · [WidgetServices](/widget/widget-services) · [3DSpace 주소, SecurityContext](/widget/space-url) · [언어, Me 환경설정](/widget/i18n-preferences) · [3DSearch](/widget/search) · [6W 태그](/widget/tagger) · [Compass 에 알리기](/widget/compass-pubsub) · [상단 바](/widget/top-bar) · [3DPlay](/widget/3dplay) |
 | UWA | 기반 라이브러리 | [개요](/uwa/) · [Core 유틸](/uwa/core) · [DOM](/uwa/element) · [클래스](/uwa/class) · [Model, View](/uwa/mvc) · [Promise](/uwa/promise) · [서버 호출](/uwa/request) · [InterCom](/uwa/intercom) |
-| 화면 컨트롤 | 버튼, 입력칸, 다이얼로그, 알림 | [개요](/controls/) · [WebUX 컨트롤](/controls/webux-controls) · [다이얼로그](/controls/dialog) · [UIKIT](/controls/uikit) · [알림](/controls/notifications) · [API](/controls/api/webux-controls) |
+| 화면 컨트롤 | 버튼, 입력칸, 다이얼로그, 알림, 메뉴, 자동완성, 속성 패널, 3단 화면 | [개요](/controls/) · [WebUX 컨트롤](/controls/webux-controls) · [다이얼로그](/controls/dialog) · [UIKIT](/controls/uikit) · [알림](/controls/notifications) · [메뉴](/controls/menu) · [자동완성](/controls/autocomplete) · [속성 패널](/controls/properties-panel) · [ENOVIA 공용 화면 틀](/controls/enox-components) · [API](/controls/api/webux-controls) |
 | 이벤트 | 위젯 간 연동, 선택, 끌어 놓기 | [개요](/events/) · [PubSub](/events/pubsub) · [선택](/events/selection) · [끌어 놓기](/events/drag-and-drop) |
-| REST API | 3DSpace REST 호출 규칙과 엔드포인트 | [공통 규칙](/rest-api/) · [보안 컨텍스트](/rest-api/security-context) · [엔드포인트 목록](/rest-api/catalog) · [documents](/rest-api/documents) |
+| REST API | 3DSpace REST 호출 규칙과 엔드포인트, 성숙도 변경, 타입 정보, 객체 정보, 관계 탐색 | [공통 규칙](/rest-api/) · [보안 컨텍스트](/rest-api/security-context) · [엔드포인트 목록](/rest-api/catalog) · [documents](/rest-api/documents) · [성숙도 변경, 개정](/rest-api/lifecycle) · [타입, 속성 정보](/rest-api/dictionary) · [e6w](/rest-api/e6w) · [관계 탐색](/rest-api/navigate) |
 | DataGridView | 트리 / 표 그리드 | [개요](/datagridview/) · [기본 그리드](/datagridview/getting-started) · [셀 타입](/datagridview/cell-types) · [편집](/datagridview/editing) · [저장 후 반영](/datagridview/save-and-reflect) · [헤더](/datagridview/header) · [행 높이](/datagridview/row-height) · [정렬, 필터](/datagridview/sort-filter) · [행 그룹핑](/datagridview/row-grouping) · [툴바](/datagridview/toolbar) · [트리](/datagridview/tree) · [나눠 불러오기](/datagridview/server-side) · [컬럼 함수](/datagridview/cell-functions) · [우클릭 메뉴](/datagridview/context-menu) · [드래그앤드롭](/datagridview/drag-and-drop) · [셀 직접 그리기](/datagridview/custom-cell) · [상태바](/datagridview/status-bar) · [사용자 뷰](/datagridview/custom-views) · [이름 색인](/datagridview/api/key-index) · [API](/datagridview/api/grid-options) |
 | Tweakers | 셀, 툴바, 폼의 편집기 | [개요](/tweakers/) · [단독 사용](/tweakers/standalone) · [사용자 타입](/tweakers/custom-type) · [GeneratedToolbar](/tweakers/generated-toolbar) · [API](/tweakers/api/tweaker) |
 
@@ -90,9 +90,20 @@ features:
 | 만든 위젯을 3DDashboard 에 올리고 싶다 | [3DDashboard 에 위젯 올리기](/widget/dashboard-register) |
 | 위젯 설정 화면(preferences)을 만들고 싶다 | [위젯 설정](/widget/preferences) |
 | 위젯 글자를 다국어로 바꾸고 싶다 | [플러그인 (i18n!)](/amd/plugins) |
+| 위젯에서 사용자 언어를 알고 싶다 | [언어와 사용자 환경설정](/widget/i18n-preferences#지금-언어-얻기) |
+| 날짜, 숫자를 사용자 언어 형식으로 쓰고 싶다 | [언어와 사용자 환경설정](/widget/i18n-preferences#날짜와-숫자-쓰기) |
+| 사용자의 Me 설정(단위, 새 탭에서 열기)을 읽고 싶다 | [언어와 사용자 환경설정](/widget/i18n-preferences#me-환경설정-읽기) |
 | 위젯에서 3DSpace 데이터를 읽고 쓰고 싶다 | [3DSpace 주소, SecurityContext](/widget/space-url) → [서버 호출](/uwa/request) → [REST API](/rest-api/) |
 | 로그인 사용자와 보안 컨텍스트를 알고 싶다 | [PlatformAPI](/widget/platform-api) · [보안 컨텍스트](/rest-api/security-context) |
 | 문서(파일)를 조회하거나 만들고 싶다 | [문서 (documents)](/rest-api/documents) |
+| 위젯에서 객체의 상태(성숙도)를 바꾸고 싶다 | [성숙도 변경, 개정](/rest-api/lifecycle) → [라이프사이클과 promote](/trigger/lifecycle) |
+| 위젯에서 새 revision 을 만들거나 소유자를 넘기고 싶다 | [성숙도 변경, 개정](/rest-api/lifecycle) |
+| 타입, 상태 이름을 사용자 언어로 보이고 싶다 | [타입, 속성 정보](/rest-api/dictionary#값-번역-getnlsofpropertiesvalues) |
+| 하위 타입 목록, 타입 아이콘을 받고 싶다 | [타입, 속성 정보](/rest-api/dictionary#하위-타입-gettypeinfo) |
+| 타입의 속성 목록과 값 목록(range)을 받고 싶다 | [타입, 속성 정보](/rest-api/dictionary#타입-속성-dictionary-class) |
+| 여러 객체의 이름, 제목, 상태를 한 번에 읽고 싶다 | [e6w ObjectInfo](/rest-api/e6w#objectinfo) |
+| 로그인, 이름으로 사람을 찾고 싶다 | [e6w PersonSearch](/rest-api/e6w#사람-찾기-personsearch) |
+| 사용처(상위), 하위, 첨부 문서를 받고 싶다 | [관계 탐색](/rest-api/navigate#예-사용처-상위-받기) |
 | 위젯에 목록 그리드를 넣고 싶다 | [DataGridView](/datagridview/) → [기본 그리드](/datagridview/getting-started) |
 | 그리드 셀을 편집하고 서버에 저장하고 싶다 | [편집](/datagridview/editing) → [저장 후 화면 반영](/datagridview/save-and-reflect) |
 | 그리드 셀에 콤보, 날짜 같은 편집기를 넣고 싶다 | [셀 타입](/datagridview/cell-types) → [사용자 타입 등록](/tweakers/custom-type) |
@@ -110,11 +121,28 @@ features:
 | 그리드 셀을 직접 그리거나 아래에 행 수를 보여주고 싶다 | [셀 직접 그리기](/datagridview/custom-cell) · [상태바](/datagridview/status-bar) |
 | 확인 다이얼로그, 알림 메시지를 띄우고 싶다 | [다이얼로그](/controls/dialog) · [알림](/controls/notifications) |
 | 다른 앱(속성, 변경 조치)을 지금 화면 위에 창으로 열고 싶다 | [TransientWidget](/widget/transient-widget) |
+| 객체 속성을 OOTB 화면 그대로 내 위젯 안에서 보이고 편집하고 싶다 | [속성 패널 (EditPropWidget)](/controls/properties-panel) |
+| 버튼 하나로 OOTB 정보(속성) 창을 띄우고 싶다 | [OOTB 정보 창으로 열기](/controls/properties-panel#ootb-정보-창으로-열기) |
+| ENOVIA 앱처럼 왼쪽 / 가운데 / 오른쪽 3단 화면을 만들고 싶다 | [ENOVIA 공용 화면 틀](/controls/enox-components#_3단-화면-enoxtriptych) |
+| 위젯 안에 끌어 옮길 수 있는 떠 있는 패널을 띄우고 싶다 | [ENOVIA 공용 화면 틀](/controls/enox-components#떠-있는-패널-enofloatingpanel) |
+| 버튼이나 아이콘을 누르면 메뉴를 띄우고 싶다 | [메뉴 (DS/Menu)](/controls/menu) |
+| 요소에 오른쪽 클릭 메뉴를 붙이고 싶다 | [오른쪽 클릭 메뉴](/controls/menu#오른쪽-클릭-메뉴-contextualmenu) |
+| 사람이나 객체를 이름으로 찾아 고르는 입력 칸을 만들고 싶다 | [자동완성 입력 (WUXAutoComplete)](/controls/autocomplete#서버에서-찾기) |
+| 위젯 안에서 부품 / 도면 / 문서를 3D·2D 로 미리 보고 싶다 | [3D / 2D 미리 보기 (3DPlay)](/widget/3dplay) |
 | 패널을 탭으로 묶거나, 사용자가 옮긴 창 위치를 기억하고 싶다 | [창 묶기, 붙이기, 위치 저장](/controls/window-layout) |
 | 왼쪽 목록 / 가운데 그리드 / 오른쪽 속성 화면을 만들고 싶다 | [분할 레이아웃 (DockingElement)](/controls/docking-element) |
 | 위젯끼리 값을 주고받고 싶다 | [PubSub](/events/pubsub) · [PlatformAPI](/widget/platform-api) · [InterCom](/uwa/intercom) |
 | 다른 위젯과 선택을 맞추고 싶다 | [선택 (CSOManager)](/events/selection) |
 | 다른 위젯에서 끌어 온 객체를 받고 싶다 | [끌어 놓기](/events/drag-and-drop) |
+| 사용자가 연결한 위젯끼리만 메시지를 보내고 싶다 | [WidgetLink](/controls/enox-components#widgetlink-직접-쓰기) |
+| 3DSearch 를 열어 사용자가 고른 객체나 사람을 위젯으로 받고 싶다 | [3DSearch 에서 골라 오기](/widget/search) |
+| 화면 없이 코드로 3DSearch 검색을 하고 싶다 | [federated search](/widget/search#화면-없이-검색-federated-search) |
+| 위젯 목록을 3DDashboard 태그 창(6W)으로 거르고 싶다 | [6W 태그 연동](/widget/tagger) |
+| 위젯에서 고른 객체를 Compass 의 앱 실행에 넘기고 싶다 | [Compass 에 선택 객체 알리기](/widget/compass-pubsub) |
+| 대시보드 상단 바(+, 도움말 메뉴)에 위젯 명령을 넣고 싶다 | [대시보드 상단 바](/widget/top-bar) |
+| webapps 에 들어 있는 Handlebars, CKEditor, Vue, React, Highcharts 를 위젯에서 쓰고 싶다 | [들어 있는 외부 라이브러리](/amd/libraries) |
+| 로그를 이름별로 켜고 끄고 싶다 | [공통 유틸](/amd/utilities#logger) |
+| 요소 크기가 바뀔 때 다시 그리고 싶다 | [공통 유틸](/amd/utilities#크기-변화-받기) |
 | 동작하지 않는데 오류가 없다 | [자주 틀리는 점](/guide/faq) |
 | 모르는 용어가 나왔다 | [용어집](/guide/glossary) |
 | 원본의 모듈 이름이 어느 문서에 있는지 찾고 싶다 | [모듈 경로 색인](/guide/module-index) |
