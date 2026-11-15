@@ -1,11 +1,11 @@
 # 문서 추가 방법
 
-이 사이트는 [VitePress](https://vitepress.dev/) 로 만듭니다. 페이지는 `docs/` 아래의 마크다운(`.md`) 파일이고, `master` 에 push 하면 GitHub Actions 가 자동으로 배포합니다.
+이 사이트는 [VitePress](https://vitepress.dev/) 로 만듭니다. 페이지는 `docs/` 아래의 마크다운(`.md`) 파일이고, `main` 에 push 하면 GitHub Actions 가 자동으로 배포합니다.
 
 ## 폴더 구조
 
 ```
-sampleCodesAndMemos/
+3d-docs/
 ├─ docs/
 │  ├─ .vitepress/config.mjs   상단 메뉴, 왼쪽 메뉴 설정
 │  ├─ index.md               홈 (분야별 문서 표, 하고 싶은 일로 찾기)
@@ -146,8 +146,8 @@ npm install
 npm run docs:dev
 ```
 
-브라우저에서 터미널에 표시된 주소(기본 `http://localhost:5173/sampleCodesAndMemos/`)를 열면 파일을 저장할 때마다 바로 반영됩니다.
+브라우저에서 터미널에 표시된 주소(기본 `http://localhost:5173/3d-docs/`)를 열면 파일을 저장할 때마다 바로 반영됩니다.
 
 ## 배포
 
-`master` 에 push 하면 `.github/workflows/deploy-docs.yml` 이 사이트를 빌드해서 GitHub Pages 에 올립니다. 진행 상황은 저장소의 **Actions** 탭에서 볼 수 있습니다.
+`main` 에 push 하면 `.github/workflows/deploy-docs.yml` 이 사이트를 빌드해서 GitHub Pages 에 올립니다. 진행 상황은 저장소의 **Actions** 탭에서 볼 수 있습니다.

@@ -6,7 +6,7 @@
 TopBarProxy/TopBarProxy.js (`DS/TopBarProxy/TopBarProxy`, `MenuItem`, `Menu`, `MenuBarItem`), TopBar/TopBar.js (상단 바 쪽: InterCom 서버 `MainMenuBar` 를 여는 `DS/TopBar/model/MainMenuBar`, `MenuBarItemView`, `MenuView`), TopFrame/TopFrame.js (`setStaticMenuProviders`). 모듈을 쓰는 앱 21 개 (`DS/TopBarProxy/MenuItem` 8, `DS/TopBarProxy/Menu` 6). 호출부: Foundation (`initWidgetTopBar`, `initHelpSystem`), ENORouteMgmt, ENXMeetingMgmt, ENXDecisionMgmt, ENXHistoryUX, ENOSubscriptionMgmt (도움말), FolderEditor, ClassificationEditor, LibraryEditor, ENOCollabSharingCmds (+ 메뉴), 3DPlayUtils, 3DPlayExperienceModule (공유 메뉴, activate / deactivate / die), InstantMessaging, MyAccount, W3DDriveWrapper (사용자 메뉴). 호출 집계 (변수 이름 `topBarProxy`): `setContent(` 8, `addContent(` 4, `deactivate(` 4, `activate(` 2, `empty(` 2, `die(` 2, `get(` 1
 :::
 
-샘플: [TopBarSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TopBarSample.html) (+ / 공유 / 도움말 메뉴에 항목 넣기, 하위 메뉴, 배지, activate / deactivate / empty / die). 3DDashboard 에서만 동작합니다. 단독 실행에서는 상단 바가 없어 아무것도 보이지 않습니다.
+샘플: [TopBarSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/TopBarSample.html) (+ / 공유 / 도움말 메뉴에 항목 넣기, 하위 메뉴, 배지, activate / deactivate / empty / die). 3DDashboard 에서만 동작합니다. 단독 실행에서는 상단 바가 없어 아무것도 보이지 않습니다.
 
 ## 상단 바의 칸
 

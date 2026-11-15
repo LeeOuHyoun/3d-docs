@@ -2,7 +2,7 @@
 
 컬럼 3개와 데이터 5행으로 그리드를 띄우는 최소 구성입니다.
 
-샘플: [01_basic.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/01_basic.html)
+샘플: [01_basic.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/01_basic.html)
 
 ::: info 근거
 DataGridViewSample/01_basic.html (ENOVIA 서버에서 동작 확인), DataGridView.js 의 DataGridView publishedProperties (`treeDocument`, `columns`, `height` 기본값 `'inherit'`, `maxVisibleRowCount`).

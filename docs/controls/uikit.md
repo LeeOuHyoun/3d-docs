@@ -4,7 +4,7 @@
 
 새 화면은 [WebUX 컨트롤](/controls/webux-controls) 을 권장합니다 ([무엇을 쓸까](/controls/#무엇을-쓸까)). 이 페이지는 기존 코드를 읽고 고칠 때, 그리고 `Mask` / `Alert` 처럼 간단한 부품을 쓸 때를 위한 것입니다.
 
-샘플: [03_feedback.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/03_feedback.html)
+샘플: [03_feedback.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/03_feedback.html)
 
 ::: info 근거
 UIKIT.js 의 Mask, Input, Input/Button, Input/Text, Input/Toggle, Input/Select, Alert, Modal, SuperModal, Tooltip, Popover, Spinner, Scroller, Menu, Dropdown, DropdownMenu, Iconbar, Form. UIKIT.css 의 `.alert`, `.masked`, `.mask`. UWA2/js/Controls/Abstract.js. 호출부: `Mask.mask(this.contentDiv)` 50 건, `t.mask(widget.body)` 11 건, Alert `.add({ className: "error", message ... })` 65 건

@@ -2,7 +2,7 @@
 
 행 아래에 하위 행을 달면 그리드가 트리가 됩니다. 실제 ENOVIA 앱은 그리드를 트리로 쓰는 경우가 많습니다 (DataGridView 를 쓰는 앱 파일 119개 중 89개에 `addChild` 가 나옴).
 
-샘플: [06_tree.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/06_tree.html)
+샘플: [06_tree.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/06_tree.html)
 
 ::: info 근거
 TreeModel.js 의 TreeNodeModel 생성자 (`children` 값에 따른 `_expandState`), addChild / remove / expand / preExpandDone / hasChildren / getNodeDepth, TreeDocument 의 `useAsyncPreExpand` 처리와 onPreExpand, DataGridView.js 의 `_subscribeToPreExpand` (펼치는 동안 로딩 표시). 호출부: ENXNav, FolderEditor, IssueManagement, ENXHistoryUX.

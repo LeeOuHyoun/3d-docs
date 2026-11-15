@@ -2,7 +2,7 @@
 
 내장 편집기(문자열, 숫자, 콤보 ...)로 안 되는 값은 `TweakerBase` 를 상속해 편집기를 직접 만듭니다. 만든 편집기는 템플릿과 타입 이름으로 등록하면 폼(`generateView`)과 그리드 셀(컬럼 `typeRepresentation`)에서 내장 편집기처럼 씁니다. 앱 파일 76개 중 15개가 이 방법을 씁니다 (EPSSchematicsUI 의 tweakers 7개, CfgVariantEffectivityEditor, ENOXModelListView, WAfrTweakers, TweakersEx, SpecGridView UWAObjectTemplate 등).
 
-샘플: [04_customTweaker.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/04_customTweaker.html)
+샘플: [04_customTweaker.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/04_customTweaker.html)
 
 ::: info 근거
 Tweakers.js 의 TweakerBase (publishedProperties, `_applyValue`, `_applyReadOnly`, `_createViewModule`, `_resolveViewModuleToApply`, `onChange` / `onPreEdit` / `onPostEdit` / `onCancelEdit`, `computeContentSize`), baseViewModule (`setTweakerValue`, `inject`, `destroy`, `computeTweakerContentLength`), TypeRepresentationDirectory.registerTemplates / `_callOnTemplateRequired`. Utilities.js 의 WUXUWAUtils.inherit, Dom.addEventOnElement / isCurrentlyCalledFromUIInteraction, Utils.dynamicRequire. DataGridView.js 의 셀 편집기 생성(`readOnly: !isCellInEdition`)과 change / liveChange 처리(`setModelAt`). 호출부: EPSSchematicsUI tweakers (BigInt, String, JSON, ValueTypeCombo ...) 와 EPSSchematicsUITypeTemplates.json, CfgVariantEffectivityEditor (TweakerTristate), SpecGridView UWAObjectTemplate, WAfrTweakers, ENOChgGovernanceUX (TweakerExpandInput).

@@ -14,7 +14,7 @@ grid.layout.setColumnWidth('title', 240);
 grid.layout.setColumnPinned('tree', 'left');
 ```
 
-샘플: [12_header.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/12_header.html) 의 "컬럼" 버튼 줄
+샘플: [12_header.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/12_header.html) 의 "컬럼" 버튼 줄
 
 "사용" 칸은 enovia2025 webapps 에서 DataGridView 를 쓰는 앱 파일 119개 가운데 그 이름이 나오는 파일 수입니다.
 

@@ -6,7 +6,7 @@
 3DPlayHelper/3DPlayHelper.js (전역 함수 `Player3DPlayWeb`, `Launch3DPlayWeb`, `DS/3DPlayHelper/3DPlayWebPlayer`, `DS/3DPlayHelper/SplashScreen`), 3DPlay/3DPlay.js (`DS/3DPlay/3DPlay` 의 `createExperience`, `addCallbacks`, `publish` / `subscribe`), 3DPlayConnectors/3DPlayConnectors.js (`DS/3DPlayConnectors/3DPlayInputPreProcessor`), 3DPlaySupport/3DPlaySupport.js (`SupportList` 의 usage 표와 타입별 experience, `AssetSupport.checkSupport`), 3DPlayExperienceModule.js (`ASSET/LOADINGFINISHED` 등 publish), 3DPlayHelper/3DPlaySyndication.html, 3DPlayWidget/3DPlayWidget.js (`W3DPlayPrefsCtrl` 의 `X3DContentId`), 3DPlayApp/assets/json/CAT3DPLAW_AP.idcard.json, 2026 의 3DPlayAppV2/3DPlayAppV2.js 와 WebAfr/Applications/X3DPLAW_AP.json. 호출부: EditPropWidget (`facets/3DPlay/3DPlayFacet`), SNResultUX, ENOAttachmentsPreviewWebInWin, DocumentPreview, ENODODisplay, FolderEditor (2026), DMUPlayMarker 와 CAT3DAnnotationUtils (TransientWidget). 집계: `"DS/3DPlay/3DPlay"` 를 쓰는 폴더 23 개 (2025, 2026), `"DS/3DPlayHelper/3DPlayHelper"` 17 개 (2025) / 16 개 (2026). 세는 방법은 [들어 있는 외부 라이브러리](/amd/libraries) 와 같음
 :::
 
-샘플: [3DPlaySample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/3DPlaySample.html) (physicalid 로 미리 보기, 닫기, 3DPlay 앱으로 열기). 3DSpace 주소, 플랫폼 id, 창 열기를 대시보드가 맡으므로 3DDashboard 에 올린 위젯에서만 확인할 수 있습니다.
+샘플: [3DPlaySample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/3DPlaySample.html) (physicalid 로 미리 보기, 닫기, 3DPlay 앱으로 열기). 3DSpace 주소, 플랫폼 id, 창 열기를 대시보드가 맡으므로 3DDashboard 에 올린 위젯에서만 확인할 수 있습니다.
 
 ## 방법 고르기
 

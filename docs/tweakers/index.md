@@ -77,11 +77,11 @@ TweakerNumber (displayStyle 'spinBox', semantics { stepValue: 1, decimals: 0 })
 
 | 샘플 | 내용 | 관련 문서 |
 | --- | --- | --- |
-| [01_standalone.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/01_standalone.html) | 편집기 직접 생성, 타입 이름으로 생성, 값 읽기와 이벤트 | [편집기 단독 사용](/tweakers/standalone) |
-| [02_customType.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/02_customType.html) | 사용자 타입과 enum 등록 후 그리드와 폼에서 사용 | [사용자 타입 등록](/tweakers/custom-type) |
-| [03_generatedToolbar.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/03_generatedToolbar.html) | 그리드 없는 툴바, 항목 상태 변경, 값 읽기, 메뉴형 버튼, 보기 전환 | [GeneratedToolbar](/tweakers/generated-toolbar) |
-| [04_customTweaker.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/04_customTweaker.html) | 별점 편집기, 숫자 + 단위 편집기를 만들어 폼과 그리드 셀에서 사용 | [편집기 직접 만들기](/tweakers/custom-tweaker) |
-| [05_editors.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/05_editors.html) | 편집기 종류별 폼과 그리드, value 형태 실시간 표시 | [편집기 종류별 사용법](/tweakers/editors) |
+| [01_standalone.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/01_standalone.html) | 편집기 직접 생성, 타입 이름으로 생성, 값 읽기와 이벤트 | [편집기 단독 사용](/tweakers/standalone) |
+| [02_customType.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/02_customType.html) | 사용자 타입과 enum 등록 후 그리드와 폼에서 사용 | [사용자 타입 등록](/tweakers/custom-type) |
+| [03_generatedToolbar.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/03_generatedToolbar.html) | 그리드 없는 툴바, 항목 상태 변경, 값 읽기, 메뉴형 버튼, 보기 전환 | [GeneratedToolbar](/tweakers/generated-toolbar) |
+| [04_customTweaker.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/04_customTweaker.html) | 별점 편집기, 숫자 + 단위 편집기를 만들어 폼과 그리드 셀에서 사용 | [편집기 직접 만들기](/tweakers/custom-tweaker) |
+| [05_editors.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/05_editors.html) | 편집기 종류별 폼과 그리드, value 형태 실시간 표시 | [편집기 종류별 사용법](/tweakers/editors) |
 
 ::: warning
 샘플은 `<3DSpace>/webapps/TweakersSample/` 에 두고 ENOVIA 서버 주소로 열거나, `npm run samples` 로 내 PC 에서 엽니다 ([샘플을 내 PC 에서 실행하기](/guide/contributing#샘플을-내-pc-에서-실행하기)).

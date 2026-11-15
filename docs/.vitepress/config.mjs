@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress'
 
-const REPO = 'https://github.com/LeeOuHyoun/sampleCodesAndMemos'
+const REPO = 'https://github.com/LeeOuHyoun/3d-docs'
 
 const SERVER_SIDEBAR = [
   {
@@ -421,7 +421,7 @@ export default defineConfig({
   lang: 'ko-KR',
   title: 'ENOVIA 분석 사양서',
   description: 'ENOVIA(3DEXPERIENCE) 3DSpace 서버와 webapps 개발 사양 분석 문서',
-  base: '/sampleCodesAndMemos/',
+  base: '/3d-docs/',
   cleanUrls: true,
   lastUpdated: true,
   markdown: {
@@ -506,7 +506,7 @@ export default defineConfig({
       { icon: 'github', link: REPO }
     ],
     editLink: {
-      pattern: `${REPO}/edit/master/docs/:path`,
+      pattern: `${REPO}/edit/main/docs/:path`,
       text: 'GitHub 에서 이 페이지 수정'
     },
     search: {

@@ -78,7 +78,7 @@ mod policy 'MyRequestPolicy' state 'Review'
 | 이미 같은 state 면 건너뛰기 | `setState` 가 하위 트리거를 다시 깨우므로 불필요한 호출을 줄임 |
 | 실패 시 예외 | 하위만 못 따라가면 상위와 하위 state 가 어긋남. 상위 전이도 실패시키는 편이 안전 |
 
-샘플 JPO 의 `syncChildState` 가 이 형태입니다. [MyPartTrigger_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TriggerSample/MyPartTrigger_mxJPO.java)
+샘플 JPO 의 `syncChildState` 가 이 형태입니다. [MyPartTrigger_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/TriggerSample/MyPartTrigger_mxJPO.java)
 
 ## 서명과 자동 promote
 

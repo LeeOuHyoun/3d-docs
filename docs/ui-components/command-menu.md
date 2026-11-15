@@ -2,7 +2,7 @@
 
 **command** 는 링크 하나입니다. 무엇을 열지(`href`), 어떻게 보일지(`label`, `Image`), 어디에 열지(`Target Location`), 누구에게 보일지(`Access ...`)를 정합니다. **menu** 는 command 와 다른 menu 를 담는 묶음입니다. 같은 menu 객체가 놓이는 곳에 따라 툴바, 드롭다운, 객체 트리, 앱 메뉴가 됩니다.
 
-샘플: [01_command_menu.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UIComponentSample/01_command_menu.mql)
+샘플: [01_command_menu.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/UIComponentSample/01_command_menu.mql)
 
 ::: info 근거
 `mql/06.command/Command_sample.mql`, `mql/07.menu/Menu_Sample.mql`, `mql/07.menu/Tree.mql`, `type_*.mql`, 프로젝트 command 346 파일 / menu 146 파일. 동작: `3dspace/common/scripts/emxUICore.js` 의 `submitList`, `findFrame`, `scripts/emxUIToolbar.js`, `common/emxTree.jsp`. 키 목록: `xerinfra.jar` 의 `UINavigatorUtil.class`, `UIMenu.class`, `framework.jar` 의 `UIToolbar.class` 문자열 상수. `properties/emxSystem.properties` 의 `emxFramework.PopupSize`, `eServiceSuite*`

@@ -2,7 +2,7 @@
 
 행을 우클릭했을 때 열리는 메뉴는 그리드 옵션 `onContextualEvent` 로 만듭니다. 실제 ENOVIA 앱에서 가장 많이 쓰는 그리드 옵션 중 하나입니다 (DataGridView 를 쓰는 앱 파일 119개 중 78개).
 
-샘플: [08_contextMenu.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/08_contextMenu.html)
+샘플: [08_contextMenu.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/08_contextMenu.html)
 
 ::: info 근거
 DataGridView.js 의 publishedProperties `onContextualEvent` (기본값 = `buildDefaultContextualMenu` 호출), 컨텍스트 메뉴 리스너 (`onContextualEvent.call(grid, { context, collectionView, infos, data, cellInfos })`), 메뉴 빌더의 `buildMenu` 기본 옵션, `showContextualMenuColumnFlag` 로 추가되는 `ContextualMenuColumn` 컬럼, Tweakers.js 의 `chevronMenuIcon` (`contextMenuFallback`). 호출부: CompareWidget2, CfgBulkTablePresenter, ConfiguratorPanel, ENOChgGovernanceUX.

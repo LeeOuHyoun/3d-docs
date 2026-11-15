@@ -47,17 +47,17 @@ ENOVIA(3DEXPERIENCE) 는 개발 사양서를 제공하지 않고, webapps 소스
 
 | 모듈 | 샘플 폴더 |
 | --- | --- |
-| DataGridView | [DataGridViewSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/DataGridViewSample) |
-| Tweakers | [TweakersSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/TweakersSample) |
-| UWA | [UWASample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/UWASample) |
-| 화면 컨트롤 | [ControlsSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/ControlsSample) |
-| 이벤트, 끌어 놓기 | [EventsSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/EventsSample) |
-| 위젯 | [WidgetSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/WidgetSample) |
-| 데이터 모델 / MQL | [SchemaSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/SchemaSample) |
-| UI 구성 요소 | [UIComponentSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/UIComponentSample) |
-| JPO | [JPOSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/JPOSample) |
-| 트리거 | [TriggerSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/TriggerSample) |
-| 공통 유틸 (DataGridView 보조 함수, 펼치는 검색 패널) | [CommonUtils](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/CommonUtils) |
+| DataGridView | [DataGridViewSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/DataGridViewSample) |
+| Tweakers | [TweakersSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/TweakersSample) |
+| UWA | [UWASample](https://github.com/LeeOuHyoun/3d-docs/tree/main/UWASample) |
+| 화면 컨트롤 | [ControlsSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/ControlsSample) |
+| 이벤트, 끌어 놓기 | [EventsSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/EventsSample) |
+| 위젯 | [WidgetSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/WidgetSample) |
+| 데이터 모델 / MQL | [SchemaSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/SchemaSample) |
+| UI 구성 요소 | [UIComponentSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/UIComponentSample) |
+| JPO | [JPOSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/JPOSample) |
+| 트리거 | [TriggerSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/TriggerSample) |
+| 공통 유틸 (DataGridView 보조 함수, 펼치는 검색 패널) | [CommonUtils](https://github.com/LeeOuHyoun/3d-docs/tree/main/CommonUtils) |
 
 - 서버에서 동작을 확인한 것은 DataGridViewSample 의 01 ~ 05 입니다. DataGridViewSample 11 ~ 16, TweakersSample 01 ~ 05, ControlsSample 04 ~ 06 · 08 ~ 10 은 ENOVIA 서버 없이 원본 webapps 를 내 PC 에서 띄워 동작을 확인했습니다 (관련 문서에 <Badge type="tip" text="로컬 실행 확인" />). 그 밖의 샘플은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.
 - 화면 샘플(`*.html`)은 `<3DSpace>/webapps/` 아래에 폴더째 넣고 서버 주소로 엽니다. 형제 폴더의 `AmdLoader`, `Core` 등을 상대 경로로 불러오기 때문입니다.

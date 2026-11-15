@@ -2,7 +2,7 @@
 
 ImmersiveFrame 안의 Panel 을 탭으로 묶거나 가장자리에 붙이고, 사용자가 옮긴 위치를 다음에도 쓰게 하는 방법입니다. 떠 있는 도구 창(ImmersiveWindow), 활성 창(WindowManager), 2026 의 "다시 묻지 않음" 저장도 여기에 있습니다. 다이얼로그 자체의 사용법은 [다이얼로그](/controls/dialog), 속성 전체는 [Windows API](/controls/api/windows) 에 있습니다.
 
-샘플: [05_window_group.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/05_window_group.html)
+샘플: [05_window_group.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/05_window_group.html)
 
 ::: info 근거
 Windows.js 의 Window (attachToWindow, _attachToWindow, _applyWindowGroup, _canBeSnapSource / Target, _saveDataInPreferences, _readWindowPreferences, deleteWindowPreferences, 드래그 종료 처리), Panel (_canBeSnapSource / Target, supportsGroupType, _createWindowGroup), WindowGroup (attachWindow, _detachWindow, _updateTitle, close), WindowGroupAsTab (currentWindows, getDisplayedWindows), ImmersiveFrame (dockWindow, undockWindow, `__acceptsSnapping__`, _computeUniqueIdentifier), ImmersiveWindow, WindowManager. Utilities.js 의 saveDataInLocalPreferences. 2026 Dialog 의 _applyCheckboxInfos, getCheckBoxInfoStateInPreferences, _applyCustomButtonsDefinition (secondaryActions). OOTB 앱은 WindowGroup 계열과 ImmersiveWindow 를 직접 부르지 않음 (0 파일). 로컬 실행: 2025, 2026 webapps 를 `npm run samples` 로 띄워 Edge 로 확인

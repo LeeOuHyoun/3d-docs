@@ -8,7 +8,7 @@
 | `css!` | 2,023 건 / 662 파일 | 쓸 값 없음 (`<link>` 추가. 실제로는 load 이벤트 객체) |
 | `text!` | 1,027 건 / 319 파일 | 파일 내용 문자열 |
 
-샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) (`i18n!`, `css!`)
+샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.js) (`i18n!`, `css!`)
 
 ::: info 근거
 AmdLoader/AmdLoader.js 의 `define("i18n", ...)`, `define("css", ...)`, `define("text", ...)`, `define("pluginDS", ...)`. 각 폴더의 `폴더_ko.js` 와 `assets/nls/*_ko.json` (예: WidgetServices, i3DXCompassPlatformServices). UWA2/js/Core.js 의 `UWA.i18n`. [언어를 찾는 순서](#언어를-찾는-순서)와 "영어 묶음만 있으면 한국어 JSON 을 안 읽음" 은 jsdom 에서 enovia2025 AmdLoader 로 요청 순서를 찍어 확인함. 2026 의 AmdLoader.js 는 2025 와 같음

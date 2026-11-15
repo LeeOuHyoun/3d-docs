@@ -169,22 +169,22 @@ enovia2025 webapps 에서 DataGridView 를 쓰는 앱 파일 119개를 기준으
 
 | 샘플 | 내용 | 관련 문서 |
 | --- | --- | --- |
-| [01_basic.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/01_basic.html) | 최소 구성 | [기본 그리드](/datagridview/getting-started) |
-| [02_cellTypes.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/02_cellTypes.html) | 셀 타입 모음 | [셀 타입](/datagridview/cell-types) |
-| [03_toolbar.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/03_toolbar.html) | 툴바 + 그리드 | [툴바](/datagridview/toolbar) |
-| [04_sortFilter.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/04_sortFilter.html) | 정렬, 필터 | [정렬과 필터](/datagridview/sort-filter) |
-| [05_options.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/05_options.html) | 실시간 설정 (값을 바꾸며 확인, 이벤트 로그) | [그리드 옵션](/datagridview/api/grid-options) |
-| [06_tree.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/06_tree.html) | 트리, 펼칠 때 불러오기, 행 아이콘 | [트리 구조](/datagridview/tree) |
-| [07_columnFunctions.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/07_columnFunctions.html) | 컬럼 함수 모음 | [컬럼 함수](/datagridview/cell-functions) |
-| [08_contextMenu.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/08_contextMenu.html) | 우클릭 메뉴, 선택 | [우클릭 메뉴와 선택](/datagridview/context-menu) |
-| [09_save.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/09_save.html) | 셀 단위 저장, 모아서 저장, 실패 시 되돌리기 | [저장 후 화면 반영](/datagridview/save-and-reflect) |
-| [10_customCell.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/10_customCell.html) | 셀 직접 그리기, 상태바 | [셀 직접 그리기](/datagridview/custom-cell) · [상태바](/datagridview/status-bar) |
-| [11_dragDrop.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/11_dragDrop.html) | 순서 바꾸기, 하위로 옮기기, 밖에서 받기, 밖으로 끌어 내기 | [드래그앤드롭](/datagridview/drag-and-drop) |
-| [12_header.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/12_header.html) | 헤더 높이, 2단 헤더, 헤더 직접 그리기, 만든 뒤 컬럼 바꾸기 | [헤더](/datagridview/header) · [레이아웃 메서드](/datagridview/api/layout-methods) |
-| [13_customViews.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/13_customViews.html) | 화면 상태 저장과 되돌리기, 사용자 뷰, 뷰 대화상자 | [사용자 뷰와 화면 상태 저장](/datagridview/custom-views) |
-| [14_rowGrouping.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/14_rowGrouping.html) | 묶기, 그룹 행 제목과 합계, 그룹 행 걸러내기, 다시 묶기 | [행 그룹핑](/datagridview/row-grouping) |
-| [15_serverSide.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/15_serverSide.html) | 행을 나눠 불러오기 (가짜 서버 5,000 행) | [서버 사이드 데이터](/datagridview/server-side) |
-| [16_findPrint.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/16_findPrint.html) | 찾기 막대, 페이지 나누기, 일괄 수정, 인쇄 | [찾기, 페이지, 일괄 수정, 인쇄](/datagridview/find-and-print) |
+| [01_basic.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/01_basic.html) | 최소 구성 | [기본 그리드](/datagridview/getting-started) |
+| [02_cellTypes.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/02_cellTypes.html) | 셀 타입 모음 | [셀 타입](/datagridview/cell-types) |
+| [03_toolbar.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/03_toolbar.html) | 툴바 + 그리드 | [툴바](/datagridview/toolbar) |
+| [04_sortFilter.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/04_sortFilter.html) | 정렬, 필터 | [정렬과 필터](/datagridview/sort-filter) |
+| [05_options.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/05_options.html) | 실시간 설정 (값을 바꾸며 확인, 이벤트 로그) | [그리드 옵션](/datagridview/api/grid-options) |
+| [06_tree.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/06_tree.html) | 트리, 펼칠 때 불러오기, 행 아이콘 | [트리 구조](/datagridview/tree) |
+| [07_columnFunctions.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/07_columnFunctions.html) | 컬럼 함수 모음 | [컬럼 함수](/datagridview/cell-functions) |
+| [08_contextMenu.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/08_contextMenu.html) | 우클릭 메뉴, 선택 | [우클릭 메뉴와 선택](/datagridview/context-menu) |
+| [09_save.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/09_save.html) | 셀 단위 저장, 모아서 저장, 실패 시 되돌리기 | [저장 후 화면 반영](/datagridview/save-and-reflect) |
+| [10_customCell.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/10_customCell.html) | 셀 직접 그리기, 상태바 | [셀 직접 그리기](/datagridview/custom-cell) · [상태바](/datagridview/status-bar) |
+| [11_dragDrop.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/11_dragDrop.html) | 순서 바꾸기, 하위로 옮기기, 밖에서 받기, 밖으로 끌어 내기 | [드래그앤드롭](/datagridview/drag-and-drop) |
+| [12_header.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/12_header.html) | 헤더 높이, 2단 헤더, 헤더 직접 그리기, 만든 뒤 컬럼 바꾸기 | [헤더](/datagridview/header) · [레이아웃 메서드](/datagridview/api/layout-methods) |
+| [13_customViews.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/13_customViews.html) | 화면 상태 저장과 되돌리기, 사용자 뷰, 뷰 대화상자 | [사용자 뷰와 화면 상태 저장](/datagridview/custom-views) |
+| [14_rowGrouping.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/14_rowGrouping.html) | 묶기, 그룹 행 제목과 합계, 그룹 행 걸러내기, 다시 묶기 | [행 그룹핑](/datagridview/row-grouping) |
+| [15_serverSide.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/15_serverSide.html) | 행을 나눠 불러오기 (가짜 서버 5,000 행) | [서버 사이드 데이터](/datagridview/server-side) |
+| [16_findPrint.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/16_findPrint.html) | 찾기 막대, 페이지 나누기, 일괄 수정, 인쇄 | [찾기, 페이지, 일괄 수정, 인쇄](/datagridview/find-and-print) |
 
 01 ~ 05 는 ENOVIA 서버에서 동작을 확인했습니다. 06 ~ 10 은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 11 ~ 16 은 ENOVIA 서버 없이 원본 webapps 를 내 PC 에서 띄워 동작을 확인했습니다 ([샘플을 내 PC 에서 실행하기](/guide/contributing#샘플을-내-pc-에서-실행하기)). 다르게 동작하면 원본 쪽이 맞습니다.
 

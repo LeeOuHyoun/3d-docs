@@ -13,7 +13,7 @@
 CoreEvents/CoreEvents.js (ModelEvents 1~220행, Events 223행~). 호출부: 3DPlayExperienceModule (`WUX.Events.subscribe`), CfgConfigurationRevisionUX (`cfgRevActionEvents.publish`), Selection/Selection.js (XSO 가 내부에서 ModelEvents 사용)
 :::
 
-샘플: [01_pubsub.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/EventsSample/01_pubsub.html) (Events, ModelEvents 호출 순서와 전파)
+샘플: [01_pubsub.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/EventsSample/01_pubsub.html) (Events, ModelEvents 호출 순서와 전파)
 
 ## Events (전역)
 

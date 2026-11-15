@@ -2,7 +2,7 @@
 
 행이 아주 많을 때 처음부터 다 넣지 않고, 필요한 만큼만 서버에서 불러오는 방법입니다. 그리드 옵션 `dataSource` 를 넣으면 그리드가 스크롤에 맞춰 "몇 번째 행부터 몇 번째 행까지 달라" 고 요청합니다.
 
-샘플: [15_serverSide.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/15_serverSide.html)
+샘플: [15_serverSide.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/15_serverSide.html)
 
 ::: info 근거
 TreeModel.js 의 DataSourceBase (numberOfRowsPerRequest / rowsOffsetToTriggerRequest / getModelItems / getCurrentFindResult / pushUpdatesNotifications / onNodeModelUpdate), CollectionView.js 의 ItemModelServerSide (`_loadRows` 와 successCallback 처리 / getVisibleNodeModel / getRowModelLength / `_resetTreeDocument` / `_applySortModel` / `_doGroupingOnModel` / `_updateClientModelFromFind` / `_onPushUpdatesNotifications` / `_createNodeModelFromData`), CollectionView (onInfiniteScroll / infiniteScrollProcessDone / onEndResizeOrOnReadyModelRequest / getModelLength / resetTreeDocument / selectAll), CollectionViewStatusBar, DataGridView.js 의 RowModelServerSide, DataGridView (`_applyDataSource` / requestDelayedModelData / getRowModelLength / getAsCSV), DataGridViewLayout 의 autoRowHeightFlag 경고, 필터 화면의 getCustomFilterSetValues 예외. 호출부: ENOXCADManageScope (dataSource), FolderEditor, ENOChgGovernanceUX, IPClassifyUX (onInfiniteScroll), ENXNav, ENOXDocumentControlUI, CATFLCockpitWidget (onDelayedModelDataRequest, requestDelayedModelData), ENORouteMgmt, RouteWebAppUX, PowerByHome (virtuallyLoadAllModelItems, getRowModelLength). 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).

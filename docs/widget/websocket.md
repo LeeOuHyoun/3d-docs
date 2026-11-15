@@ -8,7 +8,7 @@
 NotificationManager/NotificationManager.js (`activeConnection` 의 연결 옵션과 `wss://` 붙이기, `connect` 뒤 `WAFData.authenticatedRequest(passportUrl + "/login?service=INTF")` 로 `access_token` 을 받아 `emit("new_user", ...)`, `getServiceUrl({ serviceName: "3dnotifications" })`, `listenVisibilityEvent`, `listenNetworkEvent`, `socketIdentifier` / `isElectedSocket`), RTDriver/RTDriver.js (`connectionParams` 의 `path: "/socketio.rtc"` / `"/socketio.conv"`, `getServiceTicket` 의 `"/login?service=3DSIM"`, `serverLogin` 의 `emit("login", ...)`), DSNodeSocketioClient_4.7.4/DSNodeSocketioClient_4.7.4.js (전역 `io` 가 있으면 그것, 없으면 `VENNodeSocketioClient_4.7.4/socket.io.min` 을 읽음). `enovia2025/src`, `enovia2025/jpo` 에서 `javax.websocket`, `@ServerEndpoint`, `WebSocket` 검색 결과 0 건. webapps 전체에서 `new WebSocket(` 을 쓰는 곳은 세지 않았습니다
 :::
 
-샘플: [WebSocketSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WebSocketSample.html) (브라우저 WebSocket / socket.io 고르기, 3DPassport 토큰 보내기, 다시 연결, 정리). 로컬 시험 서버(ws 에코, socket.io 4.7 에코)에 연결해 주고받기, 끊긴 뒤 다시 연결, 끊기를 Edge 로 확인했습니다. 3DDashboard 안에서 연결과 토큰 받기는 확인하지 않았습니다.
+샘플: [WebSocketSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WebSocketSample.html) (브라우저 WebSocket / socket.io 고르기, 3DPassport 토큰 보내기, 다시 연결, 정리). 로컬 시험 서버(ws 에코, socket.io 4.7 에코)에 연결해 주고받기, 끊긴 뒤 다시 연결, 끊기를 Edge 로 확인했습니다. 3DDashboard 안에서 연결과 토큰 받기는 확인하지 않았습니다.
 
 ## 고르는 기준
 

@@ -6,7 +6,7 @@
 i3DXCompassServices/i3DXCompassServices.js (`DS/i3DXCompassServices/i3DXCompassPubSub`: `publish`, `subscribe`, `unsubscribe`), i3DXCompass/i3DXCompass.js (Compass 쪽: `initialize` 의 `subscribe("setObject" ...)`, `ae.setObject`, `ae.setTypes`, `ae.setX3DContent`, `ae.launchApp`, `handleLaunchAppEvent`, `Model/App` 의 `launch`, `_launchTransient`), MessageBus/MessageBus.js, i3DXCompassPlatformServices.js (`OpenWith._launchApp`), TopFrame/TopFrame.js (`_initCompass`). 모듈을 쓰는 앱 41 개. 호출부: W3DDrive, Foundation, FolderEditor, E6WCommonUI (`CompassUtil`), ENORIPE_Relations, ENOChgServices, CollaborativeTasks, HistoryExplorer, LifecycleWidget, SNInfraUX, SNNavigationMap. 모듈을 쓰는 파일 안의 `.publish("주제"` 집계: `launchApp` 24, `setObject` 9, `setX3DContent` 9, `setTypes` 8, `resetX3DContent` 5, `setStructure` 4, `resetObject` 4, `resetTypes` 3. `.subscribe(`: `setTypesCallback` 7, `launchAppCallback` 7
 :::
 
-샘플: [CompassSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/CompassSample.html) (행을 고르면 `setObject` / `setX3DContent`, 모두 풀면 `resetObject` / `resetX3DContent`, `launchApp` 과 응답). 3DDashboard 에서만 동작합니다. 단독 실행에서는 받는 Compass 가 없어 아무 일도 일어나지 않습니다.
+샘플: [CompassSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/CompassSample.html) (행을 고르면 `setObject` / `setX3DContent`, 모두 풀면 `resetObject` / `resetX3DContent`, `launchApp` 과 응답). 3DDashboard 에서만 동작합니다. 단독 실행에서는 받는 Compass 가 없어 아무 일도 일어나지 않습니다.
 
 ## 부르는 법
 

@@ -2,7 +2,7 @@
 
 컬럼 옵션은 그 컬럼의 모든 셀에 똑같이 적용됩니다. **행마다 달라야 하면** 고정값 대신 함수를 넣습니다. 그리드가 셀을 그릴 때마다 함수를 불러서 그 셀의 값, 타입, 콤보 목록, 편집 가능 여부, 모양을 정합니다.
 
-샘플: [07_columnFunctions.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/07_columnFunctions.html)
+샘플: [07_columnFunctions.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/07_columnFunctions.html)
 
 ::: info 근거
 DataGridView.js 의 DataGridViewLayout (`getColumnOptionValue(columnID, "함수명")` 으로 컬럼 함수를 읽는 getter 들), DataGridView 의 getCellCssClassesAt / _getCellTooltip / setNodeModelValue / _getCellValueForSort. 호출부: ENOXEngineer, PIMwebUX (getCellValue, getCellSemantics, getCellEditableState), ENOChgGovernanceUX, PowerByHome (getCellClassName), ENXNav (getCellTooltip), ENORouteMgmt (getCellTypeRepresentation).

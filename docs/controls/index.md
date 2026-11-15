@@ -7,7 +7,7 @@
 | WebUX | `DS/Controls/*`, `DS/Windows/*`, `DS/Notifications/*` | `wux-` 로 시작하는 클래스 | `new Button({ label })` 후 `btn.label = ...` 처럼 속성으로 다룸 |
 | UIKIT | `DS/UIKIT/*` | Bootstrap 과 비슷한 클래스 (`btn`, `form-control`, `modal`) | `new Button({ value })` 후 `btn.setValue(...)` 처럼 메서드로 다룸 |
 
-샘플: [ControlsSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/ControlsSample)
+샘플: [ControlsSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/ControlsSample)
 
 ::: info 근거
 Controls.js (Abstract, Button ...), Windows.js (Window, Dialog), UIKIT.js (Input, Modal, Mask ...), Notifications.js, Core.js 의 BaseComponent, UWA2/js/Controls/Abstract.js. 참조 파일 수: `DS/Controls/` 469, `DS/UIKIT/` 400, `DS/Windows/` 207, `DS/Notifications/` 119 (두 계열을 함께 쓰는 파일 175). DataGridView.js, Tweakers.js 는 `DS/Controls/*` 만 씁니다.

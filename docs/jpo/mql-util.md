@@ -6,7 +6,7 @@
 jpo 폴더 `MqlUtil.mqlCommand(` 2,365 건. 시그니처와 동작은 xerinfra.jar `com.matrixone.apps.domain.util.MqlUtil` class 파일 (public `mqlCommand` 13 개, `mqlCommandStream` 2 개) 의 바이트코드 기준
 :::
 
-샘플: [XX_MyPartAction_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/JPOSample/XX_MyPartAction_mxJPO.java) (mqlCommand 의 $1 인자, notice, print bus)
+샘플: [XX_MyPartAction_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/JPOSample/XX_MyPartAction_mxJPO.java) (mqlCommand 의 $1 인자, notice, print bus)
 
 ## 기본 형태
 

@@ -4,7 +4,7 @@
 
 OOTB 와 프로젝트 모두 트리거 프로그램을 직접 붙이지 않고, 공용 JPO `emxTriggerManager` 하나를 붙인 뒤 **설정 객체** 로 실제 JPO 메서드를 고릅니다.
 
-샘플: [01_trigger_register.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TriggerSample/01_trigger_register.mql), [MyPartTrigger_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TriggerSample/MyPartTrigger_mxJPO.java)
+샘플: [01_trigger_register.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/TriggerSample/01_trigger_register.mql), [MyPartTrigger_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/TriggerSample/MyPartTrigger_mxJPO.java)
 
 ::: info 근거
 `mql/12.trigger/*.mql` (21 개, `Trigger_Sample.mql` 템플릿 포함), `mql/03.policy/Policy_Sample.mql`, OOTB policy / type 수정 파일 안의 `print` 결과. 코드 쪽: `jpo/emxTriggerManagerBase_mxJPO.java`, `jpo/emxTriggerValidationBase_mxJPO.java`, `jpo/emxTriggerValidationResultsBase_mxJPO.java`, OOTB 트리거 JPO 의 주석에 적힌 트리거 이름, xerinfra.jar `com.matrixone.apps.cache.TriggerObjectsCache.populateCache` (Active / `Error` 필터)

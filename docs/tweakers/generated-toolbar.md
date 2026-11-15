@@ -2,7 +2,7 @@
 
 JSON 으로 툴바를 만드는 모듈입니다. `grid.setToolbar` 도 내부에서 이것을 씁니다. 앱 파일 76개 중 48개가 쓰는, Tweakers 에서 가장 많이 쓰이는 모듈입니다. 여기서는 그리드와 상관없이 직접 만드는 방법과, 만든 뒤 항목을 바꾸는 방법을 다룹니다.
 
-샘플: [03_generatedToolbar.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/03_generatedToolbar.html), [ToolbarActions.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/ToolbarActions.js)
+샘플: [03_generatedToolbar.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/03_generatedToolbar.html), [ToolbarActions.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/ToolbarActions.js)
 
 ::: info 근거
 Tweakers.js 의 GeneratedToolbar, TweakerFunction, TypeEnums. Utilities.js 의 attachSimpleCallback. 호출부: DataGridView setToolbar, ENOXCollectionToolBar (ENOXGeneratedToolBar), DocumentFiles, E6WCommonUI, CompareWidget2, ENONewWidget, MapDemoWidget, ControlsEx, ENXSBToolbarClient. 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).

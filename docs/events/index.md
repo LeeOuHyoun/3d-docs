@@ -65,8 +65,8 @@ CoreEvents/CoreEvents.js, Selection/Selection.js, DataDragAndDrop/DataDragAndDro
 
 | 샘플 | 내용 | 관련 문서 |
 | --- | --- | --- |
-| [01_pubsub.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/EventsSample/01_pubsub.html) | Events 와 ModelEvents 의 이름 정규화, 호출 순서, 부모 전파 | [PubSub](/events/pubsub) |
-| [02_drag_drop.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/EventsSample/02_drag_drop.html) | 3DXContent 끌기 / 놓기, 놓인 객체 정보 조회 | [끌어 놓기](/events/drag-and-drop) |
+| [01_pubsub.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/EventsSample/01_pubsub.html) | Events 와 ModelEvents 의 이름 정규화, 호출 순서, 부모 전파 | [PubSub](/events/pubsub) |
+| [02_drag_drop.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/EventsSample/02_drag_drop.html) | 3DXContent 끌기 / 놓기, 놓인 객체 정보 조회 | [끌어 놓기](/events/drag-and-drop) |
 
 ::: warning
 샘플은 `<3DSpace>/webapps/EventsSample/` 에 두고 ENOVIA 서버 주소로 열어야 동작합니다. 원본 소스 분석으로 작성했고, 서버에서 동작 확인을 아직 하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.

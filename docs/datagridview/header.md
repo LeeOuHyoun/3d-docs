@@ -2,7 +2,7 @@
 
 컬럼 헤더 줄과 행 머리(왼쪽 번호 칸)에 관한 설정을 한곳에 모았습니다. 헤더 높이, 헤더 숨기기, 헤더 글자와 아이콘, 헤더를 2단으로 묶기, 헤더를 직접 그리기를 다룹니다.
 
-샘플: [12_header.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/12_header.html)
+샘플: [12_header.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/12_header.html)
 
 ::: info 근거
 DataGridView.js 의 DataGridViewLayout (`_applyColumnHeaderHeight`, `getColumnHeaderHeight`, `getHeaderContainerHeight`, `_computeColumnHeadersHeight`, `setColumnOrGroupProperties`, `setColumnGroupExpandedFlag`), ColumnModel (`setColumns`, `_isColumnDisplayedByHierarchy`), DataGridViewColumnHeaderCell (`buildColumnGroupExpander`, `_applyCustomHeader`), DataGridView (`DefaultOnColumnHeaderRequest`, `getCellDefaultTooltip`). 헤더 밖의 `text` 사용: `_createFirstColumnsVisibilityContextualMenu`, `_buildMassUpdateDialogAttributes`, `getAsCSV`, DataGridViewCustomViewsDialog, 2026 DataGridViewContextualMenuBuilder `_createWrapTextInColumnContextualMenu`. 2026 도 같습니다. 호출부: CATFLCockpitWidget, DMUControls (컬럼 그룹), DocumentFiles (customHeader). 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).

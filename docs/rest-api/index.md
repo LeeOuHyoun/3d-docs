@@ -6,7 +6,7 @@
 Foundation2/Foundation2.js (`applyUpdates`, `__generateUpdateWidget`, `__copyModifiedObject`, `__postprocessServerFailureMessage`), Foundation/Foundation.js `ajaxRequest`, DocumentManagement (`DocumentFoundationAjax`, `IndependentServiceBase`), VCXWebPlatform `runRequest` / `WSInformation`, IssueServices (dslib 호출), CAT3DWebStoreyComponents (dscstr 호출), DELWKOModelServices, TerminologySelector (`TerminologyWebService`, assets/config/webservices.conf.json), DELPPWWebServices `getHeaders`
 :::
 
-샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) (WAFData.authenticatedRequest 감싸기), [02_drag_drop.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/EventsSample/02_drag_drop.html) (SecurityContext 헤더로 REST 호출)
+샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.js) (WAFData.authenticatedRequest 감싸기), [02_drag_drop.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/EventsSample/02_drag_drop.html) (SecurityContext 헤더로 REST 호출)
 
 ## URL 구성
 

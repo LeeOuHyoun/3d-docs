@@ -6,7 +6,7 @@
 
 컬럼의 `typeRepresentation` 으로 셀 모양과 편집기를 정합니다. 편집하려면 `editableFlag: true` 를 같이 넣습니다.
 
-샘플: [02_cellTypes.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/02_cellTypes.html)
+샘플: [02_cellTypes.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/02_cellTypes.html)
 
 ## 한눈에 보기
 

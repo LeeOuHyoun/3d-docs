@@ -6,7 +6,7 @@
 Foundation/Foundation.js (`FoundationAjax` 197~496행 `getParams`, `setupEnoviaServer`, `calculateFinalUrl`, `ajaxRequest`, `FoundationData.loadWidget` 1198행, `tempURI`, `setRowPref`), Foundation2/Foundation2.js (`_serviceURL` 1170행, `loadServiceData` 3111행, `getParams` 3193행, `ReferenceModel.typeAheadCallback`, `syncRead`, `syncFromServer`, ObjectInfo 묶음 요청 6939행), DocumentManagement (`ObjectInfoService`, `IndependentServiceBase._getObjects`), RDFFoundation (`ObjectProxyUtil.sendRequest`, `convertServiceResponseToFederatedFormat`), WEB-INF/resources/param/ChangeOrder_Parameterization.xml (`ParameterizationExpressionImpl`). 호출부: ENOChgServices (`getAdditionObjectInfo`, `getObjectInfo`, `getAdditionSwymPersonInfo`, `getExpressionValue`), IssueServices, CfgBaseUX, VCXWebPlatform, CAT3DExpModel, ENOGantt, CollaborativeTasks, ENOXCADManageScope, FolderEditor, FolderUpload, ENOProjectMgmtModels, IssueManagement. 집계: 2025 `e6w/service/` 문자열 `ObjectInfo` 8, `PersonSearch` 5, `ExpresssionSearch` 4, `ApplicabilityTypeInfo` 3, `ObjectSearch`, `ObjectSearchByName`, `PersonSearchByName` 각 1 (Foundation2 처럼 이름만 넘겨 조립하는 호출은 빠짐). `Foundation2/FoundationV2Data` 를 쓰는 앱 6 개, `Foundation/FoundationData` 3 개
 :::
 
-샘플: [02_drag_drop.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/EventsSample/02_drag_drop.html) (놓인 객체를 `GET v2/e6w/service/ObjectInfo/{id}` 로 읽기)
+샘플: [02_drag_drop.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/EventsSample/02_drag_drop.html) (놓인 객체를 `GET v2/e6w/service/ObjectInfo/{id}` 로 읽기)
 
 ## 버전과 주소
 

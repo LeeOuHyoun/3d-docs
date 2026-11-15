@@ -75,7 +75,7 @@ define("DS/WidgetServices/securityContextServices/SecurityContextServices", [...
 | 이름 붙은 `define("DS/A/x", [...])` | **다른 폴더**의 `DS/` 의존성만. 같은 폴더(`DS/A/...`) 의존성은 묶음 안에 같이 있다고 보고 건너뜀 |
 
 ::: tip 내 위젯의 파일 구성
-- 파일이 몇 개 안 되면 모듈 하나를 `DS/내폴더/내폴더` 로 만들어 `내폴더/내폴더.js` 에 둡니다. 묶음 확인 요청이 생기지 않습니다 ([위젯 샘플](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) 이 이 방식).
+- 파일이 몇 개 안 되면 모듈 하나를 `DS/내폴더/내폴더` 로 만들어 `내폴더/내폴더.js` 에 둡니다. 묶음 확인 요청이 생기지 않습니다 ([위젯 샘플](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.js) 이 이 방식).
 - 개별 파일로 나누면 폴더당 한 번 `내폴더/내폴더.js` 404 가 생기고 콘솔에 위 안내가 찍힙니다. 동작에는 문제가 없습니다.
 - 여러 파일을 합칠 때는 각 `define` 에 이름(`'DS/내폴더/모듈'`)을 꼭 넣습니다. 이름 없는 `define` 을 한 파일에 둘 이상 넣으면 RequireJS 가 `Mismatched anonymous define()` 오류를 냅니다.
 :::

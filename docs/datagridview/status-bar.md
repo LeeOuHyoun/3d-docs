@@ -2,7 +2,7 @@
 
 그리드 아래에 전체 행 수, 선택 행 수 같은 정보를 보여주는 줄입니다. 생성자 옵션이 없고 `grid.buildStatusBar([...])` 로 만듭니다.
 
-샘플: [10_customCell.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/10_customCell.html)
+샘플: [10_customCell.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/10_customCell.html)
 
 ::: info 근거
 CollectionView.js 의 CollectionView.buildStatusBar / getStatusBarContainerHeight, `DS/CollectionView/CollectionViewStatusBar` (GeneratedToolbar 상속, `STATUS` 값, setModel, updateTotalRows 등). 호출부: ENOChgGovernanceUX, ENOUserGroupMgmt, ENOSubscriptionMgmt, ConfiguratorPanel.

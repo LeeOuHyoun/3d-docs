@@ -2,7 +2,7 @@
 
 ENOVIA 화면 코드 대부분이 `UWA/Class` 로 클래스를 만듭니다. `extend` 로 상속하고, `init` 이 생성자, `this._parent()` 가 부모 메서드 호출입니다. 옵션, 이벤트, 타이머 같은 기능은 mixin 으로 섞어 넣습니다.
 
-샘플: [02_class.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UWASample/02_class.html)
+샘플: [02_class.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/UWASample/02_class.html)
 
 ::: info 근거
 UWA2/js/Class.js, Class/Options.js, Class/Events.js, Class/Listener.js, Class/Timed.js, Class/Debug.js, Dispatcher.js. 호출부: `"UWA/Class"` 2,970 건 / 757 파일, `this._parent(` 7,701 건

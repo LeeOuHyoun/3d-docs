@@ -356,8 +356,8 @@ emxCommonMigrationBase_mxJPO.java:93 (`new BufferedWriter(new MatrixWriter(conte
 
 | 샘플 | 내용 |
 | --- | --- |
-| [XX_MyPartUI_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/JPOSample/XX_MyPartUI_mxJPO.java) | 표 program, 구조 펼치기, 열 function, 접근, 범위, 저장 (객체 / 관계) |
-| [XX_MyPartAction_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/JPOSample/XX_MyPartAction_mxJPO.java) | 트랜잭션 안에서 생성 + 연결, `pushContext`, `MqlUtil`, 다국어 메시지 |
+| [XX_MyPartUI_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/JPOSample/XX_MyPartUI_mxJPO.java) | 표 program, 구조 펼치기, 열 function, 접근, 범위, 저장 (객체 / 관계) |
+| [XX_MyPartAction_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/JPOSample/XX_MyPartAction_mxJPO.java) | 트랜잭션 안에서 생성 + 연결, `pushContext`, `MqlUtil`, 다국어 메시지 |
 
 ::: warning
 샘플의 타입, 관계, 속성 (`type_MyPart`, `relationship_MyPartDocument` ...) 은 예시 이름입니다. 실제 스키마의 심볼릭 이름으로 바꿔야 합니다. 원본 소스 분석으로 작성했고 서버에서 컴파일 확인을 하지 않았습니다.

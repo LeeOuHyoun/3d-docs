@@ -2,7 +2,7 @@
 
 `DS/Controls/*` 컨트롤을 만들고, 값을 읽고 쓰고, 이벤트를 받는 방법입니다. 모든 컨트롤이 같은 규칙(`Abstract` 상속)을 따르므로 공통 사용법을 먼저 익히면 나머지는 속성 이름만 다릅니다.
 
-샘플: [01_webux_form.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/01_webux_form.html)
+샘플: [01_webux_form.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/01_webux_form.html)
 
 ::: info 근거
 Controls.js 의 Abstract (publishedProperties, fire, addEventListener), Button, Toggle, ButtonGroup, AbstractEditor, LineEditor, Editor, ComboBoxBase, ComboBox, DatePicker, TimePicker, Calendar, Label, Expander, Popup, ProgressBar, Loader, ModalLoader, ModalContainer, `_private/DateUtilsPrivate` (2026 `parseDateAndTime`). Tweakers.js 의 TweakerDate (VIEW_MODULES, _upgradeValue), TweakerBase._resolveViewModuleToApply. Core.js 의 BaseComponent (init, setProperties, inject, _applyForAdvancedSetterProperty), Core.js 의 TooltipModel. Utilities.js 의 WUXUWAUtils.generatePropertiesSettersAndGetters, Dom.generateIcon. 호출부: AuthGenericCommands, DELWebCommonControls, CAT3DAnnotationBaseCmds, ENXMeetingMgmt, ENORouteMgmt, DocumentCreateNew

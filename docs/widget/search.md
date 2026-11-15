@@ -6,7 +6,7 @@
 SNInfraUX/SNInfraUX.js 의 `DS/SNInfraUX/SearchCom` (소켓 껍데기), `DS/SNInfraUX/SearchRessources` (검색 요청 본문, `getFedSearchUrl`), `DS/SNInfraUX/Api/SearchApi`. SNSearchUX/SNSearchUX.js 의 `DS/SNSearchUX/InContextSearch` (`RegisterContext`, `InContextSearch`, `UnregisterContext` 를 받는 쪽), `DS/SNSearchUX/SearchUX_TopBar`. SNResultUX/SNResultUX.js 의 `dispatchInContextSelection`, `_createFurtiveControls`, `buildCompassSelectionData`, `DS/SNResultUX/utils/FederatedSearch_parse`. UWA2/js/Utils/InterCom.js, UWA2/js/Json.js (`prune`). 호출부: ENOUserGroupMgmt, ENORouteMgmt (11 곳), ENXMeetingMgmt, ENXESignConfigApp, `DS/E6WCommonUI/Search`, PADUtils `inAppsSearch`, ENOXSearchUIController, LifecycleWidget, 3DSearch 의 "저장된 검색 수정". 집계: `DS/SNInfraUX/SearchCom` 을 쓰는 앱 15 (2026 16), InterCom 소켓으로 `SearchComServer` 에 직접 붙는 앱 32, in-context 옵션(`app_socket_id`)을 만드는 앱 43, `Selected_Objects_search` 35 파일, `UnregisterContext` 30 파일 46 건. 옵션 표와 받는 키 표의 앱 수는 OOTB 소스에서 센 근사값 (3DSearch 자체 모듈 제외). REST: RDFFoundation `FederatedSearchUtil`, SearchWidget. 2026 SNInfraUX, SNSearchUX, SNResultUX 와 비교함
 :::
 
-샘플: [SearchSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/SearchSample.html) (타입을 제한해 3DSearch 열기, 여러 개 선택, 받은 객체 빼기, 사람 고르기, 받은 목록, 등록 해제, 글자로 검색). 3DDashboard 위젯에서만 3DSearch 가 열립니다. 단독 실행에서는 화면만 뜨고 단추를 눌러도 아무 일도 일어나지 않습니다.
+샘플: [SearchSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/SearchSample.html) (타입을 제한해 3DSearch 열기, 여러 개 선택, 받은 객체 빼기, 사람 고르기, 받은 목록, 등록 해제, 글자로 검색). 3DDashboard 위젯에서만 3DSearch 가 열립니다. 단독 실행에서는 화면만 뜨고 단추를 눌러도 아무 일도 일어나지 않습니다.
 
 ## 부르는 법
 

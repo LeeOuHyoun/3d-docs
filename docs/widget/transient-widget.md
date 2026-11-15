@@ -6,7 +6,7 @@
 TransientWidget/TransientWidget.js, Controller/Transient.js, Tool/Mapping.js, Tool/TransientMessaging.js (2025, 2026 모두 난독화되지 않은 원본). 모듈 이름 사용 54 파일. 호출부: ENOChangeActionUX (`ENOWCHA_AP`, `ENOWCHG_AP`), ENORouteMgmt (`ENXROUT_AP`), LifecycleControls (`ENOLCMT_AP`), CollaborativeTasks (`ENXBPPY_AP`), E6WCommonUI / NotifAlert / SocialToolbar (`X3DPRFL_AP`), ENOChgServices (`widget.getValue("TransientCAPid")`). 옵션 집계: `mode: "panel"` 15, `mode: "transient"` 12, `height` 800 / 700, `width` 650 ~ 800
 :::
 
-샘플: [TransientSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TransientSample.html) (다른 앱 열기 / 닫기 / 숨기기, 자기 자신을 창으로 열기, 넘어온 값 읽기). 3DDashboard 에서만 창이 열립니다. 단독 실행에서는 화면만 뜨고 `showWidget` 은 아무 일도 하지 않습니다.
+샘플: [TransientSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/TransientSample.html) (다른 앱 열기 / 닫기 / 숨기기, 자기 자신을 창으로 열기, 넘어온 값 읽기). 3DDashboard 에서만 창이 열립니다. 단독 실행에서는 화면만 뜨고 `showWidget` 은 아무 일도 하지 않습니다.
 
 ## 열기
 

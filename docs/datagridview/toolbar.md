@@ -2,7 +2,7 @@
 
 그리드 위에 검색창, 콤보, 버튼을 놓는 툴바입니다. DataGridView 에는 툴바용 생성자 옵션이 없고 `grid.setToolbar(JSON)` 으로만 만듭니다.
 
-샘플: [03_toolbar.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/03_toolbar.html), [ToolbarActions.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/ToolbarActions.js)
+샘플: [03_toolbar.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/03_toolbar.html), [ToolbarActions.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/ToolbarActions.js)
 
 ::: info 근거
 DataGridView.js 의 setToolbar, Tweakers.js 의 GeneratedToolbar. 호출부: ENOChgGovernanceUX, CfgBaseUX, ParameterizationSkeleton, IssueComponents.

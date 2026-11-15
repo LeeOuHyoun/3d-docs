@@ -6,7 +6,7 @@
 TagNavigatorProxy/TagNavigatorProxy.js (위젯 쪽: `TagNavigatorProxy.createProxy`, `AbstractTagger6WProxy`, `Tagger6WProxy`, `Tagger6WProxyWithFilteringServices`), TagNavigator/TagNavigator.js (태그 창 쪽: InterCom 서버 `com.ds.tagger6w`, `TaggerProxy`, `TaggerProxyWithFilteringServices`, `Predicate`, `TagValue`), TopFrame/TopFrame.js (`_initTagNavigator`). 모듈을 쓰는 앱 27 개. 호출부: Foundation / Foundation2 (`WidgetTagNavInit`, `TaggerAggregator`, `TNProxyFilterOnServerHelper`), ENOProjectMgmtCommonComponents, ENOPartMgt (`PartContentsCollection`), W3DContentApp, ENXSBGridConnector (`6WTag.js`), IPClassifyUX, ENOFilterBIUX, SNResultUX, 3DPlayUtils. 문자열 집계 (webapps 전체, 같은 이름의 다른 객체 포함): `TagNavigatorProxy.createProxy(` 10, `.setSubjectsTags(` 31, `.addSubjectsTags(` 7, `"onFilterChange"` 31, `"onFilterSubjectsChange"` 18. `filteringMode` 값: `"WithFilteringServices"` 13 폴더, `"FilteringOnServer"` 11 폴더
 :::
 
-샘플: [TaggerSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TaggerSample.html) (작은 목록에 태그 붙이기, 태그 창에서 고르면 목록 거르기, activate / deactivate, die). 3DDashboard 에서만 동작합니다. 단독 실행에서는 태그 창이 없어 `proxyIsReady` 도, 필터 이벤트도 오지 않습니다.
+샘플: [TaggerSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/TaggerSample.html) (작은 목록에 태그 붙이기, 태그 창에서 고르면 목록 거르기, activate / deactivate, die). 3DDashboard 에서만 동작합니다. 단독 실행에서는 태그 창이 없어 `proxyIsReady` 도, 필터 이벤트도 오지 않습니다.
 
 ## 만들기
 

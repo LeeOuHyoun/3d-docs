@@ -6,7 +6,7 @@ title: ENOVIA 공용 화면 틀 (ENOX)
 
 OOTB ENOVIA 앱(ENX*, ENO* 위젯)은 같은 화면 틀을 씁니다. 왼쪽 / 가운데 / 오른쪽 3단 화면(`ENOXTriptych`), 객체 머리글(`ENOXIDCard`), 빈 화면 안내(`ENOXEmptyContent`), 떠 있는 패널(`ENOFloatingPanel`) 등입니다. 이 문서는 이 모듈들을 커스텀 위젯에서 쓰는 방법과, 같은 일을 하는 WebUX 컨트롤과 고르는 기준을 정리합니다.
 
-샘플: [10_enox_layout.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/10_enox_layout.html)
+샘플: [10_enox_layout.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/10_enox_layout.html)
 
 ::: info 근거
 ENOXTriptych/ENOXTriptych.js (`init`, `_subscribeToEvents`, `_subscribeToDomEvents`, `_initDivs`, `_initResizer`, `_refreshContainerLeftSize`, `_refreshContainerRightSize`, `_showPanel`, `_hidePanel`, `_makeModal`), html/ENOXTriptych.html, css/ENOXTriptych.css. ENOXWelcomePanel/ENOXWelcomePanel.js. ENOFloatingPanel/ENOFloatingPanel.js (`defaultOptions`, `init`, `initUI`, `_close`, `setNewSize`, `_actionMove`, `_resizeContainer`, `_saveDimensionAndPosition`), UIKIT.js 의 `DS/UIKIT/Modal`, WidgetServices.js 의 `getWidgetBody`. ENOXInterWdgCom/ENOXInterWdgCom.js (`LinkManager`, `Proxy`), assets/init/ENOWidgetLinkEvents.json, assets/doc/select.md, WidgetLink/WidgetLink.js. ENOXIDCard/js/IDCard.js, html/IDCard.html. ENOXEmptyContent/js/ENOXEmptyContent.js, SentenceDetails.js. W3DXComponents/W3DXComponents.js (`Skeleton`, `Views/Item/TileView`, `Collections/ActionsCollection`, `Models/ActionModel`). LevelSelector/LevelSelector.js. Skeleton/Skeleton.js (`DS/Skeleton/SkeletonLayout`).

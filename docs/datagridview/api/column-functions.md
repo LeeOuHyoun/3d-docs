@@ -6,7 +6,7 @@ title: 컬럼 함수
 
 컬럼 옵션에 고정값 대신 함수를 넣으면 셀마다 다르게 정할 수 있습니다. 인자 `cellInfos` 에는 rowID, columnID, cellID, nodeModel(행 데이터), cellModel(셀 값) 등이 들어 있고, 함수 안의 `this` 는 그리드입니다.
 
-예제와 함께 보려면 [컬럼 함수 가이드](/datagridview/cell-functions) 를 먼저 읽으세요. 샘플: [07_columnFunctions.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/07_columnFunctions.html)
+예제와 함께 보려면 [컬럼 함수 가이드](/datagridview/cell-functions) 를 먼저 읽으세요. 샘플: [07_columnFunctions.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/07_columnFunctions.html)
 
 ```js
 {

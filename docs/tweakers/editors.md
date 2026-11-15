@@ -2,7 +2,7 @@
 
 편집기(Tweaker) 종류마다 어떻게 만들고, `value` 에 어떤 모양의 값이 들어오고 나가며, 자주 쓰는 옵션이 무엇인지를 한 페이지에 모았습니다. 옵션 전체 목록은 [semantics](/tweakers/api/semantics), 타입 이름 전체 목록은 [typeRepresentation](/datagridview/api/type-representation) 에 있습니다.
 
-샘플: [05_editors.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/05_editors.html)
+샘플: [05_editors.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/05_editors.html)
 
 ::: info 근거
 Tweakers.js 의 TweakerBase (`_preEditValue`, `_applyMinValue`, possibleValues 검사), TweakerString / TweakerNumber / TweakerDate / TweakerBoolean / TweakerEnum / TweakerFunction / TweakerURLObject / TweakerColor 와 각 VIEW_MODULES, StringViewModules 의 ComboBox, `assets/typeTemplates.json`, `assets/defaultTypeRepresentations.json`.

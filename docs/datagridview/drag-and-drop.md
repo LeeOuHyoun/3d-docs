@@ -2,7 +2,7 @@
 
 그리드 안에서 행을 끌어 순서를 바꾸거나, 행을 밖으로 끌어 내거나, 밖에서 끌어 온 것을 그리드에 놓는 방법입니다. 위젯 사이에서 주고받는 데이터 형식(3DXContent)은 [끌어 놓기](/events/drag-and-drop) 에 있고, 이 페이지는 그리드의 옵션과 콜백만 다룹니다.
 
-샘플: [11_dragDrop.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/11_dragDrop.html)
+샘플: [11_dragDrop.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/11_dragDrop.html)
 
 ::: info 근거
 DataGridView.js 의 `_manageDragAndDrop` / `_processDragAndDropCallbacks` (콜백 호출 순서, cellInfos 에 붙는 값), `onDragStartCellDefault` / `onDragOverCellDefault` / `onDropCellDefault` 같은 `on...Default` 기본 동작 함수, `_serializeDragAndDropEvent`, `getRowReorderEnabledState` / `enableRowReordering` / `disableRowReordering`, `getDraggedRowData` / `getDraggedColumnData`, `getCellAttributesAt` (draggable 속성), DataGridViewRowHeaderCell.buildDragGrip, 사용자 뷰 대화상자의 `onDropCell`. CollectionView.js 의 `addEventListener` (cellInfos), `groupRows` (그룹핑 중 순서 바꾸기 끄기). TreeModel.js 의 `moveNodes`, TreeDocument 옵션 `shouldAcceptDrag` / `shouldAcceptDrop`, `onUpdate`. Core/wux.css 의 `.wux-datagridview-drag-row-feedback`, `.wux-datagridview-drag-grip`. 호출부: ENXMeetingMgmt, ENORouteMgmt, IssueManagement, IssueComponents, FolderEditor, SpecTreeDGV. 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).

@@ -1,6 +1,6 @@
 # 정렬과 필터 <Badge type="tip" text="서버 확인" />
 
-샘플: [04_sortFilter.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/04_sortFilter.html)
+샘플: [04_sortFilter.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/04_sortFilter.html)
 
 ::: info 근거
 DataGridView.js 의 DataGridView `_applySortModel` / `_preEditSortModel` (sortOptions.maxSortedColumnsCount), DataGridViewLayout 의 `compareFunction` getter, DataGridView 의 getCellValueForSort 호출부, TreeModel.js 의 TreeDocument.setFilterModel. 호출부: FolderEditor, DesignEnvironmentUX (sortModel), ENOChgGovernanceUX, IssueManagement (compareFunction), CATFLCockpitWidget, ENORouteMgmt (setFilterModel).

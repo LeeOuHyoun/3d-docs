@@ -2,7 +2,7 @@
 
 위젯 설정은 사용자가 위젯마다 바꾸는 값입니다 (페이지 크기, 보기 방식, 자격 증명 ...). 정의는 HTML 의 `<widget:preferences>` 나 `widget.addPreference` 로 하고, 값은 `widget.getValue` / `setValue` 로 읽고 씁니다. 화면에 보이지 않는 `hidden` 항목은 위젯 상태 저장용으로 많이 씁니다.
 
-샘플: [WidgetSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.html) (hidden, range, boolean, list), [WidgetSample.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) (`addPreference` 로 목록 추가)
+샘플: [WidgetSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.html) (hidden, range, boolean, list), [WidgetSample.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.js) (`addPreference` 로 목록 추가)
 
 ::: info 근거
 UWA2/js/Widget.js (`addPreference`, `getValue`, `setValue`, `getPreferences`, 값 변환 함수), Environments/Standalone.js (`loadPreferencesXML`), Environment.js (`convertSourceToJson`, `onEdit`), Controls/Form.js (`onchange`). 호출부: DELPPWServices (Credentials 목록), ENORouteMgmt/ENOROUTApp.html, EditPropWidget.html. 사용 횟수: `widget.addPreference(` 262, `widget.getPreference(` 325, `widget.getValue(` 3,177, `widget.setValue(` 1,207

@@ -2,7 +2,7 @@
 
 3DSpace REST 를 부르려면 세 가지가 필요합니다. 위젯이 속한 **플랫폼 id**, 그 플랫폼의 **3DSpace 주소**, 요청 헤더에 넣을 **SecurityContext** 입니다. 이 페이지는 그 순서를 정리합니다. 호출 자체는 [서버 호출 (WAFData)](/uwa/request) 에 있습니다.
 
-샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) 의 `getSpaceUrl`, `loadSecurityContexts`
+샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.js) 의 `getSpaceUrl`, `loadSecurityContexts`
 
 ::: info 근거
 i3DXCompass/i3DXCompass.js 의 `DS/i3DXCompass/i3DXCompassServices` (`getServiceUrl`), WidgetServices/WidgetServices.js (`__getServiceUrlAsync`, `SecurityContextServices`), BksStandalone, DELPPWServices (pno/person 응답 처리), ENOCharacteristicsApp/utils (RequestUtil, PlatformDataProvider). 호출 횟수: `x3dPlatformId` 1,060 건 / 291 파일, `pno/person?current=true` 41 건, `pno/person/getsecuritycontext` 38 건

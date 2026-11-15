@@ -2,7 +2,7 @@
 
 `UWA/Core` 는 객체 합치기, 복사, 타입 검사 같은 기본 함수를 제공합니다. 이름은 jQuery, lodash 와 비슷하지만 **동작이 다른 것이 많아서** 그대로 옮겨 쓰면 잘못되기 쉽습니다.
 
-샘플: [02_class.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UWASample/02_class.html) (merge / extend / clone / is 비교)
+샘플: [02_class.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/UWASample/02_class.html) (merge / extend / clone / is 비교)
 
 ::: info 근거
 UWA2/js/Core.js, Utils.js, String.js, Array.js, Json.js, Utils/Client.js. Core.js 를 node 에서 직접 실행해 결과를 확인함. 호출 횟수(근사): `is` 약 24,000, `createElement` 약 6,300, `clone` 약 1,800, `extend` 약 1,300, `merge` 약 1,000

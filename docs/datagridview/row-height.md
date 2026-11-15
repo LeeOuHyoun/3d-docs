@@ -161,4 +161,4 @@ new DataGridView({
 
 - `autoRowHeightFlag` 컬럼이 있어도 `getRowHeightFunction` 을 직접 넣으면 **직접 넣은 함수가 우선**이고 자동 계산은 쓰이지 않습니다.
 - `dataSource` 와 `virtuallyLoadAllModelItems: true` 를 같이 쓰면 `autoRowHeightFlag` 가 지원되지 않습니다 (콘솔 경고 후 무시). 이때는 `getRowHeightFunction` 을 직접 구현합니다. `treeDocument` 그리드와 `dataSource` 기본 방식에서는 동작합니다 ([서버 사이드 데이터](/datagridview/server-side)).
-- [실시간 설정 샘플](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/05_options.html) 의 "행 높이" 묶음에서 값을 바꿔 보며 바로 확인할 수 있습니다.
+- [실시간 설정 샘플](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/05_options.html) 의 "행 높이" 묶음에서 값을 바꿔 보며 바로 확인할 수 있습니다.

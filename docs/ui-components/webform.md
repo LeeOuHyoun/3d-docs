@@ -2,7 +2,7 @@
 
 **webform** (MQL 이름은 `form`) 은 객체 하나의 필드(field) 목록입니다. 같은 form 을 `emxForm.jsp` 로 열면 **보기 / 편집** 화면, `emxCreate.jsp` 로 열면 **생성** 화면이 됩니다. 필드 정의는 table 의 column 과 거의 같고, 화면 배치용 필드 종류(섹션, 묶음)가 더 있습니다.
 
-샘플: [03_webform_portal.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UIComponentSample/03_webform_portal.mql)
+샘플: [03_webform_portal.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/UIComponentSample/03_webform_portal.mql)
 
 ::: info 근거
 `mql/09.webform/Form_Sample.mql`, 프로젝트 form 50 파일 (field 848 개), `PMCProjectTaskViewForm.mql`, `PMCProjectTaskCreateForm.mql`. 화면: `3dspace/common/emxForm.jsp` (`mode` 처리), `emxCreate.jsp`, `emxCreateProcess.jsp` (`submitAction`), `emxCreateBody.xsl` (`Group Name`), `scripts/emxUIFormHandler.js` (`FillProperties`), `emxFormViewDisplay.jsp`, `emxFormEditDisplay.jsp` (`isGroupHolderField` → 다음 `getFieldGroupCount` 개 필드를 한 `<tr>` 에). 키 목록: `framework.jar` 의 `UIFormCommon.class`, `UIForm.class` 문자열 상수. JPO 예: `jpo/emxProjectSpaceBase_mxJPO.java` 의 `getProjectPolicyRange`

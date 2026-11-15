@@ -2,7 +2,7 @@
 
 같은 컬럼 값을 가진 행을 "그룹 행" 아래로 모아, 접고 펼칠 수 있게 하는 기능입니다. 그룹 행은 그리드가 TreeDocument 안에 새로 만들어 넣는 행이라서, 선택된 행이나 전체 행을 읽는 코드에 같이 섞여 나옵니다.
 
-샘플: [14_rowGrouping.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/14_rowGrouping.html)
+샘플: [14_rowGrouping.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/14_rowGrouping.html)
 
 ::: info 근거
 DataGridView.js 의 DataGridView publishedProperties (`rowGroupingEnabledFlag`, `rowGroupingOptions`), `_applyRowGroupingOptions`, groupRows / reapplyRowGrouping / getGroupingOptions / createGroupingUI, 행 모델의 `_doGroupingOnModel` / `_applySortModel`, `_getCellTypeRepresentation`, getModelAt, getAsCSV, `_getCellValueForCopy`, 기본 메뉴의 `_supportedMenus` / `_createColumnsManagementContextualMenu`, 사용자 뷰 대화상자의 `_groupingSelectionChips`, 필터 값 목록의 `ignoreGroupingNodes`. CollectionView.js 의 행 모델 groupRows / `_reapplyRowGrouping` (2026 은 DataGridView.js 안). TreeModel.js 의 TreeDocument.groupNodes / ungroupNodes, TreeNodeModel 의 groupChildren / ungroupChildren / `NODE_SOURCE`, 그룹 행 클래스의 getNodeSource / getProperty / getIdentifier / getOriginalChildrenInformation / canBeFiltered. 호출부: ENXHistoryUX, ENXNav, ENOXEngineer, CATFLCockpitWidget, ENOChgGovernanceUX. 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).

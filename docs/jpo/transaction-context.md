@@ -6,7 +6,7 @@
 jpo 폴더 호출 수: `context.getLocale(` 1,617, `context.getSession(` 1,340, `context.getUser(` 742, `ContextUtil.pushContext(` 698, `ContextUtil.popContext(` 725, `ContextUtil.startTransaction(` 359, `ContextUtil.commitTransaction(` 369, `ContextUtil.abortTransaction(` 378. 동작은 xerinfra.jar `ContextUtil`, eMatrixServletRMI.jar `matrix.db.Context` class 파일의 바이트코드 기준. `context.getRole()` 의 형식은 xerinfra.jar `PersonUtil.getActiveSecurityContext` (`getRole()` 이 `ctx::` 로 시작하면 그 뒤를 돌려줌) 와 `getActiveOrganization`, `getActiveProject` (보안 컨텍스트를 나눠 씀) 기준
 :::
 
-샘플: [XX_MyPartAction_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/JPOSample/XX_MyPartAction_mxJPO.java) (startTransaction / commit / abort, pushContext / popContext)
+샘플: [XX_MyPartAction_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/JPOSample/XX_MyPartAction_mxJPO.java) (startTransaction / commit / abort, pushContext / popContext)
 
 ## Context 에서 꺼내는 값
 

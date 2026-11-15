@@ -2,7 +2,7 @@
 
 그리드 없이 편집기(Tweaker) 하나를 화면에 놓고 값을 주고받는 방법입니다. 폼, 다이얼로그, 속성 패널에 씁니다.
 
-샘플: [01_standalone.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/01_standalone.html)
+샘플: [01_standalone.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/01_standalone.html)
 
 ::: info 근거
 Tweakers.js 의 TweakerBase, TweakerString / Number / Boolean / Date / Enum, TypeRepresentationFactory.generateView. Controls.js 의 Abstract (fire, addEventListener). 호출부: DocumentCreateNew CreateForm, DataGridViewCustomViewsDialog, ParameterizationSkeleton, Form, VCXGUIInfrastructure. 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).

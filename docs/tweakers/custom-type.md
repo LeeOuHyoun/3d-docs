@@ -2,7 +2,7 @@
 
 자주 쓰는 콤보 목록이나 아이콘 토글을 이름 하나로 등록해 두면 그리드 컬럼, 툴바, 폼에서 `typeRepresentation: '이름'` 만으로 쓸 수 있습니다.
 
-샘플: [02_customType.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/02_customType.html)
+샘플: [02_customType.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/02_customType.html)
 
 ::: info 근거
 Tweakers.js 의 TypeRepresentationFactory, TypeRepresentationDirectory, TweakerEnum, Tweakers/assets/typeTemplates.json. 호출부: DataGridView (pinnedEnum, setToolbar), CfgBaseUX, ControlsEx, ENOXEngineer, ENXSBToolbarClient. 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).

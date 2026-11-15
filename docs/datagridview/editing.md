@@ -10,7 +10,7 @@
 DataGridView.getEditionManager, CollectionView.js 의 edition/* 클래스. 호출부: ENOChgGovernanceUX, CfgMassVariantEffectivityEditor, ENOXEngineer (editionPolicy), CATWebUXPreferences (EditionOnOver).
 :::
 
-샘플: [02_cellTypes.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/02_cellTypes.html) (셀 타입별 편집기), [05_options.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/05_options.html) (editionPolicy 를 바꿔 가며 확인)
+샘플: [02_cellTypes.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/02_cellTypes.html) (셀 타입별 편집기), [05_options.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/05_options.html) (editionPolicy 를 바꿔 가며 확인)
 
 ## editionPolicy
 

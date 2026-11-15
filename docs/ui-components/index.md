@@ -111,6 +111,6 @@ OOTB command 를 지우지 않고 `add setting 'Access Expression' 'false'` 로 
 | [URL 파라미터](/ui-components/url-parameters) | 화면 JSP 별 URL 파라미터 표 |
 | [settings 레퍼런스](/ui-components/settings) | 대상별 setting 키, 값, 의미, 프로젝트 사용 빈도 |
 
-샘플 MQL: [UIComponentSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/tree/master/UIComponentSample)
+샘플 MQL: [UIComponentSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/UIComponentSample)
 
 JPO 메서드(행 목록, 열 값, range, update, 접근 함수)를 만드는 방법은 [JPO](/jpo/) 문서를 봅니다.

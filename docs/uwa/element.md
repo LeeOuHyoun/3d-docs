@@ -2,7 +2,7 @@
 
 `UWA.createElement` 로 요소를 만들고, UWA 가 요소에 붙여 주는 메서드(`inject`, `addEvent`, `setStyles` ...)로 다룹니다. jQuery 처럼 감싼 객체가 아니라 **브라우저 요소에 메서드를 직접 붙이는** 방식입니다.
 
-샘플: [01_element.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UWASample/01_element.html)
+샘플: [01_element.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/UWASample/01_element.html)
 
 ::: info 근거
 UWA2/js/Element.js, Event.js, Dispatcher.js. 호출부: `UWA.createElement(` 5,288 건 / 284 파일. 예: CfgConfigurationContextUX, CfgAuthoringContextUX, SocialToolbar

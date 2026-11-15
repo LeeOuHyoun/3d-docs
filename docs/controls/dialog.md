@@ -2,7 +2,7 @@
 
 `DS/Windows/Dialog` 로 제목, 내용, 아래쪽 버튼이 있는 창을 띄웁니다. `modalFlag: true` 면 뒤 화면을 어둡게 가리고 막습니다. 같은 모듈 묶음에 패널(`Panel`)과 창을 담는 틀(`ImmersiveFrame`)이 있습니다.
 
-샘플: [02_dialog.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/02_dialog.html) · [04_dialog_grid.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/04_dialog_grid.html) (다이얼로그 안에 DataGridView)
+샘플: [02_dialog.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/02_dialog.html) · [04_dialog_grid.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/04_dialog_grid.html) (다이얼로그 안에 DataGridView)
 
 ::: info 근거
 Windows.js 의 Window (publishedProperties, _applyButtons, getDefaultButtonLabel, close, keydown / keyup 처리), Dialog (_applyButtons, _applyCustomButtonsDefinition, _applyCheckboxInfos, _applyModalFlag, _getDefaultPosition), Panel, ImmersiveFrame. CoreBase.js 의 WUXStandardButtonEnum, WUXStandardButtonRoleEnum, WUXCustomButtonRoleEnum. Windows_ko.js 의 번역. 호출부: AuthGenericCommands (AuthGenericDlgProgressbar), DELWebCommonControls (FormV2), CAT3DAnnotationBaseCmds. `e.dsModel.dialog.close()` 111 건. OOTB 패턴: ENXMeetingMgmt (RemoveMeeting, CreateMeetingDialog), ENXDecisionMgmt (RemoveDecision), ENOUserGroupMgmt (RemoveUsersGroup), ENXHistoryUX (HistoryDefaultDialog), ENOCharacteristicsApp (NewDialog). 사용 파일 수(2025): `DS/Windows/Dialog` 148, `DS/Windows/ImmersiveFrame` 134, `DS/UIKIT/Modal` 99, `DS/UIKIT/SuperModal` 83, `DS/TransientWidget/TransientWidget` 54, `UWA/Controls/Overlay` 11, `UWA/Controls/Popup` 10, `UWA/Controls/Lightbox` 10 (UWA 셋은 대부분 UWA 묶음 파일 자신). UIKIT.js 의 Modal / SuperModal 의존 모듈, UWA2/js/Controls/Popup.js, Overlay.js, Lightbox.js
@@ -290,7 +290,7 @@ define('DS/MyApp/View/Dialog/RemoveItems', [
 - 생성 다이얼로그(CreateMeetingDialog, NewDialog)도 같은 틀에 `content` 로 탭이나 폼을 넣습니다.
 
 ::: warning 열 때마다 만든 ImmersiveFrame 은 남습니다
-위 패턴(RemoveMeeting)은 열 때마다 `new ImmersiveFrame()` 을 `document.body` 에 붙이고, 다이얼로그를 닫아도 틀은 남겨 둡니다. 따라 만들 때는 위젯에 틀 하나를 만들어 두고 모든 다이얼로그가 같이 씁니다 ([샘플 04](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/04_dialog_grid.html) 가 이 방식).
+위 패턴(RemoveMeeting)은 열 때마다 `new ImmersiveFrame()` 을 `document.body` 에 붙이고, 다이얼로그를 닫아도 틀은 남겨 둡니다. 따라 만들 때는 위젯에 틀 하나를 만들어 두고 모든 다이얼로그가 같이 씁니다 ([샘플 04](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/04_dialog_grid.html) 가 이 방식).
 
 ENOSubscriptionMgmt (ViewSubscriptionsDialog) 처럼 `close` 이벤트에서 `immersiveFrame.destroy()` 를 부르는 OOTB 도 있습니다. 다만 `close()` 는 `close` 이벤트를 낸 뒤 다이얼로그를 `destroy()` 하고, 틀의 `destroy()` 도 안의 창을 `destroy()` 하므로 다이얼로그가 두 번 정리됩니다. 문제가 없는지는 확인하지 않았습니다 <Badge type="danger" text="검증 필요" />.
 :::
@@ -299,7 +299,7 @@ ENOSubscriptionMgmt (ViewSubscriptionsDialog) 처럼 `close` 이벤트에서 `im
 
 고르기 창, 목록 보기 창처럼 다이얼로그 안에 그리드를 넣을 때입니다. OOTB 는 ENOSubscriptionMgmt 의 ViewSubscriptionsDialog (구독 목록 그리드 + 툴바) 가 이 형태입니다.
 
-샘플: [04_dialog_grid.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/04_dialog_grid.html) (고르기 창, 찾기 칸 + 그리드)
+샘플: [04_dialog_grid.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/04_dialog_grid.html) (고르기 창, 찾기 칸 + 그리드)
 
 <<< @/../ControlsSample/04_dialog_grid.html#pick{js}
 

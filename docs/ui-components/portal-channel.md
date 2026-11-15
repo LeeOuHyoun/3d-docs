@@ -2,7 +2,7 @@
 
 **portal** 은 한 화면을 여러 칸으로 나눈 대시보드입니다. 칸 하나가 **channel** 이고, channel 은 command 를 **탭** 으로 담습니다. 탭(command)마다 자기 `href` 화면(table, form ...)을 칸 안에 엽니다.
 
-샘플: [03_webform_portal.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UIComponentSample/03_webform_portal.mql)
+샘플: [03_webform_portal.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/UIComponentSample/03_webform_portal.mql)
 
 ::: info 근거
 `mql/10.channel/Channel_Sample.mql`, `mql/11.portal/Portal_Sample.mql` (배치 그림 주석), 프로젝트 channel 33 파일, portal 22 파일. 화면: `3dspace/common/emxPortal.jsp`, `emxPortalDisplay.jsp` (행 → channel → 탭 반복). `framework.jar` 의 `UIPortal.class` 문자열 상수 (`Height`, `&portalMode=true&portalCmdName=`, `Alternate OID expression`). `emxForm.jsp:78, 213-219, 517`, `emxTable.jsp:211-216` (`portalMode` 와 `showTabHeader` 로 `showHeader` 결정)

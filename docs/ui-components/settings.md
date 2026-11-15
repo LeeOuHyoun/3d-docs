@@ -26,7 +26,7 @@
 값은 키마다 다릅니다. `Field Type` 처럼 소문자로 바꿔 비교하는 곳도 있지만(`emxCreateBody.xsl`), `Row Select` 의 `single` 처럼 정확히 비교하는 곳도 있습니다. 값도 이 페이지의 표기대로 씁니다.
 :::
 
-샘플: [01_command_menu.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UIComponentSample/01_command_menu.mql) (command, menu), [02_table.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UIComponentSample/02_table.mql) (table), [03_webform_portal.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UIComponentSample/03_webform_portal.mql) (webform, portal)
+샘플: [01_command_menu.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/UIComponentSample/01_command_menu.mql) (command, menu), [02_table.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/UIComponentSample/02_table.mql) (table), [03_webform_portal.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/UIComponentSample/03_webform_portal.mql) (webform, portal)
 
 ## 공통
 

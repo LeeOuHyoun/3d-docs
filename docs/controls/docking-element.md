@@ -2,7 +2,7 @@
 
 `DS/Windows/DockingElement` 는 영역을 **한쪽 영역(docking zone) + 나머지 영역(free zone)** 으로 나누는 컨트롤입니다. 경계를 끌어 크기를 바꾸고, 접기 막대로 접습니다. "왼쪽 목록 | 가운데 그리드 | 오른쪽 속성" 같은 화면을 만들 때 씁니다. 창(Window)이 아니라 레이아웃 컨트롤이라 ImmersiveFrame 이 필요 없습니다.
 
-샘플: [06_docking_element.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/06_docking_element.html)
+샘플: [06_docking_element.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/06_docking_element.html)
 
 ::: info 근거
 Windows.js 의 DockingElement (publishedProperties, addContent, replaceContent, getResizeInfos, __shouldCollapserBeVisible, _saveCollapseDockingZoneFlagInPreferences, 경계 끌기 / 접기 막대 처리, `fire("dockStartResize" / "dockIsResizing" / "dockResize" / "collapse" / "expand" / "dimensionsChanged")`, COLLAPSER_STYLE). 호출부: Skeleton (`DS/Skeleton/SkeletonLayout`. 왼쪽 / 오른쪽 DockingElement 를 겹쳐 3단 화면), SNResultUX (오른쪽 정보 패널), SpecTree (위쪽), IPClassifyActive, CollectionView, Tree, VCXWebTimeline (7 파일). 로컬 실행: 2025, 2026 webapps 를 `npm run samples` 로 띄워 Edge 로 확인

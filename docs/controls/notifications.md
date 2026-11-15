@@ -2,7 +2,7 @@
 
 "저장했습니다", "권한이 없습니다" 처럼 화면 오른쪽 위에 잠깐 떴다 사라지는 알림입니다. 메시지를 **보관하는 쪽** 과 **화면에 그리는 쪽** 이 나뉘어 있어서 둘을 한 번 연결해야 보입니다.
 
-샘플: [03_feedback.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/03_feedback.html)
+샘플: [03_feedback.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/03_feedback.html)
 
 ::: info 근거
 Notifications.js 의 NotificationsManagerAbstract (addNotif, modifyNotif, 이력 200 건), NotificationsManagerMessages (_completeOptions), NotificationsManagerUXMessages, NotificationsManagerViewOnScreenInstance (setNotificationManager, 표시 / 사라짐 타이머, 쌓기), NotificationsManagerViewOnScreen. CoreBase.js 의 WUXNotificationsOnScreenFadeOutPolicy. Core/wux.css 의 `.wux-notification-screen`. 호출부: CAT3DWInfraUI, CfgBaseUX. `level: "error"` 767 건, `"success"` 177 건, `"info"` 140 건, `"warning"` 136 건

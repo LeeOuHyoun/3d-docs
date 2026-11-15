@@ -4,7 +4,7 @@
 
 아래 예제에서 `saveToServer(...)` 는 이미 갖고 있는 저장 함수이고 Promise 를 돌려준다고 가정합니다.
 
-샘플: [09_save.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/09_save.html) (가짜 저장 함수로 셀 단위 저장, 모아서 저장, 저장 실패를 재현)
+샘플: [09_save.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/09_save.html) (가짜 저장 함수로 셀 단위 저장, 모아서 저장, 저장 실패를 재현)
 
 ::: info 근거
 TreeModel.js 의 TreeNodeModel.updateOptions / setValuesAsReference / acceptChanges / cancelChanges / removeChild (변경 트랜잭션 모드의 삭제 표시), TreeDocument.setUseChangeTransactionMode, DataGridView.js 의 setNodeModelValue. 호출부: ENOXEngineer, ENOXAlternateSubstitute (setCellValue), PADServices, ENXNav (setUseChangeTransactionMode), ENOCharacteristicsApp (acceptChanges).

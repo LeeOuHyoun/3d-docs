@@ -2,7 +2,7 @@
 
 policy 는 객체의 **생애 주기** 를 정합니다. 어떤 state 를 어떤 순서로 거치는지, revision 이름을 어떻게 붙이는지, state 마다 누가 무엇을 할 수 있는지를 한 곳에 적습니다. 객체는 만들 때 policy 하나를 고르고, 이후 권한 검사는 모두 그 policy 의 **현재 state** 기준입니다.
 
-샘플: [02_policy.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/SchemaSample/02_policy.mql)
+샘플: [02_policy.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/SchemaSample/02_policy.mql)
 
 ::: info 근거
 `mql/03.policy/Policy_Sample.mql`, 커스텀 policy 정의 파일(state 1 ~ 4 개, 권한 블록이 있는 파일 포함), OOTB policy 수정 파일(`Product.mql`, `Classification.mql`, `Project_Space.mql`), `mql/03.policy/` 의 policy 설계 메모(MQL 문법 전문, `AccessUtil` 권한 묶음), `mql/20.rule/*.mql`, `mql/12.trigger/Trigger_Sample.mql` 와 trigger 정의 파일. 코드 쪽: `jpo/emxAEFFullSearchBase_mxJPO.java` (`print policy ... state[...]`), `jpo/com/dassault_systemes/enovia/geographyconfiguration/ui/CountryBase_mxJPO.java` (state 심볼릭 조회), xerinfra.jar `TriggerObjectsCache.populateCache` 바이트코드 (`current` 가 `state_Active` 이고 `eService Error Type` 이 `Error` 인 trigger 객체만 캐시에 담음)

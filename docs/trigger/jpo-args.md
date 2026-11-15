@@ -2,7 +2,7 @@
 
 `emxTriggerManager` 가 부르는 JPO 메서드의 형태, 인자가 채워지는 규칙, 이벤트를 막고 메시지를 보여 주는 방법입니다. JPO 기본(생성자, 컴파일, 배포)은 [JPO](/jpo/) 를 봅니다.
 
-샘플: [MyPartTrigger_mxJPO.java](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TriggerSample/MyPartTrigger_mxJPO.java)
+샘플: [MyPartTrigger_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/TriggerSample/MyPartTrigger_mxJPO.java)
 
 ::: info 근거
 `jpo/emxTriggerManagerBase_mxJPO.java` (`mxMain`, `subEnvironmentVars`), `jpo/emxTriggerValidationResultsBase_mxJPO.java` (검증 실행 때 설정하는 환경 변수 목록), `jpo/emxContextUtilBase_mxJPO.java` (`mqlNotice`), `jpo/emxRouteBase_mxJPO.java` (`checkAssigneeForTask`), `jpo/emxCommonTaskBase_mxJPO.java`, `jpo/emxCommonPartFamilyBase_mxJPO.java`, `jpo/emxRTEUtilBase_mxJPO.java`, `jpo/emxECOBase_mxJPO.java` (RPE 플래그), `3dspace/common/emxLifecycleProcess.jsp`, 프로젝트 트리거 JPO

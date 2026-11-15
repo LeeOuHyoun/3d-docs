@@ -2,7 +2,7 @@
 
 등록은 두 단계입니다. **설정 객체** (`eService Trigger Program Parameters`) 를 만들어 Active 로 올리고, admin 의 이벤트에 `emxTriggerManager` 와 설정 객체 이름을 붙입니다.
 
-샘플: [01_trigger_register.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TriggerSample/01_trigger_register.mql)
+샘플: [01_trigger_register.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/TriggerSample/01_trigger_register.mql)
 
 ::: info 근거
 `mql/12.trigger/Trigger_Sample.mql` 와 프로젝트 트리거 정의 파일, `mql/03.policy/Policy_Sample.mql`, OOTB policy 수정 파일(`Product.mql`, `Classification.mql`)의 `print policy` 결과. 코드 쪽: `jpo/emxTriggerManagerBase_mxJPO.java` (생성자의 속성 목록, `mxMain`, `resetCache`), `jpo/emxUtilBase_mxJPO.java` (`getStateNamesFromProperties`), `jpo/emxTriggerValidationBase_mxJPO.java`, `jpo/emxDomainObjectBase_mxJPO.java` (생성자), xerinfra.jar `com.matrixone.apps.cache.TriggerObjectsCache.populateCache` (Active / `Error` 필터, `Float` 키 `TreeMap`)

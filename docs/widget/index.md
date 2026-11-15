@@ -2,7 +2,7 @@
 
 3DDashboard 에 올리는 앱은 **UWA 위젯** 입니다. HTML 한 장에 메타 정보, 설정 항목(`<widget:preferences>`), 스크립트를 넣고, 스크립트는 전역 `widget` 객체로 화면과 설정 값을 다룹니다. 플랫폼 정보(사용자, 서비스 주소, 역할)는 별도 모듈로 얻습니다.
 
-샘플: [WidgetSample](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.html) (설정, 이벤트, `i18n!` / `css!`, 3DSpace 주소와 SecurityContext)
+샘플: [WidgetSample](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.html) (설정, 이벤트, `i18n!` / `css!`, 3DSpace 주소와 SecurityContext)
 
 ::: info 근거
 UWA2/js/Widget.js, Environment.js, Environments/Frame.js, Environments/Standalone.js, c/UWA/js/UWA_Standalone_Alone.js. 위젯 HTML 226 개 (`xmlns:widget` 포함, 예: ENORouteMgmt/ENOROUTApp.html, EditPropWidget/EditPropWidget.html, 3DDashboardGettingStarted.html). 호출 횟수: `widget.getValue(` 3,177, `widget.setValue(` 1,207, `widget.body` 1,222, `widget.id` 1,458, `widget.lang` 700
@@ -149,16 +149,16 @@ UWA2/js/Widget.js, Environment.js, Environments/Frame.js, Environments/Standalon
 
 | 샘플 | 내용 | 관련 문서 |
 | --- | --- | --- |
-| [WidgetSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.html) | 위젯 HTML, `widget:preferences` (hidden, range, boolean, list) | [위젯 설정](/widget/preferences) |
-| [WidgetSample.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) | `i18n!` / `css!`, onLoad / onRefresh / endEdit / onResize / onViewChange, `addPreference` 로 SecurityContext 목록 추가, 3DSpace 주소 얻기 | [widget 객체](/widget/widget-api), [3DSpace 주소와 SecurityContext](/widget/space-url) |
-| [TransientSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TransientSample.html) | 다른 앱을 창으로 열기 / 닫기 / 숨기기, 넘어온 값 읽기 | [TransientWidget](/widget/transient-widget) |
-| [SearchSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/SearchSample.html) | 3DSearch 열기(타입 제한, 여러 개 선택), 받은 객체, 사람 고르기, 글자로 검색 | [3DSearch 에서 골라 오기](/widget/search) |
-| [TaggerSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TaggerSample.html) | 목록에 태그 붙이기, 태그 창에서 고르면 거르기 | [6W 태그 연동](/widget/tagger) |
-| [CompassSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/CompassSample.html) | 행을 고르면 setObject / setX3DContent, launchApp | [Compass 에 선택 객체 알리기](/widget/compass-pubsub) |
-| [TopBarSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/TopBarSample.html) | 상단 바 메뉴에 항목, 하위 메뉴, 배지 넣기 | [대시보드 상단 바](/widget/top-bar) |
-| [3DPlaySample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/3DPlaySample.html) | physicalid 의 3D / 2D 미리 보기, 3DPlay 앱으로 열기 | [3D / 2D 미리 보기](/widget/3dplay) |
-| [LifecycleSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/LifecycleSample.html) | 갈 수 있는 state, promote / demote, 개정, 소유자 넘기기, OOTB 성숙도 창 | [성숙도 변경, 개정](/rest-api/lifecycle) |
-| [WebSocketSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WebSocketSample.html) | 브라우저 WebSocket / socket.io 로 연결, 보내기와 받기, 3DPassport 토큰, 다시 연결 | [실시간 통신 (WebSocket)](/widget/websocket) |
+| [WidgetSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.html) | 위젯 HTML, `widget:preferences` (hidden, range, boolean, list) | [위젯 설정](/widget/preferences) |
+| [WidgetSample.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.js) | `i18n!` / `css!`, onLoad / onRefresh / endEdit / onResize / onViewChange, `addPreference` 로 SecurityContext 목록 추가, 3DSpace 주소 얻기 | [widget 객체](/widget/widget-api), [3DSpace 주소와 SecurityContext](/widget/space-url) |
+| [TransientSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/TransientSample.html) | 다른 앱을 창으로 열기 / 닫기 / 숨기기, 넘어온 값 읽기 | [TransientWidget](/widget/transient-widget) |
+| [SearchSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/SearchSample.html) | 3DSearch 열기(타입 제한, 여러 개 선택), 받은 객체, 사람 고르기, 글자로 검색 | [3DSearch 에서 골라 오기](/widget/search) |
+| [TaggerSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/TaggerSample.html) | 목록에 태그 붙이기, 태그 창에서 고르면 거르기 | [6W 태그 연동](/widget/tagger) |
+| [CompassSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/CompassSample.html) | 행을 고르면 setObject / setX3DContent, launchApp | [Compass 에 선택 객체 알리기](/widget/compass-pubsub) |
+| [TopBarSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/TopBarSample.html) | 상단 바 메뉴에 항목, 하위 메뉴, 배지 넣기 | [대시보드 상단 바](/widget/top-bar) |
+| [3DPlaySample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/3DPlaySample.html) | physicalid 의 3D / 2D 미리 보기, 3DPlay 앱으로 열기 | [3D / 2D 미리 보기](/widget/3dplay) |
+| [LifecycleSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/LifecycleSample.html) | 갈 수 있는 state, promote / demote, 개정, 소유자 넘기기, OOTB 성숙도 창 | [성숙도 변경, 개정](/rest-api/lifecycle) |
+| [WebSocketSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WebSocketSample.html) | 브라우저 WebSocket / socket.io 로 연결, 보내기와 받기, 3DPassport 토큰, 다시 연결 | [실시간 통신 (WebSocket)](/widget/websocket) |
 
 ::: warning
 샘플은 `<3DSpace>/webapps/WidgetSample/` 에 두고 ENOVIA 서버 주소로 열어야 동작합니다. 단독 실행에서는 Compass 응답이 없어 5 초 뒤 webapps 주소로 3DSpace 주소를 계산합니다. 단독 실행은 jsdom 과 모의 서버(enovia2025 webapps 파일 + 가짜 pno/person 응답)에서 NLS 요청 순서, 설정 라벨 번역, onLoad / onRefresh, SecurityContext 목록까지 확인했습니다. 실제 서버와 3DDashboard 안에서는 아직 확인하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.

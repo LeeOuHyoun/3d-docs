@@ -2,7 +2,7 @@
 
 [셀 타입](/datagridview/cell-types)(`typeRepresentation`)으로 표현할 수 없는 모양은 컬럼의 `onCellRequest` 로 직접 그립니다. 상태 칩, 막대, 버튼 여러 개, 썸네일 같은 셀에 씁니다.
 
-샘플: [10_customCell.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/10_customCell.html)
+샘플: [10_customCell.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/10_customCell.html)
 
 ::: info 근거
 DataGridView.js 의 `_manageCellRequests` (컬럼 `onCellRequest` 가 있으면 `defaultOnCellRequest` 대신 호출, rowID / columnID 0 이상에서만), CollectionView.js 의 registerReusableCellContent / reuseCellContent, CollectionViewCell 의 setReusableContent / getReusableContent, Utilities.js 의 `DS/Utilities/ReusableContentsManager`, `DS/Utilities/ReusableContent`. 호출부: PowerByHome, ENOChgGovernanceUX, ENORouteMgmt, ConfiguratorPanel, CollaborativeTasks.

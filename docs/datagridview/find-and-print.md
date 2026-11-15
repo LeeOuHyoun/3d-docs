@@ -2,7 +2,7 @@
 
 그리드에 이미 들어 있어서 옵션이나 함수 하나로 켜는 기능 네 가지입니다.
 
-샘플: [16_findPrint.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/16_findPrint.html)
+샘플: [16_findPrint.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/16_findPrint.html)
 
 ::: info 근거
 CollectionView.js 의 CollectionView.setFindStr / onFindRequest / goToNextMatchingCell / closeFind / getMatchingFindNodeModelArray / _getColumnsToProcessForFindData, 찾기 모델의 _findAllCellIDsMatchingFindStrInClientSide, `DS/CollectionView/CollectionViewPaginationManager`. DataGridView.js 의 `DS/DataGridView/DataGridViewPaginationManager` (nodeDepth), 행 모델의 _syncModel (페이지 범위), _getCellValueAsStringForFind, `DS/DataGridView/ModelMassUpdateDialog`, showModelMassUpdateDialog / _buildMassUpdateDialogAttributes, openPrintableViewWindow / generatePrintableViewHTML / getColumnOrGroupPrintableState. 호출부: ENXHistoryUX, ENOUserGroupMgmt (찾기, 인쇄), E6WCommonApps 이력 그리드 (페이지), ENOChgGovernanceUX, ENOProjectMgmtCommonComponents (일괄 수정). 찾은 범위, 페이지 수, 일괄 수정 대상, 인쇄 내용은 샘플을 [내 PC 에서 실행](/guide/contributing#샘플을-내-pc-에서-실행하기)해 확인했습니다. 인쇄 창이 실제로 뜨는 것과 대화상자 화면은 확인하지 않았습니다.

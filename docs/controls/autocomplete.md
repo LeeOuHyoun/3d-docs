@@ -2,7 +2,7 @@
 
 `DS/WUXAutoComplete/AutoComplete` 는 글자를 치면 후보 목록을 보여 주고 고르게 하는 입력 칸입니다. 하나만 고르기, 여러 개 고르기(칩), 목록에 없는 글자 받기(자유 입력), 서버 검색을 한 컨트롤로 합니다. WebUX 컨트롤(`DS/Controls/Abstract` 상속)이라 만들기, 속성 읽고 쓰기, 이벤트 받기는 [WebUX 컨트롤 공통 사용법](/controls/webux-controls#공통-사용법) 과 같습니다.
 
-샘플: [09_autocomplete.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/09_autocomplete.html) (배열로 하나 고르기, 서버 검색으로 여러 명 고르기, TreeDocument 후보, 자유 입력 태그, 코드로 값 넣고 읽기, 이벤트)
+샘플: [09_autocomplete.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/09_autocomplete.html) (배열로 하나 고르기, 서버 검색으로 여러 명 고르기, TreeDocument 후보, 자유 입력 태그, 코드로 값 넣고 읽기, 이벤트)
 
 ::: info 근거
 WUXAutoComplete/WUXAutoComplete.js (2025, 2026) 의 publishedProperties, 후보 불러오기 함수(배열, TreeDocument, 함수, Promise 처리와 다시 부를지 정하는 부분), `_applyValue`, `_applySelectedItems`, `filterItems`, `_manageReturn`, `_delayPopupCreation`, 키 맵, `getDefaultChipInfo`. 2026 의 `customValidator`, `getValueForFiltering`, `acceptDrop`, `onDrop`, `configureCustomSeparator`, `retrieveMatchingPossibleValue`, `_getCellIDToPreselect`. TweakersEx.js 의 `AutoCompleteViewModuleTweakerString`, UIKIT.js 의 `DS/UIKIT/Autocomplete`. 호출부: ENOUserGroupMgmt (AutoCompleteUtil 의 사람 찾기, `selectedItems[i].options.grid.physicalId`), ENXMeetingMgmt, ENOChgGovernanceUX (`columnOptions`, `getChipInfo`), DMUReviewPersistence. 집계: 50 개 앱. 옵션 표의 "사용" 은 AutoComplete 를 불러오는 파일 54 개 중 그 이름이 나오는 파일 수입니다. 로컬 실행: 2025, 2026 webapps 를 `npm run samples` 로 띄워 Edge 로 확인

@@ -10,7 +10,7 @@
 - 집계: 모듈 문자열이 나오는 폴더 수 `LifecycleServicesSettings` 46, `LifecycleServices` 35, `MaturityCmd` 24, `LifecycleAlert` 21, `MessageMediator` 16. 파일 수 `app_initialization(` 46, `getSecurityContextPromise(` 27, `executeAsync(` 13, `executeCompactViewAsync(` 3. 2026 은 enovia2026_webapps 의 같은 폴더와 비교
 :::
 
-샘플: [LifecycleSample.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/LifecycleSample.html) (physicalid 로 상태 그래프 읽기 → 갈 수 있는 state 골라 promote / demote → 결과와 오류 표시, dslc getNextStates / changeState, 개정, 소유자 넘기기, OOTB 성숙도 창 / 작은 성숙도 표시 / 개정 창 / 소유자 변경 창). 3DDashboard 에서만 동작합니다.
+샘플: [LifecycleSample.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/LifecycleSample.html) (physicalid 로 상태 그래프 읽기 → 갈 수 있는 state 골라 promote / demote → 결과와 오류 표시, dslc getNextStates / changeState, 개정, 소유자 넘기기, OOTB 성숙도 창 / 작은 성숙도 표시 / 개정 창 / 소유자 변경 창). 3DDashboard 에서만 동작합니다.
 
 ## 고르는 기준
 

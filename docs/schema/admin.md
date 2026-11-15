@@ -2,7 +2,7 @@
 
 스키마 객체 네 가지를 만드는 MQL 과 자주 쓰는 절(clause)을 정리합니다. Policy 는 내용이 많아 [따로](/schema/policy) 둡니다. 모든 정의 끝에는 심볼릭 이름 등록 한 줄이 붙습니다. [심볼릭 이름](/schema/#심볼릭-이름)
 
-샘플: [01_attribute_type.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/SchemaSample/01_attribute_type.mql), [03_relationship_role.mql](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/SchemaSample/03_relationship_role.mql)
+샘플: [01_attribute_type.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/SchemaSample/01_attribute_type.mql), [03_relationship_role.mql](https://github.com/LeeOuHyoun/3d-docs/blob/main/SchemaSample/03_relationship_role.mql)
 
 ::: info 근거
 `mql/01.attribute/Attribute_Sample.mql` 와 정의 파일 약 370 개, `mql/02.type/Type_Sample.mql` 와 정의 파일 약 40 개, `mql/04.relationship/RelationshipSample.mql` 와 OOTB 관계 수정 파일(`Classified_Item.mql`, `Object_Route.mql`), `mql/05.role/*.mql`, `mql/12.trigger/*.mql`, `mql/97.prod-mql/*/*.mql`. 코드 쪽: `jpo/emxCommonIssueBase_mxJPO.java` (`print type ... kindof`), 사용자 관리 JPO 의 `mod person ... assign role` / `remove assign role`, 업무 JPO 의 `context.isAssigned`

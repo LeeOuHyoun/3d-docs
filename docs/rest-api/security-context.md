@@ -6,7 +6,7 @@
 DELWeb3DUtils `getSecurityContextPromise`, DELPPWServices (보안 컨텍스트 목록과 선호값 선택), ENOPartMgt/scripts/PartUtility.js `retrieveSecurityContext`, DocumentManagement `_prepareService`, Foundation/Foundation.js `ajaxRequest`, ENOCharacteristicsApp/utils/RequestUtil.js
 :::
 
-샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) (pno/person 응답으로 SecurityContext 목록 만들기), [02_drag_drop.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/EventsSample/02_drag_drop.html) (선호 SecurityContext 읽기)
+샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.js) (pno/person 응답으로 SecurityContext 목록 만들기), [02_drag_drop.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/EventsSample/02_drag_drop.html) (선호 SecurityContext 읽기)
 
 ## 형식
 

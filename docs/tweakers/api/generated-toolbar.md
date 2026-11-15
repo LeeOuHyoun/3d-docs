@@ -15,7 +15,7 @@ var toolbar = new GeneratedToolbar({
 ```
 
 ::: info 근거
-Tweakers.js 의 GeneratedToolbar publishedProperties / prototype. 메서드, 이벤트 시점은 [샘플](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/TweakersSample/03_generatedToolbar.html)을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).
+Tweakers.js 의 GeneratedToolbar publishedProperties / prototype. 메서드, 이벤트 시점은 [샘플](https://github.com/LeeOuHyoun/3d-docs/blob/main/TweakersSample/03_generatedToolbar.html)을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).
 :::
 
 ## 생성자 옵션

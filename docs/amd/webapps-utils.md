@@ -14,7 +14,7 @@
 WebappsUtils/WebappsUtils.js 의 `define("DS/WebappsUtils/WebappsUtils")` 와 그 앞의 초기화 코드, `DS/WebappsUtils/Utils`. 호출부: FolderEditor, 3DPlay, CAT3DAnnotation 계열. 2026 도 이 세 함수는 같음
 :::
 
-샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/WidgetSample/WidgetSample.js) (getWebappsBaseUrl 로 3DSpace 주소 대체값 만들기)
+샘플: [WidgetSample.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/WidgetSample/WidgetSample.js) (getWebappsBaseUrl 로 3DSpace 주소 대체값 만들기)
 
 ## 함수
 

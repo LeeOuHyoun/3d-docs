@@ -2,7 +2,7 @@
 
 사용자가 바꾼 컬럼 너비, 순서, 표시 여부, 고정, 정렬을 저장해 두었다가 다음에 그리드를 열 때 되살리는 기능입니다. 그리드에 `identifier` 만 주면 그리드가 알아서 저장하고, 이름을 붙인 구성 여러 개("사용자 뷰")를 골라 쓰게 할 수도 있습니다.
 
-샘플: [13_customViews.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/DataGridViewSample/13_customViews.html)
+샘플: [13_customViews.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/13_customViews.html)
 
 ::: info 근거
 DataGridView.js 의 DataGridViewLayout (`_saveDataInPreferences`, `_applyPreferencesOnColumns`, `getCurrentViewChanges`, `exportPreferencesInJson`, `importJsonPreferences`, `deleteDataGridViewPreferences`, `_hasValidIdentifier`), CustomViewsManager, DataGridViewCustomViewsDialog, DataGridViewContextualMenuBuilder (`_createFirstColumnsVisibilityContextualMenu`, `_createColumnsManagementContextualMenu`), DataGridView 의 `loadCustomViews` / `showCustomViewsDialog` / 정적 함수 `hasPreferences` / `importJsonPreferences`. CollectionView.js 의 `_postBuildView` (`preferencesToApply`). Utilities.js 의 Utils (`saveDataInPreferences`, `getDataInPreferences`, `deleteDataFromPreferences`). 호출부: ENXMeetingMgmt, ENORouteMgmt, IssueComponents (identifier + useWidgetPreferencesFlag + loadCustomViews), ENOXCAD_Save (userPreferencesChange + exportPreferencesInJson), ENXNav, FolderEditor (deleteDataGridViewPreferences), CATFLCockpitWidget, ENOXEngineer, ENOProjectMgmtCommonComponents (onCustomViewsSave). 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).

@@ -2,7 +2,7 @@
 
 `DS/Menu/Menu` 는 3DEXPERIENCE 화면 공통의 팝업 메뉴입니다. 인스턴스를 만들지 않고 `Menu.show(항목 배열, 설정, 콜백)` 으로 엽니다. 오른쪽 클릭 메뉴는 `DS/Menu/ContextualMenu` 로 요소에 연결합니다. DataGridView 우클릭 메뉴, TabBar, Breadcrumb, Flyout, SelectionChips 의 메뉴도 이 모듈이 그립니다.
 
-샘플: [08_menu.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/ControlsSample/08_menu.html) (버튼 아래 메뉴, 항목 종류, 체크 / 라디오, 하위 메뉴, 열어 둔 채 체크 바꾸기, 오른쪽 클릭 메뉴)
+샘플: [08_menu.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/ControlsSample/08_menu.html) (버튼 아래 메뉴, 항목 종류, 체크 / 라디오, 하위 메뉴, 열어 둔 채 체크 바꾸기, 오른쪽 클릭 메뉴)
 
 ::: info 근거
 Menu/Menu.js (2025, 2026) 의 `DS/Menu/Menu` (`show`, `hide`, `buildView` 의 항목 검사, 위치 계산 `show`, `updateSize`, `onKeyDown`, 항목 실행 함수, `updateModel`, `MENU_STATE_*`)와 `DS/Menu/ContextualMenu` (`addEventListener`, `removeEventListener`, `setGlobalConfig`, `buildAndDisplayContextualMenu`, 메뉴를 모으는 contextmenu 처리 함수). DataGridView.js 의 `_manageContextualMenu`, Utilities.js 의 `Utils.isAsyncFunction`, `Utils.attachSimpleCallback`. 호출부: ENXMeetingMgmt, ENOUserGroupMgmt (`WUXMenu.show(menu, { position })`), RevisionFamily (`submenu`), ENXSBToolbarClient (`submenu: 'outside'`), FolderEditor, ENOChgGovernanceUX (`buildAndDisplayContextualMenu`, `action.module`). 집계: `DS/Menu/Menu` 52 개 앱, `DS/Menu/ContextualMenu` 28 개 앱. `xxxMenu.show(` 79 회 중 `WUXMenu.show(` 가 30 회이고, 나머지에는 UIKIT DropdownMenu 인스턴스의 `show()` 가 섞여 있습니다. 항목 `type` 이 나오는 앱 폴더 수: `PushItem` 125, `SeparatorItem` 47, `CheckItem` 35, `RadioItem` 21, `TitleItem` 9, `CollectionItem` 0. 로컬 실행: 2025, 2026 webapps 를 `npm run samples` 로 띄워 Edge 로 확인

@@ -76,9 +76,9 @@ require([
 
 | 샘플 | 내용 | 관련 문서 |
 | --- | --- | --- |
-| [01_element.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UWASample/01_element.html) | createElement, 요소 메서드, 이벤트 위임, 잘못된 키 비교 | [DOM](/uwa/element) |
-| [02_class.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UWASample/02_class.html) | Class.extend, _parent, Options / Events mixin, merge / extend 비교 | [클래스](/uwa/class), [Core 유틸](/uwa/core) |
-| [03_mvc.html](https://github.com/LeeOuHyoun/sampleCodesAndMemos/blob/master/UWASample/03_mvc.html) | Model, Collection, View 로 만든 목록 화면 | [Model, Collection, View](/uwa/mvc) |
+| [01_element.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/UWASample/01_element.html) | createElement, 요소 메서드, 이벤트 위임, 잘못된 키 비교 | [DOM](/uwa/element) |
+| [02_class.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/UWASample/02_class.html) | Class.extend, _parent, Options / Events mixin, merge / extend 비교 | [클래스](/uwa/class), [Core 유틸](/uwa/core) |
+| [03_mvc.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/UWASample/03_mvc.html) | Model, Collection, View 로 만든 목록 화면 | [Model, Collection, View](/uwa/mvc) |
 
 ::: warning
 샘플은 `<3DSpace>/webapps/UWASample/` 에 두고 ENOVIA 서버 주소로 열어야 동작합니다. UWA 샘플은 원본 소스 분석으로 작성했고, 서버에서 동작 확인을 아직 하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.
