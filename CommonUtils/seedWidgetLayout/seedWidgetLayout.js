@@ -14,25 +14,23 @@ define('DS/CommonUtils/seedWidgetLayout/seedWidgetLayout', [
   const LEFT_SIZE_COLLAPSED = 40;
   const MOBILE_WIDTH = 550;
 
-  const page = (text) => (content) => {
-    UWA.createElement('div', { text }).inject(content);
-  };
+  const PAGE_PATH = 'DS/CommonUtils/seedWidgetLayout/pages/';
 
   const SECTIONS = [
     {
       id: 'view',
       title: '조회',
       actions: [
-        { id: 'recent', text: '최근 항목', fonticon: 'clock', render: page('최근 항목 화면') },
-        { id: 'myItems', text: '내 항목', fonticon: 'user', render: page('내 항목 화면') },
-        { id: 'allItems', text: '전체 항목', fonticon: 'list', render: page('전체 항목 화면') }
+        { id: 'recent', text: '최근 항목', fonticon: 'clock', module: `${PAGE_PATH}RecentPage` },
+        { id: 'myItems', text: '내 항목', fonticon: 'user', module: `${PAGE_PATH}MyItemsPage` },
+        { id: 'allItems', text: '전체 항목', fonticon: 'list', module: `${PAGE_PATH}AllItemsPage` }
       ]
     },
     {
       id: 'start',
       title: '작업 시작',
       actions: [
-        { id: 'newItem', text: '새 항목', fonticon: 'plus', render: page('새 항목 화면') }
+        { id: 'newItem', text: '새 항목', fonticon: 'plus', module: `${PAGE_PATH}NewItemPage` }
       ]
     }
   ];
@@ -40,7 +38,7 @@ define('DS/CommonUtils/seedWidgetLayout/seedWidgetLayout', [
   const toActivities = (sections, selectedId) => _.map(sections, (section) => ({
     id: section.id,
     title: section.title,
-    actions: _.map(section.actions, (action) => ({ ..._.omit(action, 'render'), isDefault: action.id === selectedId }))
+    actions: _.map(section.actions, (action) => ({ ..._.omit(action, 'module'), isDefault: action.id === selectedId }))
   }));
 
   const create = (options) => {
@@ -84,14 +82,25 @@ define('DS/CommonUtils/seedWidgetLayout/seedWidgetLayout', [
       modelEvents.publish({ event: 'triptych-show-panel', data: 'left' });
     };
 
+    let currentId = '';
+    let currentPage = null;
+
     const show = (id) => {
       const action = actions[id];
       if (!action) {
         return;
       }
+      currentId = id;
       title.setText(action.text);
-      content.empty();
-      action.render(content);
+      require([action.module], (page) => {
+        if (currentId !== id) {
+          return;
+        }
+        currentPage?.destroy?.();
+        content.empty();
+        currentPage = page;
+        page.render(content, { modelEvents, id });
+      });
     };
 
     modelEvents.subscribe({ event: 'welcome-panel-collapse' }, () => setLeftSize(LEFT_SIZE_COLLAPSED));
