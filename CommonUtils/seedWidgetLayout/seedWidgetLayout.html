@@ -13,9 +13,9 @@
     .module > .moduleHeader, .moduleFooter { display: none; }
   </style>
   <script type="text/javascript">
-    require(['DS/CommonUtils/seedWidgetLayout/seedWidgetLayoutDemo'], function (Demo) {
+    require(['DS/CommonUtils/seedWidgetLayout/seedWidgetLayout'], function (seedWidgetLayout) {
       widget.addEvent('onLoad', function () {
-        Demo.render(widget.body);
+        seedWidgetLayout.render(widget.body);
       });
     });
   </script>
