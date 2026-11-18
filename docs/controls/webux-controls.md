@@ -129,7 +129,7 @@ new Button({ icon: '../assets/icons/part.png', label: '부품' });  // 이미지
 | 점(`.`)이 들어간 문자열 (`part.png`, `data:image...`) | 이미지 |
 
 ::: warning 아이콘 이름은 글꼴마다 다릅니다
-`'floppy'` 는 3DS 글꼴에만 있고 FontAwesome 에는 `'floppy-o'` 로 있습니다. 문자열로 `icon: 'floppy'` 를 주면 빈 아이콘이 됩니다. 이름은 `Core/wux-3ds-fonticons.css` 의 `.wux-ui-3ds-이름` / `.wux-ui-fa-이름` 에서 확인합니다.
+`'floppy'` 는 3DS 글꼴에만 있고 FontAwesome 에는 `'floppy-o'` 로 있습니다. 문자열로 `icon: 'floppy'` 를 주면 빈 아이콘이 됩니다. 이름은 [아이콘 목록](/controls/icons) 에서 글꼴별로 확인합니다.
 :::
 
 `WUXManagedFontIcons` 는 `DS/Controls/*` 를 불러오면 전역(`window`)에 생깁니다.
