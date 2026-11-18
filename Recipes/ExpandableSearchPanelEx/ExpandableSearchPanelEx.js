@@ -1,9 +1,9 @@
-define('DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
+define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
   'UWA/Core',
   'DS/lodash',
   'DS/Controls/Button',
   'UWA/Element',
-  'css!DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelEx.css'
+  'css!DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx.css'
 ], (UWA, _, Button) => {
   'use strict';
 

@@ -1,4 +1,4 @@
-define('DS/CommonUtils/ExpandableSearchPanelEx/SearchFieldAdapters', [
+define('DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters', [
   'UWA/Core',
   'DS/lodash',
   'DS/Controls/LineEditor',

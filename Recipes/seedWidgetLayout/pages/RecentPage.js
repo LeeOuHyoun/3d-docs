@@ -1,4 +1,4 @@
-define('DS/CommonUtils/seedWidgetLayout/pages/RecentPage', ['UWA/Core', 'UWA/Element'], (UWA) => {
+define('DS/Recipes/seedWidgetLayout/pages/RecentPage', ['UWA/Core', 'UWA/Element'], (UWA) => {
   'use strict';
 
   let timer = 0;

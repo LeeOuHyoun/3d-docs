@@ -1,9 +1,9 @@
-define('DS/CommonUtils/ExpandableSearchPanel/ExpandableSearchPanel', [
+define('DS/Recipes/ExpandableSearchPanel/ExpandableSearchPanel', [
   'UWA/Core',
   'DS/Controls/LineEditor',
   'DS/Controls/Button',
   'UWA/Element',
-  'css!DS/CommonUtils/ExpandableSearchPanel/ExpandableSearchPanel.css'
+  'css!DS/Recipes/ExpandableSearchPanel/ExpandableSearchPanel.css'
 ], (UWA, LineEditor, Button) => {
   'use strict';
 

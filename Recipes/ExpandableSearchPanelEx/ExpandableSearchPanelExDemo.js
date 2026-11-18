@@ -1,8 +1,8 @@
-define('DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
+define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
   'UWA/Core',
   'DS/lodash',
-  'DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelEx',
-  'DS/CommonUtils/ExpandableSearchPanelEx/SearchFieldAdapters',
+  'DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx',
+  'DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters',
   'DS/DataGridView/DataGridView',
   'DS/TreeModel/TreeDocument',
   'DS/TreeModel/TreeNodeModel',

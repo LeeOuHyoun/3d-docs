@@ -1,4 +1,4 @@
-define('DS/CommonUtils/seedWidgetLayout/seedWidgetLayout', [
+define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
   'UWA/Core',
   'DS/lodash',
   'DS/CoreEvents/ModelEvents',
@@ -6,7 +6,7 @@ define('DS/CommonUtils/seedWidgetLayout/seedWidgetLayout', [
   'DS/ENOXWelcomePanel/js/ENOXWelcomePanel',
   'DS/ENOXPageToolBar/js/PageToolBar',
   'UWA/Element',
-  'css!DS/CommonUtils/seedWidgetLayout/seedWidgetLayout.css'
+  'css!DS/Recipes/seedWidgetLayout/seedWidgetLayout.css'
 ], (UWA, _, ModelEvents, ENOXTriptych, ENOXWelcomePanel, PageToolBar) => {
   'use strict';
 
@@ -14,7 +14,7 @@ define('DS/CommonUtils/seedWidgetLayout/seedWidgetLayout', [
   const LEFT_SIZE_COLLAPSED = 40;
   const MOBILE_WIDTH = 550;
 
-  const PAGE_PATH = 'DS/CommonUtils/seedWidgetLayout/pages/';
+  const PAGE_PATH = 'DS/Recipes/seedWidgetLayout/pages/';
 
   const SECTIONS = [
     {

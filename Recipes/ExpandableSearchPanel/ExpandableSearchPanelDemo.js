@@ -1,6 +1,6 @@
-define('DS/CommonUtils/ExpandableSearchPanel/ExpandableSearchPanelDemo', [
+define('DS/Recipes/ExpandableSearchPanel/ExpandableSearchPanelDemo', [
   'UWA/Core',
-  'DS/CommonUtils/ExpandableSearchPanel/ExpandableSearchPanel',
+  'DS/Recipes/ExpandableSearchPanel/ExpandableSearchPanel',
   'DS/DataGridView/DataGridView',
   'DS/TreeModel/TreeDocument',
   'DS/TreeModel/TreeNodeModel',

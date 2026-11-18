@@ -1,11 +1,11 @@
-define('DS/CommonUtils/mergedHeaderGrid/mergedHeaderGrid', [
+define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
   'UWA/Core',
   'DS/lodash',
   'DS/DataGridView/DataGridView',
   'DS/TreeModel/TreeDocument',
   'DS/TreeModel/TreeNodeModel',
   'UWA/Element',
-  'css!DS/CommonUtils/mergedHeaderGrid/mergedHeaderGrid.css'
+  'css!DS/Recipes/mergedHeaderGrid/mergedHeaderGrid.css'
 ], (UWA, _, DataGridView, TreeDocument, TreeNodeModel) => {
   'use strict';
 

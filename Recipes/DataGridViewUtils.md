@@ -8,12 +8,12 @@ DataGridView 를 다룰 때 반복되는 처리(행 갱신, 키로 찾기, 선�
 ## 1. 불러오기
 
 ```js
-define('DS/MyApp/PartListView', ['DS/CommonUtils/DataGridViewUtils'], (GridUtils) => {
+define('DS/MyApp/PartListView', ['DS/Recipes/DataGridViewUtils'], (GridUtils) => {
   GridUtils.loadRows('partGrid', fetchParts);
 });
 ```
 
-- 모듈 이름 `DS/CommonUtils/DataGridViewUtils` 와 의존 모듈 `DS/lodash` 의 루트는 현장 경로로 바꿔서 씁니다.
+- 모듈 이름 `DS/Recipes/DataGridViewUtils` 와 의존 모듈 `DS/lodash` 의 루트는 현장 경로로 바꿔서 씁니다.
 - 그 밖의 의존 모듈: `DS/DataGridView/DataGridView`, `DS/TreeModel/TreeDocument`, `DS/TreeModel/TreeNodeModel`
 
 ## 2. 첫 인자 target

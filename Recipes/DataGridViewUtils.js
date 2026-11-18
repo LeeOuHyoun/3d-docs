@@ -9,9 +9,9 @@
  * 그리드 루트 DOM 에는 DS/Controls/Abstract 의 _preBuildView 가 넣어 둔 dsModel(그리드 인스턴스)과
  * wux-controls-abstract 클래스가 있어서 DOM 으로 그리드를 찾을 수 있다.
  *
- * @module DS/CommonUtils/DataGridViewUtils
+ * @module DS/Recipes/DataGridViewUtils
  */
-define('DS/CommonUtils/DataGridViewUtils', ['DS/lodash', 'DS/DataGridView/DataGridView', 'DS/TreeModel/TreeDocument', 'DS/TreeModel/TreeNodeModel'], (_, DataGridView, TreeDocument, TreeNodeModel) => {
+define('DS/Recipes/DataGridViewUtils', ['DS/lodash', 'DS/DataGridView/DataGridView', 'DS/TreeModel/TreeDocument', 'DS/TreeModel/TreeNodeModel'], (_, DataGridView, TreeDocument, TreeNodeModel) => {
   'use strict';
 
   /**
