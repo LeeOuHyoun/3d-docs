@@ -67,6 +67,11 @@ const applyFont = async (item, buffer) => {
 }
 
 const hasFolderPicker = ref(false)
+const fontGuide = computed(() => {
+  const lead = `글꼴 ${missing.value.length}개가 없어 아이콘 모양 대신 이름만 보입니다.`
+  const how = hasFolderPicker.value ? '원본 webapps 폴더를 고르면 아래 글꼴을 한 번에 찾아' : '원본 webapps 의 아래 파일을 고르면'
+  return `${lead} ${how} 이 브라우저에서만 읽어 그리고 기억합니다 (서버로 보내지 않음).`
+})
 
 onMounted(async () => {
   hasFolderPicker.value = 'showDirectoryPicker' in window
@@ -159,13 +164,13 @@ const copy = async (text) => {
   <div class="icon-gallery">
     <div v-if="missing.length || storedLabels.length" class="ig-font">
       <template v-if="missing.length">
-        <p>글꼴 {{ missing.length }}개가 없어 아이콘 모양 대신 이름만 보입니다. 원본 webapps 의 아래 파일을 고르면 이 브라우저에서만 읽어 그리고 기억합니다 (서버로 보내지 않음).</p>
+        <p>{{ fontGuide }}</p>
         <ul>
           <li v-for="item in missing" :key="item.id"><strong>{{ item.label }}</strong> <code>webapps/{{ item.file }}</code></li>
         </ul>
         <div class="ig-font-actions">
-          <button v-if="hasFolderPicker" @click="pickFolder">webapps 폴더 선택</button>
-          <button @click="fileInput.click()">파일 선택 (여러 개)</button>
+          <button v-if="hasFolderPicker" class="ig-primary" @click="pickFolder">webapps 폴더 선택</button>
+          <button :class="{ 'ig-secondary': hasFolderPicker }" @click="fileInput.click()">{{ hasFolderPicker ? '글꼴 파일 직접 고르기' : '파일 선택 (여러 개)' }}</button>
           <input ref="fileInput" type="file" multiple accept=".woff,.woff2,.ttf,.otf" hidden @change="handleFontFiles" />
         </div>
       </template>
@@ -311,7 +316,22 @@ const copy = async (text) => {
 .ig-font-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
+}
+
+.ig-font .ig-primary {
+  padding: 4px 14px;
+  border-color: var(--vp-c-warning-1);
+  background: var(--vp-c-warning-1);
+  color: var(--vp-c-bg);
+  font-weight: 600;
+}
+
+.ig-font .ig-secondary {
+  border-color: transparent;
+  color: var(--vp-c-text-2);
+  text-decoration: underline;
 }
 
 .ig-font .ig-notice {
