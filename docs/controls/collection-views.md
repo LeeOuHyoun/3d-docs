@@ -37,15 +37,15 @@ require([
   'DS/TreeModel/TreeDocument',
   'DS/TreeModel/TreeNodeModel'
 ], function (DataGridView, ResponsiveTilesCollectionView, TreeDocument, TreeNodeModel) {
-  var doc = new TreeDocument();
+  const doc = new TreeDocument();
   doc.addRoot(new TreeNodeModel({
     label: 'PRT-0001',
     icons: ['../assets/part-icon.png'],
     grid: { title: '브라켓', subLabel: '브라켓', description: '설명', thumbnail: '../assets/part.png' }
   }));
 
-  var grid = new DataGridView({ treeDocument: doc, columns: [{ text: '품번', dataIndex: 'tree' }, { text: '품명', dataIndex: 'title' }] });
-  var tiles = new ResponsiveTilesCollectionView({
+  const grid = new DataGridView({ treeDocument: doc, columns: [{ text: '품번', dataIndex: 'tree' }, { text: '품명', dataIndex: 'title' }] });
+  const tiles = new ResponsiveTilesCollectionView({
     model: doc,
     displayedOptionalCellProperties: ['description', 'contextualMenu']
   }).inject(el);
@@ -83,7 +83,7 @@ require([
 
 ```js
 require(['DS/Controls/ResponsiveTileView'], function (ResponsiveTileView) {
-  var tile = new ResponsiveTileView({
+  const tile = new ResponsiveTileView({
     picture: '../assets/part.png',
     title: 'PRT-0001',
     subtitle: '브라켓',
@@ -188,7 +188,7 @@ CfgAuthoringContextUX 는 `picture`, `icon`, `customTooltip`, `title`, `multiple
 
 ```js
 require(['DS/Controls/ResponsiveThumbnailView'], function (ResponsiveThumbnailView) {
-  var card = new ResponsiveThumbnailView({
+  const card = new ResponsiveThumbnailView({
     picture: '../assets/part.png',
     title: 'PRT-0001 A.1',
     subtitle: '재질: 알루미늄',
@@ -218,13 +218,13 @@ ResponsiveThumbnailView 의 `multipleTitleLineNumber` 는 `true` 로 바꿀 때�
 
 ```js
 require(['DS/Controls/TreeBase', 'DS/Controls/TreeNodeBase'], function (TreeBase, TreeNodeBase) {
-  var tree = new TreeBase({
+  const tree = new TreeBase({
     roots: [
       { label: '조립품 A', children: [{ label: '부품 A-1' }, { label: '부품 A-2' }] }
     ]
   }).inject(el);
 
-  var root = tree.getNthRoot(0);
+  const root = tree.getNthRoot(0);
   root.addChild(new TreeNodeBase({ label: '부품 A-3', data: { id: 'p3' } }));
   root.expand();
 
@@ -282,7 +282,7 @@ require(['DS/Controls/TreeBase', 'DS/Controls/TreeNodeBase'], function (TreeBase
 트리 옵션 `isEditable` 에 객체를 주면 켜집니다.
 
 ```js
-var tree = new TreeBase({
+const tree = new TreeBase({
   isEditable: { nodesAreDraggable: true, autoExpandAtDrag: true, autoExpandAtDragDelay: 800 }
 }).inject(el);
 ```
@@ -318,7 +318,7 @@ var tree = new TreeBase({
 
 ```js
 require(['DS/Controls/Tile'], function (Tile) {
-  var tile = new Tile({ effects: 'flip', button: true }).inject(el);
+  const tile = new Tile({ effects: 'flip', button: true }).inject(el);
   tile.setPrimaryViewContent('<b>PRT-0001</b>');
   tile.setSecondaryViewContent('상세 정보');
   tile.toggleView();
@@ -339,7 +339,7 @@ require(['DS/Controls/Tile'], function (Tile) {
 
 ```js
 require(['DS/Controls/ThumbnailView'], function (ThumbnailView) {
-  var thumb = new ThumbnailView({ size: 'small' }).inject(el);
+  const thumb = new ThumbnailView({ size: 'small' }).inject(el);
   thumb.setTitle('최근 파일');
   thumb.setSubtitle('');
   thumb.setPicture('../assets/preview.png');

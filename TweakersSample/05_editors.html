@@ -54,9 +54,9 @@
       DataGridView, TreeDocument, TreeNodeModel) {
       'use strict';
 
-      var formEl = document.getElementById('form');
-      var logEl = document.getElementById('log');
-      var factory = new TypeRepresentationFactory();
+      const formEl = document.getElementById('form');
+      const logEl = document.getElementById('log');
+      const factory = new TypeRepresentationFactory();
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -72,14 +72,14 @@
         if (value === undefined) {
           return 'undefined';
         }
-        var type = Array.isArray(value) ? 'array' : value === null ? 'null' : typeof value;
+        const type = Array.isArray(value) ? 'array' : value === null ? 'null' : typeof value;
         return JSON.stringify(value) + '  (' + type + ')';
       }
 
       function row(label) {
-        var labelEl = document.createElement('label');
-        var holder = document.createElement('div');
-        var valueEl = document.createElement('div');
+        const labelEl = document.createElement('label');
+        const holder = document.createElement('div');
+        const valueEl = document.createElement('div');
         labelEl.textContent = label;
         holder.className = 'holder';
         holder.setAttribute('data-label', label);
@@ -91,20 +91,20 @@
       }
 
       function place(label) {
-        var holder = row(label);
+        const holder = row(label);
         return function (tweaker) {
           tweaker.inject(holder);
         };
       }
 
       function tweakerOf(holder) {
-        var content = holder.querySelector('.wux-tweakers');
+        const content = holder.querySelector('.wux-tweakers');
         return content && content.dsModel;
       }
 
       function refreshValues() {
         Array.prototype.forEach.call(formEl.querySelectorAll('.holder'), function (holder) {
-          var tweaker = tweakerOf(holder);
+          const tweaker = tweakerOf(holder);
           holder.nextElementSibling.textContent = tweaker ? describe(tweaker.value) +
             (tweaker.validState === false ? '  validState=false' : '') : '';
         });
@@ -112,7 +112,7 @@
 
       ['change', 'liveChange', 'validStateChange'].forEach(function (name) {
         formEl.addEventListener(name, function (e) {
-          var holder = e.target.closest && e.target.closest('.holder');
+          const holder = e.target.closest && e.target.closest('.holder');
           if (!e.dsModel || !holder || tweakerOf(holder) !== e.dsModel) {
             return;
           }
@@ -212,10 +212,10 @@
        *   units 는 숫자 뒤에 붙는 단위. 옵션을 안 주면 stepValue 0.1, decimals 5.
        */
       // #region number
-      var qty = new TweakerNumber({ value: 10, minValue: 1, maxValue: 999, stepValue: 1, decimals: 0, valueType: 'integer' })
+      const qty = new TweakerNumber({ value: 10, minValue: 1, maxValue: 999, stepValue: 1, decimals: 0, valueType: 'integer' })
         .inject(row('수량 (정수 1~999)'));
 
-      var weight = new TweakerNumber({ value: 12.5, minValue: 0, stepValue: 0.5, decimals: 2, units: 'kg' })
+      const weight = new TweakerNumber({ value: 12.5, minValue: 0, stepValue: 0.5, decimals: 2, units: 'kg' })
         .inject(row('중량 (실수, kg)'));
 
       new TweakerNumber({ value: 1.23456789 }).inject(row('기본값 그대로'));
@@ -237,7 +237,7 @@
        *   timePickerFlag 로 시간까지. allowResetToUndefinedByUIFlag 를 주면 화면에서 비울 수 있다.
        */
       // #region date
-      var dueDate = new TweakerDate({
+      const dueDate = new TweakerDate({
         value: new Date(2026, 10, 20),
         minValue: new Date(2026, 10, 1),
         maxValue: new Date(2026, 11, 31),
@@ -305,7 +305,7 @@
        *   functionIcon 셀은 값이 있는 행에만 버튼이 그려진다. 아이콘은 semantics.icon.
        */
       // #region grid
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { status: 'WIP', owners: ['김철수'], qty: 10, dueDate: new Date(2026, 10, 20), approved: false, progress: 20, open: true } },
@@ -316,7 +316,7 @@
       });
       treeDocument.pushUpdate();
 
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         columns: [
           { text: '품번', dataIndex: 'tree', width: 110 },
@@ -355,7 +355,7 @@
        */
       // #region grid-events
       grid.addEventListener('change', function (e, cellInfos) {
-        var dataIndex = grid.columns[cellInfos.columnID].dataIndex;
+        const dataIndex = grid.columns[cellInfos.columnID].dataIndex;
         log('grid change  ' + cellInfos.nodeModel.options.label + '.' + dataIndex + ' = ' +
           describe(cellInfos.nodeModel.getAttributeValue(dataIndex)));
       });

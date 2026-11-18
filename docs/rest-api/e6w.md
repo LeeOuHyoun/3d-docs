@@ -104,7 +104,7 @@ WAFData.authenticatedRequest(spaceUrl + '/resources/v2/e6w/service/ObjectInfo?te
   onComplete: function (res) {
     if (!res || res.success === false) { console.log(res && res.error); return; }
     res.data.forEach(function (o) {
-      var de = o.dataelements;
+      const de = o.dataelements;
       console.log(o.id, o.type, de.name, de.title, de.revision, de.typeNLS, de.stateNLS, de.ownerFullname);
     });
   },
@@ -136,7 +136,7 @@ function searchPerson(text) {
       onComplete: function (res) {
         if (!res || !res.success || !res.data) { resolve([]); return; }
         resolve(res.data.filter(function (p) { return p.dataelements; }).map(function (p) {
-          var de = p.dataelements;
+          const de = p.dataelements;
           return { id: p.id, login: de.name, label: (de.firstname || '') + ' ' + (de.lastname || '') };
         }));
       },

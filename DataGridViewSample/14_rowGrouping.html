@@ -53,11 +53,11 @@
       'use strict';
 
       function writeLog(text) {
-        var log = document.getElementById('log');
+        const log = document.getElementById('log');
         log.textContent = text + '\n' + log.textContent;
       }
 
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { title: '브라켓', status: '작업중', owner: '김철수', qty: 4, created: new Date(2026, 0, 12) } },
@@ -80,17 +80,17 @@
        *   없으면 셀 값 그대로가 키다. 날짜 값은 행마다 달라서 그대로 묶으면 행마다 그룹이 하나씩 생긴다.
        */
       // #region monthKey
-      var createdColumn = {
+      const createdColumn = {
         text: '등록일',
         dataIndex: 'created',
         width: 120,
         typeRepresentation: 'date',
         getCellGroupingKey: function (cellInfos) {
-          var date = cellInfos.nodeModel.options.grid.created;
+          const date = cellInfos.nodeModel.options.grid.created;
           if (!date) {
             return '';
           }
-          var month = date.getMonth() + 1;
+          const month = date.getMonth() + 1;
           return date.getFullYear() + '-' + (month < 10 ? '0' : '') + month;
         }
       };
@@ -103,7 +103,7 @@
        *     function (values)                                  values = 그 그룹에 묶인 행들의 이 컬럼 값 배열. this = 그리드
        */
       // #region summary
-      var qtyColumn = {
+      const qtyColumn = {
         text: '수량',
         dataIndex: 'qty',
         width: 80,
@@ -111,12 +111,12 @@
         getGroupingNodeOptions: 'sum'
       };
 
-      var ownerColumn = {
+      const ownerColumn = {
         text: '담당자',
         dataIndex: 'owner',
         width: 110,
         getGroupingNodeOptions: function (values) {
-          var owners = values.filter(function (value, index) {
+          const owners = values.filter(function (value, index) {
             return values.indexOf(value) === index;
           });
           return owners.length + '명';
@@ -131,13 +131,13 @@
        */
       // #region headerMenu
       function buildMenu(params) {
-        var view = params.collectionView;
-        var menu = view.buildDefaultContextualMenu(params);
-        var cellInfos = params.cellInfos;
+        const view = params.collectionView;
+        const menu = view.buildDefaultContextualMenu(params);
+        const cellInfos = params.cellInfos;
         if (!cellInfos || cellInfos.rowID !== -1 || cellInfos.columnID < 0) {
           return menu;
         }
-        var dataIndex = view.layout.getDataIndexFromColumnIndex(cellInfos.columnID);
+        const dataIndex = view.layout.getDataIndexFromColumnIndex(cellInfos.columnID);
         menu.push({
           type: 'PushItem',
           title: '이 컬럼으로 묶기',
@@ -169,7 +169,7 @@
        *   rowDragEnabledFlag: true : 행을 끌어 순서를 바꾸는 기능. 묶여 있는 동안은 그리드가 꺼 둔다.
        */
       // #region grid
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         rowSelection: 'multiple',
         showSelectionCheckBoxesFlag: true,
@@ -237,10 +237,10 @@
        *   보통은 그리드를 만들 때 넣는다. 여기서는 기본 제목과 비교하려고 만든 뒤에 바꾸고 다시 묶는다.
        */
       // #region label
-      var titleOptions = {
+      const titleOptions = {
         hideGroupedColumns: false,
         getGroupingNodeLabel: function (groupingNode) {
-          var count = groupingNode.getOriginalChildrenInformation().notHiddenNotFilteredChildrenCount;
+          const count = groupingNode.getOriginalChildrenInformation().notHiddenNotFilteredChildrenCount;
           return groupingNode.getIdentifier() + ' - ' + count + '건';
         },
         getGroupingNodeIcons: function () {
@@ -266,8 +266,8 @@
       }
 
       document.getElementById('btnSelected').addEventListener('click', function () {
-        var selectedNodes = treeDocument.getSelectedNodes();
-        var selectedRows = selectedNodes.filter(isDataRow);
+        const selectedNodes = treeDocument.getSelectedNodes();
+        const selectedRows = selectedNodes.filter(isDataRow);
         writeLog('선택 ' + selectedNodes.length + '개 중 그룹 행을 뺀 ' + selectedRows.length + '개: '
           + selectedRows.map(function (node) { return node.getLabel(); }).join(', '));
       });
@@ -280,7 +280,7 @@
        */
       // #region excludeCsv
       document.getElementById('btnCsv').addEventListener('click', function () {
-        var csv = grid.getAsCSV({
+        const csv = grid.getAsCSV({
           canNodeModelBeExported: function (node) {
             return node.getNodeSource() !== TreeNodeModel.NODE_SOURCE.GROUPING;
           }
@@ -295,7 +295,7 @@
        *   grid.reapplyRowGrouping() : 지금 설정(getGroupingOptions())으로 다시 묶는다.
        */
       // #region reapply
-      var addedCount = 0;
+      let addedCount = 0;
 
       document.getElementById('btnAdd').addEventListener('click', function () {
         addedCount++;
@@ -316,7 +316,7 @@
        */
       // #region afterGroup
       document.getElementById('btnAfter').addEventListener('click', function () {
-        var token = treeDocument.addEventListener('groupNodes', function () {
+        const token = treeDocument.addEventListener('groupNodes', function () {
           treeDocument.removeEventListener(token);
           writeLog('묶기 끝남: 최상위 행 ' + treeDocument.getRoots().length + '개');
         });
@@ -331,13 +331,13 @@
        *   칩의 X 를 누르면 그 단계가 풀린다. 코드로 groupRows 를 불러도 이 영역의 칩이 따라 바뀐다.
        */
       // #region groupingUI
-      var groupingUI = grid.createGroupingUI();
+      const groupingUI = grid.createGroupingUI();
       groupingUI.inject(document.getElementById('grouping'));
       // #endregion groupingUI
 
       document.getElementById('btnState').addEventListener('click', function () {
-        var all = treeDocument.getAllDescendants();
-        var options = grid.getGroupingOptions();
+        const all = treeDocument.getAllDescendants();
+        const options = grid.getGroupingOptions();
         writeLog('getGroupingOptions(): ' + JSON.stringify(options)
           + ' / getRoots() ' + treeDocument.getRoots().length + '개'
           + ' / getAllDescendants() ' + all.length + '개 (그룹 행 ' + (all.length - all.filter(isDataRow).length) + '개)'

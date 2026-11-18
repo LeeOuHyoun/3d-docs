@@ -67,13 +67,13 @@
       /* [1] 편집기 클래스: TweakerBase.inherit 로 상속하고 publishedProperties 에는 바꿀 속성만 적습니다.
          getStringFromValue 는 읽기 모드 글자, 그리드 툴팁, 찾기에 쓰입니다. */
       // #region star-tweaker
-      var StarRatingTweaker = TweakerBase.inherit({
+      const StarRatingTweaker = TweakerBase.inherit({
         name: 'starRatingTweaker',
         publishedProperties: {
           value: { defaultValue: 0, type: 'number', advancedSetter: true }
         },
         getStringFromValue: function (value) {
-          var count = value || 0;
+          const count = value || 0;
           return new Array(count + 1).join('★') + new Array(6 - count).join('☆');
         }
       });
@@ -83,9 +83,9 @@
          화면에서 값이 바뀌면 setTweakerValue 를 부르고, 이벤트는 Dom.addEventOnElement 로 등록해야 그리드에 반영됩니다.
          VIEW_MODULES 에 readOnly 를 넣지 않았으므로 읽기 모드는 TweakerBase 기본 글자 표시(getStringFromValue)가 쓰입니다. */
       // #region star-edit-view
-      var BaseView = TweakerBase.prototype.baseViewModule;
+      const BaseView = TweakerBase.prototype.baseViewModule;
 
-      var StarEditView = function (tweaker, options) {
+      const StarEditView = function (tweaker, options) {
         BaseView.call(this, tweaker, options);
       };
       Utils.applyMixin(StarEditView, BaseView);
@@ -93,8 +93,8 @@
       StarEditView.prototype.buildView = function () {
         this._view = UWA.createElement('div', { 'class': 'sample-stars' });
         this._stars = [];
-        for (var i = 1; i <= 5; i++) {
-          var star = UWA.createElement('span', { 'class': 'sample-star', 'data-value': i });
+        for (let i = 1; i <= 5; i++) {
+          const star = UWA.createElement('span', { 'class': 'sample-star', 'data-value': i });
           star.textContent = '★';
           this._stars.push(star.inject(this._view));
         }
@@ -103,9 +103,9 @@
       };
 
       StarEditView.prototype.handleEvents = function () {
-        var self = this;
+        const self = this;
         Dom.addEventOnElement(this._tweaker, this._view, 'click', function (e) {
-          var star = Number(e.target.getAttribute('data-value'));
+          const star = Number(e.target.getAttribute('data-value'));
           if (star && !self._tweaker.disabled) {
             self.setTweakerValue(star);
           }
@@ -138,7 +138,7 @@
 
       /* [3] 값이 객체({ amount, unit })인 편집기. units 는 직접 추가한 속성이며 semantics 로 넘어옵니다. */
       // #region measure-tweaker
-      var MeasureTweaker = TweakerBase.inherit({
+      const MeasureTweaker = TweakerBase.inherit({
         name: 'measureTweaker',
         publishedProperties: {
           value: { defaultValue: undefined, type: 'object', advancedSetter: true },
@@ -156,15 +156,15 @@
          input / select 의 브라우저 change 이벤트는 편집기 change 와 이름이 같아 위로 올라가지 않게 막습니다.
          _getElementToFocus 는 그리드가 편집을 시작할 때 포커스를 줄 요소입니다. */
       // #region measure-edit-view
-      var BaseView = TweakerBase.prototype.baseViewModule;
+      const BaseView = TweakerBase.prototype.baseViewModule;
 
-      var MeasureEditView = function (tweaker, options) {
+      const MeasureEditView = function (tweaker, options) {
         BaseView.call(this, tweaker, options);
       };
       Utils.applyMixin(MeasureEditView, BaseView);
 
       MeasureEditView.prototype.buildView = function () {
-        var self = this;
+        const self = this;
         this._view = UWA.createElement('div', { 'class': 'sample-measure' });
         this._input = UWA.createElement('input', { type: 'number', step: 'any' }).inject(this._view);
         this._select = UWA.createElement('select').inject(this._view);
@@ -176,13 +176,13 @@
       };
 
       MeasureEditView.prototype.readValue = function () {
-        var amount = parseFloat(this._input.value);
+        const amount = parseFloat(this._input.value);
         return isNaN(amount) ? undefined : { amount: amount, unit: this._select.value };
       };
 
       MeasureEditView.prototype.handleEvents = function () {
-        var self = this;
-        var tweaker = this._tweaker;
+        const self = this;
+        const tweaker = this._tweaker;
         Dom.addEventOnElement(tweaker, this._input, 'input', function () {
           tweaker.onPreEdit();
           self.setTweakerValue(self.readValue());
@@ -227,7 +227,7 @@
 
       /* [5] 읽기 모드 화면 모듈을 따로 둔 경우. VIEW_MODULES 의 키는 displayStyle 값(edition)과 readOnly 입니다. */
       // #region measure-read-view
-      var MeasureReadView = function (tweaker, options) {
+      const MeasureReadView = function (tweaker, options) {
         BaseView.call(this, tweaker, options);
       };
       Utils.applyMixin(MeasureReadView, BaseView);
@@ -261,7 +261,7 @@
     ], function (TypeRepresentationFactory, DataGridView, TreeDocument, TreeNodeModel) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -277,7 +277,7 @@
 
       /* [6] 연결: 템플릿 id -> 모듈 경로(+ displayStyle), 타입 이름 -> 템플릿 id. 그리드를 만들기 전에 한 번 */
       // #region register
-      var factory = new TypeRepresentationFactory();
+      const factory = new TypeRepresentationFactory();
 
       factory.registerTypeTemplates({
         sampleStarRating: { path: 'DS/TweakersSample/StarRatingTweaker', options: { displayStyle: 'edition' } },
@@ -291,7 +291,7 @@
 
       /* [7] 폼: 타입 이름을 typePath 로. 편집기 하나를 직접 쓰므로 change 이벤트를 바로 받습니다. */
       // #region form
-      var formTweakers = {};
+      const formTweakers = {};
 
       [['starRating', 3, 'formRating'], ['measure', { amount: 2.5, unit: 'mm' }, 'formThickness']].forEach(function (item) {
         factory.generateView(item[1], { typePath: item[0] }).then(function (tweaker) {
@@ -308,7 +308,7 @@
 
       /* [8] 그리드: 컬럼 typeRepresentation 에 같은 이름. 확정된 값은 nodeModel 에 들어가고 그리드 change 가 옵니다. */
       // #region grid
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { title: '브라켓', rating: 4, thickness: { amount: 2, unit: 'mm' } } },
@@ -319,7 +319,7 @@
       });
       treeDocument.pushUpdate();
 
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         columns: [
           { text: '품번', dataIndex: 'tree', width: 120 },
@@ -335,7 +335,7 @@
         }
       });
       treeDocument.onNodeModelUpdate(function (e) {
-        var node = e.data.nodeModel;
+        const node = e.data.nodeModel;
         log('nodeModel     ' + node.options.label + ' rating=' + node.getAttributeValue('rating') +
           ', thickness=' + show(node.getAttributeValue('thickness')));
       });
@@ -355,14 +355,14 @@
       });
 
       byId('btnReadOnly').addEventListener('click', function () {
-        var next = !formTweakers.starRating.readOnly;
+        const next = !formTweakers.starRating.readOnly;
         formTweakers.starRating.readOnly = next;
         formTweakers.measure.readOnly = next;
         log('readOnly = ' + next);
       });
 
       byId('btnDisabled').addEventListener('click', function () {
-        var next = !formTweakers.starRating.disabled;
+        const next = !formTweakers.starRating.disabled;
         formTweakers.starRating.disabled = next;
         formTweakers.measure.disabled = next;
         log('disabled = ' + next);

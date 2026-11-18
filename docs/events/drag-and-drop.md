@@ -143,15 +143,15 @@ ENOChangeActionUX, ENOChgServices 가 하는 검사를 정리하면 다음 순�
 
 ```js
 require(['DS/DataDragAndDrop/DataDragAndDrop'], function (DnD) {
-  var myPlatformId = widget.getValue('x3dPlatformId') || 'OnPremise';
+  const myPlatformId = widget.getValue('x3dPlatformId') || 'OnPremise';
 
   function parse3DXContent(text) {
-    var content;
+    let content;
     try { content = JSON.parse(text); } catch (e) { return null; }
     if (!content || content.protocol !== '3DXContent' || !content.data) return null;
-    var seen = {};
+    const seen = {};
     return (content.data.items || []).filter(function (item) {
-      var ok = item.serviceId === '3DSpace' && item.objectId && item.objectType &&
+      const ok = item.serviceId === '3DSpace' && item.objectId && item.objectType &&
         (!item.envId || item.envId === myPlatformId) && !seen[item.objectId];
       seen[item.objectId] = true;
       return ok;
@@ -160,7 +160,7 @@ require(['DS/DataDragAndDrop/DataDragAndDrop'], function (DnD) {
 
   DnD.droppable(dropEl, {
     drop: function (text, el, e) {
-      var items = parse3DXContent(text);
+      const items = parse3DXContent(text);
       if (!items || items.length === 0) {
         console.warn('3DSpace 객체가 아닙니다');
         return;

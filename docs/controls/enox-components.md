@@ -496,7 +496,7 @@ DELWebWidgetLinkInfra 는 LinkManager 없이 `DS/WidgetLink/WidgetLink` 를 바�
 
 ```js
 require(['DS/WidgetLink/WidgetLink'], function (WidgetLink) {
-  var link = WidgetLink.get(widget);
+  const link = WidgetLink.get(widget);
 
   function listen() {
     link.subscribe('XX/MyApp/SelectPart', function (data) { console.log(data.id); });
@@ -546,7 +546,7 @@ ENOXInterWdgCom 의 `Proxy` 는 PlatformAPI 로 `DS/ENO/` + 이름 토픽을 보
 ENOPartMgt (ContentDisplaySkeleton, PartSkeleton) 의 구성:
 
 ```js
-var skeleton = new Skeleton({
+const skeleton = new Skeleton({
   contents: {
     collection: MyPartCollection,
     view: ContentSet,

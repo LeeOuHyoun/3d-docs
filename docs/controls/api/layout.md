@@ -7,7 +7,7 @@ title: 레이아웃 컨트롤 API
 화면을 나누고 묶는 `DS/Controls/*` 컨트롤의 공개 속성, 이벤트, 메서드입니다. 사용법은 [레이아웃 컨트롤](/controls/layout) 에 있습니다.
 
 ```js
-var tab = new Tab({ displayStyle: 'strip' }).inject(el);
+const tab = new Tab({ displayStyle: 'strip' }).inject(el);
 tab.add({ label: '속성', value: 'props', content: propsDiv, isSelected: true });
 tab.addEventListener('change', function (e) { console.log(e.dsModel.value[0]); });
 ```
@@ -380,7 +380,7 @@ Controls.js (2025, 2026) 의 Accordeon, Tab, TabBar, Toolbar, Breadcrumb, GroupB
 `DS/Controls/Scroller`. 부모 `UWA/Controls/Abstract`. 대상 요소를 `div.wux-scroller`(`position: absolute`, 상하좌우 0)로 감싸 스크롤 시작 / 중 / 끝을 알려 줍니다. Layouts(GridEngine), CollectionView 가 씁니다.
 
 ```js
-var scroller = new Scroller(targetEl, { scrollEndTimeout: 300 }).inject(parentEl);
+const scroller = new Scroller(targetEl, { scrollEndTimeout: 300 }).inject(parentEl);
 ```
 
 | 옵션 | 기본값 | 설명 |

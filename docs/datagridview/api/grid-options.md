@@ -11,7 +11,7 @@ title: 그리드 옵션
 "사용" 칸은 enovia2025 webapps 에서 DataGridView 를 쓰는 앱 파일 119개 가운데 그 이름이 나오는 파일 수입니다. `height`, `disabled` 처럼 그리드가 아닌 곳에도 흔히 쓰이는 이름은 셀 수 없어서 `-` 로 두었습니다.
 
 ```js
-var grid = new DataGridView({
+const grid = new DataGridView({
   treeDocument: treeDocument,
   columns: columns,
   rowSelection: 'single',

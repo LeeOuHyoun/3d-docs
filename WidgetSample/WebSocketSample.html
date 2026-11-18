@@ -44,9 +44,9 @@
     ], function (UWA, io, PlatformAPI, WAFData, Button, LineEditor) {
       'use strict';
 
-      var MAX_TRIES = 10;
-      var logEl;
-      var stateEl;
+      const MAX_TRIES = 10;
+      let logEl;
+      let stateEl;
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -57,7 +57,7 @@
       }
 
       function row(parent, labelText) {
-        var el = UWA.createElement('div', { 'class': 'ws-row' }).inject(parent);
+        const el = UWA.createElement('div', { 'class': 'ws-row' }).inject(parent);
         if (labelText) { UWA.createElement('label', { text: labelText }).inject(el); }
         return el;
       }
@@ -68,7 +68,7 @@
        */
       // #region url
       function toSocketUrl(value) {
-        var url = String(value || '').trim().replace(/\/$/, '');
+        const url = String(value || '').trim().replace(/\/$/, '');
         if (/^wss?:\/\//.test(url)) {
           return url;
         }
@@ -83,11 +83,11 @@
        */
       // #region token
       function getAccessToken() {
-        var service = String(widget.getValue('passportService') || '').trim();
+        const service = String(widget.getValue('passportService') || '').trim();
         if (!service) {
           return Promise.resolve(null);
         }
-        var passportUrl = PlatformAPI.getApplicationConfiguration('app.urls.passport');
+        const passportUrl = PlatformAPI.getApplicationConfiguration('app.urls.passport');
         if (!passportUrl) {
           return Promise.reject(new Error('app.urls.passport 가 없습니다 (3DDashboard 밖)'));
         }
@@ -96,7 +96,7 @@
             type: 'json',
             onComplete: function (data) {
               try {
-                var json = typeof data === 'string' ? JSON.parse(data) : data;
+                const json = typeof data === 'string' ? JSON.parse(data) : data;
                 if (json && json.access_token) {
                   resolve(json.access_token);
                 } else {
@@ -119,10 +119,10 @@
        */
       // #region native
       function openNative(url, handlers) {
-        var socket = null;
-        var timer = null;
-        var tries = 0;
-        var closedByUser = false;
+        let socket = null;
+        let timer = null;
+        let tries = 0;
+        let closedByUser = false;
 
         function connect() {
           socket = new WebSocket(url);
@@ -171,7 +171,7 @@
        */
       // #region socketio
       function openSocketIo(url, handlers) {
-        var socket = io(url, {
+        const socket = io(url, {
           path: String(widget.getValue('socketPath') || '/socket.io'),
           transports: ['websocket'],
           reconnection: true,
@@ -204,20 +204,20 @@
        *   - 위젯을 지우거나 페이지를 떠날 때 pagehide 에서 닫습니다. 설정을 바꾸면 닫고 다시 엽니다.
        */
       // #region connect
-      var client = null;
+      let client = null;
 
       function connect() {
         disconnect();
-        var serverUrl = widget.getValue('serverUrl');
+        const serverUrl = widget.getValue('serverUrl');
         if (!serverUrl) {
           log('설정에서 WebSocket server 를 넣습니다.');
           return;
         }
-        var url = toSocketUrl(serverUrl);
-        var open = widget.getValue('client') === 'socketio' ? openSocketIo : openNative;
+        const url = toSocketUrl(serverUrl);
+        const open = widget.getValue('client') === 'socketio' ? openSocketIo : openNative;
         setState('연결 중');
         log('connect ' + url + ' (' + widget.getValue('client') + ')');
-        var current = open(url, {
+        const current = open(url, {
           onOpen: function () {
             setState('연결됨');
             log('open');
@@ -266,17 +266,17 @@
       // #endregion connect
 
       function build() {
-        var page = UWA.createElement('div', { 'class': 'ws-page' });
+        const page = UWA.createElement('div', { 'class': 'ws-page' });
 
         stateEl = UWA.createElement('span', { 'class': 'ws-state', text: '닫음' });
         stateEl.inject(row(page, '상태'));
 
-        var actions = row(page);
+        const actions = row(page);
         new Button({ label: '연결', emphasize: 'primary', onClick: connect }).inject(actions);
         new Button({ label: '끊기', onClick: disconnect }).inject(actions);
 
-        var messageEditor = new LineEditor({ placeholder: '보낼 글', sizeInCharNumber: 36 });
-        var sendRow = row(page, '메시지');
+        const messageEditor = new LineEditor({ placeholder: '보낼 글', sizeInCharNumber: 36 });
+        const sendRow = row(page, '메시지');
         messageEditor.inject(sendRow);
         new Button({ label: '보내기', onClick: onSend }).inject(sendRow);
 
@@ -287,7 +287,7 @@
             log('연결되어 있지 않습니다.');
             return;
           }
-          var text = String(messageEditor.value || '');
+          const text = String(messageEditor.value || '');
           client.send('message', text);
           log('보냄 ' + text);
         }

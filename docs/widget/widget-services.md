@@ -10,8 +10,8 @@ WidgetServices/WidgetServices.js 의 `DS/WidgetServices/WidgetServices` (도우�
 
 ```js
 require(['DS/WidgetServices/WidgetServices'], function (WidgetServices) {
-  var platformId = WidgetServices.getTenantID();
-  var lang = WidgetServices.getLanguage();
+  const platformId = WidgetServices.getTenantID();
+  const lang = WidgetServices.getLanguage();
   WidgetServices.get3DSpaceUrlAsync({
     platformId: platformId,
     onComplete: function (spaceUrl) { ... }
@@ -43,7 +43,7 @@ require(['DS/WidgetServices/WidgetServices'], function (WidgetServices) {
 ## get3DSpaceUrlAsync
 
 ```js
-var request = WidgetServices.get3DSpaceUrlAsync({
+const request = WidgetServices.get3DSpaceUrlAsync({
   platformId: widget.getValue('x3dPlatformId'),
   onComplete: function (spaceUrl) {
     console.log(spaceUrl);

@@ -12,7 +12,7 @@ UWA2/js/Class.js, Class/Options.js, Class/Events.js, Class/Listener.js, Class/Ti
 
 ```js
 require(['UWA/Class', 'UWA/Class/Options', 'UWA/Class/Events'], function (Class, Options, Events) {
-  var PartLoader = Class.extend(Options, Events, {
+  const PartLoader = Class.extend(Options, Events, {
     name: 'part-loader',
     defaultOptions: { pageSize: 50, filter: { state: 'WIP' } },
 
@@ -27,7 +27,7 @@ require(['UWA/Class', 'UWA/Class/Options', 'UWA/Class/Events'], function (Class,
     }
   });
 
-  var loader = new PartLoader({ filter: { owner: 'me' } });
+  const loader = new PartLoader({ filter: { owner: 'me' } });
   loader.addEvent('onLoad', function (items) { console.log(items); });
   loader.load();
 });
@@ -41,7 +41,7 @@ require(['UWA/Class', 'UWA/Class/Options', 'UWA/Class/Events'], function (Class,
 ## 상속과 _parent
 
 ```js
-var ReleasedPartLoader = PartLoader.extend({
+const ReleasedPartLoader = PartLoader.extend({
   defaultOptions: { filter: { state: 'RELEASED' } },
 
   init: function (options) {
@@ -64,8 +64,8 @@ var ReleasedPartLoader = PartLoader.extend({
 
 ```js
 load: function () {
-  var parentLoad = this._parent;
-  var self = this;
+  const parentLoad = this._parent;
+  const self = this;
   setTimeout(function () { parentLoad.call(self); }, 100);
 }
 ```

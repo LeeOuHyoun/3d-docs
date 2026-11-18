@@ -208,7 +208,7 @@ A 계열은 실패해도 HTTP 200 으로 오는 경우가 있습니다. Foundati
 function spaceRequest(spaceUrl, path, options) {
   options = options || {};
   return new Promise(function (resolve, reject) {
-    var headers = Object.assign({
+    const headers = Object.assign({
       Accept: 'application/json',
       'Content-Type': 'application/json',
       SecurityContext: options.securityContext

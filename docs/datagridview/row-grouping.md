@@ -11,7 +11,7 @@ DataGridView.js 의 DataGridView publishedProperties (`rowGroupingEnabledFlag`, 
 ## 어디에 넣나
 
 ```js{7,9-12,15}
-var grid = new DataGridView({
+const grid = new DataGridView({
   treeDocument: treeDocument,
   columns: [
     { text: '품번', dataIndex: 'tree' },
@@ -197,7 +197,7 @@ grid.inject(document.getElementById('grid'));
 전체 행을 읽을 때도 같습니다.
 
 ```js
-var allRows = treeDocument.getAllDescendants().filter(function (node) {
+const allRows = treeDocument.getAllDescendants().filter(function (node) {
   return node.getNodeSource() !== TreeNodeModel.NODE_SOURCE.GROUPING;
 });
 ```
@@ -211,7 +211,7 @@ var allRows = treeDocument.getAllDescendants().filter(function (node) {
 실제 앱(CATFLCockpitWidget, ENOXArchitectureCommon)은 같은 일을 아래처럼 씁니다.
 
 ```js
-var groupingOptions = grid.getGroupingOptions();
+const groupingOptions = grid.getGroupingOptions();
 if (groupingOptions) {
   grid.groupRows(groupingOptions);
 }
@@ -270,7 +270,7 @@ new DataGridView({
   rowGroupingOptions: {
     hideGroupedColumns: false,
     getGroupingNodeOptions: function (groupingNode) {
-      var values = {};
+      const values = {};
       values[groupingNode.getProperty()] = groupingNode.getIdentifier();
       return values;
     }

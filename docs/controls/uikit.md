@@ -14,7 +14,7 @@ UIKIT.js 의 Mask, Input, Input/Button, Input/Text, Input/Toggle, Input/Select, 
 
 ```js
 require(['DS/UIKIT/Input/Button'], function (Button) {
-  var btn = new Button({
+  const btn = new Button({
     value: '저장',
     className: 'primary',
     icon: 'floppy',
@@ -69,7 +69,7 @@ require(['DS/UIKIT/Mask'], function (Mask) {
 ## Input/Button
 
 ```js
-var btn = new Button({ value: '삭제', className: 'error small', icon: 'trash' }).inject(el);
+const btn = new Button({ value: '삭제', className: 'error small', icon: 'trash' }).inject(el);
 btn.load(true, '삭제 중...');    // 글자를 바꾸고 비활성
 btn.load(false);                 // 원래대로
 ```
@@ -93,7 +93,7 @@ btn.load(false);                 // 원래대로
 ## Input/Text
 
 ```js
-var title = new Text({ placeholder: '품명', required: true, maxlength: 40 }).inject(el);
+const title = new Text({ placeholder: '품명', required: true, maxlength: 40 }).inject(el);
 title.addEvent('onChange', function () { console.log(title.getValue()); });
 ```
 
@@ -111,7 +111,7 @@ title.addEvent('onChange', function () { console.log(title.getValue()); });
 ## Input/Toggle
 
 ```js
-var useFlag = new Toggle({ type: 'switch', label: '사용', checked: true }).inject(el);
+const useFlag = new Toggle({ type: 'switch', label: '사용', checked: true }).inject(el);
 useFlag.addEvent('onChange', function () { console.log(useFlag.isChecked()); });
 ```
 
@@ -132,7 +132,7 @@ useFlag.addEvent('onChange', function () { console.log(useFlag.isChecked()); });
 ## Input/Select
 
 ```js
-var state = new Select({
+const state = new Select({
   placeholder: '상태 선택',
   options: [
     { label: '작업중', value: 'WIP' },
@@ -167,7 +167,7 @@ state.setValue('WIP');
 
 ```js
 require(['DS/UIKIT/Alert'], function (Alert) {
-  var alert = new Alert({ visible: true, autoHide: true, hideDelay: 3000 })
+  const alert = new Alert({ visible: true, autoHide: true, hideDelay: 3000 })
     .inject(widget.body, 'top');
 
   alert.add({ className: 'success', message: '저장했습니다.' });
@@ -206,8 +206,8 @@ require(['DS/UIKIT/Alert'], function (Alert) {
 
 ```js
 require(['DS/UIKIT/Modal', 'DS/UIKIT/Input/Button'], function (Modal, Button) {
-  var ok = new Button({ value: '확인', className: 'primary' });
-  var modal = new Modal({
+  const ok = new Button({ value: '확인', className: 'primary' });
+  const modal = new Modal({
     header: '속성',
     body: '<p>내용</p>',
     footer: [ok],
@@ -244,7 +244,7 @@ require(['DS/UIKIT/Modal', 'DS/UIKIT/Input/Button'], function (Modal, Button) {
 
 ```js
 require(['DS/UIKIT/SuperModal'], function (SuperModal) {
-  var sm = new SuperModal({ renderTo: widget.body });
+  const sm = new SuperModal({ renderTo: widget.body });
 
   sm.alert('저장했습니다.', '완료');
   sm.confirm('삭제할까요?', '삭제', function (ok) { console.log(ok); });
@@ -300,7 +300,7 @@ WebUX 컨트롤에는 `tooltipInfos` 를 쓰는 편이 간단합니다 ([툴팁]
 ## Spinner
 
 ```js
-var spinner = new Spinner({ visible: true }).inject(el);
+const spinner = new Spinner({ visible: true }).inject(el);
 spinner.hide();
 spinner.show();
 ```
@@ -318,7 +318,7 @@ spinner.show();
 내용 요소에 UIKIT 모양 스크롤바를 붙입니다.
 
 ```js
-var list = UWA.createElement('div', { html: items });
+const list = UWA.createElement('div', { html: items });
 new Scroller({ element: list }).inject(container);
 ```
 
@@ -328,7 +328,7 @@ new Scroller({ element: list }).inject(container);
 
 ```js
 require(['DS/UIKIT/DropdownMenu'], function (DropdownMenu) {
-  var menu = new DropdownMenu({
+  const menu = new DropdownMenu({
     target: btn.getContent(),
     items: [
       { text: '편집', fonticon: 'pencil', name: 'edit' },
@@ -366,7 +366,7 @@ WebUX 메뉴(`DS/Menu`)와 고르는 기준은 [메뉴](/controls/menu#uikit-dro
 아이콘 버튼을 가로로 늘어놓은 툴바입니다. 넘치는 항목은 `...` 메뉴로 들어갑니다.
 
 ```js
-var bar = new Iconbar({
+const bar = new Iconbar({
   items: [
     { name: 'add', text: '추가', fonticon: 'plus' },
     { name: 'search', text: '검색', fonticon: 'search' },
@@ -385,7 +385,7 @@ var bar = new Iconbar({
 
 ```js
 require(['DS/UIKIT/Form'], function (Form) {
-  var form = new Form({
+  const form = new Form({
     fields: [
       { type: 'text', name: 'partNo', label: '품번', required: true, placeholder: 'PRT-0000' },
       { type: 'select', name: 'state', label: '상태', options: [ { label: '작업중', value: 'WIP' }, { label: '승인', value: 'RELEASED' } ] },

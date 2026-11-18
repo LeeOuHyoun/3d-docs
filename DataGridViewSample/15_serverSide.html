@@ -50,16 +50,16 @@
     ], function (DataGridView, DataSourceBase, TreeDocument, TreeNodeModel) {
       'use strict';
 
-      var container = document.getElementById('grid');
-      var grid = null;
-      var keyword = '';
+      const container = document.getElementById('grid');
+      let grid = null;
+      let keyword = '';
 
       function writeLog(text) {
-        var log = document.getElementById('log');
+        const log = document.getElementById('log');
         log.textContent = text + '\n' + log.textContent;
       }
 
-      var COLUMNS = [
+      const COLUMNS = [
         { text: '품번', dataIndex: 'tree', width: 180 },
         { text: '품명', dataIndex: 'title', width: 200 },
         { text: '상태', dataIndex: 'status', width: 100 },
@@ -77,10 +77,10 @@
        *   실제 화면에서는 이 자리에 WAFData 호출이 들어간다.
        */
       // #region server
-      var NAMES = ['브라켓', '샤프트', '하우징', '커버', '베어링', '볼트', '너트', '와셔'];
-      var STATUSES = ['작업중', '검토중', '승인'];
-      var serverRows = [];
-      for (var i = 1; i <= 5000; i++) {
+      const NAMES = ['브라켓', '샤프트', '하우징', '커버', '베어링', '볼트', '너트', '와셔'];
+      const STATUSES = ['작업중', '검토중', '승인'];
+      const serverRows = [];
+      for (let i = 1; i <= 5000; i++) {
         serverRows.push({
           tree: 'PRT-' + ('000' + i).slice(-4),
           title: NAMES[i % NAMES.length] + ' ' + i,
@@ -92,17 +92,17 @@
       function loadRows(start, count, sort, filter) {
         return new Promise(function (resolve) {
           setTimeout(function () {
-            var rows = serverRows.filter(function (row) {
+            const rows = serverRows.filter(function (row) {
               return !filter || row.title.indexOf(filter) !== -1;
             });
             if (sort && sort.length) {
-              var key = sort[0].dataIndex;
-              var direction = sort[0].sort === 'desc' ? -1 : 1;
+              const key = sort[0].dataIndex;
+              const direction = sort[0].sort === 'desc' ? -1 : 1;
               rows.sort(function (a, b) {
                 return (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0) * direction;
               });
             }
-            var items = rows.slice(start, start + count).map(function (row) {
+            const items = rows.slice(start, start + count).map(function (row) {
               return { tree: row.tree, title: row.title, status: row.status, stock: row.stock };
             });
             writeLog('서버: ' + start + ' ~ ' + (start + count - 1) + ' 요청, ' + items.length + '행 응답 (전체 ' + rows.length + '행)');
@@ -114,7 +114,7 @@
       function loadStock(partNumbers) {
         return new Promise(function (resolve) {
           setTimeout(function () {
-            var stockByPart = {};
+            const stockByPart = {};
             serverRows.forEach(function (row) {
               if (partNumbers.indexOf(row.tree) !== -1) {
                 stockByPart[row.tree] = row.stock;
@@ -135,11 +135,11 @@
        */
       // #region infinite
       function createInfiniteGrid() {
-        var treeDocument = new TreeDocument();
-        var finished = false;
+        const treeDocument = new TreeDocument();
+        let finished = false;
 
         function appendRows() {
-          var start = treeDocument.getRoots().length;
+          const start = treeDocument.getRoots().length;
           return loadRows(start, 100).then(function (result) {
             treeDocument.prepareUpdate();
             result.items.forEach(function (row) {
@@ -150,7 +150,7 @@
           });
         }
 
-        var infiniteGrid = new DataGridView({ treeDocument: treeDocument, columns: COLUMNS });
+        const infiniteGrid = new DataGridView({ treeDocument: treeDocument, columns: COLUMNS });
 
         infiniteGrid.onInfiniteScroll(function (info) {
           if (!info.reachBottom || finished) {
@@ -180,7 +180,7 @@
        */
       // #region delayed
       function createDelayedGrid() {
-        var treeDocument = new TreeDocument();
+        const treeDocument = new TreeDocument();
         treeDocument.prepareUpdate();
         serverRows.forEach(function (row) {
           treeDocument.addRoot(new TreeNodeModel({ label: row.tree, grid: { title: row.title, status: row.status } }));
@@ -191,7 +191,7 @@
           treeDocument: treeDocument,
           columns: COLUMNS,
           onDelayedModelDataRequest: function (info) {
-            var nodes = info.collectionView.model
+            const nodes = info.collectionView.model
               .slice(info.startNodeIndex, info.endNodeIndex + 1)
               .filter(function (node) { return node.options.grid.stock === undefined; });
             writeLog('보이는 행 ' + info.startNodeIndex + ' ~ ' + info.endNodeIndex + ' (' + info.context + '), 재고 요청 ' + nodes.length + '행');
@@ -226,7 +226,7 @@
           params.failCallback();
           return;
         }
-        var lastRow = result.total <= params.request.endRow + 1 ? result.total : -1;
+        const lastRow = result.total <= params.request.endRow + 1 ? result.total : -1;
         if (sendTotal) {
           params.successCallback(result.items, lastRow, result.total);
         } else {
@@ -245,10 +245,10 @@
        */
       // #region dataSource
       function createDataSource(sendTotal) {
-        var dataSource = new DataSourceBase();
+        const dataSource = new DataSourceBase();
         dataSource.numberOfRowsPerRequest = 200;
         dataSource.getModelItems = function (params) {
-          var request = params.request;
+          const request = params.request;
           loadRows(request.startRow, request.endRow - request.startRow + 1, request.sortModel, keyword).then(function (result) {
             answer(params, result, sendTotal);
           }, function () {
@@ -293,10 +293,10 @@
       function loadChildRows(parentId, start, count) {
         return new Promise(function (resolve) {
           setTimeout(function () {
-            var total = parentId ? 5 : 300;
-            var items = [];
-            for (var index = start; index < Math.min(start + count, total); index++) {
-              var id = parentId ? parentId + '-' + (index + 1) : 'ASM-' + ('000' + (index + 1)).slice(-4);
+            const total = parentId ? 5 : 300;
+            const items = [];
+            for (let index = start; index < Math.min(start + count, total); index++) {
+              const id = parentId ? parentId + '-' + (index + 1) : 'ASM-' + ('000' + (index + 1)).slice(-4);
               items.push({ tree: id, title: parentId ? '부품 ' + (index + 1) : '어셈블리 ' + (index + 1), status: STATUSES[index % 3], hasChildren: !parentId });
             }
             writeLog('서버: ' + (parentId || '최상위') + ' 의 ' + start + ' ~ ' + (start + count - 1) + ' 요청, ' + items.length + '행 응답');
@@ -306,11 +306,11 @@
       }
 
       function createChildrenGrid() {
-        var dataSource = new DataSourceBase();
+        const dataSource = new DataSourceBase();
         dataSource.getModelItems = function (params) {
-          var request = params.request;
-          var keys = request.groupKeys;
-          var parentId = keys.length ? keys[keys.length - 1] : null;
+          const request = params.request;
+          const keys = request.groupKeys;
+          const parentId = keys.length ? keys[keys.length - 1] : null;
           loadChildRows(parentId, request.startRow, request.endRow - request.startRow + 1).then(function (result) {
             result.items.forEach(function (row) {
               row.stringIdentifier = row.tree;
@@ -337,7 +337,7 @@
       }
       // #endregion reload
 
-      var builders = {
+      const builders = {
         infinite: createInfiniteGrid,
         delayed: createDelayedGrid,
         dataSource: createDataSourceGrid,
@@ -390,7 +390,7 @@
        */
       // #region count
       document.getElementById('btnCount').addEventListener('click', function () {
-        var treeDocument = grid.getTreeDocument();
+        const treeDocument = grid.getTreeDocument();
         writeLog('getModelLength() = ' + grid.getModelLength()
           + ', getRowModelLength() = ' + grid.getRowModelLength()
           + ', TreeDocument 의 행 = ' + treeDocument.getAllDescendants().length

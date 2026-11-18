@@ -19,7 +19,7 @@ CoreEvents/CoreEvents.js (ModelEvents 1~220행, Events 223행~). 호출부: 3DPl
 
 ```js
 require(['DS/CoreEvents/Events'], function (Events) {
-  var token = Events.subscribe({ event: 'myapp/part-saved' }, function (data) {
+  const token = Events.subscribe({ event: 'myapp/part-saved' }, function (data) {
     console.log('저장됨', data.id);
   });
 
@@ -76,9 +76,9 @@ require(['DS/CoreEvents/Events'], function (Events) {
 
 ```js
 require(['DS/CoreEvents/ModelEvents'], function (ModelEvents) {
-  var bus = new ModelEvents();
+  const bus = new ModelEvents();
 
-  var token = bus.subscribe({ event: 'row-selected' }, function (data, token) {
+  const token = bus.subscribe({ event: 'row-selected' }, function (data, token) {
     console.log(data.id);
   });
 
@@ -121,8 +121,8 @@ require(['DS/CoreEvents/ModelEvents'], function (ModelEvents) {
 ### 부모 전파
 
 ```js
-var root = new ModelEvents({ target: 'root' });
-var child = new ModelEvents({ target: 'child', parent: root });
+const root = new ModelEvents({ target: 'root' });
+const child = new ModelEvents({ target: 'child', parent: root });
 
 root.subscribe({ event: 'changed' }, function (e) {
   console.log(e.target, e.data);

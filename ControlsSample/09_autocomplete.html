@@ -45,7 +45,7 @@
     ], function (AutoComplete, TreeDocument, TreeNodeModel, Button) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -59,7 +59,7 @@
         return [].concat(items || []).map(function (node) { return node.options.label; }).join(', ');
       }
 
-      var PEOPLE = [
+      const PEOPLE = [
         { id: 'kcs01', name: '김철수', org: '설계1팀' },
         { id: 'lyh02', name: '이영희', org: '설계2팀' },
         { id: 'pms03', name: '박민수', org: '생산기술팀' },
@@ -70,7 +70,7 @@
       function fakeServerSearch(text) {
         return new Promise(function (resolve) {
           setTimeout(function () {
-            var q = text.toLowerCase();
+            const q = text.toLowerCase();
             resolve(PEOPLE.filter(function (p) { return p.name.indexOf(text) >= 0 || p.id.indexOf(q) >= 0; }));
           }, 400);
         });
@@ -84,7 +84,7 @@
        *   - value 는 고른 항목의 value, selectedItems 는 고른 TreeNodeModel 하나입니다 (배열 아님).
        */
       // #region single
-      var state = new AutoComplete({
+      const state = new AutoComplete({
         placeholder: '상태 고르기',
         multiSearchMode: false,
         allowFreeInputFlag: false,
@@ -109,7 +109,7 @@
        *   - 항목의 grid 에 넣은 객체는 node.options.grid 로 읽습니다.
        */
       // #region search
-      var people = new AutoComplete({
+      const people = new AutoComplete({
         placeholder: '이름이나 아이디 2글자 이상',
         multiSearchMode: true,
         allowFreeInputFlag: false,
@@ -128,7 +128,7 @@
       }).inject(document.getElementById('people'));
 
       people.addEventListener('change', function () {
-        var ids = (people.selectedItems || []).map(function (node) { return node.options.grid.id; });
+        const ids = (people.selectedItems || []).map(function (node) { return node.options.grid.id; });
         log('담당자 change: id=' + ids.join(', ') + ', value=' + JSON.stringify(people.value));
       });
       // #endregion search
@@ -139,9 +139,9 @@
        *   - 그리드에 쓰는 TreeDocument 를 같이 넘기면 그리드 선택도 바뀌므로 후보용 TreeDocument 를 따로 만듭니다.
        */
       // #region tree
-      var categoryDoc = new TreeDocument();
+      const categoryDoc = new TreeDocument();
       [['기구', ['브라켓', '샤프트']], ['전장', ['커넥터', '하네스']]].forEach(function (group) {
-        var parent = new TreeNodeModel({ label: group[0], value: group[0] });
+        const parent = new TreeNodeModel({ label: group[0], value: group[0] });
         group[1].forEach(function (name) {
           parent.addChild(new TreeNodeModel({ label: name, value: group[0] + '/' + name }));
         });
@@ -149,7 +149,7 @@
       });
       categoryDoc.expandAll();
 
-      var category = new AutoComplete({
+      const category = new AutoComplete({
         placeholder: '분류',
         multiSearchMode: false,
         allowFreeInputFlag: false,
@@ -167,13 +167,13 @@
        *   - 직접 친 항목은 node.options.customNode 가 true 입니다.
        */
       // #region free
-      var tags = new AutoComplete({
+      const tags = new AutoComplete({
         placeholder: '태그 (Enter 로 추가)',
         elementsTree: ['긴급', '검토 필요', '고객 요청']
       }).inject(document.getElementById('tags'));
 
       tags.addEventListener('change', function () {
-        var list = (tags.selectedItems || []).map(function (node) {
+        const list = (tags.selectedItems || []).map(function (node) {
           return node.options.label + (node.options.customNode ? ' (직접 입력)' : '');
         });
         log('태그 change: ' + list.join(', '));

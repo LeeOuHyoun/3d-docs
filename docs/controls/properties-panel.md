@@ -16,13 +16,13 @@ require([
   'DS/EditPropWidget/constants/EditPropConstants',
   'DS/EditPropWidget/models/EditPropModel'
 ], function (EditPropWidget, EditPropConstants, EditPropModel) {
-  var panel = new EditPropWidget({
+  const panel = new EditPropWidget({
     typeOfDisplay: EditPropConstants.ALL,
     selectionType: EditPropConstants.NO_SELECTION,
     readOnly: false,
     extraNotif: true
   });
-  var model = new EditPropModel({ objectId: physicalId, metatype: 'businessobject', source: '3DSpace', tenant: platformId });
+  const model = new EditPropModel({ objectId: physicalId, metatype: 'businessobject', source: '3DSpace', tenant: platformId });
   panel.initDatas([model]);
   panel.inject(containerEl);
 });

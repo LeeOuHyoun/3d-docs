@@ -44,14 +44,14 @@
     ], function (UWA, Element, Model, Collection, View) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
       }
 
       /* [1] Model: defaults, validate. 초기화는 init 이 아니라 setup */
-      var Part = Model.extend({
+      const Part = Model.extend({
         defaults: { title: '', state: 'WIP', qty: 0 },
 
         validate: function (attrs) {
@@ -65,9 +65,9 @@
       });
 
       /* [2] Collection: comparator 는 속성 이름 또는 함수 */
-      var Parts = Collection.extend({ model: Part, comparator: 'title' });
+      const Parts = Collection.extend({ model: Part, comparator: 'title' });
 
-      var parts = new Parts([
+      const parts = new Parts([
         { id: 'PRT-0002', title: '샤프트', qty: 4 },
         { id: 'PRT-0001', title: '브라켓', qty: 10 },
         { id: 'PRT-0003', title: '하우징', qty: 1, state: 'RELEASED' }
@@ -78,7 +78,7 @@
       });
 
       /* [3] 행 View: domEvents + listenTo. destroy 에서 stopListening 직접 호출 */
-      var PartRow = View.extend({
+      const PartRow = View.extend({
         tagName: 'div',
         className: 'part-row',
 
@@ -93,7 +93,7 @@
         },
 
         render: function () {
-          var released = this.model.get('state') === 'RELEASED';
+          const released = this.model.get('state') === 'RELEASED';
           this.container.toggleClassName('released', released);
           this.container.setContent([
             { tag: 'span', 'class': 'title', text: this.model.id + '  ' + this.model.get('title') },
@@ -124,7 +124,7 @@
       });
 
       /* [4] 목록 View: Collection 이벤트를 듣고 행 View 를 다시 만듦. render 는 직접 호출 */
-      var PartList = View.extend({
+      const PartList = View.extend({
         className: 'part-list',
 
         setup: function () {
@@ -150,11 +150,11 @@
       new PartList({ collection: parts }).render().inject(document.getElementById('list'));
 
       /* [5] 버튼 */
-      var seq = 4;
+      let seq = 4;
 
       document.getElementById('btnAdd').addEventListener('click', function () {
-        var part = new Part({ id: 'PRT-000' + seq, title: document.getElementById('newTitle').value, qty: Number(document.getElementById('newQty').value) });
-        var error = part.validate(part.toJSON());
+        const part = new Part({ id: 'PRT-000' + seq, title: document.getElementById('newTitle').value, qty: Number(document.getElementById('newQty').value) });
+        const error = part.validate(part.toJSON());
         if (error) {
           log('추가 안 됨: ' + error);
           return;

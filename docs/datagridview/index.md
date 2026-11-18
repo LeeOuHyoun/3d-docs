@@ -22,7 +22,7 @@ require([
   'DS/TreeModel/TreeDocument',
   'DS/TreeModel/TreeNodeModel'
 ], function (DataGridView, TreeDocument, TreeNodeModel) {
-  var treeDocument = new TreeDocument();
+  const treeDocument = new TreeDocument();
   treeDocument.addRoot(new TreeNodeModel({ label: 'PRT-0001', grid: { title: '브라켓' } }));
 
   new DataGridView({

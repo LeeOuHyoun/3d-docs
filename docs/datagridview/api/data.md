@@ -7,7 +7,7 @@ title: 데이터 (TreeDocument)
 그리드에 표시할 데이터입니다. `TreeDocument` 가 데이터 묶음, `TreeNodeModel` 이 행 하나입니다.
 
 ```js
-var treeDocument = new TreeDocument();
+const treeDocument = new TreeDocument();
 treeDocument.prepareUpdate();
 treeDocument.addRoot(new TreeNodeModel({ label: 'PRT-0001', grid: { title: '브라켓' } }));
 treeDocument.pushUpdate();
@@ -22,7 +22,7 @@ treeDocument.pushUpdate();
 이미 만든 그리드에서 데이터를 다시 얻을 때는 `getTreeDocument()` 를 씁니다.
 
 ```js
-var treeDocument = grid.getTreeDocument();
+const treeDocument = grid.getTreeDocument();
 treeDocument.getSelectedNodes();
 ```
 

@@ -41,15 +41,15 @@
     require(['UWA/Core', 'UWA/Element', 'UWA/Event'], function (UWA, Element, UWAEvent) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
       }
 
       /* [1] createElement: 'class', styles, html 배열, events */
-      var stateSpan;
-      var box = UWA.createElement('div', {
+      let stateSpan;
+      const box = UWA.createElement('div', {
         'class': 'part-box',
         styles: { padding: 8, width: 320 },
         html: [
@@ -72,24 +72,24 @@
       }).inject(document.getElementById('boxArea'));
 
       /* [2] 이벤트 위임: 하위 .item 클릭을 한 곳에서. getElement(e) = 선택자에 맞은 요소 */
-      var list = UWA.createElement('div', { 'class': 'part-box' }).inject(document.getElementById('listArea'));
+      const list = UWA.createElement('div', { 'class': 'part-box' }).inject(document.getElementById('listArea'));
       ['PRT-0001', 'PRT-0002', 'PRT-0003'].forEach(function (id) {
         UWA.createElement('div', { 'class': 'item', text: id + ' 클릭', data: { id: id } }).inject(list);
       });
       list.addEvent('click .item', function (e) {
-        var item = UWAEvent.getElement(e);
+        const item = UWAEvent.getElement(e);
         log('위임 클릭 data-id = ' + item.getData('id'));
       });
 
       /* [3] 잘못된 키: className, style 은 동작하지 않음 → 'class', styles */
-      var wrong = UWA.createElement('div', { className: 'red', style: { fontWeight: 'bold' }, text: 'wrong' });
-      var right = UWA.createElement('div', { 'class': 'red', styles: { fontWeight: 'bold' }, text: 'right' });
+      const wrong = UWA.createElement('div', { className: 'red', style: { fontWeight: 'bold' }, text: 'wrong' });
+      const right = UWA.createElement('div', { 'class': 'red', styles: { fontWeight: 'bold' }, text: 'right' });
       document.getElementById('compare').textContent =
         '{ className, style }  → ' + wrong.outerHTML + '\n' +
         "{ 'class', styles }   → " + right.outerHTML;
 
       /* [4] 요소는 'click', 'onClick' 은 실행되지 않음 */
-      var btn = UWA.createElement('button', { text: "addEvent('click') / addEvent('onClick')" })
+      const btn = UWA.createElement('button', { text: "addEvent('click') / addEvent('onClick')" })
         .inject(document.getElementById('boxArea'));
       btn.addEvent('click', function () { log("'click' 핸들러 실행"); });
       btn.addEvent('onClick', function () { log("'onClick' 핸들러 실행 (나오면 안 됨)"); });

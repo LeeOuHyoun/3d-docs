@@ -57,18 +57,18 @@
     ], function (DataGridView, DataGridViewPaginationManager, CollectionViewStatusBar, Find, TreeDocument, TreeNodeModel) {
       'use strict';
 
-      var TITLES = ['브라켓', '샤프트', '하우징', '커버', '베어링'];
-      var STATES = ['작업중', '검토중', '승인'];
-      var OWNERS = ['김철수', '이영희', '박민수'];
+      const TITLES = ['브라켓', '샤프트', '하우징', '커버', '베어링'];
+      const STATES = ['작업중', '검토중', '승인'];
+      const OWNERS = ['김철수', '이영희', '박민수'];
 
       function writeLog(text) {
-        var log = document.getElementById('log');
+        const log = document.getElementById('log');
         log.textContent = text + '\n' + log.textContent;
       }
 
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
-      for (var i = 1; i <= 50; i++) {
+      for (let i = 1; i <= 50; i++) {
         treeDocument.addRoot(new TreeNodeModel({
           label: 'PRT-' + String(i).padStart(4, '0'),
           grid: { title: TITLES[i % 5], status: STATES[i % 3], qty: i * 10, owner: OWNERS[i % 3] }
@@ -86,7 +86,7 @@
        *   - printableFlag: false           : 인쇄용 화면에서 뺄 컬럼
        */
       // #region grid
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         findNavigationMode: 'substring',
         showMatchingCellBackgroundFlag: true,
@@ -141,7 +141,7 @@
        */
       // #region matched
       document.getElementById('btnMatched').addEventListener('click', function () {
-        var rows = grid.getMatchingFindNodeModelArray() || [];
+        const rows = grid.getMatchingFindNodeModelArray() || [];
         writeLog('찾은 행 ' + rows.length + '개: ' + rows.map(function (node) { return node.getLabel(); }).join(', '));
       });
       // #endregion matched
@@ -160,8 +160,8 @@
        */
       // #region pages
       function movePage(step) {
-        var manager = grid.paginationManager;
-        var page = manager.currentPage + step;
+        const manager = grid.paginationManager;
+        const page = manager.currentPage + step;
         if (page < 1 || page > manager.getPageNumber()) return;
         manager.currentPage = page;
         writeLog('페이지 ' + page + ' / ' + manager.getPageNumber());

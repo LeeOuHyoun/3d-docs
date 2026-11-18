@@ -41,7 +41,7 @@
        *   - 프로그레스 : 0 ~ 100 숫자
        *   - 날짜       : Date 객체
        */
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { title: '브라켓', status: '작업중', owners: ['김철수'],          priority: '높음', progress: 20,  approved: false, dueDate: new Date(2026, 10, 10), qty: 10, weight: 1.25, color: '#368ec4', url: { label: '3ds.com', url: 'https://www.3ds.com' }, note: '1차 설계' } },
@@ -69,7 +69,7 @@
        *   pinned            : 'left' / 'right' 로 고정 (기본 'unpinned')
        *   visibleFlag / resizableFlag / sortableFlag : 표시 / 크기조절 / 정렬 가능 여부
        */
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
 
         /* ---- 그리드 전체 표시 옵션 ---- */
@@ -206,7 +206,7 @@
        */
       // #region dump
       document.getElementById('btnDump').addEventListener('click', function () {
-        var rows = treeDocument.getRoots().map(function (node) {
+        const rows = treeDocument.getRoots().map(function (node) {
           return {
             partNo: node.options.label,
             title: node.getAttributeValue('title'),

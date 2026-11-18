@@ -21,7 +21,7 @@ UWA2/js/Utils/InterCom.js. 호출부: Foundation (bps.intercom.server), ENOAEFSt
 
 ```js
 require(['UWA/Utils/InterCom'], function (InterCom) {
-  var server = new InterCom.Server('my.intercom.server');
+  const server = new InterCom.Server('my.intercom.server');
 
   server.addListener('onPartSelected', function (data, info) {
     console.log('선택된 부품', data.id);
@@ -36,7 +36,7 @@ require(['UWA/Utils/InterCom'], function (InterCom) {
 
 ```js
 require(['UWA/Utils/InterCom'], function (InterCom) {
-  var socket = new InterCom.Socket('my.widget.socket');
+  const socket = new InterCom.Socket('my.widget.socket');
   socket.subscribeServer('my.intercom.server', window.parent, targetOrigin);
 
   socket.addListener('onRefresh', function (data) {

@@ -20,7 +20,7 @@ Tweakers.js 의 TypeRepresentationFactory, TypeRepresentationDirectory, TweakerE
 저장소는 기존 키를 덮어쓰지 않는 방식으로 합칩니다. 같은 이름으로 두 번 등록하면 처음 것이 남고 오류도 나지 않습니다 (`registerEnum`, `registerTypeRepresentations` 모두). 그래서 샘플은 `getRegisteredEnum` / `getRegisteredTypeRepresentation` 으로 먼저 확인합니다. 목록을 바꾸려면 등록된 객체를 직접 고칩니다.
 
 ```js
-var typeRep = factory.getRegisteredTypeRepresentation('partStatusCombo');
+const typeRep = factory.getRegisteredTypeRepresentation('partStatusCombo');
 if (typeRep) {
   typeRep.semantics.possibleValues = newValues;
 } else {

@@ -44,7 +44,7 @@
     ], function (UWA, Dialog, Panel, ImmersiveFrame, Button, LineEditor) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -60,11 +60,11 @@
 
       /* [1] 표준 버튼 Ok / Cancel */
       addButton('bodyButtons', 'Ok / Cancel', function () {
-        var editor = new LineEditor({ placeholder: '변경 사유', requiredFlag: true });
-        var body = UWA.createElement('div', { styles: { padding: 12 } });
+        const editor = new LineEditor({ placeholder: '변경 사유', requiredFlag: true });
+        const body = UWA.createElement('div', { styles: { padding: 12 } });
         editor.inject(body);
 
-        var dlg = new Dialog({
+        const dlg = new Dialog({
           title: '승인',
           content: body,
           modalFlag: true,
@@ -99,7 +99,7 @@
 
       /* [3] 체크박스 */
       addButton('bodyButtons', '체크박스', function () {
-        var dlg = new Dialog({
+        const dlg = new Dialog({
           title: '삭제',
           content: textBody('PRT-0001 을 삭제합니다.'),
           modalFlag: true,
@@ -113,8 +113,8 @@
 
       /* [4] 확인 묻기 */
       function confirmDialog(title, message, callback) {
-        var answered = false;
-        var dlg = new Dialog({
+        let answered = false;
+        const dlg = new Dialog({
           title: title,
           content: textBody(message),
           modalFlag: true,
@@ -133,7 +133,7 @@
       });
 
       /* [5] 숨겼다 다시 보이기 (autoCloseFlag: false) */
-      var reusable;
+      let reusable;
       addButton('bodyButtons', '다시 쓰는 창', function () {
         if (!reusable) {
           reusable = new Dialog({
@@ -149,8 +149,8 @@
       });
 
       /* [6] ImmersiveFrame 과 Panel */
-      var frameArea = document.getElementById('frameArea');
-      var frame = new ImmersiveFrame();
+      const frameArea = document.getElementById('frameArea');
+      const frame = new ImmersiveFrame();
       frame.inject(frameArea);
       frame.setContentInBackgroundLayer(UWA.createElement('div', { 'class': 'bg', text: '배경 층 (그리드 같은 본 화면 자리)' }));
 
@@ -164,7 +164,7 @@
         });
       });
 
-      var panel;
+      let panel;
       addButton('frameButtons', '오른쪽 Panel', function () {
         if (panel) { return; }
         panel = new Panel({

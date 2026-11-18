@@ -7,11 +7,11 @@ title: 목록, 트리, 타일 뷰 API
 카드 컨트롤(`Responsive*View`), 트리(`TreeBase`, `TreeNodeBase`, `Tree`, `TreeNode`), `Tile`, 옛 `ThumbnailView` / `TileView` 의 옵션, 속성, 메서드, 이벤트입니다. 사용법은 [목록, 트리, 타일 뷰](/controls/collection-views) 에 있습니다.
 
 ```js
-var tile = new ResponsiveTileView({ title: 'PRT-0001', statusbarIcons: ['trash'] }).inject(el);
+const tile = new ResponsiveTileView({ title: 'PRT-0001', statusbarIcons: ['trash'] }).inject(el);
 tile.subtitle = '브라켓';
 tile.addEventListener('StatusbarIconPointerDown', function (e) { console.log(e.options.iconIndex); });
 
-var tree = new TreeBase({ roots: [{ label: 'A', children: [{ label: 'B' }] }] }).inject(el2);
+const tree = new TreeBase({ roots: [{ label: 'A', children: [{ label: 'B' }] }] }).inject(el2);
 tree.onNodeClick(function (node) { console.log(node.getLabel()); });
 ```
 

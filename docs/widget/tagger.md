@@ -12,7 +12,7 @@ TagNavigatorProxy/TagNavigatorProxy.js (위젯 쪽: `TagNavigatorProxy.createPro
 
 ```js
 require(['DS/TagNavigatorProxy/TagNavigatorProxy'], function (TagNavigatorProxy) {
-  var proxy = TagNavigatorProxy.createProxy({
+  const proxy = TagNavigatorProxy.createProxy({
     widgetId: widget.id,
     filteringMode: 'WithFilteringServices'
   });
@@ -126,7 +126,7 @@ require(['DS/TagNavigatorProxy/TagNavigatorProxy'], function (TagNavigatorProxy)
 ### 서버로 거르기 (FilteringOnServer)
 
 ```js
-var proxy = TagNavigatorProxy.createProxy({
+const proxy = TagNavigatorProxy.createProxy({
   widgetId: widget.id,
   filteringMode: 'FilteringOnServer'
 });

@@ -174,7 +174,7 @@ toolbar.pushUpdateView();
 <<< @/../TweakersSample/03_generatedToolbar.html#read{js}
 
 ```js
-var node = toolbar.getNodeModelByID('keyword');
+const node = toolbar.getNodeModelByID('keyword');
 node.getAttributeValue('data');       // 값
 node._associatedView;                 // 항목의 편집기 (onReady 뒤)
 ```

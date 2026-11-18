@@ -43,7 +43,7 @@
       'use strict';
 
       function writeLog(text) {
-        var log = document.getElementById('log');
+        const log = document.getElementById('log');
         log.textContent = text + '\n' + log.textContent;
       }
 
@@ -55,8 +55,8 @@
        *   badges: 아이콘 모서리에 겹쳐 그리는 작은 아이콘 { topLeft, topRight, bottomLeft, bottomRight }
        */
       // #region icons
-      var ICON_ASSEMBLY = [{ iconName: 'folder', fontIconFamily: 1 }];
-      var ICON_PART = [{ iconName: 'doc', fontIconFamily: 1 }];
+      const ICON_ASSEMBLY = [{ iconName: 'folder', fontIconFamily: 1 }];
+      const ICON_PART = [{ iconName: 'doc', fontIconFamily: 1 }];
 
       function createPart(label, title, qty) {
         return new TreeNodeModel({ label: label, icons: ICON_PART, grid: { title: title, qty: qty } });
@@ -76,7 +76,7 @@
        *     행을 펼칠 때 node.preExpandDone() 이 불릴 때까지 기다린다. 기다리는 동안 펼침 아이콘은 "펼치는 중" 상태로 표시된다.
        */
       // #region data
-      var treeDocument = new TreeDocument({ useAsyncPreExpand: true });
+      const treeDocument = new TreeDocument({ useAsyncPreExpand: true });
       treeDocument.prepareUpdate();
 
       treeDocument.addRoot(new TreeNodeModel({
@@ -98,7 +98,7 @@
         ]
       }));
 
-      var housing = new TreeNodeModel({ label: 'ASM-0002', icons: ICON_ASSEMBLY, grid: { title: '하우징 어셈블리', qty: 1 } });
+      const housing = new TreeNodeModel({ label: 'ASM-0002', icons: ICON_ASSEMBLY, grid: { title: '하우징 어셈블리', qty: 1 } });
       housing.addChild(createPart('PRT-0003', '하우징', 1));
       housing.addChild(createPart('PRT-0004', '커버', 1));
       treeDocument.addRoot(housing);
@@ -136,7 +136,7 @@
       }
 
       treeDocument.onPreExpand(function (e) {
-        var node = e.target;
+        const node = e.target;
         if (node.hasChildren()) {
           node.preExpandDone();
           return;
@@ -163,7 +163,7 @@
        *   treeNodeCellOptions 로 트리 컬럼 모양을 바꾼다. (expanderStyle: 'classic' 기본 / 'triangle' / 'none')
        */
       // #region grid
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         rowSelection: 'single',
         treeNodeCellOptions: { expanderStyle: 'triangle', depthIncrement: 22 },
@@ -184,7 +184,7 @@
        *   삭제 : node.remove()          하위 행까지 같이 없어진다.
        */
       // #region actions
-      var newPartCount = 0;
+      let newPartCount = 0;
 
       document.getElementById('btnExpandAll').addEventListener('click', function () {
         treeDocument.expandAll();
@@ -193,7 +193,7 @@
         treeDocument.collapseAll();
       });
       document.getElementById('btnAddChild').addEventListener('click', function () {
-        var parent = treeDocument.getSelectedNodes()[0];
+        const parent = treeDocument.getSelectedNodes()[0];
         if (!parent) {
           writeLog('하위 행을 붙일 행을 먼저 선택하세요.');
           return;
@@ -203,7 +203,7 @@
         parent.expand();
       });
       document.getElementById('btnRemove').addEventListener('click', function () {
-        var node = treeDocument.getSelectedNodes()[0];
+        const node = treeDocument.getSelectedNodes()[0];
         if (node) {
           node.remove();
         }
@@ -218,8 +218,8 @@
        */
       // #region read
       document.getElementById('btnDump').addEventListener('click', function () {
-        var lines = treeDocument.getAllDescendants().map(function (node) {
-          var parent = node.getParent();
+        const lines = treeDocument.getAllDescendants().map(function (node) {
+          const parent = node.getParent();
           return new Array(node.getNodeDepth() + 1).join('    ') + node.getLabel()
             + '  (부모: ' + (node.isRoot() ? '없음' : parent.getLabel()) + ', 하위 ' + (node.getChildren() || []).length + '개)';
         });

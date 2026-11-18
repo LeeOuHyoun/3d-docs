@@ -36,8 +36,8 @@ require(['DS/WebappsUtils/WebappsUtils'], function (WebappsUtils) {
 - 폴더 끝을 `/` 로 넘기면 아이콘 폴더 주소를 얻습니다. ENOVIA 코드는 `getWebappsAssetUrl('3DPlay', 'icons/32/')` 뒤에 파일 이름을 붙여 씁니다.
 
 ```js
-var iconUrl = WebappsUtils.getWebappsAssetUrl('MyWidget', 'icons/part.png');
-var workerUrl = WebappsUtils.getWebappsBaseUrl() + 'MyWidget/worker.js';
+const iconUrl = WebappsUtils.getWebappsAssetUrl('MyWidget', 'icons/part.png');
+const workerUrl = WebappsUtils.getWebappsBaseUrl() + 'MyWidget/worker.js';
 ```
 
 ## 로드될 때 하는 일

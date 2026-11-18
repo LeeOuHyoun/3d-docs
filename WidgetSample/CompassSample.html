@@ -38,17 +38,17 @@
     ], function (UWA, CompassPubSub, Button, LineEditor) {
       'use strict';
 
-      var DEFAULT_ROWS = [
+      const DEFAULT_ROWS = [
         { objectId: 'XX-0001', objectType: 'VPMReference', displayName: 'MyProduct-01' },
         { objectId: 'XX-0002', objectType: 'VPMReference', displayName: 'MyProduct-02' },
         { objectId: 'XX-0003', objectType: 'Document', displayName: 'MySpec-01' }
       ];
 
-      var rows = [];
-      var selected = [];
-      var logEl;
-      var tableHolder;
-      var contextEditor;
+      let rows = [];
+      let selected = [];
+      let logEl;
+      let tableHolder;
+      let contextEditor;
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -108,8 +108,8 @@
       // #endregion launch
 
       function onSelectionChange() {
-        var contextId = contextEditor.value;
-        var items = selected.map(function (row) {
+        const contextId = contextEditor.value;
+        const items = selected.map(function (row) {
           return toCompassItem(row, contextId);
         });
         publishSelection(items);
@@ -117,7 +117,7 @@
       }
 
       function toggleRow(row, tr) {
-        var index = selected.indexOf(row);
+        const index = selected.indexOf(row);
         if (index === -1) {
           selected.push(row);
         } else {
@@ -129,13 +129,13 @@
 
       function drawTable() {
         tableHolder.empty();
-        var table = UWA.createElement('table', { 'class': 'cp-table' }).inject(tableHolder);
-        var head = UWA.createElement('tr').inject(table);
+        const table = UWA.createElement('table', { 'class': 'cp-table' }).inject(tableHolder);
+        const head = UWA.createElement('tr').inject(table);
         ['displayName', 'objectId', 'objectType'].forEach(function (text) {
           UWA.createElement('th', { text: text }).inject(head);
         });
         rows.forEach(function (row) {
-          var tr = UWA.createElement('tr', { 'class': 'cp-item' }).inject(table);
+          const tr = UWA.createElement('tr', { 'class': 'cp-item' }).inject(table);
           [row.displayName, row.objectId, row.objectType].forEach(function (text) {
             UWA.createElement('td', { text: text }).inject(tr);
           });
@@ -146,7 +146,7 @@
       }
 
       function build() {
-        var page = UWA.createElement('div', { 'class': 'cp-page' });
+        const page = UWA.createElement('div', { 'class': 'cp-page' });
 
         UWA.createElement('div', {
           'class': 'cp-note',
@@ -154,26 +154,26 @@
         }).inject(page);
 
         UWA.createElement('h3', { text: '목록' }).inject(page);
-        var rowsRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
+        const rowsRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
         UWA.createElement('label', { text: '행 (JSON)' }).inject(rowsRow);
-        var rowsEl = UWA.createElement('textarea').inject(rowsRow);
+        const rowsEl = UWA.createElement('textarea').inject(rowsRow);
         rowsEl.value = JSON.stringify(DEFAULT_ROWS, null, 1);
 
-        var contextRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
+        const contextRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
         UWA.createElement('label', { text: 'contextId' }).inject(contextRow);
         contextEditor = new LineEditor({ value: '', placeholder: 'SecurityContext (선택)', sizeInCharNumber: 40 });
         contextEditor.inject(contextRow);
 
-        var drawRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
+        const drawRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
         new Button({ label: '목록 다시 그리기', onClick: onRedraw }).inject(drawRow);
         new Button({ label: '모두 풀기', onClick: onClear }).inject(drawRow);
 
         tableHolder = UWA.createElement('div').inject(page);
 
         UWA.createElement('h3', { text: '앱 실행 (launchApp)' }).inject(page);
-        var launchRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
+        const launchRow = UWA.createElement('div', { 'class': 'cp-row' }).inject(page);
         UWA.createElement('label', { text: '앱 ID' }).inject(launchRow);
-        var appIdEditor = new LineEditor({ value: 'ENOLCMT_AP', sizeInCharNumber: 20 });
+        const appIdEditor = new LineEditor({ value: 'ENOLCMT_AP', sizeInCharNumber: 20 });
         appIdEditor.inject(launchRow);
         new Button({ label: '실행', emphasize: 'primary', onClick: onLaunch }).inject(launchRow);
 
@@ -199,7 +199,7 @@
         }
 
         function onLaunch() {
-          var appId = appIdEditor.value;
+          const appId = appIdEditor.value;
           log('launchApp ' + appId);
           launchApp(appId, function (ok, result) {
             log('launchAppCallback ' + (ok ? '성공' : '실패') + ' ' + JSON.stringify(result));

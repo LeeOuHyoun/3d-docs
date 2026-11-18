@@ -41,8 +41,8 @@
     ], function (GeneratedToolbar, TypeRepresentationFactory, TypeEnums) {
       'use strict';
 
-      var logEl = document.getElementById('log');
-      var view = {
+      const logEl = document.getElementById('log');
+      const view = {
         dirty: false,
         log: function (text) {
           logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -55,7 +55,7 @@
        *   저장소는 전역 하나라서 같은 이름은 한 번만 등록된다.
        */
       // #region register
-      var factory = new TypeRepresentationFactory();
+      const factory = new TypeRepresentationFactory();
       if (!factory.getRegisteredEnum('sampleViewMode')) {
         factory.registerEnum('sampleViewMode', ['목록', '썸네일', '상세']);
       }
@@ -131,7 +131,7 @@
               disabled: !view.dirty,
               icon: { iconName: 'floppy', fontIconFamily: 1 },
               value: function (e) {
-                var keyword = e.context.toolbar.getNodeModelByID('keyword');
+                const keyword = e.context.toolbar.getNodeModelByID('keyword');
                 e.context.executionContext.log('저장 클릭 (keyword = ' + (keyword && keyword.getAttributeValue('data')) + ')');
                 setDirty(e.context.toolbar, false);
               }
@@ -218,7 +218,7 @@
               possibleValues: [TypeEnums.Layout.DataGridView, TypeEnums.Layout.SmallTile, TypeEnums.Layout.BigTile]
             },
             onNodeUpdate: function (nodeModel) {
-              var data = nodeModel.getAttributeValue('data');
+              const data = nodeModel.getAttributeValue('data');
               view.log('onNodeUpdate layout = ' + (data.value || data));
             }
           }
@@ -237,7 +237,7 @@
        *   modelUpdated : 항목 하나가 바뀔 때마다 (onNodeUpdate 다음)
        */
       // #region create
-      var toolbar = new GeneratedToolbar({
+      const toolbar = new GeneratedToolbar({
         items: GeneratedToolbar.prototype.createTreeDocument({ entries: buildEntries() }),
         executionContext: view,
         overflowManagement: 'dropdown',
@@ -261,8 +261,8 @@
       // #region read
       document.getElementById('btnRead').addEventListener('click', function () {
         view.log('읽기  ' + ['keyword', 'viewMode', 'zoomRate', 'layout'].map(function (id) {
-          var node = toolbar.getNodeModelByID(id);
-          var value = node ? node.getAttributeValue('data') : '(없음)';
+          const node = toolbar.getNodeModelByID(id);
+          const value = node ? node.getAttributeValue('data') : '(없음)';
           return id + '=' + (value && value.value ? value.value : value);
         }).join(', '));
       });
@@ -273,7 +273,7 @@
        *   visibleFlag, 값({ grid: { data } }) 모두 updateNodeModel 하나로 바로 바뀐다.
        */
       // #region update
-      var searchVisible = true;
+      let searchVisible = true;
       document.getElementById('btnToggleSearch').addEventListener('click', function () {
         searchVisible = !searchVisible;
         toolbar.updateNodeModel('keyword', { visibleFlag: searchVisible });
@@ -292,7 +292,7 @@
        */
       // #region replace
       document.getElementById('btnReplace').addEventListener('click', function () {
-        var entries = buildEntries().filter(function (entry) {
+        const entries = buildEntries().filter(function (entry) {
           return entry.id !== 'viewMode';
         });
         toolbar.updateModel({ entries: entries });

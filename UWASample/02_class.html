@@ -35,7 +35,7 @@
     ], function (UWA, Class, Options, Events) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent += text + '\n';
@@ -46,7 +46,7 @@
       }
 
       /* [1] Class.extend(mixin..., 정의): init = 생성자 */
-      var PartLoader = Class.extend(Options, Events, {
+      const PartLoader = Class.extend(Options, Events, {
         name: 'part-loader',
         defaultOptions: { pageSize: 50, filter: { state: 'WIP' } },
 
@@ -66,7 +66,7 @@
       });
 
       /* [2] 상속: defaultOptions 는 깊게 합쳐짐, _parent = 부모의 같은 이름 메서드 */
-      var ReleasedPartLoader = PartLoader.extend({
+      const ReleasedPartLoader = PartLoader.extend({
         defaultOptions: { filter: { state: 'RELEASED' } },
 
         init: function (options) {
@@ -75,8 +75,8 @@
         },
 
         load: function () {
-          var parentLoad = this._parent;
-          var self = this;
+          const parentLoad = this._parent;
+          const self = this;
           log('  ReleasedPartLoader.load → 100ms 뒤 부모 load (_parent 를 변수에 담아 둠)');
           setTimeout(function () { parentLoad.call(self); }, 100);
         }
@@ -84,7 +84,7 @@
 
       document.getElementById('btnClass').addEventListener('click', function () {
         log('--- new ReleasedPartLoader({ filter: { owner: "me" } })');
-        var loader = new ReleasedPartLoader({ filter: { owner: 'me' } });
+        const loader = new ReleasedPartLoader({ filter: { owner: 'me' } });
         log('  instanceof PartLoader = ' + (loader instanceof PartLoader) + ', instanceof Events = ' + (loader instanceof Events));
         log('  getOption("pageSize") = ' + loader.getOption('pageSize'));
         loader.load();
@@ -93,7 +93,7 @@
       /* [3] Events: 인자 배열이 펼쳐짐, false 를 돌려주면 뒤 리스너 중단, priority */
       document.getElementById('btnEvents').addEventListener('click', function () {
         log('--- Events');
-        var loader = new PartLoader();
+        const loader = new PartLoader();
         loader.addEvent('onSave', function (id, title) { log('  리스너 A (priority 0, 등록 1번째) ' + id + ' ' + title + ' → false 반환'); return false; });
         loader.addEvent('onSave', function () { log('  리스너 B (priority 5, 등록 2번째) → 먼저 실행'); }, loader, 5);
         loader.addEvent('onSave', function () { log('  리스너 C (A 가 false 를 돌려줘서 실행되지 않음)'); });
@@ -108,9 +108,9 @@
         log('  extend deep ' + json(UWA.extend({ o: { x: 1, y: 1 } }, { o: { x: 9 } }, true)));
         log('  extend(t, a, b) ' + json(UWA.extend({}, { a: 1 }, { b: 2 })) + '   (b 는 합쳐지지 않음)');
 
-        var src = { list: [1, 2], when: new Date(0) };
-        var deep = UWA.clone(src);
-        var shallow = UWA.clone(src, false);
+        const src = { list: [1, 2], when: new Date(0) };
+        const deep = UWA.clone(src);
+        const shallow = UWA.clone(src, false);
         log('  clone 깊게: list 같은 배열? ' + (deep.list === src.list) + ', 얕게: ' + (shallow.list === src.list));
         log('  clone(new Map()) → ' + UWA.typeOf(UWA.clone(new Map([['k', 1]]))) + ' ' + json(UWA.clone(new Map([['k', 1]]))));
 

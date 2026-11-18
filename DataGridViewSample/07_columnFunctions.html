@@ -43,7 +43,7 @@
       'use strict';
 
       /* 종류(kind)별 재질 콤보 목록 : 행마다 다른 콤보 목록의 재료 */
-      var MATERIALS_BY_KIND = {
+      const MATERIALS_BY_KIND = {
         '금속': ['SS400', 'S45C', 'AL6061', 'SUS304'],
         '수지': ['ABS', 'PC', 'POM'],
         '전장': ['FR-4', 'CEM-3']
@@ -53,7 +53,7 @@
        * 검사값 컬럼은 행마다 타입이 다르다.
        *   checkType 'N' = 숫자, 'B' = 예/아니오, 'T' = 글자
        */
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { title: '브라켓', kind: '금속', material: 'SS400',  qty: 10, price: 1200,  status: '작업중', progress: 20,  owner: '김철수', checkType: 'N', checkValue: 12 } },
@@ -82,12 +82,12 @@
       }
 
       function isLocked(cellInfos) {
-        var row = rowOf(cellInfos);
+        const row = rowOf(cellInfos);
         return !!row && row.status === '승인';
       }
       // #endregion rowOf
 
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         showColumnBorderFlag: true,
         columns: [
@@ -111,11 +111,11 @@
             editableFlag: true,
             editionPolicy: 'EditionOnClick',
             getCellSemantics: function (cellInfos) {
-              var row = rowOf(cellInfos);
+              const row = rowOf(cellInfos);
               return { possibleValues: (row && MATERIALS_BY_KIND[row.kind]) || [] };
             },
             getCellEditableState: function (cellInfos) {
-              var row = rowOf(cellInfos);
+              const row = rowOf(cellInfos);
               return !!row && !!MATERIALS_BY_KIND[row.kind] && !isLocked(cellInfos);
             },
             getCellClassName: function (cellInfos) {
@@ -132,7 +132,7 @@
           {
             text: '수량', dataIndex: 'qty', width: 70, typeRepresentation: 'integer', editableFlag: true,
             hasCellValue: function (cellInfos) {
-              var row = rowOf(cellInfos);
+              const row = rowOf(cellInfos);
               return !!row && row.kind !== '문서';
             },
             getCellEditableState: function (cellInfos) {
@@ -142,7 +142,7 @@
           {
             text: '단가', dataIndex: 'price', width: 90, typeRepresentation: 'integer', editableFlag: true,
             hasCellValue: function (cellInfos) {
-              var row = rowOf(cellInfos);
+              const row = rowOf(cellInfos);
               return !!row && row.kind !== '문서';
             },
             getCellEditableState: function (cellInfos) {
@@ -167,11 +167,11 @@
             typeRepresentation: 'integer',
             alignment: 'far',
             getCellValue: function (cellInfos) {
-              var row = rowOf(cellInfos);
+              const row = rowOf(cellInfos);
               return row && row.kind !== '문서' ? row.qty * row.price : undefined;
             },
             getCellValueForSort: function (nodeModel) {
-              var row = nodeModel.options.grid;
+              const row = nodeModel.options.grid;
               return row.kind === '문서' ? 0 : row.qty * row.price;
             }
           },
@@ -195,7 +195,7 @@
             width: 150,
             typeRepresentation: 'integer',
             getCellClassName: function (cellInfos) {
-              var row = rowOf(cellInfos);
+              const row = rowOf(cellInfos);
               if (!row) {
                 return '';
               }
@@ -205,7 +205,7 @@
               return row.progress === 100 ? 'cell-done' : '';
             },
             getCellTooltip: function (cellInfos) {
-              var row = rowOf(cellInfos);
+              const row = rowOf(cellInfos);
               return { shortHelp: row ? '담당: ' + row.owner + ' / 진행률 ' + row.progress + '%' : '진행률' };
             }
           },
@@ -223,7 +223,7 @@
             editableFlag: true,
             editionPolicy: 'EditionOnClick',
             getCellTypeRepresentation: function (cellInfos) {
-              var row = rowOf(cellInfos);
+              const row = rowOf(cellInfos);
               if (row && row.checkType === 'N') {
                 return 'integer';
               }

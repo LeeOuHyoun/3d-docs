@@ -34,10 +34,10 @@ Scroller, Stack, LayerSet, Deck 은 `UWA/Controls/Abstract` 계열이라 `publis
 
 ```js
 require(['DS/Controls/Accordeon'], function (Accordeon) {
-  var general = UWA.createElement('div', { text: '일반 속성 ...' });
-  var history = UWA.createElement('div', { text: '이력 ...' });
+  const general = UWA.createElement('div', { text: '일반 속성 ...' });
+  const history = UWA.createElement('div', { text: '이력 ...' });
 
-  var acc = new Accordeon({
+  const acc = new Accordeon({
     exclusive: false,
     style: 'simple',
     items: [
@@ -46,7 +46,7 @@ require(['DS/Controls/Accordeon'], function (Accordeon) {
     ]
   }).inject(el);
 
-  var id = acc.addItem({ header: '첨부', content: UWA.createElement('div', { text: '첨부 ...' }) });
+  const id = acc.addItem({ header: '첨부', content: UWA.createElement('div', { text: '첨부 ...' }) });
   acc.expandItem(acc.getIndexFromId(id));
 
   acc.addEventListener('expand', function (e) {
@@ -94,7 +94,7 @@ require(['DS/Controls/Accordeon'], function (Accordeon) {
 
 ```js
 require(['DS/Controls/Tab'], function (Tab) {
-  var tab = new Tab({ displayStyle: 'strip' }).inject(el);
+  const tab = new Tab({ displayStyle: 'strip' }).inject(el);
   tab.tabBar.centeredFlag = false;
   tab.tabBar.pinFlag = false;
 
@@ -170,7 +170,7 @@ tab.addEventListener('close', function (e) {
 
 ```js
 require(['DS/Controls/TabBar'], function (TabBar) {
-  var bar = new TabBar({ displayStyle: 'strip', centeredFlag: false, pinFlag: false }).inject(el);
+  const bar = new TabBar({ displayStyle: 'strip', centeredFlag: false, pinFlag: false }).inject(el);
   bar.add({ label: '속성', value: 'props' });
   bar.add({ label: '작업', value: 'tasks' });
 
@@ -211,9 +211,9 @@ Tab 을 쓰면 `tab.tabBar` 가 이 TabBar 입니다. 이벤트는 Tab 쪽(`chan
 
 ```js
 require(['DS/Controls/Toolbar', 'DS/Controls/Button'], function (Toolbar, Button) {
-  var bar = new Toolbar({ overflowManagement: 'dropdown' }).inject(el);
-  var add = new Button({ label: '추가', icon: { iconName: 'plus', fontIconFamily: WUXManagedFontIcons.Font3DS } });
-  var del = new Button({ label: '삭제', icon: { iconName: 'trash', fontIconFamily: WUXManagedFontIcons.Font3DS } });
+  const bar = new Toolbar({ overflowManagement: 'dropdown' }).inject(el);
+  const add = new Button({ label: '추가', icon: { iconName: 'plus', fontIconFamily: WUXManagedFontIcons.Font3DS } });
+  const del = new Button({ label: '삭제', icon: { iconName: 'trash', fontIconFamily: WUXManagedFontIcons.Font3DS } });
 
   bar.add('element', { element: add.getContent(), position: 'near', priority: 10 });
   bar.add('separator', { position: 'near' });
@@ -232,7 +232,7 @@ require(['DS/Controls/Toolbar', 'DS/Controls/Button'], function (Toolbar, Button
 
 ```js
 require(['DS/Controls/Breadcrumb'], function (Breadcrumb) {
-  var crumb = new Breadcrumb({ value: ['전체', '조립품', 'PRT-0001'], mode: Breadcrumb.MODE.NAVIGATION }).inject(el);
+  const crumb = new Breadcrumb({ value: ['전체', '조립품', 'PRT-0001'], mode: Breadcrumb.MODE.NAVIGATION }).inject(el);
   crumb.addEventListener('change', function (e) {
     console.log('경로', e.dsModel.value);
   });
@@ -250,7 +250,7 @@ require(['DS/Controls/Breadcrumb'], function (Breadcrumb) {
 
 ```js
 require(['DS/Controls/GroupBox'], function (GroupBox) {
-  var box = new GroupBox({ label: '기본 정보', content: UWA.createElement('div', { text: '...' }) }).inject(el);
+  const box = new GroupBox({ label: '기본 정보', content: UWA.createElement('div', { text: '...' }) }).inject(el);
   box.iconDimension = 20;
   box.icon = { iconName: 'attributes', fontIconFamily: WUXManagedFontIcons.Font3DS };
 });
@@ -265,7 +265,7 @@ require(['DS/Controls/GroupBox'], function (GroupBox) {
 
 ```js
 require(['DS/Controls/Flyout'], function (Flyout) {
-  var fly = new Flyout({
+  const fly = new Flyout({
     icon: 'cog',
     onClick: function () { console.log('기본 동작'); },
     extendedView: { menuModel: [{ type: 'PushItem', title: '설정', action: { callback: function () { console.log('설정'); } } }] }
@@ -283,8 +283,8 @@ require(['DS/Controls/Flyout'], function (Flyout) {
 
 ```js
 require(['DS/Controls/BadgesContainer'], function (BadgesContainer) {
-  var approved = { text: '승인', emphasize: 'success' };
-  var badges = new BadgesContainer({
+  const approved = { text: '승인', emphasize: 'success' };
+  const badges = new BadgesContainer({
     value: [approved, { text: 'v2', callback: function (info) { console.log('누름', info.text); } }]
   }).inject(el);
 
@@ -304,9 +304,9 @@ require(['DS/Controls/BadgesContainer'], function (BadgesContainer) {
 
 ```js
 require(['DS/Controls/Scroller'], function (Scroller) {
-  var scroller = new Scroller(listEl, { scrollEndTimeout: 300 }).inject(parentEl);
+  const scroller = new Scroller(listEl, { scrollEndTimeout: 300 }).inject(parentEl);
   scroller.onScrollEnd(function () {
-    var pos = this.getPosition();
+    const pos = this.getPosition();
     console.log('멈춤', pos.x, pos.y);
   });
 });
@@ -326,7 +326,7 @@ Scroller 는 Ctrl, Shift 없이 굴린 휠을 막고(`preventDefault`) 세로로
 
 ```js
 require(['DS/Controls/Stack'], function (Stack) {
-  var stack = new Stack({ orientation: 'vertical' });
+  const stack = new Stack({ orientation: 'vertical' });
   stack.append('위 칸', { weight: 1 });
   stack.append('아래 칸', { weight: 3 });
   stack.inject(el);
@@ -342,7 +342,7 @@ require(['DS/Controls/Stack'], function (Stack) {
 
 ```js
 require(['DS/Controls/LayerSet'], function (LayerSet) {
-  var layers = new LayerSet({ styles: { position: 'relative', height: '300px' } }).inject(el);
+  const layers = new LayerSet({ styles: { position: 'relative', height: '300px' } }).inject(el);
   layers.addLayer(UWA.createElement('div', { text: '바닥' }));
   layers.addLayer(UWA.createElement('div', { text: '오른쪽 위' }), { top: 0, right: 0 });
 });
@@ -376,7 +376,7 @@ require(['DS/Controls/Deck'], function (Deck) {
 
 ```js
 require(['DS/Controls/Stepper'], function (Stepper) {
-  var stepper = new Stepper({
+  const stepper = new Stepper({
     steps: [
       { title: '작성', description: '기본 정보 입력' },
       { title: '검토' },
@@ -429,7 +429,7 @@ require(['DS/Controls/DropdownButton'], function (DropdownButton) {
 
 ```js
 require(['DS/Controls/ModeChooser'], function (ModeChooser) {
-  var chooser = new ModeChooser({
+  const chooser = new ModeChooser({
     type: 'buttons',
     modesList: [
       { label: '목록', icon: 'view-list', value: 'list' },

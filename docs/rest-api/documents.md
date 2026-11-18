@@ -41,7 +41,7 @@ DocumentManagement/DocumentManagement.js (`DocumentFoundationAjax` 1~186행, `In
 spaceRequest(spaceUrl, '/resources/v1/modeler/documents/' + docId + '?$include=versions', {
   securityContext: securityContext
 }).then(function (res) {
-  var doc = res.data[0];
+  const doc = res.data[0];
   console.log(doc.dataelements.title, doc.dataelements.revision);
   (doc.relateddata.files || []).forEach(function (f) {
     console.log(f.id, f.dataelements.title);
@@ -83,7 +83,7 @@ WAFData.authenticatedRequest(spaceUrl + '/resources/v1/modeler/documents/?$inclu
 ## 만들기 (파일 없이)
 
 ```js
-var body = {
+const body = {
   csrf: csrf,
   data: [{
     type: 'Document',
@@ -114,10 +114,10 @@ spaceRequest(spaceUrl, '/resources/v1/modeler/documents', { method: 'POST', body
 ```js
 function checkinFile(ticket, file) {
   return new Promise(function (resolve, reject) {
-    var form = new FormData();
+    const form = new FormData();
     form.append(ticket.ticketparamname, ticket.ticket);
     form.append('file_0', file, file.name);
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open('POST', ticket.ticketURL, true);
     xhr.onload = function () { xhr.status === 200 ? resolve(xhr.responseText) : reject(xhr); };
     xhr.onerror = reject;
@@ -159,7 +159,7 @@ spaceRequest(spaceUrl, '/resources/v1/modeler/documents/' + docId + '/files/Down
   securityContext: securityContext,
   body: { csrf: csrf, data: [{ id: fileId }] }
 }).then(function (res) {
-  var ticketURL = res.data[0].dataelements.ticketURL;
+  const ticketURL = res.data[0].dataelements.ticketURL;
   console.log(ticketURL);
 });
 ```

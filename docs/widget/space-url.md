@@ -11,7 +11,7 @@ i3DXCompass/i3DXCompass.js 의 `DS/i3DXCompass/i3DXCompassServices` (`getService
 ## 한눈에
 
 ```js
-var platformId = widget.getValue('x3dPlatformId');
+const platformId = widget.getValue('x3dPlatformId');
 
 getSpaceUrl(platformId)
   .then(function (spaceUrl) { return getSecurityContext(spaceUrl, platformId); })
@@ -47,9 +47,9 @@ getSpaceUrl(platformId)
 
 ```js
 function getSpaceUrl(platformId) {
-  var fallback = WebappsUtils.getWebappsBaseUrl().replace(/webapps\/?$/, '');
+  const fallback = WebappsUtils.getWebappsBaseUrl().replace(/webapps\/?$/, '');
   return new Promise(function (resolve) {
-    var done = false;
+    let done = false;
     function finish(url) {
       if (!done) {
         done = true;
@@ -61,7 +61,7 @@ function getSpaceUrl(platformId) {
       serviceName: '3DSpace',
       platformId: platformId || undefined,
       onComplete: function (result) {
-        var url = Array.isArray(result) ? (result[0] && result[0].url) : result;
+        const url = Array.isArray(result) ? (result[0] && result[0].url) : result;
         finish(url || fallback);
       },
       onFailure: function () { finish(fallback); }
@@ -124,14 +124,14 @@ function toContext(role, org, cs) {
   return 'ctx::' + role + '.' + org + '.' + cs;
 }
 
-var list = [];
+const list = [];
 person.collabspaces.forEach(function (cs) {
   cs.couples.forEach(function (c) {
     list.push(toContext(c.role.name, c.organization.name, cs.name));
   });
 });
-var p = person.preferredcredentials;
-var preferred = p && p.role ? toContext(p.role.name, p.organization.name, p.collabspace.name) : null;
+const p = person.preferredcredentials;
+const preferred = p && p.role ? toContext(p.role.name, p.organization.name, p.collabspace.name) : null;
 ```
 
 - 목록은 협업공간 × (조직, 역할) 조합입니다. 화면 표시에는 `title`, `role.nls` 를 씁니다.
@@ -145,7 +145,7 @@ var preferred = p && p.role ? toContext(p.role.name, p.organization.name, p.coll
 WAFData.authenticatedRequest(spaceUrl + '/resources/pno/person/getsecuritycontext', {
   type: 'json',
   onComplete: function (res) {
-    var sc = res.SecurityContext;
+    let sc = res.SecurityContext;
     if (sc && sc.indexOf('ctx::') !== 0) { sc = 'ctx::' + sc; }
   }
 });

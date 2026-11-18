@@ -41,17 +41,17 @@
     ], function (UWA, EditPropWidget, EditPropConstants, EditPropModel, Button, LineEditor, ComboBox, Toggle) {
       'use strict';
 
-      var logEl;
-      var panelEl;
-      var panel = null;
-      var readOnlyNow = false;
+      let logEl;
+      let panelEl;
+      let panel = null;
+      let readOnlyNow = false;
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
       }
 
       function row(parent, labelText) {
-        var el = UWA.createElement('div', { 'class': 'row' }).inject(parent);
+        const el = UWA.createElement('div', { 'class': 'row' }).inject(parent);
         if (labelText) { UWA.createElement('label', { text: labelText }).inject(el); }
         return el;
       }
@@ -74,7 +74,7 @@
        */
       // #region create
       function createPanel(settings) {
-        var options = {
+        const options = {
           typeOfDisplay: settings.typeOfDisplay,
           selectionType: EditPropConstants.NO_SELECTION,
           facets: settings.typeOfDisplay === EditPropConstants.ALL ? [
@@ -113,7 +113,7 @@
             }
           };
         }
-        var created = new EditPropWidget(options, widget);
+        const created = new EditPropWidget(options, widget);
         created.inject(panelEl);
         return created;
       }
@@ -131,7 +131,7 @@
        */
       // #region data
       function toModel(physicalId) {
-        var model = new EditPropModel({
+        const model = new EditPropModel({
           objectId: physicalId,
           metatype: 'businessobject',
           source: '3DSpace',
@@ -201,7 +201,7 @@
       // #region ootb-window
       function openInformationWindow(physicalIds, securityContext) {
         require(['DS/ENOCollabSharingCmds/commands/EditPropCmd/EditPropCmdBase'], function (EditPropCmdBase) {
-          var nodes = physicalIds.map(function (id) {
+          const nodes = physicalIds.map(function (id) {
             return {
               id: id,
               tenant: getTenant(),
@@ -218,19 +218,19 @@
       // #endregion ootb-window
 
       function build() {
-        var page = UWA.createElement('div', { 'class': 'page' });
+        const page = UWA.createElement('div', { 'class': 'page' });
 
         UWA.createElement('h2', { text: '07. 속성 패널 (EditPropWidget)' }).inject(page);
-        var intro = UWA.createElement('p', { text: 'physicalid 를 넣으면 OOTB 속성 화면(ID 카드, 탭, 속성 보기 / 편집 / 저장)을 아래 영역에 붙입니다. 3DSpace 데이터를 읽으므로 3DDashboard 나 3DSpace 서버에서만 동작합니다. ' }).inject(page);
+        const intro = UWA.createElement('p', { text: 'physicalid 를 넣으면 OOTB 속성 화면(ID 카드, 탭, 속성 보기 / 편집 / 저장)을 아래 영역에 붙입니다. 3DSpace 데이터를 읽으므로 3DDashboard 나 3DSpace 서버에서만 동작합니다. ' }).inject(page);
         UWA.createElement('a', { href: 'index.html', text: '목록으로' }).inject(intro);
 
-        var idEditor = new LineEditor({ placeholder: 'physicalid (여러 개는 쉼표로)', sizeInCharNumber: 48 });
+        const idEditor = new LineEditor({ placeholder: 'physicalid (여러 개는 쉼표로)', sizeInCharNumber: 48 });
         idEditor.inject(row(page, 'physicalid'));
 
-        var scEditor = new LineEditor({ placeholder: 'ctx::VPLMProjectLeader.MyCompany.Common Space (비우면 기본값)', sizeInCharNumber: 48 });
+        const scEditor = new LineEditor({ placeholder: 'ctx::VPLMProjectLeader.MyCompany.Common Space (비우면 기본값)', sizeInCharNumber: 48 });
         scEditor.inject(row(page, 'SecurityContext'));
 
-        var displayCombo = new ComboBox({
+        const displayCombo = new ComboBox({
           elementsList: [
             { label: 'ALL (ID 카드 + 탭)', value: EditPropConstants.ALL },
             { label: 'ONLY_EDIT_PROPERTIES (속성만)', value: EditPropConstants.ONLY_EDIT_PROPERTIES },
@@ -241,13 +241,13 @@
         });
         displayCombo.inject(row(page, 'typeOfDisplay'));
 
-        var flagsRow = row(page, '옵션');
-        var readOnlyToggle = new Toggle({ type: 'checkbox', label: 'readOnly', checkFlag: false });
+        const flagsRow = row(page, '옵션');
+        const readOnlyToggle = new Toggle({ type: 'checkbox', label: 'readOnly', checkFlag: false });
         readOnlyToggle.inject(flagsRow);
-        var editModeToggle = new Toggle({ type: 'checkbox', label: 'editMode', checkFlag: false });
+        const editModeToggle = new Toggle({ type: 'checkbox', label: 'editMode', checkFlag: false });
         editModeToggle.inject(flagsRow);
 
-        var actions = row(page);
+        const actions = row(page);
         new Button({ label: '보이기', emphasize: 'primary', onClick: onShow }).inject(actions);
         new Button({ label: '다시 읽기', onClick: ifPanel(onRefresh) }).inject(actions);
         new Button({ label: '읽기 전용 켜기 / 끄기', onClick: ifPanel(onToggleReadOnly) }).inject(actions);
@@ -278,7 +278,7 @@
         }
 
         function onShow() {
-          var ids = readIds();
+          const ids = readIds();
           if (ids.length === 0) {
             log('physicalid 를 넣습니다.');
             return;
@@ -334,7 +334,7 @@
         }
 
         function onOpenWindow() {
-          var ids = readIds();
+          const ids = readIds();
           if (ids.length === 0) {
             log('physicalid 를 넣습니다.');
             return;
@@ -380,13 +380,13 @@
         },
 
         updateFacet: function () {
-          var model = this.getModel();
-          var table = UWA.createElement('table');
+          const model = this.getModel();
+          const table = UWA.createElement('table');
           this.elements.container.empty();
           if (!model) {
             return;
           }
-          var rows = model.isMergedModel()
+          const rows = model.isMergedModel()
             ? [['합친 객체', Object.keys(model.getMergingModels()).join(', ')]]
             : [
               ['objectId', model.get('objectId')],
@@ -398,7 +398,7 @@
               ['options.note', this.options.note]
             ];
           rows.forEach(function (pair) {
-            var tr = UWA.createElement('tr').inject(table);
+            const tr = UWA.createElement('tr').inject(table);
             UWA.createElement('td', { text: pair[0] }).inject(tr);
             UWA.createElement('td', { text: pair[1] == null ? '' : String(pair[1]) }).inject(tr);
           });

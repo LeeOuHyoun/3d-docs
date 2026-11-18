@@ -70,5 +70,5 @@ CollectionView.js 의 CollectionView.addEventListener (cellInfos 를 붙여 감�
 
 | 호출 | 설명 |
 | --- | --- |
-| <code>var h = grid.addEventListener(이름, fn)</code> | 반환값 h 는 실제 DOM 에 등록된 감싼 함수 |
+| <code>const h = grid.addEventListener(이름, fn)</code> | 반환값 h 는 실제 DOM 에 등록된 감싼 함수 |
 | <code>grid.removeEventListener(이름, h)</code> | ※ 원래 fn 이 아니라 addEventListener 의 반환값으로 해제해야 한다 |

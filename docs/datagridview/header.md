@@ -159,7 +159,7 @@ new DataGridView({
 컬럼 객체에 `children` 을 넣으면 그 컬럼은 그룹 헤더가 되고, `children` 의 컬럼들이 그 아래 줄에 놓입니다.
 
 ```js
-var columns = [
+const columns = [
   { text: '품번', dataIndex: 'tree' },
   {
     text: '치수',
@@ -225,7 +225,7 @@ var columns = [
 컬럼 옵션 `customHeader` 에 함수를 넣으면 그 컬럼의 헤더 칸을 직접 만든 DOM 으로 그립니다. 필수 입력 표시(`*`)처럼 글자와 아이콘만으로 안 되는 헤더에 씁니다.
 
 ```js
-var columns = [
+const columns = [
   { text: '품번', dataIndex: 'tree' },
   {
     text: '비고',
@@ -233,9 +233,9 @@ var columns = [
     editableFlag: true,
     customHeader: {
       buildContent: function (cellInfos) {
-        var box = document.createElement('div');
-        var label = document.createElement('span');
-        var mark = document.createElement('span');
+        const box = document.createElement('div');
+        const label = document.createElement('span');
+        const mark = document.createElement('span');
         label.textContent = '비고';
         mark.textContent = ' *';
         mark.style.color = 'red';

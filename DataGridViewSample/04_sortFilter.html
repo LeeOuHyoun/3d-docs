@@ -40,10 +40,10 @@
 
       /* 우선순위 컬럼의 사용자 정의 정렬 순서 (문자 순서가 아닌 업무 순서) */
       // #region priorityOrder
-      var PRIORITY_ORDER = { '높음': 1, '보통': 2, '낮음': 3 };
+      const PRIORITY_ORDER = { '높음': 1, '보통': 2, '낮음': 3 };
       // #endregion priorityOrder
 
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { title: '브라켓',   status: '작업중', priority: '보통', progress: 20,  qty: 10, dueDate: new Date(2026, 10, 10), note: '1차 설계' } },
@@ -87,7 +87,7 @@
       // #endregion filter
       treeDocument.pushUpdate();
 
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
 
         /*

@@ -42,19 +42,19 @@
     ], function (UWA, SearchCom, CompassServices, WAFData, Button, LineEditor, Toggle) {
       'use strict';
 
-      var PICKED_COLUMNS = ['id', 'label', 'name', 'type'];
-      var FOUND_COLUMNS = ['resourceid', 'ds6w:label', 'ds6w:identifier', 'ds6w:type', 'ds6wg:revision', 'ds6w:status'];
-      var logEl;
-      var pickedEl;
-      var foundEl;
-      var picked = [];
+      const PICKED_COLUMNS = ['id', 'label', 'name', 'type'];
+      const FOUND_COLUMNS = ['resourceid', 'ds6w:label', 'ds6w:identifier', 'ds6w:type', 'ds6wg:revision', 'ds6w:status'];
+      let logEl;
+      let pickedEl;
+      let foundEl;
+      let picked = [];
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
       }
 
       function row(parent, labelText) {
-        var el = UWA.createElement('div', { 'class': 'ss-row' }).inject(parent);
+        const el = UWA.createElement('div', { 'class': 'ss-row' }).inject(parent);
         if (labelText) { UWA.createElement('label', { text: labelText }).inject(el); }
         return el;
       }
@@ -73,11 +73,11 @@
           UWA.createElement('div', { 'class': 'ss-empty', text: '없음' }).inject(container);
           return;
         }
-        var table = UWA.createElement('table', { 'class': 'ss-table' }).inject(container);
-        var head = UWA.createElement('tr').inject(table);
+        const table = UWA.createElement('table', { 'class': 'ss-table' }).inject(container);
+        const head = UWA.createElement('tr').inject(table);
         columns.forEach(function (c) { UWA.createElement('th', { text: c }).inject(head); });
         rows.forEach(function (r) {
-          var tr = UWA.createElement('tr').inject(table);
+          const tr = UWA.createElement('tr').inject(table);
           columns.forEach(function (c) {
             UWA.createElement('td', { text: r[c] === undefined || r[c] === null ? '' : String(r[c]) }).inject(tr);
           });
@@ -94,8 +94,8 @@
        *   - 결과는 옵션의 app_socket_id(= socketId) 소켓으로만 옵니다.
        */
       // #region socket
-      var socketId = 'XX_search_' + widget.id;
-      var socket = null;
+      const socketId = 'XX_search_' + widget.id;
+      let socket = null;
 
       function getSocket() {
         if (!socket) {
@@ -142,7 +142,7 @@
        */
       // #region person
       function personOptions(title, multiSel) {
-        var options = objectOptions(title, ['Person'], multiSel, []);
+        const options = objectOptions(title, ['Person'], multiSel, []);
         options.precond = 'flattenedtaxonomies:"types/Person" AND current:"active"';
         return options;
       }
@@ -153,7 +153,7 @@
        */
       // #region open
       function openSearch(options) {
-        var s = getSocket();
+        const s = getSocket();
         s.dispatchEvent('RegisterContext', options);
         s.dispatchEvent('InContextSearch', options);
       }
@@ -174,7 +174,7 @@
       }
 
       function onSelected(objects) {
-        var known = picked.map(function (p) { return p.id; });
+        const known = picked.map(function (p) { return p.id; });
         objects.map(toItem).forEach(function (item) {
           if (known.indexOf(item.id) === -1) {
             picked.push(item);
@@ -191,8 +191,8 @@
        */
       // #region response
       function onResponse(response) {
-        var content = response.selected_data;
-        var count = content && content.data ? content.data.items.length : 0;
+        const content = response.selected_data;
+        const count = content && content.data ? content.data.items.length : 0;
         log('InContextSearch_Response ' + response.selected_command + ', 3DXContent items ' + count);
       }
       // #endregion response
@@ -260,15 +260,15 @@
       }
 
       function federatedSearch(baseUrl, text, types, securityContext, callback) {
-        var words = cleanText(text);
-        var parts = [];
+        const words = cleanText(text);
+        const parts = [];
         if (words) {
           parts.push('([ds6w:label]:(*' + words + '*) OR [ds6w:identifier]:(*' + words + '*))');
         }
         if (types.length) {
           parts.push(typePrecond(types));
         }
-        var body = {
+        const body = {
           label: 'XXSearch-' + Date.now(),
           query: parts.length ? parts.join(' AND ') : '#all',
           select_predicate: ['ds6w:label', 'ds6w:identifier', 'ds6w:type', 'ds6wg:revision', 'ds6w:status', 'ds6w:modified'],
@@ -305,9 +305,9 @@
       // #region fed-parse
       function toRows(response) {
         return (response.results || []).map(function (result) {
-          var item = {};
+          const item = {};
           (result.attributes || []).forEach(function (attr) {
-            var prev = item[attr.name];
+            const prev = item[attr.name];
             item[attr.name] = prev === undefined ? attr.value : [].concat(prev, attr.value);
           });
           return item;
@@ -315,7 +315,7 @@
       }
 
       function sourceErrors(response) {
-        var sources = (response.infos && response.infos.sources) || [];
+        const sources = (response.infos && response.infos.sources) || [];
         return sources.filter(function (s) {
           return s.error;
         }).map(function (s) {
@@ -325,18 +325,18 @@
       // #endregion fed-parse
 
       function build() {
-        var page = UWA.createElement('div', { 'class': 'ss-page' });
+        const page = UWA.createElement('div', { 'class': 'ss-page' });
 
         UWA.createElement('h3', { text: '3DSearch 에서 고르기 (in-context search)' }).inject(page);
-        var typesEditor = new LineEditor({ value: 'VPMReference', sizeInCharNumber: 30 });
+        const typesEditor = new LineEditor({ value: 'VPMReference', sizeInCharNumber: 30 });
         typesEditor.inject(row(page, '타입 (쉼표로)'));
-        var titleEditor = new LineEditor({ value: 'Select objects', sizeInCharNumber: 30 });
+        const titleEditor = new LineEditor({ value: 'Select objects', sizeInCharNumber: 30 });
         titleEditor.inject(row(page, '제목'));
-        var optionRow = row(page, '선택');
-        var multiToggle = new Toggle({ type: 'checkbox', label: '여러 개', checkFlag: true }).inject(optionRow);
-        var excludeToggle = new Toggle({ type: 'checkbox', label: '받은 객체 빼기', checkFlag: true }).inject(optionRow);
+        const optionRow = row(page, '선택');
+        const multiToggle = new Toggle({ type: 'checkbox', label: '여러 개', checkFlag: true }).inject(optionRow);
+        const excludeToggle = new Toggle({ type: 'checkbox', label: '받은 객체 빼기', checkFlag: true }).inject(optionRow);
 
-        var actions = row(page);
+        const actions = row(page);
         new Button({ label: '3DSearch 열기', emphasize: 'primary', onClick: onOpenObjects }).inject(actions);
         new Button({ label: '사람 고르기', onClick: onOpenPerson }).inject(actions);
         new Button({ label: '등록 해제', onClick: onRelease }).inject(actions);
@@ -346,9 +346,9 @@
         pickedEl = UWA.createElement('div').inject(page);
 
         UWA.createElement('h3', { text: '글자로 검색 (federated search)' }).inject(page);
-        var textEditor = new LineEditor({ value: '', placeholder: '제목이나 이름 일부', sizeInCharNumber: 30 });
+        const textEditor = new LineEditor({ value: '', placeholder: '제목이나 이름 일부', sizeInCharNumber: 30 });
         textEditor.inject(row(page, '검색어'));
-        var contextEditor = new LineEditor({ value: '', placeholder: 'ctx::역할.조직.협업공간 (비워도 됨)', sizeInCharNumber: 40 });
+        const contextEditor = new LineEditor({ value: '', placeholder: 'ctx::역할.조직.협업공간 (비워도 됨)', sizeInCharNumber: 40 });
         contextEditor.inject(row(page, 'SecurityContext'));
         new Button({ label: '검색', emphasize: 'primary', onClick: onFederatedSearch }).inject(row(page));
         foundEl = UWA.createElement('div').inject(page);
@@ -360,12 +360,12 @@
         renderTable(foundEl, [], FOUND_COLUMNS);
 
         function onOpenObjects() {
-          var types = splitTypes(typesEditor.value);
+          const types = splitTypes(typesEditor.value);
           if (!types.length) {
             log('타입을 넣습니다.');
             return;
           }
-          var exclude = excludeToggle.checkFlag ? picked.map(function (p) { return p.id; }) : [];
+          const exclude = excludeToggle.checkFlag ? picked.map(function (p) { return p.id; }) : [];
           openSearch(objectOptions(titleEditor.value, types, multiToggle.checkFlag, exclude));
           log('InContextSearch ' + types.join(', '));
         }
@@ -386,7 +386,7 @@
         }
 
         function onFederatedSearch() {
-          var types = splitTypes(typesEditor.value);
+          const types = splitTypes(typesEditor.value);
           getFederatedUrl(function (baseUrl) {
             if (!baseUrl) {
               log('3DSearch 주소를 얻지 못했습니다.');
@@ -397,7 +397,7 @@
                 log('federated search 실패: ' + (error.message || error));
                 return;
               }
-              var rows = toRows(response);
+              const rows = toRows(response);
               renderTable(foundEl, rows, FOUND_COLUMNS);
               log('federated search ' + rows.length + ' / ' + (response.infos ? response.infos.nmatches : '?'));
               sourceErrors(response).forEach(function (e) { log('소스 오류 ' + e); });

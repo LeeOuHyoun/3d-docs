@@ -9,7 +9,7 @@ title: layoutOptions
 그리드를 만들 때만 넣을 수 있고(readOnly), 만든 뒤에는 `grid.layout.옵션 = 값` 으로 바꿉니다.
 
 ```js
-var grid = new DataGridView({
+const grid = new DataGridView({
   treeDocument: treeDocument,
   columns: columns,
   layoutOptions: { cellHeight: 32, rowsHeader: false }

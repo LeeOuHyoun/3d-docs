@@ -59,7 +59,7 @@ DataGridView.js 의 publishedProperties `onContextualEvent` (기본값 = `buildD
 
 ```js
 onContextualEvent: function (params) {
-  var menu = params.collectionView.buildDefaultContextualMenu(params, { pin: false, insertRow: false });
+  const menu = params.collectionView.buildDefaultContextualMenu(params, { pin: false, insertRow: false });
   menu.push({ type: 'PushItem', title: '내 메뉴', action: { callback: function () { } } });
   return menu;
 }

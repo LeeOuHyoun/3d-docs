@@ -8,10 +8,10 @@ define('DS/WidgetSample/WidgetSample', [
 ], function (UWA, WAFData, WebappsUtils, CompassServices, nls) {
   'use strict';
 
-  var widget;
-  var state = { spaceUrl: null, userName: null, error: null };
-  var infoEl;
-  var logEl;
+  let widget;
+  const state = { spaceUrl: null, userName: null, error: null };
+  let infoEl;
+  let logEl;
 
   function log(text) {
     if (logEl) {
@@ -35,9 +35,9 @@ define('DS/WidgetSample/WidgetSample', [
 
   /* [2] 3DSpace 주소: Compass 에 묻고, 응답이 없으면 webapps 주소에서 계산 */
   function getSpaceUrl() {
-    var fallback = WebappsUtils.getWebappsBaseUrl().replace(/webapps\/?$/, '');
+    const fallback = WebappsUtils.getWebappsBaseUrl().replace(/webapps\/?$/, '');
     return new Promise(function (resolve) {
-      var done = false;
+      let done = false;
       function finish(url, from) {
         if (done) {
           return;
@@ -51,7 +51,7 @@ define('DS/WidgetSample/WidgetSample', [
         serviceName: '3DSpace',
         platformId: widget.getValue('x3dPlatformId') || undefined,
         onComplete: function (result) {
-          var url = Array.isArray(result) ? (result[0] && result[0].url) : result;
+          const url = Array.isArray(result) ? (result[0] && result[0].url) : result;
           finish(url || fallback, url ? 'compass' : 'fallback');
         },
         onFailure: function () { finish(fallback, 'fallback'); }
@@ -65,25 +65,25 @@ define('DS/WidgetSample/WidgetSample', [
   }
 
   function loadSecurityContexts() {
-    var platformId = widget.getValue('x3dPlatformId');
-    var url = state.spaceUrl + '/resources/modeler/pno/person?current=true&select=preferredcredentials&select=collabspaces';
+    const platformId = widget.getValue('x3dPlatformId');
+    let url = state.spaceUrl + '/resources/modeler/pno/person?current=true&select=preferredcredentials&select=collabspaces';
     if (platformId) {
       url += '&tenant=' + encodeURIComponent(platformId);
     }
     return request(url, { headers: { Accept: 'application/json' } }).then(function (person) {
-      var options = [];
-      var values = [];
-      var pref = person.preferredcredentials;
-      var preferred = pref && pref.role ? toContext(pref.role.name, pref.organization.name, pref.collabspace.name) : null;
-      var saved = widget.getValue('securityContext');
+      const options = [];
+      const values = [];
+      const pref = person.preferredcredentials;
+      const preferred = pref && pref.role ? toContext(pref.role.name, pref.organization.name, pref.collabspace.name) : null;
+      const saved = widget.getValue('securityContext');
       (person.collabspaces || []).forEach(function (cs) {
         (cs.couples || []).forEach(function (couple) {
-          var value = toContext(couple.role.name, couple.organization.name, cs.name);
+          const value = toContext(couple.role.name, couple.organization.name, cs.name);
           values.push(value);
           options.push({ value: value, label: (cs.title || cs.name) + ' / ' + (couple.role.nls || couple.role.name) });
         });
       });
-      var chosen = values.indexOf(saved) !== -1 ? saved : (values.indexOf(preferred) !== -1 ? preferred : values[0]);
+      const chosen = values.indexOf(saved) !== -1 ? saved : (values.indexOf(preferred) !== -1 ? preferred : values[0]);
       state.userName = person.name;
       /* [4] 위젯 설정에 목록형 항목을 코드로 추가 (같은 이름이면 교체) */
       widget.addPreference({
@@ -117,7 +117,7 @@ define('DS/WidgetSample/WidgetSample', [
   }
 
   function render() {
-    var rows = [
+    const rows = [
       [nls.get('hello', { name: state.userName || '-' }), ''],
       ['x3dPlatformId', widget.getValue('x3dPlatformId') || '-'],
       [nls.get('spaceUrl'), state.spaceUrl || nls.get('loading')],

@@ -38,7 +38,7 @@ UWPClientCode/UWPClientCode.js 의 `DS/UWPClientCode/I18n`, AmdLoader.js 의 `i1
 
 ```js
 require(['DS/UWPClientCode/I18n'], function (I18n) {
-  var lang = window.widget && widget.lang ? widget.lang : I18n.getCurrentLanguage();
+  const lang = window.widget && widget.lang ? widget.lang : I18n.getCurrentLanguage();
 });
 ```
 
@@ -46,9 +46,9 @@ require(['DS/UWPClientCode/I18n'], function (I18n) {
 
 ```js
 require(['DS/UWPClientCode/I18n'], function (I18n) {
-  var lang = I18n.getCurrentLanguage();
-  var korean = I18n.getSupportedLanguages().ko;
-  var text = I18n.replace('{count} items', { count: 3 });
+  const lang = I18n.getCurrentLanguage();
+  const korean = I18n.getSupportedLanguages().ko;
+  const text = I18n.replace('{count} items', { count: 3 });
 });
 ```
 
@@ -73,11 +73,11 @@ OOTB 는 대부분 인자 없이 `toLocaleString()`, `toLocaleDateString()`, `to
 위젯 언어에 맞추려면 `Intl` 에 `widget.lang` 을 넘깁니다.
 
 ```js
-var dateFormat = new Intl.DateTimeFormat(widget.lang, {
+const dateFormat = new Intl.DateTimeFormat(widget.lang, {
   year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
 });
 cell.textContent = dateFormat.format(new Date(modified));
-var count = new Intl.NumberFormat(widget.lang).format(12345.6);
+const count = new Intl.NumberFormat(widget.lang).format(12345.6);
 ```
 
 WUX 컨트롤(날짜 입력, 그리드의 날짜 필터 등)은 `WUX.currentFormatsLanguage` 로 형식을 정합니다. 처음 값은 `widget.lang` (없으면 브라우저 언어)이고, 값을 넣으면 `WUX.onFormatsLanguageChange(fn)` 에 등록한 함수가 불립니다 (Controls, Tweakers).
@@ -100,8 +100,8 @@ Me 설정에 "지역 형식 언어"(`RegionalFormatLanguage`)와 "ISO 8601 날�
 
 ```js
 require(['DS/Utilities/DateUtils', 'DS/Utilities/NumberUtils'], function (DateUtils, NumberUtils) {
-  var modifiedText = DateUtils.formatDateToString(new Date(modified), { timePrecision: 'min' });
-  var weightText = NumberUtils.formatNumberToString(12345.678, { decimals: 2, thousandsSeparator: true });
+  const modifiedText = DateUtils.formatDateToString(new Date(modified), { timePrecision: 'min' });
+  const weightText = NumberUtils.formatNumberToString(12345.678, { decimals: 2, thousandsSeparator: true });
 });
 ```
 
@@ -179,7 +179,7 @@ require(['DS/MePreferencesClientAPI/MePreferencesClientAPI'], function (MePrefer
 function readMePreference(MePreferences, repository, name) {
   return MePreferences.readPreferences([{ Repository: repository, PreferenceNames: [name] }])
     .then(function (result) {
-      var value;
+      let value;
       (result.repositories || []).forEach(function (repo) {
         (repo.preferences || []).forEach(function (pref) {
           if (pref.name === name) {
@@ -215,7 +215,7 @@ require(['DS/WebappsUtils/BetaOptions'], function (BetaOptions) {
     preferenceName: 'OpenInNewTab',
     preferenceValueExpected: 'FullScreenExperience'
   }).then(function (pref) {
-    var openInNewTab = Boolean(pref && pref.value);
+    const openInNewTab = Boolean(pref && pref.value);
   });
 });
 ```
@@ -250,12 +250,12 @@ Me 설정이 저장되면 PlatformAPI 메시지 `com.ds.mep:onPrefUpdate` 가 �
 
 ```js
 require(['DS/PlatformAPI/PlatformAPI'], function (PlatformAPI) {
-  var subscription = PlatformAPI.subscribe('com.ds.mep:onPrefUpdate', function (data) {
+  const subscription = PlatformAPI.subscribe('com.ds.mep:onPrefUpdate', function (data) {
     if (!Array.isArray(data) || !data[1] || !data[1].preferences) {
       return;
     }
-    var tenantId = data[2] && data[2].tenantId;
-    var myTenant = PlatformAPI.getWidgetTenant() || PlatformAPI.getTenant();
+    const tenantId = data[2] && data[2].tenantId;
+    const myTenant = PlatformAPI.getWidgetTenant() || PlatformAPI.getTenant();
     if (tenantId && tenantId !== myTenant) {
       return;
     }

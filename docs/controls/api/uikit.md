@@ -7,7 +7,7 @@ title: UIKIT API
 `DS/UIKIT/*` 모듈별 옵션(`defaultOptions`), 메서드, 이벤트입니다. 사용법은 [UIKIT](/controls/uikit) 에 있습니다.
 
 ```js
-var btn = new Button({ value: '저장', className: 'primary', events: { onClick: function () { console.log('저장'); } } }).inject(el);
+const btn = new Button({ value: '저장', className: 'primary', events: { onClick: function () { console.log('저장'); } } }).inject(el);
 btn.addEvent('onClick', function () { console.log('두 번째'); });
 ```
 

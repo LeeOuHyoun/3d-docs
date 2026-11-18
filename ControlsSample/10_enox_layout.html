@@ -52,7 +52,7 @@
     ], function (UWA, Model, ModelEvents, ENOXTriptych, IDCard, ENOXEmptyContent, ENOFloatingPanel, Button, DataGridView, TreeDocument, TreeNodeModel) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -62,7 +62,7 @@
         new Button({ label: label, onClick: fn }).inject(document.getElementById('buttons'));
       }
 
-      var PARTS = {
+      const PARTS = {
         Mechanical: [
           { name: 'PRT-0001', revision: 'A.1', title: '브라켓', owner: '김철수', state: 'IN_WORK' },
           { name: 'PRT-0002', revision: 'B.2', title: '샤프트', owner: '이영희', state: 'RELEASED' }
@@ -74,7 +74,7 @@
         ]
       };
 
-      var THUMBNAIL = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+      const THUMBNAIL = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
         '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="90"><rect width="120" height="90" fill="#e8f1f8"/><circle cx="60" cy="45" r="24" fill="#368ec4"/></svg>'
       );
 
@@ -86,12 +86,12 @@
        *   - 왼쪽 기본값은 닫힘 / 끌기 불가 / 300px, 오른쪽 기본값은 닫힘 / 끌기 가능 / 300px / 닫기 아이콘 있음 입니다.
        */
       // #region layout
-      var modelEvents = new ModelEvents();
-      var leftPane = UWA.createElement('div', { 'class': 'pane' });
-      var rightPane = UWA.createElement('div', { 'class': 'pane', text: '행을 고르면 속성이 보입니다.' });
-      var emptyHost = UWA.createElement('div', { 'class': 'host' });
+      const modelEvents = new ModelEvents();
+      const leftPane = UWA.createElement('div', { 'class': 'pane' });
+      const rightPane = UWA.createElement('div', { 'class': 'pane', text: '행을 고르면 속성이 보입니다.' });
+      const emptyHost = UWA.createElement('div', { 'class': 'host' });
 
-      var triptych = new ENOXTriptych();
+      const triptych = new ENOXTriptych();
       triptych.init({
         modelEvents: modelEvents,
         container: document.getElementById('layout'),
@@ -123,9 +123,9 @@
        *   - 크기는 triptych-set-size 에 { side, size } 를 보냅니다.
        */
       // #region commands
-      var detail = UWA.createElement('div', { 'class': 'detail' });
-      var idCardHost = UWA.createElement('div', { 'class': 'idcard-host' }).inject(detail);
-      var gridHost = UWA.createElement('div', { 'class': 'grid-host' }).inject(detail);
+      const detail = UWA.createElement('div', { 'class': 'detail' });
+      const idCardHost = UWA.createElement('div', { 'class': 'idcard-host' }).inject(detail);
+      const gridHost = UWA.createElement('div', { 'class': 'grid-host' }).inject(detail);
 
       function showDetail() {
         modelEvents.publish({ event: 'triptych-set-content', data: { side: 'middle', content: detail } });
@@ -157,7 +157,7 @@
         });
       });
 
-      var lastResize = {};
+      const lastResize = {};
       modelEvents.subscribe({ event: 'triptych-resized' }, function (data) {
         lastResize[data.side] = data.width;
       });
@@ -169,7 +169,7 @@
        *   - id 로 등록하고 triptych-remove-check-before-close 에 같은 id 를 주어 지웁니다.
        */
       // #region check
-      var editing = false;
+      let editing = false;
 
       function canCloseRight() {
         if (editing) {
@@ -197,7 +197,7 @@
        *   - 모델 값을 set 하면 바뀐 키(이름, 버전, 썸네일, 속성 등)만 다시 그립니다. 버튼을 보일지(with... 키)는 만들 때만 읽습니다.
        */
       // #region idcard
-      var idCardModel = new Model({
+      const idCardModel = new Model({
         modelEvents: modelEvents,
         name: '',
         version: '',
@@ -207,7 +207,7 @@
         withInformationButton: true,
         withToggleMinifiedButton: true
       });
-      var idCard = new IDCard({ model: idCardModel });
+      const idCard = new IDCard({ model: idCardModel });
 
       function renderIdCard() {
         idCard.render().inject(idCardHost);
@@ -230,8 +230,8 @@
       modelEvents.subscribe({ event: 'idcard-expanded' }, function () { log('idcard-expanded'); });
       // #endregion idcard
 
-      var treeDocument = new TreeDocument();
-      var grid = new DataGridView({
+      const treeDocument = new TreeDocument();
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         rowSelection: 'single',
         columns: [
@@ -243,7 +243,7 @@
       });
       grid.inject(gridHost);
 
-      var shown = false;
+      let shown = false;
 
       function showCategory(category) {
         if (!shown) {
@@ -260,15 +260,15 @@
         log('분류: ' + category);
       }
 
-      var list = UWA.createElement('ul', { styles: { margin: 0, paddingLeft: '16px' } }).inject(leftPane);
+      const list = UWA.createElement('ul', { styles: { margin: 0, paddingLeft: '16px' } }).inject(leftPane);
       Object.keys(PARTS).forEach(function (category) {
         UWA.createElement('li', { text: category, events: { click: function () { showCategory(category); } } }).inject(list);
       });
 
       treeDocument.getXSO().onPostAdd(function () {
-        var node = treeDocument.getSelectedNodes()[0];
+        const node = treeDocument.getSelectedNodes()[0];
         if (!node) { return; }
-        var row = node.options.grid;
+        const row = node.options.grid;
         rightPane.textContent = row.name + ' / ' + row.title + ' / ' + row.owner + ' / ' + row.state;
         showInIdCard(row);
         modelEvents.publish({ event: 'triptych-show-panel', data: 'right' });
@@ -283,7 +283,7 @@
        *   - 처음 크기는 내용에 맞춰 정해집니다. 저장된 값이 없을 때만 setNewSize 로 크기를 줍니다.
        */
       // #region floating
-      var floatingPanel = null;
+      let floatingPanel = null;
 
       function openFloatingPanel() {
         if (floatingPanel) { return; }

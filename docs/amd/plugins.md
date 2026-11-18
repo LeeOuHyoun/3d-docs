@@ -135,7 +135,7 @@ define('DS/MyWidget/Config', [
   'text!DS/MyWidget/assets/config.json',
   'text!DS/MyWidget/assets/row.html'
 ], function (configText, rowHtml) {
-  var config = JSON.parse(configText);
+  const config = JSON.parse(configText);
 });
 ```
 

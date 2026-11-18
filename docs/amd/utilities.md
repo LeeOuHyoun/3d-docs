@@ -30,8 +30,8 @@ require([
   'DS/Utilities/Utils',
   'DS/Logger/Logger'
 ], function (WUX, Dom, Utils, Logger) {
-  var logger = Logger.getLogger('DS/MyWidget/PartList');
-  var onResize = Utils.debounce(function () {
+  const logger = Logger.getLogger('DS/MyWidget/PartList');
+  const onResize = Utils.debounce(function () {
     logger.log('resized');
   }, 200);
 });
@@ -100,8 +100,8 @@ Dom.removeAllEventsOnElement(this);
 ### 아이콘
 
 ```js
-var fontIcon = Dom.generateIcon('check');
-var image = Dom.generateIcon({ iconPath: iconUrl, iconSize: { width: '16px', height: '16px' } });
+const fontIcon = Dom.generateIcon('check');
+const image = Dom.generateIcon({ iconPath: iconUrl, iconSize: { width: '16px', height: '16px' } });
 Dom.generateIcon('close', { target: existingSpan });
 container.appendChild(fontIcon);
 ```
@@ -127,7 +127,7 @@ container.appendChild(fontIcon);
 
 ```js
 define('DS/MyWidget/PartList', ['DS/Logger/Logger'], function (Logger) {
-  var logger = Logger.getLogger('DS/MyWidget/PartList');
+  const logger = Logger.getLogger('DS/MyWidget/PartList');
   logger.debug('rows', rows);
   logger.log('loaded');
   logger.warn('no SecurityContext');
@@ -241,7 +241,7 @@ require(['DS/Core/Core', 'DS/Core/PointerEvents'], function (WUX, PointerEvents)
 
 ```js
 require(['DS/ResizeSensor/js/ResizeSensor'], function (ResizeSensor) {
-  var sensor = new ResizeSensor(container, function () {
+  const sensor = new ResizeSensor(container, function () {
     onContainerResize(container.offsetWidth, container.offsetHeight);
   });
   sensor.detach();

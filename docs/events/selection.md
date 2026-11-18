@@ -20,7 +20,7 @@ Selection/Selection.js (XSO 1~470행, 각 매니저 473행~). 호출부: SPYUI (
 
 ```js
 require(['DS/Selection/CSOManager'], function (CSOManager) {
-  var token = CSOManager.onPostAdd(function (added) {
+  const token = CSOManager.onPostAdd(function (added) {
     console.log('추가됨', added);
   });
 
@@ -109,7 +109,7 @@ require(['DS/Selection/CSOManager'], function (CSOManager) {
 
 ```js
 require(['DS/Selection/XSO'], function (XSO) {
-  var mySelection = new XSO({
+  const mySelection = new XSO({
     eventChannel: 'MYAPP/',
     useUniqueID: true,
     getElementID: function (item) { return item.id; }

@@ -24,7 +24,7 @@ Controls.js (2025, 2026) 의 SpinBox (`_preEditValue`, `_applyValue`, `_getValid
 
 ```js
 require(['DS/Controls/SpinBox', 'DS/Controls/Slider'], function (SpinBox, Slider) {
-  var weight = new SpinBox({
+  const weight = new SpinBox({
     value: 5,
     units: 'px',
     minValue: 1,
@@ -34,7 +34,7 @@ require(['DS/Controls/SpinBox', 'DS/Controls/Slider'], function (SpinBox, Slider
     decimals: 0
   }).inject(document.getElementById('weight'));
 
-  var slider = new Slider({ value: 5, minValue: 1, maxValue: 50, stepValue: 1 })
+  const slider = new Slider({ value: 5, minValue: 1, maxValue: 50, stepValue: 1 })
     .inject(document.getElementById('weightSlider'));
 
   weight.addEventListener('change', function (e) { slider.value = e.dsModel.value; });
@@ -86,12 +86,12 @@ SpinBox 와 Slider 를 서로 맞추는 위 형태는 2DAnnotation 의 펜 두�
 입력 글자를 직접 숫자로 바꾸거나, 숫자를 다른 글자로 보여 줄 때 씁니다. 3DPlay2DExperience 의 페이지 이동 칸이 이 방식입니다 (값은 페이지 번호, 화면은 페이지 이름).
 
 ```js
-var labels = { 1: '표지', 2: '목차', 3: '본문' };
-var page = new SpinBox({
+const labels = { 1: '표지', 2: '목차', 3: '본문' };
+const page = new SpinBox({
   value: 1, minValue: 1, maxValue: 3, stepValue: 1, decimals: 0,
   customValidator: function (text, delta) {
     if (delta) { return page.value + delta; }
-    for (var k in labels) { if (labels[k] === text) { return Number(k); } }
+    for (const k in labels) { if (labels[k] === text) { return Number(k); } }
     return Number(text);
   },
   customFormatter: function (value) { return labels[value]; }
@@ -129,7 +129,7 @@ var page = new SpinBox({
 
 ```js
 require(['DS/Controls/Slider'], function (Slider) {
-  var opacity = new Slider({ value: 0.5, minValue: 0, maxValue: 1, stepValue: 0.01 })
+  const opacity = new Slider({ value: 0.5, minValue: 0, maxValue: 1, stepValue: 0.01 })
     .inject(document.getElementById('opacity'));
 
   opacity.addEventListener('change', function (e) { preview.style.opacity = e.dsModel.value; });
@@ -169,7 +169,7 @@ Esc 를 누르면 마지막으로 마우스를 누르거나 뗀 때의 값으로
 `value` 에 배열을 주면 손잡이가 그 개수만큼 생기고, 손잡이 사이가 채워집니다. 각 손잡이는 이웃 손잡이를 넘지 못합니다.
 
 ```js
-var range = new Slider({ value: [20, 80], minValue: 0, maxValue: 100 }).inject(el);
+const range = new Slider({ value: [20, 80], minValue: 0, maxValue: 100 }).inject(el);
 range.addEventListener('change', function (e) { console.log(e.dsModel.value[0], e.dsModel.value[1]); });
 range.increment(1);
 range.value = [10, 90];
@@ -189,7 +189,7 @@ Slider 는 받은 배열을 그대로 보관합니다. `arr[0] = 5; range.value 
 - `GradientSlider`: 색의 한 성분(`gradientType`: `Hue`, `Saturation`, `Value`, `HslSaturation`, `Lightness`, `Red`, `Green`, `Blue`, `Alpha`)을 고르는 막대. 성분에 맞춰 `maxValue` 를 360 / 100 / 255 로 바꿉니다. `modulationColor` 는 HSV 배열 `[h, s, v, a]` 이며, 값을 바꾸면 이 배열도 함께 바뀝니다. `change` 의 `e.options.colorSubAttributeType` 에 성분 이름이 옵니다.
 
 ```js
-var hue = new GradientSlider({ gradientType: 'Hue', modulationColor: [200, 80, 90] }).inject(el);
+const hue = new GradientSlider({ gradientType: 'Hue', modulationColor: [200, 80, 90] }).inject(el);
 hue.addEventListener('change', function (e) { console.log(e.options.colorSubAttributeType, hue.modulationColor); });
 ```
 
@@ -201,13 +201,13 @@ hue.addEventListener('change', function (e) { console.log(e.options.colorSubAttr
 
 ```js
 require(['DS/Controls/SelectionChips'], function (SelectionChips) {
-  var tags = new SelectionChips({ placeholder: '태그 없음' }).inject(document.getElementById('tags'));
+  const tags = new SelectionChips({ placeholder: '태그 없음' }).inject(document.getElementById('tags'));
 
   tags.addChip({ label: '긴급', value: 'URGENT' });
   tags.addChips([{ label: '설계', value: 'DESIGN' }, { label: '구매', value: 'PURCHASE' }]);
 
   tags.addEventListener('change', function () {
-    var values = tags.getAllChipsOptions().map(function (c) { return c.value; });
+    const values = tags.getAllChipsOptions().map(function (c) { return c.value; });
     console.log(values);
   });
   tags.addEventListener('onPostRemove', function (e) { console.log('삭제', e.options.chips); });
@@ -263,9 +263,9 @@ require(['DS/Controls/SelectionChips'], function (SelectionChips) {
 칩은 기본으로 끌 수 있습니다. 같은 SelectionChips 안에서는 순서가 바뀌고, 다른 SelectionChips 로는 양쪽 모두의 `acceptDrop` 이 `true` (또는 `true` 를 주는 `Promise`)를 돌려줄 때만 옮겨집니다. Ctrl 을 누르면 복사입니다.
 
 ```js
-var accept = function (info) { return info.sourceSelectionChips !== info.targetSelectionChips; };
-var left = new SelectionChips({ acceptDrop: accept }).inject(el1);
-var right = new SelectionChips({ acceptDrop: accept }).inject(el2);
+const accept = function (info) { return info.sourceSelectionChips !== info.targetSelectionChips; };
+const left = new SelectionChips({ acceptDrop: accept }).inject(el1);
+const right = new SelectionChips({ acceptDrop: accept }).inject(el2);
 ```
 
 `onDragStartCell`, `onDropCell`, `onDropBlank` 등 10 개 함수로 기본 동작 앞에 끼어들 수 있습니다. 인자는 `(브라우저 이벤트, { chipCellView, dropPosition, dropIndex })` 입니다.
@@ -286,7 +286,7 @@ SelectionChips 끝에 LineEditor 를 붙인 입력칸입니다. 글자를 치고
 
 ```js
 require(['DS/Controls/SelectionChipsEditor'], function (SelectionChipsEditor) {
-  var mails = new SelectionChipsEditor({
+  const mails = new SelectionChipsEditor({
     placeholder: '메일 주소',
     uniqueValue: true,
     value: ['a@example.com'],
@@ -335,7 +335,7 @@ require(['DS/Controls/SelectionChipsEditor'], function (SelectionChipsEditor) {
 
 ```js
 require(['DS/Controls/Find'], function (Find) {
-  var find = new Find({
+  const find = new Find({
     displayMatchCaseToggle: true,
     relatedWidget: grid,
     onFindRequest: grid.setFindStr,
@@ -373,16 +373,16 @@ require(['DS/Controls/Find'], function (Find) {
 
 ```js
 require(['DS/Controls/FilePicker'], function (FilePicker) {
-  var picker = new FilePicker({
+  const picker = new FilePicker({
     placeholder: 'XML 파일 선택',
     fileTypes: '.xml',
     allowResetToUndefinedByUIFlag: true
   }).inject(document.getElementById('file'));
 
   picker.addEventListener('change', function () {
-    var file = picker.value;
+    const file = picker.value;
     if (!file) { return; }
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = function (ev) { console.log(ev.target.result); };
     reader.readAsText(file);
   });
@@ -456,7 +456,7 @@ require([
 | `DS/Controls/SmartInput` | 만들 때 "deprecated, SmartInputs/* 를 쓰라" 경고. 2026 에서 삭제 | `DS/Controls/*` 개별 컨트롤 |
 
 ```js
-var sw = new Switch({ label: '자동 저장', value: true, onChange: function (v) { console.log(v); } });
+const sw = new Switch({ label: '자동 저장', value: true, onChange: function (v) { console.log(v); } });
 sw.inject(el);
 sw.setValue(false, false);
 ```

@@ -41,10 +41,10 @@ PlatformAPI/PlatformAPI.js 전체 (297 줄), MessageBus/MessageBus.js, Tenant/Te
 
 ```js
 require(['DS/PlatformAPI/PlatformAPI'], function (PlatformAPI) {
-  var user = PlatformAPI.getUser();
-  var login = user ? user.login : null;
-  var tenant = PlatformAPI.getTenant();
-  var platformId = PlatformAPI.getWidgetTenant() || tenant;
+  const user = PlatformAPI.getUser();
+  const login = user ? user.login : null;
+  const tenant = PlatformAPI.getTenant();
+  const platformId = PlatformAPI.getWidgetTenant() || tenant;
 });
 ```
 
@@ -74,7 +74,7 @@ ENOVIA 코드에서 많이 읽는 키입니다.
 ## publish / subscribe
 
 ```js
-var sub = PlatformAPI.subscribe('myapp.part.selected', function (data, message) {
+const sub = PlatformAPI.subscribe('myapp.part.selected', function (data, message) {
   console.log(data.id, message.topic);
 });
 

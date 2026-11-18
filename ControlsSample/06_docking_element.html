@@ -42,7 +42,7 @@
     ], function (UWA, DockingElement, Button, DataGridView, TreeDocument, TreeNodeModel) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -52,7 +52,7 @@
         new Button({ label: label, onClick: fn }).inject(document.getElementById('buttons'));
       }
 
-      var PARTS = {
+      const PARTS = {
         Mechanical: [
           { name: 'PRT-0001', title: '브라켓', owner: '김철수' },
           { name: 'PRT-0002', title: '샤프트', owner: '이영희' }
@@ -73,11 +73,11 @@
        *   - autoExpandFlag: false 면 접힌 영역에 마우스를 올려도 저절로 펼쳐지지 않습니다.
        */
       // #region layout
-      var leftPane = UWA.createElement('div', { 'class': 'pane' });
-      var rightPane = UWA.createElement('div', { 'class': 'pane', text: '행을 고르면 속성이 보입니다.' });
-      var center = UWA.createElement('div', { 'class': 'center' });
+      const leftPane = UWA.createElement('div', { 'class': 'pane' });
+      const rightPane = UWA.createElement('div', { 'class': 'pane', text: '행을 고르면 속성이 보입니다.' });
+      const center = UWA.createElement('div', { 'class': 'center' });
 
-      var rightDocking = new DockingElement({
+      const rightDocking = new DockingElement({
         side: WUXDockAreaEnum.RightDockArea,
         dockingZoneContent: rightPane,
         freeZoneContent: center,
@@ -88,7 +88,7 @@
         visibleCollapserFlag: true
       });
 
-      var leftDocking = new DockingElement({
+      const leftDocking = new DockingElement({
         identifier: 'sample-left-docking',
         side: WUXDockAreaEnum.LeftDockArea,
         dockingZoneContent: leftPane,
@@ -117,8 +117,8 @@
       });
       // #endregion events
 
-      var treeDocument = new TreeDocument();
-      var grid = new DataGridView({
+      const treeDocument = new TreeDocument();
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         rowSelection: 'single',
         columns: [
@@ -139,13 +139,13 @@
         log('분류: ' + category);
       }
 
-      var list = UWA.createElement('ul', { styles: { margin: 0, paddingLeft: '16px' } }).inject(leftPane);
+      const list = UWA.createElement('ul', { styles: { margin: 0, paddingLeft: '16px' } }).inject(leftPane);
       Object.keys(PARTS).forEach(function (category) {
         UWA.createElement('li', { text: category, events: { click: function () { showCategory(category); } } }).inject(list);
       });
 
       treeDocument.getXSO().onPostAdd(function () {
-        var node = treeDocument.getSelectedNodes()[0];
+        const node = treeDocument.getSelectedNodes()[0];
         if (!node) { return; }
         rightPane.textContent = node.options.grid.name + ' / ' + node.options.grid.title + ' / ' + node.options.grid.owner;
       });
@@ -178,7 +178,7 @@
         log('왼쪽 ' + leftPane.offsetWidth + 'px, 가운데 ' + center.offsetWidth + 'px, 오른쪽 ' + rightPane.offsetWidth + 'px');
       });
       addButton('저장 값 보기', function () {
-        var saved = null;
+        let saved = null;
         try { saved = localStorage.getItem('wux-docking-element-left'); } catch (e) { saved = null; }
         log('wux-docking-element-left: ' + saved);
       });

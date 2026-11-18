@@ -7,7 +7,7 @@ title: WebUX 컨트롤 API
 `DS/Controls/*` 컨트롤별 공개 속성(publishedProperties), 메서드, 이벤트입니다. 사용법은 [WebUX 컨트롤](/controls/webux-controls) 에 있습니다.
 
 ```js
-var btn = new Button({ label: '저장' }).inject(el);
+const btn = new Button({ label: '저장' }).inject(el);
 btn.label = '수정';
 btn.addEventListener('buttonclick', function (e) { console.log(e.dsModel.label); });
 ```

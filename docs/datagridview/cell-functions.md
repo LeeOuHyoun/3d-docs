@@ -73,7 +73,7 @@ DataGridView.js 의 DataGridViewLayout (`getColumnOptionValue(columnID, "함수�
 
 ```js
 getCellTooltip: function (cellInfos) {
-  var row = rowOf(cellInfos);
+  const row = rowOf(cellInfos);
   return row && row.progress < 30 ? { shortHelp: '진행률이 낮습니다' } : grid.getCellDefaultTooltip(cellInfos);
 }
 ```

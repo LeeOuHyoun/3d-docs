@@ -126,10 +126,10 @@
     ], function (DataGridView, TreeDocument, TreeNodeModel) {
       'use strict';
 
-      var grid = null;
+      let grid = null;
 
       function createTreeDocument() {
-        var treeDocument = new TreeDocument();
+        const treeDocument = new TreeDocument();
         treeDocument.prepareUpdate();
         [
           { label: 'PRT-0001', grid: { title: '브라켓', status: '작업중', owners: ['김철수'], progress: 20, approved: false, note: '1차 설계' } },
@@ -146,10 +146,10 @@
       }
 
       function readControls() {
-        var values = { grid: {}, layout: {}, special: {} };
+        const values = { grid: {}, layout: {}, special: {} };
         Array.prototype.forEach.call(document.querySelectorAll('#controls [data-opt]'), function (el) {
-          var path = el.getAttribute('data-opt').split('.');
-          var value;
+          const path = el.getAttribute('data-opt').split('.');
+          let value;
           if (el.type === 'checkbox') {
             value = el.checked;
           } else if (el.type === 'number') {
@@ -165,22 +165,22 @@
       }
 
       function buildOptions(values) {
-        var s = values.special;
-        var layoutOptions = Object.assign({}, values.layout);
+        const s = values.special;
+        const layoutOptions = Object.assign({}, values.layout);
         if (s.rowHeightFn) {
           layoutOptions.getRowHeightFunction = function (rowID) {
             return rowID % 2 === 0 ? 50 : undefined;
           };
         }
-        var gridOptions = Object.assign({}, values.grid);
+        const gridOptions = Object.assign({}, values.grid);
         if (gridOptions.selectionStyle === '') {
           delete gridOptions.selectionStyle;
         }
-        var progressColumn = { text: '진행률', dataIndex: 'progress', width: 140, typeRepresentation: 'progress', editableFlag: true, editionPolicy: s.editionPolicy };
+        const progressColumn = { text: '진행률', dataIndex: 'progress', width: 140, typeRepresentation: 'progress', editableFlag: true, editionPolicy: s.editionPolicy };
         if (s.alignment) {
           progressColumn.alignment = s.alignment;
         }
-        var ownersSemantics = { possibleValues: ['김철수', '이영희', '박민수', '최지훈'], allowMultipleValuesFlag: true };
+        const ownersSemantics = { possibleValues: ['김철수', '이영희', '박민수', '최지훈'], allowMultipleValuesFlag: true };
         if (s.separator) {
           ownersSemantics.viewOptions = { multipleValuesSeparator: s.separator };
         }
@@ -199,18 +199,18 @@
       }
 
       function toCode(options) {
-        var json = JSON.stringify(options, function (key, value) {
+        let json = JSON.stringify(options, function (key, value) {
           return typeof value === 'function' ? '__FN__' + value.toString() + '__FN__' : value;
         }, 2);
         json = json.replace(/"__FN__([\s\S]*?)__FN__"/g, function (match, body) {
           return JSON.parse('"' + body + '"');
         });
-        return 'var grid = new DataGridView(' + json.replace(/^\{/, '{\n  "treeDocument": treeDocument,') + ');\ngrid.inject(document.getElementById(\'grid\'));';
+        return 'const grid = new DataGridView(' + json.replace(/^\{/, '{\n  "treeDocument": treeDocument,') + ');\ngrid.inject(document.getElementById(\'grid\'));';
       }
 
       function rebuild() {
-        var options = buildOptions(readControls());
-        var container = document.getElementById('playGrid');
+        const options = buildOptions(readControls());
+        const container = document.getElementById('playGrid');
         if (grid && grid.destroy) {
           grid.destroy();
         }
@@ -226,17 +226,17 @@
        *   grid.addEventListener(이름, function (event, cellInfos) { ... })
        *   셀에서 발생한 이벤트면 cellInfos 에 그 셀의 행/컬럼/값이 들어온다.
        */
-      var GRID_EVENTS = [
+      const GRID_EVENTS = [
         'activeCellChange', 'preselectedCellChange', 'allCellsRendered', 'sortModelChange',
         'columnOrderChange', 'columnVisibleStateChange', 'columnWidthChange', 'userPreferencesChange',
         'change', 'liveChange', 'preEdit', 'postEdit', 'buttonclick'
       ];
-      var POINTER_EVENTS = ['click', 'dblclick', 'contextmenu', 'keydown'];
-      var NOISY_EVENTS = ['preselectedCellChange', 'allCellsRendered'];
+      const POINTER_EVENTS = ['click', 'dblclick', 'contextmenu', 'keydown'];
+      const NOISY_EVENTS = ['preselectedCellChange', 'allCellsRendered'];
 
       function writeLog(text) {
-        var log = document.getElementById('playLog');
-        var time = new Date().toTimeString().slice(0, 8);
+        const log = document.getElementById('playLog');
+        const time = new Date().toTimeString().slice(0, 8);
         log.textContent = time + '  ' + text + '\n' + log.textContent.split('\n').slice(0, 200).join('\n');
       }
 
@@ -244,8 +244,8 @@
         if (!cellInfos) {
           return '';
         }
-        var dataIndex = grid.layout.getDataIndexFromColumnIndex(cellInfos.columnID);
-        var value = cellInfos.nodeModel && dataIndex ? (dataIndex === 'tree' ? cellInfos.nodeModel.options.label : cellInfos.nodeModel.getAttributeValue(dataIndex)) : undefined;
+        const dataIndex = grid.layout.getDataIndexFromColumnIndex(cellInfos.columnID);
+        const value = cellInfos.nodeModel && dataIndex ? (dataIndex === 'tree' ? cellInfos.nodeModel.options.label : cellInfos.nodeModel.getAttributeValue(dataIndex)) : undefined;
         return '  ← 셀 rowID=' + cellInfos.rowID + ', columnID=' + cellInfos.columnID + ', dataIndex=' + dataIndex
           + (cellInfos.nodeModel ? ', 행=' + cellInfos.nodeModel.options.label : '')
           + (value !== undefined ? ', 값=' + JSON.stringify(value) : '');
@@ -260,7 +260,7 @@
             if (NOISY_EVENTS.indexOf(name) > -1 && document.getElementById('playLog').textContent.indexOf(name) === 10) {
               return;
             }
-            var extra = event.options && Object.keys(event.options).length ? '  options=' + JSON.stringify(event.options) : '';
+            const extra = event.options && Object.keys(event.options).length ? '  options=' + JSON.stringify(event.options) : '';
             writeLog(name + extra + describeCell(cellInfos));
           });
         });

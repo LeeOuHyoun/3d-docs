@@ -40,16 +40,16 @@ Tweakers.js (2025 / 2026) 의 TweakerDuration, DurationViewModules, TweakerAbstr
 
 ```js
 require(['DS/Tweakers/TweakerDuration'], function (TweakerDuration) {
-  var period = new TweakerDuration({
+  const period = new TweakerDuration({
     displayStyle: 'datePickers',
     value: { from: new Date(2026, 0, 5).getTime(), to: new Date(2026, 0, 30).getTime() }
   }).inject(document.getElementById('period'));
   period.addEventListener('change', function (e) {
-    var v = e.dsModel.value;
+    const v = e.dsModel.value;
     console.log(v ? new Date(v.from) : null, v ? new Date(v.to) : null);
   });
 
-  var effort = new TweakerDuration({
+  const effort = new TweakerDuration({
     displayStyle: 'editors',
     value: { duration: 7200, tolerance: 600 },
     displayOptions: { unit: { duration: 'Hours', tolerance: 'Minutes' } }
@@ -113,7 +113,7 @@ require(['DS/Tweakers/TweakerDuration'], function (TweakerDuration) {
 
 ```js
 require(['DS/Tweakers/TweakerAbstractMagnitude'], function (TweakerAbstractMagnitude) {
-  var len = new TweakerAbstractMagnitude({
+  const len = new TweakerAbstractMagnitude({
     displayStyle: 'editors',
     value: { magnitude: 0.25, tolerance: 0.00005 },
     displayOptions: {
@@ -165,7 +165,7 @@ require(['DS/Tweakers/TweakerAbstractMagnitude'], function (TweakerAbstractMagni
 
 ```js
 require(['DS/Tweakers/TweakerArray'], function (TweakerArray) {
-  var sizes = new TweakerArray({
+  const sizes = new TweakerArray({
     valueType: 'integer',
     value: [10, 20, 30],
     editorTitle: '치수 목록'
@@ -218,7 +218,7 @@ require(['DS/Tweakers/TweakerArray'], function (TweakerArray) {
 
 ```js
 require(['DS/Tweakers/TweakerVector'], function (TweakerVector) {
-  var pos = new TweakerVector({
+  const pos = new TweakerVector({
     definition: ['X', 'Y', 'Z'],
     units: 'mm',
     value: [10, 0, 5]
@@ -253,13 +253,13 @@ require(['DS/Tweakers/TweakerVector'], function (TweakerVector) {
 
 ```js
 require(['DS/Tweakers/TweakerFile'], function (TweakerFile) {
-  var file = new TweakerFile({
+  const file = new TweakerFile({
     placeholder: '도면 파일',
     fileTypes: '.pdf,.dwg',
     allowResetToUndefinedByUIFlag: true
   }).inject(document.getElementById('file'));
   file.addEventListener('change', function (e) {
-    var f = e.dsModel.value;
+    const f = e.dsModel.value;
     console.log(f ? f.name : '없음');
   });
 });
@@ -301,10 +301,10 @@ require(['DS/Tweakers/TweakerFile'], function (TweakerFile) {
 
 ```js
 require(['DS/Tweakers/TweakerBlob'], function (TweakerBlob) {
-  var attach = new TweakerBlob({ placeholder: '첨부 파일을 끌어 놓으세요' })
+  const attach = new TweakerBlob({ placeholder: '첨부 파일을 끌어 놓으세요' })
     .inject(document.getElementById('attach'));
   attach.addEventListener('change', function (e) {
-    var t = e.dsModel;
+    const t = e.dsModel;
     console.log(t.value ? t.value.substring(0, 40) : '', t.blob);
   });
 });
@@ -366,7 +366,7 @@ TweakerBlob 은 값 비교 없이 `value` 가 바뀔 때마다 `change` 를 보�
 
 ```js
 require(['DS/Tweakers/TypeRepresentationFactory'], function (TypeRepresentationFactory) {
-  var factory = new TypeRepresentationFactory();
+  const factory = new TypeRepresentationFactory();
   factory.generateView({ name: 'Bolt', qty: 4, released: true }, {
     typePath: 'object',
     readOnly: true
@@ -445,7 +445,7 @@ CollectionView, Tree 의 기본 `onRightViewRequest` 가 이 형태(`typePath: '
 
 ```js
 require(['DS/Tweakers/TypeEnums'], function (TypeEnums) {
-  var modes = [TypeEnums.Layout.DataGridView, TypeEnums.Layout.SmallTile];
+  const modes = [TypeEnums.Layout.DataGridView, TypeEnums.Layout.SmallTile];
   console.log(modes[0].value);
 });
 ```
@@ -496,7 +496,7 @@ TweakersEx, TweakerAbstractMagnitude 가 쓰는 내부 함수(값 글자 + `...`
 
 ```js
 require(['DS/Tweakers/TweakerBase', 'DS/Tweakers/StringViewModules'], function (TweakerBase, StringViewModules) {
-  var MyTweaker = TweakerBase.inherit({ name: 'myTweaker' });
+  const MyTweaker = TweakerBase.inherit({ name: 'myTweaker' });
   MyTweaker.prototype.baseViewModule = StringViewModules.Base;
   MyTweaker.prototype.VIEW_MODULES = {
     edition: { classObject: StringViewModules.LineEditorDotsEditor, options: { viewOptions: { displayPopupOnCreation: true } } }

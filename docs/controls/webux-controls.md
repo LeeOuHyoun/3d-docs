@@ -12,10 +12,10 @@ Controls.js 의 Abstract (publishedProperties, fire, addEventListener), Button, 
 
 ```js
 require(['DS/Controls/Button', 'DS/Controls/LineEditor'], function (Button, LineEditor) {
-  var partNo = new LineEditor({ placeholder: 'PRT-0000', requiredFlag: true })
+  const partNo = new LineEditor({ placeholder: 'PRT-0000', requiredFlag: true })
     .inject(document.getElementById('partNo'));
 
-  var save = new Button({ label: '저장', emphasize: 'primary' })
+  const save = new Button({ label: '저장', emphasize: 'primary' })
     .inject(document.getElementById('buttons'));
 
   save.addEventListener('buttonclick', function (e) {
@@ -137,7 +137,7 @@ new Button({ icon: '../assets/icons/part.png', label: '부품' });  // 이미지
 ## Button
 
 ```js
-var del = new Button({
+const del = new Button({
   label: '삭제',
   emphasize: 'error',
   icon: { iconName: 'trash', fontIconFamily: WUXManagedFontIcons.Font3DS },
@@ -172,7 +172,7 @@ var del = new Button({
 체크박스, 라디오, 스위치를 하나의 클래스로 만듭니다.
 
 ```js
-var useFlag = new Toggle({ type: 'switch', label: '사용', checkFlag: true }).inject(el);
+const useFlag = new Toggle({ type: 'switch', label: '사용', checkFlag: true }).inject(el);
 useFlag.addEventListener('change', function (e) {
   console.log('사용 여부', e.dsModel.checkFlag);
 });
@@ -199,7 +199,7 @@ useFlag.addEventListener('change', function (e) {
 버튼이나 토글 여러 개를 묶어 값 하나(배열)로 다룹니다.
 
 ```js
-var group = new ButtonGroup({ type: 'radio' }).inject(el);
+const group = new ButtonGroup({ type: 'radio' }).inject(el);
 group.addChild(new Button({ label: '작업중', value: 'WIP' }));
 group.addChild(new Button({ label: '승인', value: 'RELEASED' }));
 group.value = ['WIP'];
@@ -224,8 +224,8 @@ group.addEventListener('change', function (e) {
 `LineEditor` 는 한 줄, `Editor` 는 여러 줄 입력칸입니다. 둘 다 `AbstractEditor` 를 상속해 이벤트가 같습니다.
 
 ```js
-var title = new LineEditor({ placeholder: '품명', requiredFlag: true, displayClearFieldButtonFlag: true }).inject(el);
-var memo = new Editor({ nbRows: 4, placeholder: '비고' }).inject(el2);
+const title = new LineEditor({ placeholder: '품명', requiredFlag: true, displayClearFieldButtonFlag: true }).inject(el);
+const memo = new Editor({ nbRows: 4, placeholder: '비고' }).inject(el2);
 
 title.addEventListener('change', function (e) { console.log('확정', e.dsModel.value); });
 title.addEventListener('uncommittedChange', function (e) { console.log('입력 중', e.options.uncommittedValue); });
@@ -264,7 +264,7 @@ title.addEventListener('uncommittedChange', function (e) { console.log('입력 �
 ## ComboBox
 
 ```js
-var state = new ComboBox({
+const state = new ComboBox({
   elementsList: [
     { label: '작업중', value: 'WIP' },
     { label: '검토중', value: 'REVIEW' },
@@ -317,14 +317,14 @@ state.value = 'RELEASED';
 
 ```js
 require(['DS/Controls/DatePicker', 'DS/Tweakers/TweakerDate'], function (DatePicker, TweakerDate) {
-  var due = new DatePicker({
+  const due = new DatePicker({
     value: new Date(2026, 11, 1),
     minValue: new Date(2026, 10, 1),
     allowUndefinedFlag: true
   }).inject(el);
   due.addEventListener('change', function (e) { console.log('납기', e.dsModel.value); });
 
-  var meeting = new TweakerDate({ value: '2026-12-01T09:30:00', timePickerFlag: true, allowResetToUndefinedByUIFlag: true })
+  const meeting = new TweakerDate({ value: '2026-12-01T09:30:00', timePickerFlag: true, allowResetToUndefinedByUIFlag: true })
     .inject(el2);
   meeting.addEventListener('change', function (e) { console.log('회의', e.dsModel.value); });
 });
@@ -416,7 +416,7 @@ DataGridView 컬럼의 `typeRepresentation: 'date'` / `'datetime'` / `'time'` �
 상태 표시용 칩입니다.
 
 ```js
-var chip = new Label({ value: '승인', emphasize: 'success', appearance: 'closeable-chip' }).inject(el);
+const chip = new Label({ value: '승인', emphasize: 'success', appearance: 'closeable-chip' }).inject(el);
 chip.addEventListener('close', function () { chip.destroy(); });
 ```
 
@@ -433,8 +433,8 @@ chip.addEventListener('close', function () { chip.destroy(); });
 제목을 눌러 펼치고 접는 영역입니다.
 
 ```js
-var body = UWA.createElement('div', { text: '상세 속성 ...' });
-var exp = new Expander({ header: '상세', body: body, expandedFlag: true }).inject(el);
+const body = UWA.createElement('div', { text: '상세 속성 ...' });
+const exp = new Expander({ header: '상세', body: body, expandedFlag: true }).inject(el);
 exp.addEventListener('collapse', function () { console.log('접힘'); });
 ```
 
@@ -453,10 +453,10 @@ exp.addEventListener('collapse', function () { console.log('접힘'); });
 다른 요소 옆에 띄우는 떠 있는 상자입니다. 드롭다운 패널, 간단한 설정 창에 씁니다.
 
 ```js
-var btn = new Button({ label: '필터' }).inject(el);
-var box = UWA.createElement('div', { text: '필터 내용', styles: { padding: 8 } });
+const btn = new Button({ label: '필터' }).inject(el);
+const box = UWA.createElement('div', { text: '필터 내용', styles: { padding: 8 } });
 
-var popup = new Popup({ target: btn.getContent(), trigger: 'click', position: 'bottom' });
+const popup = new Popup({ target: btn.getContent(), trigger: 'click', position: 'bottom' });
 popup.setBody(box);
 popup.addEventListener('hide', function () { console.log('닫힘'); });
 ```
@@ -474,7 +474,7 @@ popup.addEventListener('hide', function () { console.log('닫힘'); });
 ## ProgressBar
 
 ```js
-var bar = new ProgressBar({ value: 0, emphasize: 'success' }).inject(el);
+const bar = new ProgressBar({ value: 0, emphasize: 'success' }).inject(el);
 bar.value = 40;
 bar.infiniteFlag = true;   // 끝을 모를 때
 ```
@@ -493,7 +493,7 @@ bar.infiniteFlag = true;   // 끝을 모를 때
 
 ```js
 require(['DS/Controls/ModalLoader'], function (ModalLoader) {
-  var area = document.getElementById('grid');   // position 이 static 이면 안 됨
+  const area = document.getElementById('grid');   // position 이 static 이면 안 됨
 
   ModalLoader.displayModalLoader(area, '저장 중...');
   save().then(function () {
@@ -523,7 +523,7 @@ require(['DS/Controls/ModalLoader'], function (ModalLoader) {
 
 ```js
 require(['UWA/Core', 'DS/Controls/Abstract'], function (UWA, Abstract) {
-  var PartBadge = Abstract.inherit({
+  const PartBadge = Abstract.inherit({
     name: 'partBadge',
     publishedProperties: {
       partNo: { defaultValue: '', type: 'string' },
@@ -541,7 +541,7 @@ require(['UWA/Core', 'DS/Controls/Abstract'], function (UWA, Abstract) {
     }
   });
 
-  var badge = new PartBadge({ partNo: 'PRT-0001' }).inject(document.body);
+  const badge = new PartBadge({ partNo: 'PRT-0001' }).inject(document.body);
   badge.state = 'RELEASED';
   badge.fire('change');
 });

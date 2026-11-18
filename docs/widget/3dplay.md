@@ -162,8 +162,8 @@ require(['DS/3DPlaySupport/AssetSupport'], function (AssetSupport) {
 DocumentPreview 는 `Player3DPlayWeb` 을 직접 만들지 않고 3DPlay 전용 페이지를 iframe 으로 엽니다.
 
 ```js
-var params = { input: { asset: asset }, options: { loading: 'autoplay' } };
-var base = WebappsUtils.getProxifiedWebappsBaseUrl() || WebappsUtils.getWebappsBaseUrl();
+const params = { input: { asset: asset }, options: { loading: 'autoplay' } };
+const base = WebappsUtils.getProxifiedWebappsBaseUrl() || WebappsUtils.getWebappsBaseUrl();
 UWA.createElement('iframe', {
   src: base + '3DPlayHelper/3DPlaySyndication.html?params=' + encodeURIComponent(JSON.stringify(params)),
   styles: { position: 'absolute', width: '100%', height: '100%', border: '0' }

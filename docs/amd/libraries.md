@@ -55,7 +55,7 @@ require([
   'DS/Handlebars/Handlebars',
   'text!DS/MyWidget/assets/templates/PartCard.html'
 ], function (Handlebars, source) {
-  var template = Handlebars.compile(source);
+  const template = Handlebars.compile(source);
   widget.body.setHTML(template({ name: 'PRT-0001', revision: 'A' }));
 });
 ```
@@ -85,7 +85,7 @@ Vue 2 는 OOTB(3DPlayWidgetViews 의 W3DPlayLightboxView)처럼 `new Vue({ el, t
 
 ```js
 require(['DS/vue/vue', 'DS/vuekit/vuekit'], function (Vue) {
-  var mount = UWA.createElement('div').inject(widget.body);
+  const mount = UWA.createElement('div').inject(widget.body);
   new Vue({
     el: mount,
     template: '<div><vu-btn @click="save">저장</vu-btn> <span v-text="message"></span></div>',
@@ -101,7 +101,7 @@ Vue 3 은 `createApp` 으로 만들고 `mount` 합니다. OOTB(SNSearchUX, MPFVi
 
 ```js
 require(['DS/vue-3.4.15/vue'], function (Vue) {
-  var app = Vue.createApp({
+  const app = Vue.createApp({
     template: '<button @click="count++" v-text="count"></button>',
     data: function () { return { count: 0 }; }
   });
@@ -138,7 +138,7 @@ widget.addEvent('onLoad', function () {
     'DS/React18Loader/React',
     'DS/React18Loader/ReactDomClient'
   ], function (React, ReactDomClient) {
-    var root = ReactDomClient.createRoot(widget.body);
+    const root = ReactDomClient.createRoot(widget.body);
     root.render(React.createElement('div', { className: 'my-panel' }, 'My widget'));
   });
 });
@@ -189,7 +189,7 @@ Ext JS 와 Bryntum 은 머리 주석에 상용 라이선스 안내가 있습니�
 
 ```js
 require(['DS/VENHighChart/UIHighCharts'], function (Highcharts) {
-  var el = UWA.createElement('div', { styles: { height: '300px' } }).inject(widget.body);
+  const el = UWA.createElement('div', { styles: { height: '300px' } }).inject(widget.body);
   Highcharts.chart(el, {
     title: { text: 'My chart' },
     series: [{ type: 'column', data: [3, 5, 2] }]
@@ -203,7 +203,7 @@ require(['DS/VENHighChart/UIHighCharts'], function (Highcharts) {
 래퍼가 없는 Plotly 는 SMAMpaResultsChartsWebUI 처럼 경로와 shim 을 직접 잡습니다. 경로 이름은 창 전체에 걸리므로 겹치지 않게 짓습니다.
 
 ```js
-var base = require.toUrl('DS/PlotlyJS-3.0.1/').split('?')[0];
+const base = require.toUrl('DS/PlotlyJS-3.0.1/').split('?')[0];
 require.config({
   paths: { 'MyWidget-plotly': base + 'plotly.min' },
   shim: { 'MyWidget-plotly': { exports: 'Plotly' } }
@@ -240,8 +240,8 @@ CKEditor 4 는 textarea 를 바꿔 끼우는 방식입니다 (ENORouteMgmt 의 �
 
 ```js
 require(['DS/CKEditor/CKEditor'], function (CKEDITOR) {
-  var textarea = UWA.createElement('textarea', { name: 'myComment' }).inject(widget.body);
-  var editor = CKEDITOR.replace(textarea, {
+  const textarea = UWA.createElement('textarea', { name: 'myComment' }).inject(widget.body);
+  const editor = CKEDITOR.replace(textarea, {
     toolbar: [{ name: 'basicstyles', items: ['Bold', 'Italic'] }],
     height: 120
   });

@@ -79,7 +79,7 @@ WAFData 는 CSRF 토큰을 자동으로 붙이지 않습니다. 3DSpace REST 에
 WAFData.authenticatedRequest(spaceUrl + '/resources/v1/application/CSRF', {
   type: 'json',
   onComplete: function (res) {
-    var csrfToken = res.csrf.value;
+    const csrfToken = res.csrf.value;
     WAFData.authenticatedRequest(spaceUrl + '/resources/v1/modeler/documents', {
       method: 'POST',
       type: 'json',

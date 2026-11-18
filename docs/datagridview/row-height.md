@@ -9,7 +9,7 @@ DataGridView.js 의 DataGridViewLayout (getDefaultCellHeight / _applyCellHeight 
 ## 어디에 넣나
 
 ```js{4-9,13,16}
-var grid = new DataGridView({
+const grid = new DataGridView({
   treeDocument: treeDocument,
 
   layoutOptions: {
@@ -105,7 +105,7 @@ new DataGridView({
   columns: columns,
   layoutOptions: {
     getRowHeightFunction: function (rowID) {
-      var node = grid.model[rowID];
+      const node = grid.model[rowID];
       if (node && node.getAttributeValue('status') === '검토중') {
         return 50;
       }

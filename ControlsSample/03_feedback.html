@@ -57,7 +57,7 @@
     ], function (UWA, Button, ModalLoader, Mask, Alert, SuperModal, UXMessages, ViewOnScreen) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -68,7 +68,7 @@
       }
 
       /* [1] UIKIT Mask: UWA 요소로 감싸서 넘김 */
-      var maskArea = UWA.extendElement(document.getElementById('maskArea'));
+      const maskArea = UWA.extendElement(document.getElementById('maskArea'));
       addButton('maskButtons', 'Mask 2초', function () {
         Mask.mask(maskArea, '불러오는 중...');
         log('isMasked=' + Mask.isMasked(maskArea));
@@ -76,7 +76,7 @@
       });
 
       /* [2] WebUX ModalLoader: 같은 글자로 지움 */
-      var loaderArea = document.getElementById('loaderArea');
+      const loaderArea = document.getElementById('loaderArea');
       addButton('maskButtons', 'ModalLoader 2초', function () {
         ModalLoader.displayModalLoader(loaderArea, '저장 중...');
         setTimeout(function () { ModalLoader.removeModalLoader(loaderArea, '저장 중...'); log('removeModalLoader (같은 글자)'); }, 2000);
@@ -94,8 +94,8 @@
       });
 
       /* [3] UIKIT Alert */
-      var alertArea = document.getElementById('alertArea');
-      var alertBox = new Alert({ visible: true, autoHide: true, hideDelay: 3000 }).inject(alertArea, 'top');
+      const alertArea = document.getElementById('alertArea');
+      const alertBox = new Alert({ visible: true, autoHide: true, hideDelay: 3000 }).inject(alertArea, 'top');
       alertBox.addEvent('onRemoveMessage', function () { log('alert onRemoveMessage'); });
       ['primary', 'success', 'warning', 'error'].forEach(function (cls) {
         addButton('alertButtons', 'Alert ' + cls, function () {
@@ -107,12 +107,12 @@
       ViewOnScreen.setNotificationManager(UXMessages);
       ['info', 'success', 'warning', 'error'].forEach(function (level) {
         addButton('notifButtons', 'addNotif ' + level, function () {
-          var id = UXMessages.addNotif({ level: level, title: level, message: '<b>HTML</b> 은 allowUnsafeHTML: false 로 글자 그대로', allowUnsafeHTML: false });
+          const id = UXMessages.addNotif({ level: level, title: level, message: '<b>HTML</b> 은 allowUnsafeHTML: false 로 글자 그대로', allowUnsafeHTML: false });
           log('addNotif id=' + id);
         });
       });
 
-      var uploadId;
+      let uploadId;
       addButton('notifButtons', '진행 알림 (modifyNotif)', function () {
         uploadId = UXMessages.addNotif({ level: 'info', message: '업로드 중... 0%', sticky: true, category: 'upload' });
         setTimeout(function () { UXMessages.modifyNotif(uploadId, { level: 'info', message: '업로드 중... 60%', sticky: true, category: 'upload' }); }, 1000);
@@ -123,7 +123,7 @@
       });
 
       /* [5] UIKIT SuperModal */
-      var sm = new SuperModal();
+      const sm = new SuperModal();
       addButton('modalButtons', 'alert', function () {
         sm.alert('저장했습니다.', '완료', function () { log('alert 닫힘'); });
       });

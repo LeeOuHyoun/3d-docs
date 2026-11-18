@@ -55,7 +55,7 @@
     ], function (TweakerString, TweakerNumber, TweakerBoolean, TweakerDate, TypeRepresentationFactory) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -71,14 +71,14 @@
        *   fireOnlyFromUIInteractionFlag: true 면 코드로 값을 바꿀 때는 이벤트가 나지 않는다.
        */
       // #region direct
-      var partNo = new TweakerString({ value: '', placeholder: 'PRT-0001', pattern: 'PRT-[0-9]{4}', requiredFlag: true })
+      const partNo = new TweakerString({ value: '', placeholder: 'PRT-0001', pattern: 'PRT-[0-9]{4}', requiredFlag: true })
         .inject(byId('partNo'));
-      var title = new TweakerString({ value: '브라켓' }).inject(byId('title'));
-      var qty = new TweakerNumber({ value: 1, minValue: 0, maxValue: 999, stepValue: 1, decimals: 0 })
+      const title = new TweakerString({ value: '브라켓' }).inject(byId('title'));
+      const qty = new TweakerNumber({ value: 1, minValue: 0, maxValue: 999, stepValue: 1, decimals: 0 })
         .inject(byId('qty'));
-      var useFlag = new TweakerBoolean({ value: true, label: '사용함', displayStyle: 'switch' })
+      const useFlag = new TweakerBoolean({ value: true, label: '사용함', displayStyle: 'switch' })
         .inject(byId('useFlag'));
-      var dueDate = new TweakerDate({ value: new Date(), fireOnlyFromUIInteractionFlag: true })
+      const dueDate = new TweakerDate({ value: new Date(), fireOnlyFromUIInteractionFlag: true })
         .inject(byId('dueDate'));
       // #endregion direct
 
@@ -108,9 +108,9 @@
        *   onViewCreated 를 넣지 않으면 Promise 를 돌려준다. 만들 때 넣는 값으로는 change 가 나지 않는다.
        */
       // #region generate-view
-      var factory = new TypeRepresentationFactory();
-      var rate;
-      var status;
+      const factory = new TypeRepresentationFactory();
+      let rate;
+      let status;
 
       factory.generateView(40, { typePath: 'percentage' }).then(function (tweaker) {
         rate = tweaker.inject(byId('rate'));
@@ -161,7 +161,7 @@
        */
       // #region readonly
       byId('btnReadOnly').addEventListener('click', function () {
-        var next = !qty.readOnly;
+        const next = !qty.readOnly;
         [partNo, title, qty, useFlag, dueDate, rate, status].forEach(function (tweaker) {
           if (tweaker) {
             tweaker.readOnly = next;

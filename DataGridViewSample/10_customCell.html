@@ -43,9 +43,9 @@
     ], function (DataGridView, CollectionViewStatusBar, TreeDocument, TreeNodeModel) {
       'use strict';
 
-      var STATUSES = ['작업중', '검토중', '승인', '폐기'];
+      const STATUSES = ['작업중', '검토중', '승인', '폐기'];
 
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { title: '브라켓', status: '작업중', progress: 20 } },
@@ -73,7 +73,7 @@
        *     cellInfos.cellView.setReusableContent(내용) 셀에 넣는다. 전에 있던 내용은 그리드가 회수한다.
        */
       // #region grid
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         columns: [
           { text: '품번', dataIndex: 'tree', width: 140 },
@@ -83,8 +83,8 @@
             dataIndex: 'status',
             width: 170,
             onCellRequest: function (cellInfos) {
-              var chip = this.reuseCellContent('statusChip');
-              var status = cellInfos.nodeModel.getAttributeValue('status');
+              const chip = this.reuseCellContent('statusChip');
+              const status = cellInfos.nodeModel.getAttributeValue('status');
               chip.textContent = status;
               chip.setAttribute('data-status', status);
               cellInfos.cellView.setReusableContent(chip);
@@ -95,8 +95,8 @@
             dataIndex: 'progress',
             width: 220,
             onCellRequest: function (cellInfos) {
-              var content = this.reuseCellContent('progressBar');
-              var progress = cellInfos.nodeModel.getAttributeValue('progress');
+              const content = this.reuseCellContent('progressBar');
+              const progress = cellInfos.nodeModel.getAttributeValue('progress');
               content.querySelector('.bar').style.width = progress + '%';
               content.querySelector('.text').textContent = progress + '%';
               cellInfos.cellView.setReusableContent(content);
@@ -118,7 +118,7 @@
       grid.registerReusableCellContent({
         id: 'statusChip',
         buildContent: function () {
-          var chip = document.createElement('span');
+          const chip = document.createElement('span');
           chip.className = 'status-chip';
           return chip;
         }
@@ -126,7 +126,7 @@
       grid.registerReusableCellContent({
         id: 'progressBar',
         buildContent: function () {
-          var content = document.createElement('div');
+          const content = document.createElement('div');
           content.className = 'progress-cell';
           content.innerHTML = '<div class="track"><div class="bar"></div></div><div class="text"></div>';
           return content;
@@ -146,7 +146,7 @@
        */
       // #region statusBar
       function approvedText() {
-        var count = treeDocument.getAllDescendants().filter(function (node) {
+        const count = treeDocument.getAllDescendants().filter(function (node) {
           return node.getAttributeValue('status') === '승인';
         }).length;
         return '승인 ' + count + '건';
@@ -181,8 +181,8 @@
         if (!cellInfos || !cellInfos.nodeModel || !event.target.classList.contains('status-chip')) {
           return;
         }
-        var node = cellInfos.nodeModel;
-        var nextStatus = STATUSES[(STATUSES.indexOf(node.getAttributeValue('status')) + 1) % STATUSES.length];
+        const node = cellInfos.nodeModel;
+        const nextStatus = STATUSES[(STATUSES.indexOf(node.getAttributeValue('status')) + 1) % STATUSES.length];
         node.updateOptions({ grid: { status: nextStatus } });
         grid.elements.statusBar.updateNodeModel('approvedCount', { grid: { data: approvedText() } });
       });

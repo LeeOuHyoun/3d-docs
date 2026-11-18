@@ -42,11 +42,11 @@
       'use strict';
 
       function writeLog(text) {
-        var log = document.getElementById('log');
+        const log = document.getElementById('log');
         log.textContent = text + '\n' + log.textContent;
       }
 
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { title: '브라켓', status: '작업중', owner: '김철수' } },
@@ -71,11 +71,11 @@
        *     submenu: [ 항목, ... ]  하위 메뉴
        */
       // #region rowMenu
-      var STATUSES = ['작업중', '검토중', '승인', '폐기'];
+      const STATUSES = ['작업중', '검토중', '승인', '폐기'];
 
       function buildRowMenu(clickedNode) {
-        var selectedNodes = treeDocument.getSelectedNodes();
-        var isLocked = clickedNode.getAttributeValue('status') === '승인';
+        const selectedNodes = treeDocument.getSelectedNodes();
+        const isLocked = clickedNode.getAttributeValue('status') === '승인';
         return [
           {
             type: 'PushItem',
@@ -147,14 +147,14 @@
        *     우클릭한 행이 선택되어 있지 않으면 먼저 그 행을 선택한다.
        */
       // #region grid
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         rowSelection: 'multiple',
         showSelectionCheckBoxesFlag: true,
         cellActivationFeedback: 'row',
         showContextualMenuColumnFlag: true,
         onContextualEvent: function (params) {
-          var cellInfos = params && params.cellInfos;
+          const cellInfos = params && params.cellInfos;
           if (!cellInfos) {
             return [];
           }
@@ -183,13 +183,13 @@
        */
       // #region selection
       function showSelection() {
-        var labels = treeDocument.getSelectedNodes().map(function (node) {
+        const labels = treeDocument.getSelectedNodes().map(function (node) {
           return node.getLabel();
         });
         document.getElementById('selection').textContent = labels.length ? '선택: ' + labels.join(', ') : '선택된 행 없음';
       }
 
-      var xso = treeDocument.getXSO();
+      const xso = treeDocument.getXSO();
       xso.onPostAdd(showSelection);
       xso.onPostRemove(showSelection);
       xso.onEmpty(showSelection);

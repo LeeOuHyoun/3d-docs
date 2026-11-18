@@ -12,7 +12,7 @@ UWA2/js/Element.js, Event.js, Dispatcher.js. 호출부: `UWA.createElement(` 5,2
 
 ```js
 require(['UWA/Core', 'UWA/Element'], function (UWA) {
-  var box = UWA.createElement('div', {
+  const box = UWA.createElement('div', {
     'class': 'part-box',
     styles: { padding: 8, border: '1px solid #ccc' },
     html: [
@@ -128,7 +128,7 @@ box.addEvent('click', function (e) {
 });
 
 list.addEvent('click .item', function (e) {
-  var item = UWA.Event.getElement(e);
+  const item = UWA.Event.getElement(e);
   console.log(item.getData('id'));
 });
 
@@ -189,7 +189,7 @@ box.removeEvent('click', handler);
 `document.querySelector`, `e.target` 으로 얻은 요소에는 UWA 메서드가 없습니다. 메서드가 필요하면 붙입니다.
 
 ```js
-var el = UWA.extendElement(document.getElementById('grid'));
+const el = UWA.extendElement(document.getElementById('grid'));
 el.addClassName('ready');
 ```
 

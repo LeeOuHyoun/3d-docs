@@ -42,7 +42,7 @@
     ], function (Menu, ContextualMenu, Button) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -72,12 +72,12 @@
       }
 
       function openBasic(e) {
-        var rect = buttonRect(e);
+        const rect = buttonRect(e);
         showMenu(basicItems(), { position: { x: rect.left, y: rect.bottom } });
       }
 
       function openRightAligned(e) {
-        var rect = buttonRect(e);
+        const rect = buttonRect(e);
         showMenu(basicItems(), { position: { x: rect.right, y: rect.bottom }, layout: 'topright' });
       }
       // #endregion show
@@ -112,7 +112,7 @@
        *   - RadioItem 도 묶음 개념이 없어서 하나만 'selected' 가 되게 앱이 정합니다.
        */
       // #region check
-      var view = { thumbnail: true, sort: 'name' };
+      const view = { thumbnail: true, sort: 'name' };
 
       function sortItem(value, title) {
         return {
@@ -186,7 +186,7 @@
        *   - 열린 메뉴의 체크 표시는 Menu.updateModel([{ title, state }]) 로 바꿉니다 (CheckItem 만, title 로 찾음).
        */
       // #region keepOpen
-      var columns = [
+      const columns = [
         { title: '품번', visible: true },
         { title: '품명', visible: true },
         { title: '담당자', visible: false }
@@ -210,7 +210,7 @@
       }
 
       function openColumns(e) {
-        var rect = buttonRect(e);
+        const rect = buttonRect(e);
         showMenu(columnItems(), { position: { x: rect.left, y: rect.bottom }, doNotHideOnAction: true });
       }
       // #endregion keepOpen
@@ -218,11 +218,11 @@
       addButton('기본 메뉴', openBasic);
       addButton('오른쪽 정렬 (layout)', openRightAligned);
       addButton('체크 / 라디오', function (e) {
-        var rect = buttonRect(e);
+        const rect = buttonRect(e);
         showMenu(viewItems(), { position: { x: rect.left, y: rect.bottom } });
       });
       addButton('하위 메뉴', function (e) {
-        var rect = buttonRect(e);
+        const rect = buttonRect(e);
         showMenu(exportItems(), { position: { x: rect.left, y: rect.bottom } });
       });
       addButton('열어 둔 채 바꾸기', openColumns);
@@ -236,15 +236,15 @@
        *   - addEventListener 가 돌려준 번호로 removeEventListener 합니다.
        */
       // #region contextual
-      var area = document.getElementById('area');
-      var inner = document.getElementById('inner');
+      const area = document.getElementById('area');
+      const inner = document.getElementById('inner');
 
-      var areaToken = ContextualMenu.addEventListener(area, {
+      let areaToken = ContextualMenu.addEventListener(area, {
         context: 'PRT-0002',
         callback: function (params) {
-          var onInner = !!params.info.target.closest('#inner');
+          const onInner = !!params.info.target.closest('#inner');
           log('callback (눌린 요소: ' + params.info.target.id + ', 영역 안 위치: ' + Math.round(params.info.position.x) + ', ' + Math.round(params.info.position.y) + ')');
-          var items = [{ type: 'PushItem', title: '새로 고침', fonticon: { content: 'wux-ui-3ds wux-ui-3ds-reload' }, action: { callback: run, context: 'reload' } }];
+          const items = [{ type: 'PushItem', title: '새로 고침', fonticon: { content: 'wux-ui-3ds wux-ui-3ds-reload' }, action: { callback: run, context: 'reload' } }];
           if (onInner) {
             items.unshift({ type: 'PushItem', title: params.context + ' 열기', action: { callback: run, context: params.context } }, { type: 'SeparatorItem' });
           }
@@ -256,7 +256,7 @@
       });
 
       function openByCode() {
-        var rect = inner.getBoundingClientRect();
+        const rect = inner.getBoundingClientRect();
         ContextualMenu.buildAndDisplayContextualMenu(inner, { clientX: rect.left, clientY: rect.bottom });
       }
 

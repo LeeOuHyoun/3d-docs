@@ -7,7 +7,7 @@ title: Windows API
 `DS/Windows/*` 의 모든 모듈(Window, Dialog, Panel, ImmersiveWindow, WindowGroup, ImmersiveFrame, DockingElement, WindowManager)의 속성, 메서드, 이벤트와 열거형입니다. 사용법은 [다이얼로그](/controls/dialog), [창 묶기, 붙이기, 위치 저장](/controls/window-layout), [분할 레이아웃 (DockingElement)](/controls/docking-element) 에 있습니다.
 
 ```js
-var dlg = new Dialog({ title: '승인', content: el, modalFlag: true, buttons: { Ok: new Button({ onClick: function (e) { e.dsModel.dialog.close(); } }) } });
+const dlg = new Dialog({ title: '승인', content: el, modalFlag: true, buttons: { Ok: new Button({ onClick: function (e) { e.dsModel.dialog.close(); } }) } });
 dlg.addEventListener('close', function () { console.log('닫힘'); });
 ```
 

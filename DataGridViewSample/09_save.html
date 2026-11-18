@@ -52,7 +52,7 @@
       'use strict';
 
       function writeLog(text) {
-        var log = document.getElementById('log');
+        const log = document.getElementById('log');
         log.textContent = new Date().toTimeString().slice(0, 8) + '  ' + text + '\n' + log.textContent;
       }
 
@@ -63,7 +63,7 @@
        *   그래서 저장이 끝나면 보낸 값이 아니라 응답 값을 행에 다시 넣는다.
        */
       // #region server
-      var nextId = 100;
+      let nextId = 100;
 
       function saveToServer(rows) {
         return new Promise(function (resolve, reject) {
@@ -86,7 +86,7 @@
       // #endregion server
 
       function createTreeDocument() {
-        var treeDocument = new TreeDocument();
+        const treeDocument = new TreeDocument();
         treeDocument.prepareUpdate();
         [
           { label: 'PRT-0001', grid: { id: 'ID-1', title: '브라켓', qty: 10, modified: '09:00:00' } },
@@ -115,7 +115,7 @@
        *   showModelChangesFlag: true 면 저장 중인 셀에 변경 표시가 보인다.
        */
       // #region immediate
-      var gridA = new DataGridView({
+      const gridA = new DataGridView({
         treeDocument: createTreeDocument(),
         showModelChangesFlag: true,
         columns: [
@@ -126,8 +126,8 @@
             width: 240,
             editableFlag: true,
             setCellValue: function (cellInfos, newValue) {
-              var node = cellInfos.nodeModel;
-              var oldValue = cellInfos.cellModel;
+              const node = cellInfos.nodeModel;
+              const oldValue = cellInfos.cellModel;
               node.updateOptions({ grid: { title: newValue } });
               writeLog('[A] ' + node.getLabel() + ' 저장 요청: "' + newValue + '"');
               saveToServer([{ id: node.options.grid.id, title: newValue, qty: node.options.grid.qty }])
@@ -161,10 +161,10 @@
        *     NodeToBeRemoved   삭제 표시된 행    이 모드에서 node.remove() 는 바로 지우지 않고 표시만 한다
        */
       // #region transaction
-      var treeDocumentB = createTreeDocument();
+      const treeDocumentB = createTreeDocument();
       treeDocumentB.setUseChangeTransactionMode(true);
 
-      var gridB = new DataGridView({
+      const gridB = new DataGridView({
         treeDocument: treeDocumentB,
         showModelChangesFlag: true,
         rowSelection: 'single',
@@ -196,11 +196,11 @@
           writeLog('[B] 저장할 변경이 없습니다.');
           return;
         }
-        var allNodes = treeDocumentB.getAllDescendants();
-        var removedNodes = allNodes.filter(function (node) {
+        const allNodes = treeDocumentB.getAllDescendants();
+        const removedNodes = allNodes.filter(function (node) {
           return hasState(node, WUXModelChangeStates.NodeToBeRemoved);
         });
-        var changedNodes = allNodes.filter(function (node) {
+        const changedNodes = allNodes.filter(function (node) {
           return node.getChangeStates() !== WUXModelChangeStates.Unchanged && removedNodes.indexOf(node) === -1;
         });
         writeLog('[B] 저장 요청: 추가/수정 ' + changedNodes.length + '행, 삭제 ' + removedNodes.length + '행');
@@ -232,14 +232,14 @@
       });
       // #endregion cancel
 
-      var newRowCount = 0;
+      let newRowCount = 0;
 
       document.getElementById('btnAdd').addEventListener('click', function () {
         newRowCount++;
         treeDocumentB.addRoot(new TreeNodeModel({ label: 'NEW-' + newRowCount, grid: { title: '신규 부품 ' + newRowCount, qty: 1, modified: '' } }));
       });
       document.getElementById('btnRemove').addEventListener('click', function () {
-        var node = treeDocumentB.getSelectedNodes()[0];
+        const node = treeDocumentB.getSelectedNodes()[0];
         if (node) {
           node.remove();
         }

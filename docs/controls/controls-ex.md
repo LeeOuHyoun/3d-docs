@@ -40,7 +40,7 @@ ControlsEx 폴더에는 CSS 파일이 없습니다. 모양은 모두 `Core/wux.c
 
 ```js
 require(['DS/ControlsEx/Card'], function (Card) {
-  var card = new Card({
+  const card = new Card({
     picture: '../assets/images/part.png',
     titleIcon: { iconName: 'folder', fontIconFamily: WUXManagedFontIcons.Font3DS },
     titleText: 'PRT-0001',
@@ -159,7 +159,7 @@ TweakersEx 의 카드 보기는 URL 객체 값의 `func` / `module` / `argument`
 
 ```js
 require(['DS/ControlsEx/IDCard'], function (IDCard) {
-  var idCard = new IDCard({
+  const idCard = new IDCard({
     identifier: 'partHeader',
     titleIcon: { iconName: 'folder', fontIconFamily: WUXManagedFontIcons.Font3DS },
     titleText: 'PRT-0001 브라켓',
@@ -279,7 +279,7 @@ ENOProjectMgmtCommonComponents 는 `new IDCard({ isFoldedFlag: true, infoVisible
 
 ```js
 require(['DS/ControlsEx/LoadingPanel'], function (LoadingPanel) {
-  var panel = new LoadingPanel({
+  const panel = new LoadingPanel({
     shape: 'linear',
     width: '300px',
     info: '부품 목록을 불러오는 중...',
@@ -380,9 +380,9 @@ DELWebUXControls 의 DELProgressBar 는 `LoadingPanel.inherit({ publishedPropert
 
 ```js
 require(['DS/ControlsEx/CodeMirror'], function (CodeMirror) {
-  var editor = new CodeMirror({
+  const editor = new CodeMirror({
     mode: 'javascript',
-    value: 'var a = 1;',
+    value: 'const a = 1;',
     CMOptions: { theme: 'eclipse', lineNumbers: true },
     resizableFlag: true
   }).inject(document.getElementById('code'));
@@ -452,15 +452,15 @@ require(['DS/ControlsEx/CodeMirror'], function (CodeMirror) {
 
 ```js
 require(['DS/ControlsEx/PathExplorer', 'DS/TreeModel/TreeDocument', 'DS/TreeModel/TreeNodeModel'], function (PathExplorer, TreeDocument, TreeNodeModel) {
-  var doc = new TreeDocument();
-  var root = new TreeNodeModel({ label: '제품' });
-  var asm = new TreeNodeModel({ label: '조립품 A' });
-  var part = new TreeNodeModel({ label: '브라켓' });
+  const doc = new TreeDocument();
+  const root = new TreeNodeModel({ label: '제품' });
+  const asm = new TreeNodeModel({ label: '조립품 A' });
+  const part = new TreeNodeModel({ label: '브라켓' });
   asm.addChild(part);
   root.addChild(asm);
   doc.addRoot(root);
 
-  var path = new PathExplorer({ model: doc, value: part }).inject(document.getElementById('path'));
+  const path = new PathExplorer({ model: doc, value: part }).inject(document.getElementById('path'));
   path.addEventListener('change', function (e) {
     console.log(path.computeStringsFromValue(e.dsModel.value));
   });
@@ -516,13 +516,13 @@ TreeDocument, TreeNodeModel 만들기는 [데이터 (TreeDocument)](/datagridvie
 
 ```js
 require(['UWA/Core', 'DS/ControlsEx/Wizard'], function (UWA, Wizard) {
-  var pages = [
+  const pages = [
     UWA.createElement('div', { text: '기본 정보 입력' }),
     UWA.createElement('div', { text: '첨부 파일 선택' }),
     UWA.createElement('div', { text: '확인' })
   ];
 
-  var wizard = new Wizard({
+  const wizard = new Wizard({
     steps: [
       { title: '기본 정보', description: '이름, 설명' },
       { title: '첨부' },
@@ -572,7 +572,7 @@ require(['UWA/Core', 'DS/ControlsEx/Wizard'], function (UWA, Wizard) {
 
 ```js
 require(['DS/WindowsEx/WizardDialog'], function (WizardDialog) {
-  var dlg = new WizardDialog({
+  const dlg = new WizardDialog({
     title: '부품 등록',
     content: wizard,
     modalFlag: true,
@@ -626,7 +626,7 @@ require(['DS/WindowsEx/WizardDialog'], function (WizardDialog) {
 
 ```js
 require(['DS/ControlsEx/MagnitudeEditor'], function (MagnitudeEditor) {
-  var len = new MagnitudeEditor({
+  const len = new MagnitudeEditor({
     magnitudeID: 'LENGTH',
     displayUnit: 'MM',
     value: 0.012,

@@ -82,9 +82,9 @@ widget.addPreference({
 ## 값 읽기, 쓰기
 
 ```js
-var size = widget.getInt('pageSize');
-var showState = widget.getBool('showState');
-var mode = widget.getValue('viewMode');
+const size = widget.getInt('pageSize');
+const showState = widget.getBool('showState');
+const mode = widget.getValue('viewMode');
 
 widget.setValue('viewMode', 'tile');
 widget.setValue('lastPartId', 'PRT-0001');
@@ -151,7 +151,7 @@ widget.deleteValue('lastPartId');
 `X3DContentId` 는 `3DXContent` 형식입니다.
 
 ```js
-var content = JSON.parse(widget.getValue('X3DContentId'));
+const content = JSON.parse(widget.getValue('X3DContentId'));
 // {
 //   protocol: '3DXContent', version: '0.1', source: '<보낸 앱 id>',
 //   data: { items: [ { envId: '<플랫폼 id>', serviceId: '3DSpace', objectId: '<physicalid>', objectType: '<타입>', contextId: '<SecurityContext>' } ] }

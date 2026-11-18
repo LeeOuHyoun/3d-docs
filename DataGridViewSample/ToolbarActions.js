@@ -16,21 +16,21 @@
 define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], function (TreeNodeModel) {
   'use strict';
 
-  var newRowCount = 0;
+  let newRowCount = 0;
 
   /* 검색어 + 상태 콤보 두 조건을 함께 적용해서 행을 보이기/숨기기 */
-  var currentKeyword = '';
-  var currentStatus = '전체';
+  let currentKeyword = '';
+  let currentStatus = '전체';
 
   // #region rowVisibility
   function applyRowVisibility(grid) {
-    var treeDocument = grid.treeDocument;
+    const treeDocument = grid.treeDocument;
     treeDocument.prepareUpdate();
     treeDocument.getRoots().forEach(function (node) {
-      var label = String(node.options.label);
-      var status = node.getAttributeValue('status');
-      var keywordOk = currentKeyword === '' || label.toLowerCase().indexOf(currentKeyword.toLowerCase()) > -1;
-      var statusOk = currentStatus === '전체' || status === currentStatus;
+      const label = String(node.options.label);
+      const status = node.getAttributeValue('status');
+      const keywordOk = currentKeyword === '' || label.toLowerCase().indexOf(currentKeyword.toLowerCase()) > -1;
+      const statusOk = currentStatus === '전체' || status === currentStatus;
       if (keywordOk && statusOk) {
         node.show();
       } else {
@@ -45,7 +45,7 @@ define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], f
     /* [+] 버튼 : 행 추가. TreeDocument 에 TreeNodeModel 을 addRoot 하면 그리드에 바로 반영된다. */
     // #region addRow
     addRow: function (e) {
-      var grid = e.context.executionContext;
+      const grid = e.context.executionContext;
       newRowCount++;
       grid.treeDocument.prepareUpdate();
       grid.treeDocument.addRoot(new TreeNodeModel({
@@ -59,8 +59,8 @@ define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], f
     /* [휴지통] 버튼 : 선택된 행 삭제. 선택 정보는 TreeDocument 가 가지고 있다. */
     // #region deleteSelected
     deleteSelected: function (e) {
-      var grid = e.context.executionContext;
-      var selectedNodes = grid.treeDocument.getSelectedNodes();
+      const grid = e.context.executionContext;
+      const selectedNodes = grid.treeDocument.getSelectedNodes();
       if (selectedNodes.length === 0) {
         alert('삭제할 행을 선택하세요.');
         return;
@@ -75,8 +75,8 @@ define('DS/DataGridViewSample/ToolbarActions', ['DS/TreeModel/TreeNodeModel'], f
 
     /* [보기] 버튼 : 선택된 행의 값을 읽어서 확인. getAttributeValue(dataIndex) 로 셀 값을 읽는다. */
     showSelected: function (e) {
-      var grid = e.context.executionContext;
-      var lines = grid.treeDocument.getSelectedNodes().map(function (node) {
+      const grid = e.context.executionContext;
+      const lines = grid.treeDocument.getSelectedNodes().map(function (node) {
         return node.options.label + ' / ' + node.getAttributeValue('title') + ' / ' + node.getAttributeValue('status') + ' / ' + node.getAttributeValue('progress') + '%';
       });
       alert(lines.length ? lines.join('\n') : '선택된 행이 없습니다.');

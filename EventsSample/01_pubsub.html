@@ -40,8 +40,8 @@
     require(['DS/CoreEvents/Events', 'DS/CoreEvents/ModelEvents'], function (Events, ModelEvents) {
       'use strict';
 
-      var logEl = document.getElementById('log');
-      var tokens = [];
+      const logEl = document.getElementById('log');
+      let tokens = [];
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -87,8 +87,8 @@
       });
 
       /* [5] ModelEvents: target 이 있으면 부모로 전파, 받는 값은 포장 객체 */
-      var root = new ModelEvents({ target: 'root' });
-      var child = new ModelEvents({ target: 'child', parent: root });
+      const root = new ModelEvents({ target: 'root' });
+      const child = new ModelEvents({ target: 'child', parent: root });
       root.subscribe({ event: 'changed' }, function (e) {
         log('[5] root 받음 target=' + e.target + ' data=' + JSON.stringify(e.data));
       });

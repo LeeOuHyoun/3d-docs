@@ -29,8 +29,8 @@ saveToServer(payload).then(function (result) {
 {
   text: '품명', dataIndex: 'title', editableFlag: true,
   setCellValue: function (cellInfos, newValue) {
-    var node = cellInfos.nodeModel;
-    var oldValue = cellInfos.cellModel;
+    const node = cellInfos.nodeModel;
+    const oldValue = cellInfos.cellModel;
     node.updateOptions({ grid: { title: newValue } });
     saveToServer({ id: node.options.grid.id, title: newValue })
       .then(function (result) {
@@ -56,13 +56,13 @@ saveToServer(payload).then(function (result) {
 
 ```js
 saveToServer(rows).then(function (results) {
-  var nodeById = {};
+  const nodeById = {};
   treeDocument.getAllDescendants().forEach(function (node) {
     nodeById[node.options.grid.id] = node;
   });
   treeDocument.prepareUpdate();
   results.forEach(function (r) {
-    var node = nodeById[r.id];
+    const node = nodeById[r.id];
     if (node) {
       node.updateOptions({ grid: r });
     }
@@ -90,13 +90,13 @@ node.remove();
 
 ```js
 treeDocument.setUseChangeTransactionMode(true);
-var grid = new DataGridView({ treeDocument: treeDocument, columns: columns, showModelChangesFlag: true });
+const grid = new DataGridView({ treeDocument: treeDocument, columns: columns, showModelChangesFlag: true });
 
 function handleSave() {
   if (!treeDocument.hasPendingChanges()) {
     return;
   }
-  var changed = treeDocument.getAllDescendants().filter(function (node) {
+  const changed = treeDocument.getAllDescendants().filter(function (node) {
     return node.getChangeStates() !== WUXModelChangeStates.Unchanged;
   });
   saveToServer(changed.map(function (node) { return node.options.grid; }))
@@ -134,7 +134,7 @@ function handleSave() {
 `node.getChangeStates()` 는 전역 `WUXModelChangeStates` 의 비트 값을 돌려줍니다. 한 행이 여러 상태를 같이 가질 수 있으므로(추가한 행을 다시 고친 경우 등) `&` 로 확인합니다.
 
 ```js
-var isRemoved = (node.getChangeStates() & WUXModelChangeStates.NodeToBeRemoved) !== 0;
+const isRemoved = (node.getChangeStates() & WUXModelChangeStates.NodeToBeRemoved) !== 0;
 ```
 
 | 값 | 뜻 | `acceptChanges()` | `cancelChanges()` |

@@ -35,7 +35,7 @@
       'use strict';
 
       /* [1] 데이터 */
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { title: '브라켓', status: '작업중', progress: 20,  qty: 10 } },
@@ -50,7 +50,7 @@
       treeDocument.pushUpdate();
 
       /* [2] 그리드 생성 (설정은 모두 생성자 옵션) */
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         showSelectionCheckBoxesFlag: true,   // 행 머리에 선택 체크박스 항상 표시 (기본 'OnOver' = 마우스 올릴 때만)
         cellActivationFeedback: 'row',       // 클릭 시 셀 대신 행 전체를 강조 ('cell' 이 기본)
@@ -93,7 +93,7 @@
        *   module 은 webapps 기준 경로다. 'DS/DataGridViewSample/ToolbarActions' -> webapps/DataGridViewSample/ToolbarActions.js
        */
       // #region toolbar
-      var toolbar = grid.setToolbar({
+      const toolbar = grid.setToolbar({
         entries: [
           {
             id: 'searchPartNo',

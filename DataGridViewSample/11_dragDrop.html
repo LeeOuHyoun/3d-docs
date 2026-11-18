@@ -67,7 +67,7 @@
       'use strict';
 
       function writeLog(text) {
-        var log = document.getElementById('log');
+        const log = document.getElementById('log');
         log.textContent = text + '\n' + log.textContent;
       }
 
@@ -75,7 +75,7 @@
         return new TreeNodeModel({ label: id, grid: { id: id, title: title, type: type, status: status }, children: children });
       }
 
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         createRow('FLD-0001', '조립 부품', 'Folder', '작업중', [
@@ -103,7 +103,7 @@
        *   cellDragEnabledFlag 는 만들 때 정한다. 만든 뒤 false 로 바꿔도 이미 그려진 셀 내용은 계속 끌린다.
        */
       // #region grid
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         columns: [
           { text: '품번', dataIndex: 'tree', width: 200 },
@@ -156,7 +156,7 @@
        *   끌기가 끝난 DragEnd 콜백에서 새 순서를 읽는다. 손잡이로 끌면 ...RowHeader, 셀로 끌면 ...Cell 콜백이 불린다.
        */
       // #region saveOrder
-      var dropped = false;
+      let dropped = false;
 
       function markDropped(event, cellInfos) {
         dropped = !!(cellInfos.droppedNodes && cellInfos.droppedNodes.length > 0);
@@ -166,7 +166,7 @@
       function saveOrderAfterDrag(event, cellInfos) {
         if (dropped) {
           dropped = false;
-          var ids = treeDocument.getAllDescendants().map(function (node) {
+          const ids = treeDocument.getAllDescendants().map(function (node) {
             return (node.isRoot() ? '' : node.getParent().getLabel() + '/') + node.getAttributeValue('id');
           });
           writeLog('저장할 새 순서: ' + ids.join(', '));
@@ -185,8 +185,8 @@
        */
       // #region customDrop
       function moveIntoTarget(event, cellInfos) {
-        var nodes = cellInfos.droppedNodes;
-        var target = cellInfos.nodeModel;
+        const nodes = cellInfos.droppedNodes;
+        const target = cellInfos.nodeModel;
         if (!nodes || nodes.length === 0 || !target || cellInfos.dropPosition !== 'middle') {
           return true;
         }
@@ -221,7 +221,7 @@
       }
 
       function addDroppedItems(event, parentNode) {
-        var content;
+        let content;
         try {
           content = JSON.parse(event.dataTransfer.getData('text'));
         } catch (e) {
@@ -232,7 +232,7 @@
         }
         treeDocument.prepareUpdate();
         (content.data.items || []).forEach(function (item) {
-          var node = new TreeNodeModel({
+          const node = new TreeNodeModel({
             label: item.displayName,
             grid: { id: item.objectId, title: '밖에서 받은 객체', type: item.objectType, status: '작업중' }
           });
@@ -262,7 +262,7 @@
        */
       // #region dragOut
       function putContent(event, cellInfos) {
-        var content = {
+        const content = {
           protocol: '3DXContent',
           version: '1.1',
           source: 'MYAPP',
@@ -313,7 +313,7 @@
       // #endregion combine
 
       function applyOptions() {
-        var rules = { all: function () { return true; }, noMiddle: rejectMiddle, folderOnly: folderOnly };
+        const rules = { all: function () { return true; }, noMiddle: rejectMiddle, folderOnly: folderOnly };
         grid.rowDragEnabledFlag = document.getElementById('chkRowDrag').checked;
         grid.rowReorderEnabledFlag = document.getElementById('chkReorder').checked;
         treeDocument.options.shouldAcceptDrop = rules[document.getElementById('selDropRule').value];
@@ -326,7 +326,7 @@
       });
       applyOptions();
 
-      var externalCount = 0;
+      let externalCount = 0;
       document.getElementById('dragSource').addEventListener('dragstart', function (event) {
         externalCount++;
         event.dataTransfer.setData('text', JSON.stringify({
@@ -338,7 +338,7 @@
         event.dataTransfer.effectAllowed = 'copy';
       });
 
-      var dropBox = document.getElementById('dropBox');
+      const dropBox = document.getElementById('dropBox');
       dropBox.addEventListener('dragover', function (event) {
         event.preventDefault();
         dropBox.classList.add('over');
@@ -349,8 +349,8 @@
       dropBox.addEventListener('drop', function (event) {
         event.preventDefault();
         dropBox.classList.remove('over');
-        var content = JSON.parse(event.dataTransfer.getData('text'));
-        var names = content.data.items.map(function (item) { return item.displayName; });
+        const content = JSON.parse(event.dataTransfer.getData('text'));
+        const names = content.data.items.map(function (item) { return item.displayName; });
         writeLog('상자가 받음: ' + names.join(', ') + ' (행 정보 합쳐짐: ' + !!content.data.DataGridView_Row_Options + ')');
       });
 

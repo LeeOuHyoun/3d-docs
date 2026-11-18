@@ -7,7 +7,7 @@ title: 레이아웃 메서드
 `grid.layout` 객체에서 부르는 함수입니다. 컬럼을 숨기거나 너비를 바꾸는 것처럼 **만든 뒤에 컬럼을 다루는 일**은 대부분 그리드가 아니라 이 객체에 있습니다. 그리드 객체의 함수는 [그리드 메서드](/datagridview/api/grid-methods), 생성할 때 넣는 옵션은 [layoutOptions](/datagridview/api/layout-options) 에 있습니다.
 
 ```js
-var grid = new DataGridView({ treeDocument: treeDocument, columns: columns });
+const grid = new DataGridView({ treeDocument: treeDocument, columns: columns });
 
 grid.layout.setColumnVisibleFlag('price', false);
 grid.layout.setColumnWidth('title', 240);
@@ -35,7 +35,7 @@ DataGridView.js 의 `DS/DataGridView/DataGridViewLayout` (클래스 이름 Colle
 ```js
 grid.addEventListener('click', function (event, cellInfos) {
   if (!cellInfos || cellInfos.columnID < 0) { return; }
-  var dataIndex = grid.layout.getDataIndexFromColumnIndex(cellInfos.columnID);
+  const dataIndex = grid.layout.getDataIndexFromColumnIndex(cellInfos.columnID);
 });
 ```
 
@@ -130,7 +130,7 @@ grid.layout.setColumnOrGroupProperties('qty', { text: '수량 (EA)', editableFla
 이 표에 없는 키(컬럼 함수 등)를 바꿀 때는 컬럼 정의 객체를 고친 뒤 `applyColumns()` 를 부릅니다.
 
 ```js
-var column = grid.layout.getColumnOrGroup('qty');
+const column = grid.layout.getColumnOrGroup('qty');
 column.getCellClassName = function (cellInfos) { return 'qty-cell'; };
 grid.layout.applyColumns();
 ```
@@ -165,7 +165,7 @@ grid.layout.applyColumns();
 | <code>getRowPosition(rowID)</code> | 5 | <code>number</code> | 행의 세로 위치(px) |
 
 ```js
-var cellID = grid.layout.getCellIDFromCoordinates({ rowID: 0, columnID: 'title' });
+const cellID = grid.layout.getCellIDFromCoordinates({ rowID: 0, columnID: 'title' });
 grid.setActiveCell(cellID);
 ```
 

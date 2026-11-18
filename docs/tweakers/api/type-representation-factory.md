@@ -7,7 +7,7 @@ title: TypeRepresentationFactory API
 타입 이름으로 편집기를 만들고, 사용자 타입과 enum 을 등록합니다. 사용법은 [사용자 타입 등록](/tweakers/custom-type), [편집기 단독 사용](/tweakers/standalone#타입-이름으로-만들기) 에 있습니다.
 
 ```js
-var factory = new TypeRepresentationFactory();
+const factory = new TypeRepresentationFactory();
 factory.registerEnum('partStatus', ['작업중', '승인']);
 factory.generateView('승인', { typePath: 'partStatus' }).then(function (tweaker) { tweaker.inject(el); });
 ```

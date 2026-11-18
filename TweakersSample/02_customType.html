@@ -49,7 +49,7 @@
     ], function (TypeRepresentationFactory, DataGridView, TreeDocument, TreeNodeModel) {
       'use strict';
 
-      var logEl = document.getElementById('log');
+      const logEl = document.getElementById('log');
 
       function log(text) {
         logEl.textContent = text + '\n' + logEl.textContent;
@@ -62,7 +62,7 @@
        *   registerEnum                : 이름 하나와 목록. { 라벨: 값 } 객체면 저장 값과 화면 라벨이 다르다.
        */
       // #region register
-      var factory = new TypeRepresentationFactory();
+      const factory = new TypeRepresentationFactory();
 
       if (!factory.getRegisteredTypeRepresentation('partStatusCombo')) {
         factory.registerTypeRepresentations({
@@ -100,7 +100,7 @@
        *   컬럼 typeRepresentation 에 등록한 이름을 넣는다.
        */
       // #region grid
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', grid: { title: '브라켓', status: 'WIP', remove: false, pin: 'none', grade: 'A' } },
@@ -111,7 +111,7 @@
       });
       treeDocument.pushUpdate();
 
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         columns: [
           { text: '품번', dataIndex: 'tree', width: 120 },
@@ -124,7 +124,7 @@
       }).inject(document.getElementById('grid'));
 
       treeDocument.onNodeModelUpdate(function (e) {
-        var node = e.data.nodeModel;
+        const node = e.data.nodeModel;
         log(node.options.label + '  status=' + node.getAttributeValue('status') +
           ', remove=' + node.getAttributeValue('remove') + ', pin=' + node.getAttributeValue('pin') +
           ', grade=' + node.getAttributeValue('grade'));

@@ -7,7 +7,7 @@ title: 색상, 표시 컨트롤 API
 색 선택(ColorPicker, ColorChooser, ColorPalette, ColorCanvas, ColorEditors), 시간 선택판(TimeChooser), 막대(Gauge, Timeline), 툴팁 화면(Tooltip, TooltipLoader, 2026 툴팁 뷰, UserCard, BaseCard)의 공개 속성, 메서드, 이벤트입니다. 사용법과 함정은 [색상, 표시 컨트롤](/controls/display-controls) 에 있습니다.
 
 ```js
-var picker = new ColorPicker({ value: 'ff0000' }).inject(el);
+const picker = new ColorPicker({ value: 'ff0000' }).inject(el);
 picker.value = '00ff00';
 picker.addEventListener('change', function (e) { console.log('#' + e.dsModel.value); });
 ```

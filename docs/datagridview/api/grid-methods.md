@@ -7,10 +7,10 @@ title: 그리드 메서드
 `new DataGridView({ ... })` 로 만든 그리드 객체에서 부르는 함수입니다. DataGridView 자체 함수와 상속받은 CollectionView 함수를 함께 정리했습니다. 옵션(`grid.옵션 = 값`)은 [그리드 옵션](/datagridview/api/grid-options) 에 있습니다.
 
 ```js
-var grid = new DataGridView({ treeDocument: treeDocument, columns: columns });
+const grid = new DataGridView({ treeDocument: treeDocument, columns: columns });
 
-var doc = grid.getTreeDocument();
-var info = grid.getCellInfosAt(grid.getActiveCellID());
+const doc = grid.getTreeDocument();
+const info = grid.getCellInfosAt(grid.getActiveCellID());
 grid.ensureNodeModelVisible(doc.getRoots()[10], false, true);
 ```
 
@@ -101,8 +101,8 @@ TreeDocument 자체의 함수(행 추가, 선택 목록 등)는 [데이터 (Tree
 | <code>flashEffectOnNodeModel('ui-modified', node)</code> | - | 행을 잠깐 깜빡여 변경을 알림 |
 
 ```js
-var doc = grid.getTreeDocument();
-var target = doc.getAllDescendants().find(function (n) { return n.getLabel() === 'PRT-0123'; });
+const doc = grid.getTreeDocument();
+const target = doc.getAllDescendants().find(function (n) { return n.getLabel() === 'PRT-0123'; });
 grid.ensureNodeModelVisible(target, true, true, 0.5, true);
 grid.selectNodeModel(target);
 ```
@@ -173,7 +173,7 @@ grid.onReady(function () {
 ```js
 grid.displayModalLoader('Loading...');
 loadRows().then(function (rows) {
-  var doc = grid.getTreeDocument();
+  const doc = grid.getTreeDocument();
   doc.prepareUpdate();
   rows.forEach(function (row) { doc.addRoot(new TreeNodeModel(row)); });
   doc.pushUpdate();

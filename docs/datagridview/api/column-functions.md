@@ -12,7 +12,7 @@ title: 컬럼 함수
 {
   text: '금액', dataIndex: 'amount',
   getCellValue: function (cellInfos) {
-    var g = cellInfos.nodeModel.options.grid;
+    const g = cellInfos.nodeModel.options.grid;
     return g.qty * g.price;
   },
   getCellEditableState: function (cellInfos) {
@@ -31,7 +31,7 @@ DataGridView.js 의 DataGridViewLayout (`getColumnOptionValue(columnID, "함수�
 
 | 키 | 사용 | 호출 형태 (this) | 반환값 | 예 | 설명 |
 | --- | --- | --- | --- | --- | --- |
-| <code>getCellValue</code> | 47 | fn(cellInfos)  this=그리드 | 표시할 값 | <code>var g = cellInfos.nodeModel.options.grid; return g.qty * g.price;</code> | grid[dataIndex] 대신 계산한 값을 표시. 화면, 찾기, 내보내기에 모두 쓰임 |
+| <code>getCellValue</code> | 47 | fn(cellInfos)  this=그리드 | 표시할 값 | <code>const g = cellInfos.nodeModel.options.grid; return g.qty * g.price;</code> | grid[dataIndex] 대신 계산한 값을 표시. 화면, 찾기, 내보내기에 모두 쓰임 |
 | <code>setCellValue</code> | 25 | fn(cellInfos, newValue)  this=그리드 | - | <code>cellInfos.nodeModel.updateOptions({ grid: { qty: newValue } });</code> | 편집 결과 저장 방법을 직접 지정. cellInfos.cellModel = 바뀌기 전 값 |
 | <code>hasCellValue</code> | 19 | fn(cellInfos)  this=그리드 | boolean | <code>return cellInfos.nodeModel.options.grid.type === 'PART';</code> | false 를 돌려주면 해당 셀은 빈 칸 (getCellValue 도 호출 안 됨) |
 | <code>getCellValueForSort</code> | 7 | fn(nodeModel, dataIndex)  this=그리드 | 정렬용 값 | <code>return nodeModel.options.grid.dueDate.getTime();</code> | ※ 인자가 cellInfos 가 아님. 정렬에 쓸 값이 표시값과 다를 때. getCellValue 로 계산해 보여주는 컬럼은 이 함수가 있어야 정렬할 값이 생김 |

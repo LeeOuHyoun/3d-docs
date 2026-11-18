@@ -95,7 +95,7 @@ UXMessages.addNotif({
 ## 지우기, 바꾸기
 
 ```js
-var id = UXMessages.addNotif({ level: 'info', message: '업로드 중... 0%', sticky: true });
+const id = UXMessages.addNotif({ level: 'info', message: '업로드 중... 0%', sticky: true });
 UXMessages.modifyNotif(id, { level: 'info', message: '업로드 중... 60%', sticky: true });
 UXMessages.modifyNotif(id, { level: 'success', message: '업로드 완료' });
 

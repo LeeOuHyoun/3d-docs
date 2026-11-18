@@ -39,14 +39,14 @@
     ], function (UWA, TransientWidget, Button, LineEditor, ComboBox) {
       'use strict';
 
-      var logEl;
+      let logEl;
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
       }
 
       function row(parent, labelText) {
-        var el = UWA.createElement('div', { 'class': 'ts-row' }).inject(parent);
+        const el = UWA.createElement('div', { 'class': 'ts-row' }).inject(parent);
         if (labelText) { UWA.createElement('label', { text: labelText }).inject(el); }
         return el;
       }
@@ -58,7 +58,7 @@
        */
       // #region open
       function openApp(appId, data, mode, width, height) {
-        var options = { mode: mode };
+        const options = { mode: mode };
         if (mode === 'panel') {
           options.width = width;
           options.height = height;
@@ -96,34 +96,34 @@
       // #endregion receive
 
       function build() {
-        var page = UWA.createElement('div', { 'class': 'ts-page' });
+        const page = UWA.createElement('div', { 'class': 'ts-page' });
 
         UWA.createElement('h3', { text: '받은 값 (이 위젯이 창으로 열렸을 때)' }).inject(page);
-        var receivedEl = UWA.createElement('div', { 'class': 'ts-received' }).inject(page);
+        const receivedEl = UWA.createElement('div', { 'class': 'ts-received' }).inject(page);
         receivedEl.textContent = JSON.stringify(readReceived(), null, 2);
 
         UWA.createElement('h3', { text: '다른 앱 열기' }).inject(page);
-        var appIdEditor = new LineEditor({ value: 'ENOLCMT_AP', sizeInCharNumber: 20 });
+        const appIdEditor = new LineEditor({ value: 'ENOLCMT_AP', sizeInCharNumber: 20 });
         appIdEditor.inject(row(page, '앱 ID'));
 
-        var dataEl = UWA.createElement('textarea').inject(row(page, '넘길 값'));
-        var platformId = widget.getValue('x3dPlatformId') || 'OnPremise';
+        const dataEl = UWA.createElement('textarea').inject(row(page, '넘길 값'));
+        const platformId = widget.getValue('x3dPlatformId') || 'OnPremise';
         dataEl.value = JSON.stringify({
           SelectedItem: [{ objectId: '', metatype: 'businessobject', source: '3DSpace', tenant: platformId }],
           x3dPlatformId: platformId,
           sampleMessage: 'from TransientSample'
         });
 
-        var modeCombo = new ComboBox({ elementsList: ['panel', 'transient'], value: 'panel', enableSearchFlag: false });
+        const modeCombo = new ComboBox({ elementsList: ['panel', 'transient'], value: 'panel', enableSearchFlag: false });
         modeCombo.inject(row(page, 'mode'));
 
-        var widthEditor = new LineEditor({ value: '650', sizeInCharNumber: 6 });
-        var heightEditor = new LineEditor({ value: '800', sizeInCharNumber: 6 });
-        var sizeRow = row(page, '크기');
+        const widthEditor = new LineEditor({ value: '650', sizeInCharNumber: 6 });
+        const heightEditor = new LineEditor({ value: '800', sizeInCharNumber: 6 });
+        const sizeRow = row(page, '크기');
         widthEditor.inject(sizeRow);
         heightEditor.inject(sizeRow);
 
-        var actions = row(page);
+        const actions = row(page);
         new Button({ label: '열기', emphasize: 'primary', onClick: onOpen }).inject(actions);
         new Button({ label: '나를 창으로 열기', onClick: onOpenSelf }).inject(actions);
         new Button({ label: '닫기', onClick: onClose }).inject(actions);
@@ -144,14 +144,14 @@
         }
 
         function onOpen() {
-          var data = parseData();
+          const data = parseData();
           if (!data) { return; }
           openApp(appIdEditor.value, data, modeCombo.value, parseInt(widthEditor.value, 10), parseInt(heightEditor.value, 10));
           log('showWidget ' + appIdEditor.value + ' ' + modeCombo.value);
         }
 
         function onOpenSelf() {
-          var selfAppId = widget.data.appId;
+          const selfAppId = widget.data.appId;
           if (!selfAppId) {
             log('widget.data.appId 가 없습니다. 3DDashboard 에 앱으로 등록된 위젯에서만 됩니다.');
             return;

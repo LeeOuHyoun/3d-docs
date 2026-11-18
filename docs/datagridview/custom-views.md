@@ -23,7 +23,7 @@ DataGridView.js 의 DataGridViewLayout (`_saveDataInPreferences`, `_applyPrefere
 ## 어디에 넣나
 
 ```js{2-4,6,8,10,14-15}
-var grid = new DataGridView({
+const grid = new DataGridView({
   identifier: 'partList',
   useWidgetPreferencesFlag: true,
   customViewsOptions: { dialogMaximizedFlag: false },
@@ -274,7 +274,7 @@ grid.getCustomViewsManager().onCustomViewsSave = function (views, currentIdentif
 `useWidgetPreferencesFlag: true` 를 더합니다. 실제 ENOVIA 앱이 가장 많이 쓰는 형태입니다.
 
 ```js
-var grid = new DataGridView({
+const grid = new DataGridView({
   identifier: 'partList',
   useWidgetPreferencesFlag: true,
   treeDocument: treeDocument,
@@ -317,7 +317,7 @@ if (savedJson) {
   DataGridView.importJsonPreferences('partList', savedJson);
 }
 
-var grid = new DataGridView({
+const grid = new DataGridView({
   identifier: 'partList',
   treeDocument: treeDocument,
   columns: columns
@@ -351,9 +351,9 @@ var grid = new DataGridView({
 위젯 설정에 저장한 그리드(예제 2)는 저장값에서 뷰를 다시 읽어 넣는 앱이 많습니다.
 
 ```js
-var raw = widget.getValue('wux-collectionView-dataGridView');
+const raw = widget.getValue('wux-collectionView-dataGridView');
 if (raw) {
-  var saved = JSON.parse(raw)[grid.identifier];
+  const saved = JSON.parse(raw)[grid.identifier];
   if (saved) {
     grid.loadCustomViews(saved.customViews, saved.currentCustomViewId);
   }

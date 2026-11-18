@@ -76,8 +76,8 @@ require(['DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices'], function
 CompassServices.getPlatformServices({
   platformId: widget.getValue('x3dPlatformId'),
   onComplete: function (platform) {
-    var spaceUrl = platform['3DSpace'];
-    var swymUrl = platform['3DSwym'];
+    const spaceUrl = platform['3DSpace'];
+    const swymUrl = platform['3DSwym'];
   },
   onFailure: function () { ... }
 });
@@ -151,7 +151,7 @@ Compass 를 찾지 못하면 `onComplete()` 가 인자 없이 불립니다. `get
 
 ```js
 require(['DS/i3DXCompassPlatformServices/OpenWith'], function (OpenWith) {
-  var content = {
+  const content = {
     protocol: '3DXContent',
     version: '0.1',
     source: widget.getValue('x3dAppId'),
@@ -168,7 +168,7 @@ require(['DS/i3DXCompassPlatformServices/OpenWith'], function (OpenWith) {
     }
   };
 
-  var openWith = new OpenWith();
+  const openWith = new OpenWith();
   openWith.set3DXContent(content);
   openWith.retrieveCompatibleApps(function (items) {
     items.forEach(function (item) {

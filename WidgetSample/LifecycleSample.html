@@ -41,23 +41,23 @@
     ], function (UWA, WAFData, WebappsUtils, CompassServices, PlatformAPI, Button, LineEditor) {
       'use strict';
 
-      var state = { spaceUrl: '', securityContext: '', object: null, graph: null };
-      var logEl;
+      const state = { spaceUrl: '', securityContext: '', object: null, graph: null };
+      let logEl;
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
       }
 
       function row(parent, labelText) {
-        var el = UWA.createElement('div', { 'class': 'ls-row' }).inject(parent);
+        const el = UWA.createElement('div', { 'class': 'ls-row' }).inject(parent);
         if (labelText) { UWA.createElement('label', { text: labelText }).inject(el); }
         return el;
       }
 
       function getSpaceUrl() {
-        var fallback = WebappsUtils.getWebappsBaseUrl().replace(/webapps\/?$/, '');
+        const fallback = WebappsUtils.getWebappsBaseUrl().replace(/webapps\/?$/, '');
         return new Promise(function (resolve) {
-          var done = false;
+          let done = false;
           function finish(url) {
             if (!done) {
               done = true;
@@ -69,7 +69,7 @@
             serviceName: '3DSpace',
             platformId: widget.getValue('x3dPlatformId') || undefined,
             onComplete: function (result) {
-              var url = Array.isArray(result) ? (result[0] && result[0].url) : result;
+              const url = Array.isArray(result) ? (result[0] && result[0].url) : result;
               finish(url || fallback);
             },
             onFailure: function () { finish(fallback); }
@@ -83,7 +83,7 @@
             type: 'json',
             headers: { Accept: 'application/json' },
             onComplete: function (res) {
-              var sc = res && res.SecurityContext;
+              const sc = res && res.SecurityContext;
               if (!sc) {
                 reject(new Error('SecurityContext 가 비어 있습니다'));
                 return;
@@ -112,7 +112,7 @@
       }
 
       function lcRequest(path, body, extraHeaders) {
-        var headers = UWA.extend({
+        const headers = UWA.extend({
           Accept: 'application/json',
           'Content-Type': 'application/json',
           'Accept-Language': widget.lang,
@@ -159,8 +159,8 @@
           if (!res || !res.status || res.status.errorMsg) {
             throw new Error((res && res.status && res.status.errorMsg) || 'getStateGraph 실패');
           }
-          var object = res.data.objects[0];
-          var policy = res.data.policies.filter(function (p) {
+          const object = res.data.objects[0];
+          const policy = res.data.policies.filter(function (p) {
             return object && p.name === object.policy;
           })[0];
           if (!policy) {
@@ -178,15 +178,15 @@
        */
       // #region next-states
       function computeNextStates(object, graph) {
-        var byName = {};
+        const byName = {};
         graph.states.forEach(function (s) { byName[s.stateSysName] = s; });
-        var current = byName[object.current];
-        var list = graph.transitions.filter(function (t) {
+        const current = byName[object.current];
+        const list = graph.transitions.filter(function (t) {
           return t.sourceState === object.current;
         }).map(function (t) {
           return { state: t.targetState, action: 'promote' };
         });
-        var previous = graph.states.filter(function (s) {
+        const previous = graph.states.filter(function (s) {
           return current && s.visuorder === current.visuorder - 1;
         })[0];
         if (previous && !list.some(function (n) { return n.state === previous.stateSysName; })) {
@@ -224,7 +224,7 @@
        */
       // #region errors
       function errorText(e) {
-        var data = e && e.data;
+        let data = e && e.data;
         if (typeof data === 'string') {
           try { data = JSON.parse(data); } catch (x) { return data; }
         }
@@ -335,7 +335,7 @@
         container.empty();
         return new Promise(function (resolve) {
           require(['DS/LifecycleCmd/MaturityCmd', 'css!DS/ChangeMaturityWidget/ChangeMaturityWidget'], function (MaturityCmd) {
-            var cmd = new MaturityCmd({ context: lifecycleContext() });
+            const cmd = new MaturityCmd({ context: lifecycleContext() });
             cmd.executeCompactViewAsync(widget, container, { SecurityContext: state.securityContext }, physicalId)
               .then(function () {
                 resolve(cmd.changeMaturityWidget.current);
@@ -351,7 +351,7 @@
       // #region ootb-revise
       function openReviseDialog(object, onDone) {
         require(['DS/LifecycleCmd/ReviseCmd'], function (ReviseCmd) {
-          var cmd = new ReviseCmd({ context: lifecycleContext() });
+          const cmd = new ReviseCmd({ context: lifecycleContext() });
           cmd.addEvent('ExecCompleted', onDone);
           cmd.execute([{
             physicalid: object.physicalid,
@@ -371,7 +371,7 @@
       // #region ootb-owner
       function openTransferOwnershipDialog(object) {
         require(['DS/ENOCollabSharingCmds/commands/TransferOwnershipCmd/ActionBar_TransferOwnershipCmd'], function (TransferOwnershipCmd) {
-          var node = {
+          const node = {
             getID: function () { return object.physicalid; },
             getLabel: function () { return object.displayName || object.name; },
             getType: function () { return object.type; },
@@ -396,8 +396,8 @@
       // #region notify
       function listenLifecycleEvents() {
         PlatformAPI.subscribe('Lifecycle.Modification', function (data) {
-          var info = typeof data === 'string' ? JSON.parse(data) : data;
-          var refresh = info.Refresh || {};
+          const info = typeof data === 'string' ? JSON.parse(data) : data;
+          const refresh = info.Refresh || {};
           ['created', 'modified', 'deleted'].forEach(function (key) {
             (refresh[key] || []).forEach(function (item) {
               log('Lifecycle.Modification ' + key + ' ' + item.physicalid + ' ' + (item.operation || '') + ' ' + (item.state || ''));
@@ -405,54 +405,54 @@
           });
         });
         PlatformAPI.subscribe('DS/PADUtils/PADCommandProxy/refresh', function (message) {
-          var authored = message && message.data && message.data.authored;
+          const authored = message && message.data && message.data.authored;
           log('PADCommandProxy/refresh ' + JSON.stringify(authored || message));
         });
       }
       // #endregion notify
 
       function build() {
-        var page = UWA.createElement('div', { 'class': 'ls-page' });
+        const page = UWA.createElement('div', { 'class': 'ls-page' });
 
         UWA.createElement('h3', { text: '접속 정보' }).inject(page);
-        var infoEl = UWA.createElement('div', { 'class': 'ls-box' }).inject(page);
-        var scEditor = new LineEditor({ value: '', sizeInCharNumber: 50 });
+        const infoEl = UWA.createElement('div', { 'class': 'ls-box' }).inject(page);
+        const scEditor = new LineEditor({ value: '', sizeInCharNumber: 50 });
         scEditor.inject(row(page, 'SecurityContext'));
 
         UWA.createElement('h3', { text: '객체' }).inject(page);
-        var idRow = row(page, 'physicalid');
-        var idEditor = new LineEditor({ value: '', sizeInCharNumber: 34 });
+        const idRow = row(page, 'physicalid');
+        const idEditor = new LineEditor({ value: '', sizeInCharNumber: 34 });
         idEditor.inject(idRow);
         new Button({ label: '상태 읽기', emphasize: 'primary', onClick: onLoad }).inject(idRow);
-        var objectEl = UWA.createElement('div', { 'class': 'ls-box' }).inject(page);
+        const objectEl = UWA.createElement('div', { 'class': 'ls-box' }).inject(page);
 
         UWA.createElement('h3', { text: '갈 수 있는 상태 (lifecycle/maturity)' }).inject(page);
-        var nextEl = UWA.createElement('div', { 'class': 'ls-row' }).inject(page);
+        const nextEl = UWA.createElement('div', { 'class': 'ls-row' }).inject(page);
 
         UWA.createElement('h3', { text: 'CAA 공개 API (dslc)' }).inject(page);
-        var dslcRow = row(page, 'nextState');
-        var nextStateEditor = new LineEditor({ value: '', sizeInCharNumber: 16 });
+        const dslcRow = row(page, 'nextState');
+        const nextStateEditor = new LineEditor({ value: '', sizeInCharNumber: 16 });
         nextStateEditor.inject(dslcRow);
         new Button({ label: 'getNextStates', onClick: onDslcNext }).inject(dslcRow);
         new Button({ label: 'changeState', onClick: onDslcChange }).inject(dslcRow);
 
         UWA.createElement('h3', { text: '개정, 소유자' }).inject(page);
-        var etcRow = row(page, '새 소유자');
-        var ownerEditor = new LineEditor({ value: '', sizeInCharNumber: 16 });
+        const etcRow = row(page, '새 소유자');
+        const ownerEditor = new LineEditor({ value: '', sizeInCharNumber: 16 });
         ownerEditor.inject(etcRow);
         new Button({ label: '소유자 넘기기', onClick: onTransfer }).inject(etcRow);
         new Button({ label: '개정 (revise/major)', onClick: onRevise }).inject(etcRow);
 
         UWA.createElement('h3', { text: 'OOTB 화면' }).inject(page);
-        var ootbRow = row(page);
+        const ootbRow = row(page);
         new Button({ label: '성숙도 창', onClick: onMaturityDialog }).inject(ootbRow);
         new Button({ label: '작은 성숙도 표시', onClick: onCompact }).inject(ootbRow);
         new Button({ label: '개정 창', onClick: onReviseDialog }).inject(ootbRow);
         new Button({ label: '소유자 변경 창', onClick: onOwnerDialog }).inject(ootbRow);
-        var compactEl = UWA.createElement('div', { 'class': 'ls-compact' }).inject(page);
+        const compactEl = UWA.createElement('div', { 'class': 'ls-compact' }).inject(page);
 
         UWA.createElement('h3', { text: '결과' }).inject(page);
-        var resultEl = UWA.createElement('div', { 'class': 'ls-result' }).inject(page);
+        const resultEl = UWA.createElement('div', { 'class': 'ls-result' }).inject(page);
 
         UWA.createElement('h3', { text: '로그' }).inject(page);
         logEl = UWA.createElement('div', { 'class': 'ls-log' }).inject(page);
@@ -467,19 +467,19 @@
         }
 
         function showError(title, e) {
-          var text = errorText(e);
+          const text = errorText(e);
           resultEl.textContent = title + ' 실패\n' + text;
           log(title + ' 실패: ' + text);
         }
 
         function renderObject() {
-          var o = state.object;
+          const o = state.object;
           nextEl.empty();
           objectEl.textContent = o ? [o.displayName || o.name, o.revision, o.type, o.policy, o.currentStateUserName + ' (' + o.current + ')'].join(' / ') : '';
           if (!o) {
             return;
           }
-          var list = computeNextStates(o, state.graph);
+          const list = computeNextStates(o, state.graph);
           if (!list.length) {
             UWA.createElement('span', { text: '갈 수 있는 상태가 없습니다' }).inject(nextEl);
           }
@@ -492,7 +492,7 @@
         }
 
         function reload() {
-          var id = currentId();
+          const id = currentId();
           if (!id) {
             log('physicalid 를 넣습니다');
             return Promise.resolve();

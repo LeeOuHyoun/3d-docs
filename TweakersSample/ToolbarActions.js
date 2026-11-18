@@ -15,9 +15,9 @@ define('DS/TweakersSample/ToolbarActions', [], function () {
 
   // #region zoom
   function changeZoom(e) {
-    var toolbar = e.context.toolbar;
-    var current = parseInt(toolbar.getNodeModelByID('zoomRate').getAttributeValue('data'), 10) || 100;
-    var next = Math.min(200, Math.max(50, current + e.step));
+    const toolbar = e.context.toolbar;
+    const current = parseInt(toolbar.getNodeModelByID('zoomRate').getAttributeValue('data'), 10) || 100;
+    const next = Math.min(200, Math.max(50, current + e.step));
     toolbar.updateNodeModel('zoomRate', { grid: { data: next + '%' } });
     toolbar.updateNodeModel('zoomIn', { disabled: next >= 200 });
     toolbar.updateNodeModel('zoomOut', { disabled: next <= 50 });

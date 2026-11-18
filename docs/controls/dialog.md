@@ -35,9 +35,9 @@ ENOVIA 에서 "창을 띄우는" 방법은 다섯입니다. OOTB 앱의 새 화�
 
 ```js
 require(['UWA/Core', 'DS/Windows/Dialog', 'DS/Controls/Button'], function (UWA, Dialog, Button) {
-  var body = UWA.createElement('div', { styles: { padding: 12 }, text: '선택한 부품 3건을 승인합니다.' });
+  const body = UWA.createElement('div', { styles: { padding: 12 }, text: '선택한 부품 3건을 승인합니다.' });
 
-  var dlg = new Dialog({
+  const dlg = new Dialog({
     title: '승인',
     content: body,
     modalFlag: true,
@@ -103,7 +103,7 @@ require(['UWA/Core', 'DS/Windows/Dialog', 'DS/Controls/Button'], function (UWA, 
 `buttons` 를 비우고 `customButtonsDefinition` 에 Button 옵션 배열을 줍니다. `role` 로 Enter / Esc 를 정합니다.
 
 ```js
-var dlg = new Dialog({
+const dlg = new Dialog({
   title: '변경 확인',
   content: body,
   modalFlag: true,
@@ -125,7 +125,7 @@ var dlg = new Dialog({
 ### 아래쪽 체크박스
 
 ```js
-var dlg = new Dialog({
+const dlg = new Dialog({
   title: '삭제',
   content: '선택한 문서를 삭제합니다.',
   modalFlag: true,
@@ -204,8 +204,8 @@ function onOk(e) {
 
 ```js
 function confirmDialog(title, message, callback) {
-  var answered = false;
-  var dlg = new Dialog({
+  let answered = false;
+  const dlg = new Dialog({
     title: title,
     content: UWA.createElement('div', { styles: { padding: 12 }, text: message }),
     modalFlag: true,
@@ -238,20 +238,20 @@ define('DS/MyApp/View/Dialog/RemoveItems', [
 ], function (UWA, WUXDialog, WUXImmersiveFrame, WUXButton, NLS) {
   'use strict';
 
-  var dialog;
+  let dialog;
 
   function open(items) {
-    var deletable = items.filter(function (item) { return item.canDelete; });
-    var list = UWA.createElement('ul');
+    const deletable = items.filter(function (item) { return item.canDelete; });
+    const list = UWA.createElement('ul');
     items.forEach(function (item) {
       UWA.createElement('li', { text: item.title }).inject(list);
     });
 
-    var content = UWA.createElement('div');
+    const content = UWA.createElement('div');
     UWA.createElement('div', { text: NLS.removeWarning }).inject(content);
     list.inject(content);
 
-    var immersiveFrame = new WUXImmersiveFrame();
+    const immersiveFrame = new WUXImmersiveFrame();
     immersiveFrame.inject(document.body);
 
     dialog = new WUXDialog({
@@ -326,7 +326,7 @@ ENOSubscriptionMgmt (ViewSubscriptionsDialog) 처럼 `close` 이벤트에서 `im
 
 ```js
 require(['DS/Windows/ImmersiveFrame', 'DS/Windows/Dialog'], function (ImmersiveFrame, Dialog) {
-  var frame = new ImmersiveFrame();
+  const frame = new ImmersiveFrame();
   frame.inject(widget.body);   // 부모는 position 이 있고 높이가 있어야 함
 
   new Dialog({ title: '속성', content: body, immersiveFrame: frame, modalFlag: true });
@@ -354,7 +354,7 @@ require(['DS/Windows/ImmersiveFrame', 'DS/Windows/Dialog'], function (ImmersiveF
 `Window` 를 상속한 패널입니다. ImmersiveFrame 의 좌우 / 아래에 붙이거나 떠 있게 둡니다.
 
 ```js
-var panel = new Panel({
+const panel = new Panel({
   title: '속성',
   content: propertyEl,
   immersiveFrame: frame,

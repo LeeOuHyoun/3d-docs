@@ -34,7 +34,7 @@
     ], function (UWA, TagNavigatorProxy, Button) {
       'use strict';
 
-      var ROWS = [
+      const ROWS = [
         { id: 'XX-0001', name: 'MyBracket-01', type: 'Part', state: 'IN_WORK', stateLabel: 'In Work', owner: 'user1', modified: '2025/09/12' },
         { id: 'XX-0002', name: 'MyBracket-02', type: 'Part', state: 'RELEASED', stateLabel: 'Released', owner: 'user2', modified: '2025/10/03' },
         { id: 'XX-0003', name: 'MySpec-01', type: 'Document', state: 'IN_WORK', stateLabel: 'In Work', owner: 'user1', modified: '2025/10/21' },
@@ -43,11 +43,11 @@
         { id: 'XX-0006', name: 'MyChange-02', type: 'Change Action', state: 'RELEASED', stateLabel: 'Released', owner: 'user3', modified: '2024/12/20' }
       ];
 
-      var proxy;
-      var ready = false;
-      var rowEls = {};
-      var logEl;
-      var statusEl;
+      let proxy;
+      let ready = false;
+      const rowEls = {};
+      let logEl;
+      let statusEl;
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -65,7 +65,7 @@
       }
 
       function buildSubjectsTags(rows) {
-        var tags = {};
+        const tags = {};
         rows.forEach(function (row) {
           tags[subjectId(row)] = [
             { sixw: 'ds6w:what/ds6w:type', object: row.type, dispValue: row.type },
@@ -85,12 +85,12 @@
        */
       // #region proxy
       function createTagger(onFilter) {
-        var tagger = TagNavigatorProxy.createProxy({
+        const tagger = TagNavigatorProxy.createProxy({
           widgetId: widget.id,
           filteringMode: TagNavigatorProxy.filteringMode.WithFilteringServices
         });
         tagger.addEvent('onFilterSubjectsChange', function (e) {
-          var hasFilter = !!e.allfilters && Object.keys(e.allfilters).length > 0;
+          const hasFilter = !!e.allfilters && Object.keys(e.allfilters).length > 0;
           onFilter(hasFilter ? e.filteredSubjectList : null, e);
         });
         return tagger;
@@ -104,7 +104,7 @@
       // #region filter
       function applyFilter(subjectIds) {
         ROWS.forEach(function (row) {
-          var visible = !subjectIds || subjectIds.indexOf(subjectId(row)) !== -1;
+          const visible = !subjectIds || subjectIds.indexOf(subjectId(row)) !== -1;
           rowEls[row.id].style.display = visible ? '' : 'none';
         });
       }
@@ -132,13 +132,13 @@
       // #endregion lifecycle
 
       function buildTable(parent) {
-        var table = UWA.createElement('table', { 'class': 'tg-table' }).inject(parent);
-        var head = UWA.createElement('tr').inject(table);
+        const table = UWA.createElement('table', { 'class': 'tg-table' }).inject(parent);
+        const head = UWA.createElement('tr').inject(table);
         ['이름', '타입', '상태', '담당', '수정일'].forEach(function (text) {
           UWA.createElement('th', { text: text }).inject(head);
         });
         ROWS.forEach(function (row) {
-          var tr = UWA.createElement('tr').inject(table);
+          const tr = UWA.createElement('tr').inject(table);
           [row.name, row.type, row.stateLabel, row.owner, row.modified].forEach(function (text) {
             UWA.createElement('td', { text: text }).inject(tr);
           });
@@ -148,7 +148,7 @@
       }
 
       function build() {
-        var page = UWA.createElement('div', { 'class': 'tg-page' });
+        const page = UWA.createElement('div', { 'class': 'tg-page' });
 
         UWA.createElement('div', {
           'class': 'tg-note',
@@ -157,9 +157,9 @@
         statusEl = UWA.createElement('div', { 'class': 'tg-status', text: 'proxy 준비: 아직' }).inject(page);
 
         UWA.createElement('h3', { text: '목록' }).inject(page);
-        var table = buildTable(page);
+        const table = buildTable(page);
 
-        var actions = UWA.createElement('div', { 'class': 'tg-row' }).inject(page);
+        const actions = UWA.createElement('div', { 'class': 'tg-row' }).inject(page);
         new Button({ label: '태그 다시 보내기', emphasize: 'primary', onClick: onSendTags }).inject(actions);
         new Button({ label: '목록 가리기 (deactivate)', onClick: onHideList }).inject(actions);
         new Button({ label: '목록 보이기 (activate)', onClick: onShowList }).inject(actions);

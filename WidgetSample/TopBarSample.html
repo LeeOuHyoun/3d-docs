@@ -31,10 +31,10 @@
     ], function (UWA, TopBarProxy, MenuItem, Button) {
       'use strict';
 
-      var topBar;
-      var inboxItem;
-      var inboxCount = 0;
-      var logEl;
+      let topBar;
+      let inboxItem;
+      let inboxCount = 0;
+      let logEl;
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -81,7 +81,7 @@
        */
       // #region submenu
       function addShareMenus(proxy, onCommand) {
-        var inbox = new MenuItem({
+        const inbox = new MenuItem({
           label: 'My Inbox',
           countBadge: 0,
           onExecute: function (item) {
@@ -141,14 +141,14 @@
       }
 
       function build() {
-        var page = UWA.createElement('div', { 'class': 'tb-page' });
+        const page = UWA.createElement('div', { 'class': 'tb-page' });
 
         UWA.createElement('div', {
           'class': 'tb-note',
           text: '3DDashboard 에서만 동작합니다. 상단 바의 + 메뉴, 공유 메뉴, 도움말 메뉴에 이 위젯의 항목이 들어갑니다. 대시보드 설정에 따라 보이지 않는 칸도 있습니다. 누르면 아래 로그에 남습니다.'
         }).inject(page);
 
-        var actions = UWA.createElement('div', { 'class': 'tb-row' }).inject(page);
+        const actions = UWA.createElement('div', { 'class': 'tb-row' }).inject(page);
         new Button({ label: '배지 +1', emphasize: 'primary', onClick: onBadge }).inject(actions);
         new Button({ label: '숨기기 (deactivate)', onClick: onHide }).inject(actions);
         new Button({ label: '보이기 (activate)', onClick: onShow }).inject(actions);

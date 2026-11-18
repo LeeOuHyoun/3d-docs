@@ -12,8 +12,8 @@ SNInfraUX/SNInfraUX.js 의 `DS/SNInfraUX/SearchCom` (소켓 껍데기), `DS/SNIn
 
 ```js
 require(['DS/SNInfraUX/SearchCom'], function (SearchCom) {
-  var socketId = 'XX_search_' + widget.id;
-  var socket = SearchCom.createSocket({ socket_id: socketId });
+  const socketId = 'XX_search_' + widget.id;
+  const socket = SearchCom.createSocket({ socket_id: socketId });
 
   socket.addListener('Selected_Objects_search', function (objects) {
     objects.forEach(function (obj) {
@@ -21,7 +21,7 @@ require(['DS/SNInfraUX/SearchCom'], function (SearchCom) {
     });
   });
 
-  var options = {
+  const options = {
     app_socket_id: socketId,
     widget_id: socketId,
     mode: 'furtive',

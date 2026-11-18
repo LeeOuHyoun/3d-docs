@@ -60,11 +60,11 @@
       'use strict';
 
       function writeLog(text) {
-        var log = document.getElementById('log');
+        const log = document.getElementById('log');
         log.textContent = text + '\n' + log.textContent;
       }
 
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       [
         { label: 'PRT-0001', title: '브라켓', status: '작업중', width: 120, height: 80, depth: 6, qty: 10, note: '도면 수정 중' },
@@ -92,14 +92,14 @@
        *   description  헤더에 마우스를 올렸을 때의 툴팁
        */
       // #region text
-      var statusColumn = {
+      const statusColumn = {
         text: '상태',
         dataIndex: 'status',
         width: 90,
         icon: { iconName: 'flag', fontIconFamily: 1 },
         description: '결재 상태 (작업중 / 검토중 / 승인)'
       };
-      var qtyColumn = { text: '수량', dataIndex: 'qty', width: 80, typeRepresentation: 'integer', alignment: 'far' };
+      const qtyColumn = { text: '수량', dataIndex: 'qty', width: 80, typeRepresentation: 'integer', alignment: 'far' };
       // #endregion text
 
       /*
@@ -110,7 +110,7 @@
        *   그룹의 dataIndex 는 값과 연결되지 않고, 나중에 그룹을 찾을 때 쓰는 이름이다.
        */
       // #region group
-      var sizeGroup = {
+      const sizeGroup = {
         text: '치수 (mm)',
         dataIndex: 'sizeGroup',
         expandedFlag: false,
@@ -135,11 +135,11 @@
        *   처음부터 쓸 때는 컬럼 정의에 customHeader: { buildContent: ... } 를 바로 넣으면 된다.
        */
       // #region custom
-      var requiredHeader = {
+      const requiredHeader = {
         buildContent: function (cellInfos) {
-          var box = document.createElement('div');
-          var label = document.createElement('span');
-          var mark = document.createElement('span');
+          const box = document.createElement('div');
+          const label = document.createElement('span');
+          const mark = document.createElement('span');
           box.className = 'required-header';
           label.textContent = '비고';
           mark.className = 'mark';
@@ -149,7 +149,7 @@
           return box;
         }
       };
-      var noteColumn = { text: '비고', dataIndex: 'note', width: 180, editableFlag: true };
+      const noteColumn = { text: '비고', dataIndex: 'note', width: 180, editableFlag: true };
       // #endregion custom
 
       /*
@@ -158,7 +158,7 @@
        *   2단 헤더면 줄마다 이 높이가 된다.
        */
       // #region grid
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         columnSelection: 'none',
         layoutOptions: { columnHeaderHeight: 27 },
@@ -205,7 +205,7 @@
 
       // #region customToggle
       document.getElementById('chkCustomHeader').addEventListener('change', function (event) {
-        var column = grid.layout.getColumnOrGroup('note');
+        const column = grid.layout.getColumnOrGroup('note');
         column.customHeader = event.target.checked ? requiredHeader : undefined;
         grid.layout.applyColumns();
         writeLog('customHeader ' + (event.target.checked ? '켬' : '끔')
@@ -219,8 +219,8 @@
        */
       // #region rename
       document.getElementById('btnRename').addEventListener('click', function () {
-        var column = grid.layout.getColumnOrGroup('status');
-        var nextText = column.text === '상태' ? '진행 상태' : '상태';
+        const column = grid.layout.getColumnOrGroup('status');
+        const nextText = column.text === '상태' ? '진행 상태' : '상태';
         grid.layout.setColumnOrGroupProperties('status', { text: nextText, description: '헤더 글자를 코드로 바꿨습니다' });
         writeLog('상태 컬럼 헤더 → ' + nextText);
       });
@@ -235,8 +235,8 @@
        */
       // #region groupToggle
       document.getElementById('btnToggleGroup').addEventListener('click', function () {
-        var group = grid.layout.getColumnOrGroup('sizeGroup');
-        var position = grid.layout.getColumnOrGroupCellCoordinates(group);
+        const group = grid.layout.getColumnOrGroup('sizeGroup');
+        const position = grid.layout.getColumnOrGroupCellCoordinates(group);
         grid.layout.setColumnGroupExpandedFlag(position.rowID, position.columnID, !group.expandedFlag);
         grid.updateCellView(grid.layout.getCellIDFromCoordinates(position), {
           updateCellContent: true,
@@ -260,11 +260,11 @@
         grid.layout.setColumnWidth('title', 240);
       });
       document.getElementById('btnPin').addEventListener('click', function () {
-        var pinned = grid.layout.getColumnPinned('status');
+        const pinned = grid.layout.getColumnPinned('status');
         grid.layout.setColumnPinned('status', pinned === 'left' ? 'unpinned' : 'left');
       });
       document.getElementById('btnMove').addEventListener('click', function () {
-        var moved = grid.layout.moveColumn('qty', 'title', { insertBeforeOrAfter: 'before' });
+        const moved = grid.layout.moveColumn('qty', 'title', { insertBeforeOrAfter: 'before' });
         writeLog('moveColumn 결과: ' + moved);
       });
       document.getElementById('btnFit').addEventListener('click', function () {
@@ -279,10 +279,10 @@
        */
       // #region read
       document.getElementById('btnDump').addEventListener('click', function () {
-        var all = grid.layout.getLeafColumns().map(function (column, columnIndex) {
+        const all = grid.layout.getLeafColumns().map(function (column, columnIndex) {
           return columnIndex + ':' + column.dataIndex;
         });
-        var visible = grid.layout.getVisibleOrderedLeafColumns().map(function (column) {
+        const visible = grid.layout.getVisibleOrderedLeafColumns().map(function (column) {
           return column.dataIndex;
         });
         writeLog('컬럼 번호: ' + all.join(', ') + '\n화면 순서: ' + visible.join(', '));

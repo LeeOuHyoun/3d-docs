@@ -130,7 +130,7 @@ FedDictionaryAccessAPI.getNlsOfPropertiesValues(JSON.stringify({
   lang: widget.lang,
   apiVersion: 'R2019x',
   onComplete: function (res) {
-    var nls = typeof res === 'string' ? JSON.parse(res) : res;
+    const nls = typeof res === 'string' ? JSON.parse(res) : res;
     console.log(nls['ds6w:type'].VPMReference, nls['ds6w:status']['VPLM_SMB_Definition.IN_WORK']);
   },
   onFailure: function () {}
@@ -207,8 +207,8 @@ spaceRequest(spaceUrl, '/resources/dictionary/getTypeInfo?parentInfo=true&$selec
   securityContext: securityContext
 }).then(function (res) {
   Object.keys(res).forEach(function (typeName) {
-    var info = res[typeName];
-    var icon = info.IconName ? spaceUrl + '/snresources/images/icons/small/' + info.IconName + '.png' : '';
+    const info = res[typeName];
+    const icon = info.IconName ? spaceUrl + '/snresources/images/icons/small/' + info.IconName + '.png' : '';
     console.log(typeName, info.parent, icon);
   });
 });
@@ -254,7 +254,7 @@ spaceRequest(spaceUrl, '/resources/dictionary/class/' + encodeURIComponent('Chan
 }).then(function (res) {
   console.log(res.NLSName);
   res.Attributes.forEach(function (a) {
-    var range = a.HasRangeDefined === 'Yes' ? a.AuthorizedValues.map(function (v) { return v.Name + '=' + v.NLS; }) : [];
+    const range = a.HasRangeDefined === 'Yes' ? a.AuthorizedValues.map(function (v) { return v.Name + '=' + v.NLS; }) : [];
     console.log(a.Name, a.NLS, a.Type, a.DefaultValue, range.join(', '));
   });
 });

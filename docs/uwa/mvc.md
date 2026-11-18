@@ -25,7 +25,7 @@ UWA2/js/Class/Model.js, Collection.js, View.js, Controls/Abstract.js. 호출부:
 ## Model
 
 ```js
-var Part = Model.extend({
+const Part = Model.extend({
   idAttribute: 'id',
   defaults: { title: '', state: 'WIP', qty: 0 },
 
@@ -42,7 +42,7 @@ var Part = Model.extend({
   }
 });
 
-var part = new Part({ id: 'PRT-0001', title: '브라켓' });
+const part = new Part({ id: 'PRT-0001', title: '브라켓' });
 part.set('state', 'RELEASED');
 part.get('title');
 part.set({ qty: -1 }, { validate: true });
@@ -73,7 +73,7 @@ part.set({ qty: -1 }, { validate: true });
 기본 전송은 `UWA.Data.request` 이므로 3DSpace 를 부를 때는 `sync` 를 바꿔 `WAFData.authenticatedRequest` 를 쓰게 합니다. 실제 코드(Bookmark 등)가 쓰는 방식입니다.
 
 ```js
-var Document = Model.extend({
+const Document = Model.extend({
   urlRoot: spaceUrl + '/resources/v1/modeler/documents',
 
   sync: function (method, model, options) {
@@ -110,12 +110,12 @@ new Document({ id: 'ABC123' }).fetch({
 ## Collection
 
 ```js
-var Parts = Collection.extend({
+const Parts = Collection.extend({
   model: Part,
   comparator: 'title'
 });
 
-var parts = new Parts([{ id: 'P1', title: '샤프트' }, { id: 'P2', title: '브라켓' }]);
+const parts = new Parts([{ id: 'P1', title: '샤프트' }, { id: 'P2', title: '브라켓' }]);
 parts.addEvent('onAdd', function (model) { ... });
 parts.addEvent('onChange:state', function (model, value) { ... });
 
@@ -143,7 +143,7 @@ parts.pluck('title');
 ## View
 
 ```js
-var PartCard = View.extend({
+const PartCard = View.extend({
   name: 'part-card',
   tagName: 'div',
   className: 'part-card',

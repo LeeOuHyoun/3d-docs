@@ -51,9 +51,9 @@
     require(['DS/DataDragAndDrop/DataDragAndDrop', 'DS/WAFData/WAFData'], function (DnD, WAFData) {
       'use strict';
 
-      var spaceUrl = window.location.href.split('/webapps/')[0];
-      var logEl = document.getElementById('log');
-      var securityContextPromise;
+      const spaceUrl = window.location.href.split('/webapps/')[0];
+      const logEl = document.getElementById('log');
+      let securityContextPromise;
 
       function log(text) {
         logEl.textContent = new Date().toLocaleTimeString() + '  ' + text + '\n' + logEl.textContent;
@@ -66,7 +66,7 @@
       /* [1] 끌기: start 에서 그때의 입력값으로 3DXContent 를 만들어 setData */
       DnD.draggable(document.getElementById('card'), {
         start: function (el, e) {
-          var content = {
+          const content = {
             protocol: '3DXContent',
             version: '2.0',
             source: 'EVENTS_SAMPLE',
@@ -88,12 +88,12 @@
 
       /* [2] 놓기: JSON 파싱 → protocol 확인 → 3DSpace / 같은 플랫폼 / 중복 제거 */
       function parse3DXContent(text) {
-        var content;
+        let content;
         try { content = JSON.parse(text); } catch (e) { return null; }
         if (!content || content.protocol !== '3DXContent' || !content.data) return null;
-        var seen = {};
+        const seen = {};
         return (content.data.items || []).filter(function (item) {
-          var ok = item.serviceId === '3DSpace' && item.objectId && item.objectType &&
+          const ok = item.serviceId === '3DSpace' && item.objectId && item.objectType &&
             (!item.envId || item.envId === platformId()) && !seen[item.objectId];
           seen[item.objectId] = true;
           if (!ok) { log('[2] 건너뜀: ' + JSON.stringify(item)); }
@@ -107,7 +107,7 @@
         drop: function (text, el) {
           el.classList.remove('over');
           document.getElementById('raw').textContent = text;
-          var items = parse3DXContent(text);
+          const items = parse3DXContent(text);
           if (!items) {
             log('[2] 3DXContent 가 아닙니다');
             return;
@@ -118,16 +118,16 @@
       });
 
       function addRow(item) {
-        var tr = document.createElement('tr');
+        const tr = document.createElement('tr');
         [item.objectId, item.objectType, item.serviceId, item.envId, item.displayName].forEach(function (v) {
-          var td = document.createElement('td');
+          const td = document.createElement('td');
           td.textContent = v || '';
           tr.appendChild(td);
         });
-        var btn = document.createElement('button');
+        const btn = document.createElement('button');
         btn.textContent = '기본 정보';
         btn.addEventListener('click', function () { loadObjectInfo(item.objectId); });
-        var td = document.createElement('td');
+        const td = document.createElement('td');
         td.appendChild(btn);
         tr.appendChild(td);
         document.querySelector('#items tbody').appendChild(tr);
@@ -140,7 +140,7 @@
             type: 'json',
             headers: { Accept: 'application/json' },
             onComplete: function (res) {
-              var pc = res && res.preferredcredentials;
+              const pc = res && res.preferredcredentials;
               if (pc && pc.role && pc.organization && pc.collabspace) {
                 resolve('ctx::' + pc.role.name + '.' + pc.organization.name + '.' + pc.collabspace.name);
               } else {
@@ -166,7 +166,7 @@
                 log('[4] 실패: ' + JSON.stringify(res));
                 return;
               }
-              var de = res.data[0].dataelements || {};
+              const de = res.data[0].dataelements || {};
               log('[4] ' + res.data[0].type + ' / name=' + de.name + ' / title=' + de.title + ' / revision=' + de.revision);
             },
             onFailure: function (error) { log('[4] onFailure: ' + error.message); },

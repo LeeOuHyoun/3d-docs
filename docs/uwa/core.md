@@ -42,7 +42,7 @@ UWA.extend({ o: { x: 1, y: 1 } }, { o: { x: 9 } }, true);  // { o: { x: 9, y: 1 
 ## merge
 
 ```js
-var options = UWA.merge(userOptions || {}, { pageSize: 50, sort: 'name' });
+const options = UWA.merge(userOptions || {}, { pageSize: 50, sort: 'name' });
 ```
 
 - `target` 에 **없는 키만** 채웁니다. 이미 값이 있으면 그대로 둡니다. 이름과 달리 덮어쓰지 않습니다.
@@ -57,7 +57,7 @@ UWA.merge({ a: 1, b: null, d: 0, o: { x: 1 } }, { a: 2, b: 2, d: 2, g: 2, o: { y
 ENOVIA 코드의 관용 형태는 "옵션을 얕게 복사 → 기본값 채우기" 입니다.
 
 ```js
-var opts = UWA.clone(options || {}, false);
+const opts = UWA.clone(options || {}, false);
 UWA.merge(opts, defaults);
 ```
 

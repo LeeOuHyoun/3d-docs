@@ -36,7 +36,7 @@
         return { text: text, dataIndex: dataIndex + 'Group', children: [{ text: '', dataIndex: dataIndex, width: width }] };
       }
 
-      var columns = [
+      const columns = [
         single('No', 'no', 50),
         single('Source', 'source', 90),
         single('Part Code', 'partCode', 120),
@@ -75,7 +75,7 @@
       // #endregion columns
 
       // #region data
-      var treeDocument = new TreeDocument();
+      const treeDocument = new TreeDocument();
       treeDocument.prepareUpdate();
       treeDocument.addRoot(new TreeNodeModel({
         label: '1',
@@ -102,7 +102,7 @@
       // #endregion data
 
       // #region grid
-      var grid = new DataGridView({
+      const grid = new DataGridView({
         treeDocument: treeDocument,
         columnSelection: 'none',
         layoutOptions: { columnHeaderHeight: 27 },

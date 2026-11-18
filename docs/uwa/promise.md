@@ -33,7 +33,7 @@ require(['UWA/Promise'], function (Promise) {
 
 ```js
 function request(url) {
-  var deferred = Promise.deferred();
+  const deferred = Promise.deferred();
   WAFData.authenticatedRequest(url, {
     type: 'json',
     onComplete: function (data) { deferred.resolve(data); },

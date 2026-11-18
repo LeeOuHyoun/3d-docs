@@ -74,7 +74,7 @@ function getPreferredSecurityContext(spaceUrl) {
       type: 'json',
       headers: { Accept: 'application/json' },
       onComplete: function (res) {
-        var pc = res && res.preferredcredentials;
+        const pc = res && res.preferredcredentials;
         if (pc && pc.role && pc.organization && pc.collabspace) {
           resolve('ctx::' + pc.role.name + '.' + pc.organization.name + '.' + pc.collabspace.name);
         } else {

@@ -76,7 +76,7 @@ DataGridView.js 의 DataGridViewLayout.getDefaultCellHeight
 키 이름 <Badge type="warning" text="2026" />
 
 ```js
-var grid = new DataGridView({ ... });
+const grid = new DataGridView({ ... });
 ```
 ````
 
@@ -96,7 +96,7 @@ var grid = new DataGridView({ ... });
 
 ```js
 // #region data
-var treeDocument = new TreeDocument();
+const treeDocument = new TreeDocument();
 // #endregion data
 ```
 
@@ -110,6 +110,7 @@ var treeDocument = new TreeDocument();
 - 지금은 DataGridView 의 가이드 중 편집, 행 높이, 저장 후 화면 반영을 뺀 나머지가 이 방식입니다.
 - region 안에는 주석을 넣지 않습니다. 설명은 region 바로 위 블록 주석에 씁니다 (문서에는 region 안만 보입니다).
 - 샘플에서 그리드를 담는 요소에는 높이와 `position: relative` 를 꼭 줍니다. 그리드는 높이 기본값(`'inherit'`)일 때 자신을 `position: absolute` 로 놓아서, 없으면 페이지 전체를 덮습니다.
+- 샘플과 문서의 코드는 `var` 대신 `const` 를 쓰고, 다시 대입하는 변수만 `let` 으로 씁니다. 함수는 `function () {}` 그대로 둡니다. 화살표 함수로 바꾸면 `this` 가 달라져서 UWA 이벤트나 Tweaker 핸들러처럼 `this` 를 쓰는 곳이 깨집니다.
 
 ## 원본과 문서 비교 (빠진 이름 찾기)
 

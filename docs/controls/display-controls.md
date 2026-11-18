@@ -29,7 +29,7 @@ Controls.js (2025, 2026) 의 ColorPicker (`_preEditValue`, `_applyValue`, `_crea
 
 ```js
 require(['DS/Controls/ColorPicker'], function (ColorPicker) {
-  var picker = new ColorPicker({ value: '368ec4' }).inject(el);
+  const picker = new ColorPicker({ value: '368ec4' }).inject(el);
 
   picker.addEventListener('liveChange', function (e) {
     preview.style.backgroundColor = '#' + e.dsModel.value;
@@ -83,7 +83,7 @@ ColorPicker 는 `show()` / `hide()` 를 다시 정의했습니다. 버튼을 숨
 
 ```js
 require(['DS/Controls/ColorChooser'], function (ColorChooser) {
-  var chooser = new ColorChooser({ value: 'ffffff', referenceValue: 'ffffff' }).inject(el);
+  const chooser = new ColorChooser({ value: 'ffffff', referenceValue: 'ffffff' }).inject(el);
   chooser.addEventListener('change', function (e) {
     console.log('#' + e.dsModel.value, e.dsModel.hsvValue);
   });
@@ -113,7 +113,7 @@ ColorChooser 에는 `liveChange` 가 없습니다. 판이나 막대를 끄는 �
 
 ```js
 require(['DS/Controls/ColorPalette'], function (ColorPalette) {
-  var palette = new ColorPalette({
+  const palette = new ColorPalette({
     swatches: [
       { value: '#FEE000' },
       { value: '#009DDB', tooltipParams: { shortHelp: '파랑' } },
@@ -142,7 +142,7 @@ ColorChooser 왼쪽의 2차원 판만 따로 쓰는 컨트롤입니다 (앱 직�
 
 ```js
 require(['DS/Controls/ColorCanvas'], function (ColorCanvas) {
-  var canvas = new ColorCanvas({ value: '368ec4', subColorAttributeX: 'Saturation', subColorAttributeY: 'Value' }).inject(el);
+  const canvas = new ColorCanvas({ value: '368ec4', subColorAttributeX: 'Saturation', subColorAttributeY: 'Value' }).inject(el);
   canvas.addEventListener('change', function (e) { console.log(e.dsModel.value); });
 });
 ```
@@ -163,7 +163,7 @@ require(['DS/Controls/ColorCanvas'], function (ColorCanvas) {
 
 ```js
 require(['DS/Controls/TimeChooser'], function (TimeChooser) {
-  var chooser = new TimeChooser({ value: new Date(2026, 11, 1, 9, 30), precision: 'sec', minutesStep: 5 }).inject(el);
+  const chooser = new TimeChooser({ value: new Date(2026, 11, 1, 9, 30), precision: 'sec', minutesStep: 5 }).inject(el);
   chooser.addEventListener('change', function (e) {
     console.log(e.dsModel.getHours(), e.dsModel.getMinutes());
   });
@@ -196,7 +196,7 @@ Gauge 와 Timeline 은 `UWA/Controls/Abstract` 를 상속한 옛 방식 컨트�
 
 ```js
 require(['DS/Controls/Gauge'], function (Gauge) {
-  var gauge = new Gauge({
+  const gauge = new Gauge({
     minValue: 0,
     maxValue: 100,
     stepValue: 5,
@@ -233,7 +233,7 @@ Gauge 를 상속한 재생 막대입니다. 날짜 범위를 두고 재생 / 일
 
 ```js
 require(['DS/Controls/Timeline'], function (Timeline) {
-  var timeline = new Timeline({
+  const timeline = new Timeline({
     beginDate: '2026-01-01',
     endDate: '2026-12-31',
     date: '2026-03-01',
@@ -295,7 +295,7 @@ require(['DS/Core/TooltipModel'], function (TooltipModel) {
 
 ```js
 require(['DS/Controls/Tooltip', 'DS/Core/TooltipModel'], function (Tooltip, TooltipModel) {
-  var tooltip = new Tooltip({ target: viewerEl });
+  const tooltip = new Tooltip({ target: viewerEl });
   viewerEl.tooltipInfos = new TooltipModel({ title: 'Tags', shortHelp: 'A, B' });
 
   viewerEl.addEventListener('mousemove', function (e) {
@@ -325,7 +325,7 @@ require(['DS/Controls/Tooltip', 'DS/Core/TooltipModel'], function (Tooltip, Tool
 
 ```js
 require(['DS/Core/TooltipManager', 'DS/Core/TooltipLoader'], function (TooltipManager, TooltipLoader) {
-  var doc = frameEl.contentDocument;
+  const doc = frameEl.contentDocument;
   TooltipManager.registerDocument(doc);
   TooltipLoader.initTooltipFrame(doc);
 });
@@ -372,7 +372,7 @@ new Button({
 
 ```js
 require(['DS/Controls/UserCard'], function (UserCard) {
-  var card = new UserCard({
+  const card = new UserCard({
     name: 'Hong Gildong',
     trigram: 'HGD',
     presence: 'away',

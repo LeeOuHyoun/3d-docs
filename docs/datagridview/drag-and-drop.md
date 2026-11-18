@@ -46,7 +46,7 @@ DataGridView.js 의 `_manageDragAndDrop` / `_processDragAndDropCallbacks` (콜�
 ## 어디에 넣나
 
 ```js{5-6,8-10,13-15,17-19}
-var grid = new DataGridView({
+const grid = new DataGridView({
   treeDocument: treeDocument,
   columns: columns,
 

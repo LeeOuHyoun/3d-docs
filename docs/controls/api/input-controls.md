@@ -7,7 +7,7 @@ title: 입력 컨트롤 API
 숫자, 칩, 찾기, 파일 입력 컨트롤과 터치 키패드(Decorator)의 공개 속성(publishedProperties), 메서드, 이벤트입니다. 사용법은 [입력 컨트롤](/controls/input-controls) 에 있습니다.
 
 ```js
-var spin = new SpinBox({ value: 1, minValue: 0, stepValue: 1 }).inject(el);
+const spin = new SpinBox({ value: 1, minValue: 0, stepValue: 1 }).inject(el);
 spin.value = 3;
 spin.addEventListener('change', function (e) { console.log(e.dsModel.value); });
 ```
