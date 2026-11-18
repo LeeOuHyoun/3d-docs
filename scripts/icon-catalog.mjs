@@ -79,7 +79,7 @@ const catalog = FAMILIES.map((family) => {
   copyFileSync(join(webapps, family.font), join(FONTS, font))
   console.log(`${family.label}: 2025 ${old.size}, 2026 ${now.size}, 합계 ${names.length}, 2025만 ${names.length - now.size}, 2026 추가 ${names.length - old.size}`)
   const { id, label } = family
-  return { id, label, file: family.font.split('/').pop(), font, icons }
+  return { id, label, file: family.font, font, icons }
 })
 
 writeFileSync(join(OUT, 'catalog.json'), JSON.stringify(catalog))
