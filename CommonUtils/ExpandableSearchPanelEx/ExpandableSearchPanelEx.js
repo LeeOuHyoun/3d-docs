@@ -111,9 +111,14 @@ define('DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
   const attachToGrid = (grid, options) => {
     const gridElement = grid.getContent();
     const panel = create(options);
-    const gridHolder = UWA.createElement('div', { 'class': 'espx-grid-holder' });
+    panel.element.setStyle('flex', 'none');
+    const gridHolder = UWA.createElement('div', {
+      'class': 'espx-grid-holder',
+      styles: { position: 'relative', flex: '1 1 0', minHeight: '0' }
+    });
     UWA.createElement('div', {
       'class': 'espx-layout',
+      styles: { display: 'flex', flexDirection: 'column', height: '100%' },
       html: [panel.element, gridHolder]
     }).inject(gridElement, 'before');
     gridHolder.appendChild(gridElement);
