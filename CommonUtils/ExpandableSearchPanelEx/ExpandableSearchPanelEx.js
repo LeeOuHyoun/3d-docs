@@ -116,12 +116,17 @@ define('DS/CommonUtils/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
       'class': 'espx-grid-holder',
       styles: { position: 'relative', flex: '1 1 0', minHeight: '0' }
     });
-    UWA.createElement('div', {
+    const layout = UWA.createElement('div', {
       'class': 'espx-layout',
       styles: { display: 'flex', flexDirection: 'column', height: '100%' },
       html: [panel.element, gridHolder]
     }).inject(gridElement, 'before');
     gridHolder.appendChild(gridElement);
+    const inject = grid.inject;
+    grid.inject = function (parent, where) {
+      layout.inject(parent, where);
+      return inject.call(this, gridHolder);
+    };
     return panel;
   };
 
