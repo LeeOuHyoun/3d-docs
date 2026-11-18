@@ -257,7 +257,8 @@ const WEBAPPS_SIDEBAR = [
           { text: '속성 패널 (EditPropWidget)', link: '/controls/properties-panel' },
           { text: 'ENOVIA 공용 화면 틀 (ENOX)', link: '/controls/enox-components' },
           { text: 'UIKIT', link: '/controls/uikit' },
-          { text: '알림 메시지', link: '/controls/notifications' }
+          { text: '알림 메시지', link: '/controls/notifications' },
+          { text: '아이콘 목록', link: '/controls/icons' }
         ]
       },
       {

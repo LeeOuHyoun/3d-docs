@@ -9,7 +9,8 @@
     "docs:verify-list": "node scripts/verify-list.mjs",
     "docs:coverage": "node scripts/coverage.mjs",
     "docs:key-index": "node scripts/key-index.mjs",
-    "samples": "node scripts/samples-server.mjs"
+    "samples": "node scripts/samples-server.mjs",
+    "docs:icons": "node scripts/icon-catalog.mjs"
   },
   "devDependencies": {
     "vitepress": "^1.6.3"
