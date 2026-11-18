@@ -23,7 +23,11 @@ import IconGallery from '../.vitepress/theme/IconGallery.vue'
 - 모듈 전용 글꼴(E6WCommonApps, PlatformManagement, NotificationsCenter, CfgBaseUX, W3DXComponents)과 이미지 아이콘(`assets/icons`, `common/images`)은 이 목록에 없습니다.
 
 ::: info 글꼴 파일
-이 사이트에는 원본 글꼴 파일을 올리지 않습니다. 공개 사이트에서는 "글꼴 파일 선택" 으로 webapps 의 글꼴(`Core/assets/fonts/3ds_fonticon.woff2` 등)을 고르면 그 브라우저에서만 읽어 그립니다. 로컬에서는 `npm run docs:icons` 가 목록(`docs/public/icons/catalog.json`)을 만들고 글꼴을 `docs/public/icons/fonts/` (git 제외)에 복사합니다.
+WebUX 3DS, UIKIT 글꼴(3DS Fonticon)과 UWA 글꼴은 Dassault Systemes 의 글꼴이라 이 사이트에 올리지 않습니다. 글꼴에 적힌 라이선스는 "글꼴이 포함된 제품의 라이선스 범위에서 표시, 인쇄" 만 허용합니다. 공개 사이트에서는 아이콘 이름만 보이고, "글꼴 파일 선택" 으로 webapps 의 글꼴(`Core/assets/fonts/3ds_fonticon.woff2` 등)을 고르면 그 브라우저에서만 읽어 그립니다.
+
+FontAwesome 4.3 글꼴(Dave Gandy, [SIL OFL 1.1](https://openfontlicense.org))은 다시 배포할 수 있어 사이트에 함께 올립니다.
+
+로컬에서는 `npm run docs:icons` 가 목록(`docs/public/icons/catalog.json`)을 만들고 글꼴을 `docs/public/icons/fonts/` 에 복사합니다. 이 폴더는 `fa.woff2` 만 git 에 올라갑니다.
 :::
 
 <IconGallery />

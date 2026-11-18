@@ -24,6 +24,7 @@ const families = ref([])
 const familyId = ref('wux3ds')
 const family = computed(() => families.value.find((item) => item.id === familyId.value))
 const fontState = reactive({})
+const fontReady = computed(() => fontState[familyId.value] === 'ready')
 
 const loadFont = async (item, source) => {
   try {
@@ -103,14 +104,14 @@ const copy = async (text) => {
     <div class="ig-body">
       <div class="ig-grid" :style="{ '--ig-size': `${size}px` }">
         <button v-for="icon in icons" :key="icon[0]" :class="{ active: selected?.[0] === icon[0] }" :title="icon[0]" @click="selected = icon">
-          <span class="ig-glyph" :style="{ fontFamily: `ds-icon-${familyId}` }">{{ glyph(icon[1]) }}</span>
+          <span v-if="fontReady" class="ig-glyph" :style="{ fontFamily: `ds-icon-${familyId}` }">{{ glyph(icon[1]) }}</span>
           <span class="ig-name">{{ icon[0] }}</span>
           <span v-if="icon[2]" class="ig-old">2025</span>
         </button>
       </div>
       <aside v-if="selected" class="ig-detail">
         <button class="ig-close" @click="selected = null">×</button>
-        <span class="ig-big" :style="{ fontFamily: `ds-icon-${familyId}` }">{{ glyph(selected[1]) }}</span>
+        <span v-if="fontReady" class="ig-big" :style="{ fontFamily: `ds-icon-${familyId}` }">{{ glyph(selected[1]) }}</span>
         <strong class="ig-copy" @click="copy(selected[0])">{{ selected[0] }}</strong>
         <p>{{ family.label }} · <code>\{{ selected[1] }}</code> · {{ selected[2] ? '2025에 있음' : '2026 추가' }}</p>
         <div v-for="[label, code] in usages" :key="label" class="ig-usage">
@@ -222,7 +223,7 @@ const copy = async (text) => {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 14px 4px 8px;
+  padding: 18px 4px 8px;
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
   content-visibility: auto;
@@ -307,6 +308,7 @@ const copy = async (text) => {
 @media (max-width: 960px) {
   .ig-body {
     flex-direction: column-reverse;
+    align-items: stretch;
   }
 
   .ig-detail {

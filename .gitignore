@@ -3,4 +3,5 @@ docs/.vitepress/cache/
 docs/.vitepress/dist/
 
 debate.md
-docs/public/icons/fonts/
+docs/public/icons/fonts/*
+!docs/public/icons/fonts/fa.woff2
