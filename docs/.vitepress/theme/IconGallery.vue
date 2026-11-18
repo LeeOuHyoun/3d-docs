@@ -21,49 +21,125 @@ const USAGE = {
 }
 
 const families = ref([])
-const familyId = ref('wux3ds')
-const family = computed(() => families.value.find((item) => item.id === familyId.value))
+const familyId = ref('all')
+const familyOf = (id) => families.value.find((item) => item.id === id)
+const total = computed(() => families.value.reduce((sum, item) => sum + item.icons.length, 0))
+
+const fontsDb = (mode, run) =>
+  new Promise((resolve, reject) => {
+    const open = indexedDB.open('ds-icon-fonts', 1)
+    open.onupgradeneeded = () => open.result.createObjectStore('fonts')
+    open.onerror = () => reject(open.error)
+    open.onsuccess = () => {
+      const request = run(open.result.transaction('fonts', mode).objectStore('fonts'))
+      request.onsuccess = () => resolve(request.result)
+      request.onerror = () => reject(request.error)
+    }
+  })
+
 const fontState = reactive({})
-const fontReady = computed(() => fontState[familyId.value] === 'ready')
+const stored = reactive({})
+const missing = computed(() => families.value.filter((item) => fontState[item.id] === 'missing'))
+const storedLabels = computed(() => families.value.filter((item) => stored[item.id]).map((item) => item.label))
 
 const loadFont = async (item, source) => {
   try {
-    const face = await new FontFace(`ds-icon-${item.id}`, source).load()
-    document.fonts.add(face)
+    document.fonts.add(await new FontFace(`ds-icon-${item.id}`, source).load())
     fontState[item.id] = 'ready'
+    return true
   } catch {
     fontState[item.id] = 'missing'
+    return false
   }
 }
 
+const restoreFont = async (item) => {
+  if (await loadFont(item, `url(${withBase(`/icons/fonts/${item.font}`)})`)) return
+  const saved = await fontsDb('readonly', (store) => store.get(item.id)).catch(() => null)
+  if (saved && (await loadFont(item, saved))) stored[item.id] = true
+}
+
+const applyFont = async (item, buffer) => {
+  if (!(await loadFont(item, buffer))) return false
+  await fontsDb('readwrite', (store) => store.put(buffer, item.id)).catch(() => null)
+  stored[item.id] = true
+  return true
+}
+
+const hasFolderPicker = ref(false)
+
 onMounted(async () => {
+  hasFolderPicker.value = 'showDirectoryPicker' in window
   families.value = await (await fetch(withBase('/icons/catalog.json'))).json()
-  families.value.forEach((item) => loadFont(item, `url(${withBase(`/icons/fonts/${item.font}`)})`))
+  families.value.forEach(restoreFont)
 })
 
-const fileInput = ref()
+const notice = ref('')
 
-const handleFontFile = async (event) => {
-  const [file] = event.target.files
-  if (file) await loadFont(family.value, await file.arrayBuffer())
+const report = (results) => {
+  const loaded = results.filter(([, ok]) => ok).map(([item]) => item.label)
+  const failed = results.filter(([, ok]) => !ok).map(([item]) => item.label)
+  notice.value = [loaded.length && `읽음: ${loaded.join(', ')}`, failed.length && `못 찾음: ${failed.join(', ')}`].filter(Boolean).join(' / ')
+}
+
+const readFolderFile = async (dir, path) => {
+  const parts = path.split('/')
+  for (const part of parts.slice(0, -1)) dir = await dir.getDirectoryHandle(part)
+  return (await (await dir.getFileHandle(parts.at(-1))).getFile()).arrayBuffer()
+}
+
+const pickFolder = async () => {
+  const dir = await window.showDirectoryPicker().catch(() => null)
+  if (!dir) return
+  report(await Promise.all(missing.value.map(async (item) => [item, await readFolderFile(dir, item.file).then((buffer) => applyFont(item, buffer)).catch(() => false)])))
+}
+
+const fileInput = ref()
+const baseName = (path) => path.split('/').pop().replace(/\.[^.]+$/, '')
+
+const handleFontFiles = async (event) => {
+  const files = [...event.target.files]
   event.target.value = ''
+  const targets = missing.value.flatMap((item) => {
+    const file = files.find((candidate) => baseName(candidate.name) === baseName(item.file))
+    return file ? [[item, file]] : []
+  })
+  report(await Promise.all(targets.map(async ([item, file]) => [item, await applyFont(item, await file.arrayBuffer())])))
+  if (!targets.length) notice.value = `맞는 글꼴 파일이 없습니다: ${files.map((file) => file.name).join(', ')}`
+}
+
+const clearFonts = async () => {
+  await fontsDb('readwrite', (store) => store.clear()).catch(() => null)
+  location.reload()
 }
 
 const query = ref('')
 const since = ref('all')
 const size = ref(28)
 
-const icons = computed(() => {
+const sections = computed(() => {
   const words = query.value.trim().toLowerCase().split(/\s+/).filter(Boolean)
-  return (family.value?.icons ?? []).filter(([name, , old]) =>
-    words.every((word) => name.includes(word)) && (since.value === 'all' || (since.value === 'old') === Boolean(old))
-  )
+  return families.value
+    .filter((item) => familyId.value === 'all' || item.id === familyId.value)
+    .map((item) => ({
+      ...item,
+      ready: fontState[item.id] === 'ready',
+      icons: item.icons.filter(([name, , old]) => words.every((word) => name.includes(word)) && (since.value === 'all' || (since.value === 'old') === Boolean(old)))
+    }))
+    .filter((section) => section.icons.length || familyId.value !== 'all')
 })
+const count = computed(() => sections.value.reduce((sum, section) => sum + section.icons.length, 0))
 
 const glyph = (code) => String.fromCodePoint(parseInt(code, 16))
 
 const selected = ref(null)
-const usages = computed(() => (selected.value ? USAGE[familyId.value](selected.value[0]) : []))
+const selectedFamily = computed(() => selected.value && familyOf(selected.value.id))
+const usages = computed(() => (selected.value ? USAGE[selected.value.id](selected.value.icon[0]) : []))
+const isSelected = (id, icon) => selected.value?.id === id && selected.value.icon[0] === icon[0]
+
+const selectIcon = (id, icon) => {
+  selected.value = { id, icon }
+}
 
 const selectFamily = (id) => {
   familyId.value = id
@@ -81,7 +157,26 @@ const copy = async (text) => {
 
 <template>
   <div class="icon-gallery">
+    <div v-if="missing.length || storedLabels.length" class="ig-font">
+      <template v-if="missing.length">
+        <p>글꼴 {{ missing.length }}개가 없어 아이콘 모양 대신 이름만 보입니다. 원본 webapps 의 아래 파일을 고르면 이 브라우저에서만 읽어 그리고 기억합니다 (서버로 보내지 않음).</p>
+        <ul>
+          <li v-for="item in missing" :key="item.id"><strong>{{ item.label }}</strong> <code>webapps/{{ item.file }}</code></li>
+        </ul>
+        <div class="ig-font-actions">
+          <button v-if="hasFolderPicker" @click="pickFolder">webapps 폴더 선택</button>
+          <button @click="fileInput.click()">파일 선택 (여러 개)</button>
+          <input ref="fileInput" type="file" multiple accept=".woff,.woff2,.ttf,.otf" hidden @change="handleFontFiles" />
+        </div>
+      </template>
+      <p v-if="notice" class="ig-notice">{{ notice }}</p>
+      <p v-if="storedLabels.length" class="ig-stored">
+        브라우저에 기억한 글꼴: {{ storedLabels.join(', ') }}
+        <button @click="clearFonts">글꼴 지우기</button>
+      </p>
+    </div>
     <div class="ig-tabs">
+      <button :class="{ active: familyId === 'all' }" @click="selectFamily('all')">전체 <span>{{ total }}</span></button>
       <button v-for="item in families" :key="item.id" :class="{ active: item.id === familyId }" @click="selectFamily(item.id)">
         {{ item.label }} <span>{{ item.icons.length }}</span>
       </button>
@@ -94,26 +189,27 @@ const copy = async (text) => {
         <option value="new">2026 추가</option>
       </select>
       <label>크기 <input v-model.number="size" type="range" min="16" max="56" /> {{ size }}px</label>
-      <span class="ig-count">{{ icons.length }}개</span>
-    </div>
-    <div v-if="family && fontState[family.id] === 'missing'" class="ig-font">
-      글꼴이 없어 아이콘 모양을 그릴 수 없습니다. webapps 의 <code>{{ family.file }}</code> 를 고르면 이 화면에서만 읽어 그립니다 (서버로 보내지 않음).
-      <button @click="fileInput.click()">글꼴 파일 선택</button>
-      <input ref="fileInput" type="file" accept=".woff,.woff2,.ttf,.otf" hidden @change="handleFontFile" />
+      <span class="ig-count">{{ count }}개</span>
     </div>
     <div class="ig-body">
-      <div class="ig-grid" :style="{ '--ig-size': `${size}px` }">
-        <button v-for="icon in icons" :key="icon[0]" :class="{ active: selected?.[0] === icon[0] }" :title="icon[0]" @click="selected = icon">
-          <span v-if="fontReady" class="ig-glyph" :style="{ fontFamily: `ds-icon-${familyId}` }">{{ glyph(icon[1]) }}</span>
-          <span class="ig-name">{{ icon[0] }}</span>
-          <span v-if="icon[2]" class="ig-old">2025</span>
-        </button>
+      <div class="ig-main" :style="{ '--ig-size': `${size}px` }">
+        <section v-for="section in sections" :key="section.id">
+          <div v-if="familyId === 'all'" class="ig-section">{{ section.label }} <span>{{ section.icons.length }}</span></div>
+          <div class="ig-grid">
+            <button v-for="icon in section.icons" :key="icon[0]" :class="{ active: isSelected(section.id, icon) }" :title="icon[0]" @click="selectIcon(section.id, icon)">
+              <span v-if="section.ready" class="ig-glyph" :style="{ fontFamily: `ds-icon-${section.id}` }">{{ glyph(icon[1]) }}</span>
+              <span class="ig-name">{{ icon[0] }}</span>
+              <span v-if="icon[2]" class="ig-old">2025</span>
+            </button>
+          </div>
+        </section>
+        <p v-if="families.length && !count" class="ig-empty">찾는 아이콘이 없습니다.</p>
       </div>
       <aside v-if="selected" class="ig-detail">
         <button class="ig-close" @click="selected = null">×</button>
-        <span v-if="fontReady" class="ig-big" :style="{ fontFamily: `ds-icon-${familyId}` }">{{ glyph(selected[1]) }}</span>
-        <strong class="ig-copy" @click="copy(selected[0])">{{ selected[0] }}</strong>
-        <p>{{ family.label }} · <code>\{{ selected[1] }}</code> · {{ selected[2] ? '2025에 있음' : '2026 추가' }}</p>
+        <span v-if="fontState[selected.id] === 'ready'" class="ig-big" :style="{ fontFamily: `ds-icon-${selected.id}` }">{{ glyph(selected.icon[1]) }}</span>
+        <strong class="ig-copy" @click="copy(selected.icon[0])">{{ selected.icon[0] }}</strong>
+        <p>{{ selectedFamily.label }} · <code>\{{ selected.icon[1] }}</code> · {{ selected.icon[2] ? '2025에 있음' : '2026 추가' }}</p>
         <div v-for="[label, code] in usages" :key="label" class="ig-usage">
           <span>{{ label }}</span>
           <code class="ig-copy" @click="copy(code)">{{ code }}</code>
@@ -197,11 +293,39 @@ const copy = async (text) => {
   font-size: 14px;
 }
 
+.ig-font p,
+.ig-font ul {
+  margin: 0 0 8px;
+}
+
+.ig-font ul {
+  padding-left: 20px;
+}
+
 .ig-font button {
-  margin-left: 8px;
   padding: 2px 10px;
   border: 1px solid var(--vp-c-warning-1);
   border-radius: 6px;
+}
+
+.ig-font-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ig-font .ig-notice {
+  margin: 8px 0 0;
+  font-weight: 600;
+}
+
+.ig-font .ig-stored {
+  margin: 8px 0 0;
+  color: var(--vp-c-text-2);
+}
+
+.ig-stored button {
+  margin-left: 8px;
 }
 
 .ig-body {
@@ -210,8 +334,27 @@ const copy = async (text) => {
   gap: 16px;
 }
 
-.ig-grid {
+.ig-main {
   flex: 1;
+  min-width: 0;
+}
+
+.ig-section {
+  margin: 20px 0 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.ig-section span,
+.ig-empty {
+  color: var(--vp-c-text-3);
+}
+
+.ig-main section:first-child .ig-section {
+  margin-top: 4px;
+}
+
+.ig-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(calc(var(--ig-size) + 72px), 1fr));
   gap: 8px;
