@@ -185,8 +185,9 @@ enovia2025 webapps 에서 DataGridView 를 쓰는 앱 파일 119개를 기준으
 | [14_rowGrouping.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/14_rowGrouping.html) | 묶기, 그룹 행 제목과 합계, 그룹 행 걸러내기, 다시 묶기 | [행 그룹핑](/datagridview/row-grouping) |
 | [15_serverSide.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/15_serverSide.html) | 행을 나눠 불러오기 (가짜 서버 5,000 행) | [서버 사이드 데이터](/datagridview/server-side) |
 | [16_findPrint.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/16_findPrint.html) | 찾기 막대, 페이지 나누기, 일괄 수정, 인쇄 | [찾기, 페이지, 일괄 수정, 인쇄](/datagridview/find-and-print) |
+| [17_mergedHeader.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/17_mergedHeader.html) | 단독 컬럼과 그룹을 섞은 2단 헤더 (가로 병합) | [헤더](/datagridview/header#단독-컬럼과-섞을-때-세로-병합-없음) |
 
-01 ~ 05 는 ENOVIA 서버에서 동작을 확인했습니다. 06 ~ 10 은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 11 ~ 16 은 ENOVIA 서버 없이 원본 webapps 를 내 PC 에서 띄워 동작을 확인했습니다 ([샘플을 내 PC 에서 실행하기](/guide/contributing#샘플을-내-pc-에서-실행하기)). 다르게 동작하면 원본 쪽이 맞습니다.
+01 ~ 05 는 ENOVIA 서버에서 동작을 확인했습니다. 06 ~ 10 은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 11 ~ 17 은 ENOVIA 서버 없이 원본 webapps 를 내 PC 에서 띄워 동작을 확인했습니다 ([샘플을 내 PC 에서 실행하기](/guide/contributing#샘플을-내-pc-에서-실행하기)). 다르게 동작하면 원본 쪽이 맞습니다.
 
 ::: warning
 샘플은 `<3DSpace>/webapps/DataGridViewSample/` 에 두고 ENOVIA 서버 주소로 열어야 동작합니다.

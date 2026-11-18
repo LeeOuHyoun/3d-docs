@@ -27,7 +27,7 @@ import IconGallery from '../.vitepress/theme/IconGallery.vue'
 WebUX 3DS, UIKIT 글꼴(3DS Fonticon)과 UWA 글꼴은 Dassault Systemes 의 글꼴이라 이 사이트에 올리지 않습니다. 글꼴에 적힌 라이선스는 "글꼴이 포함된 제품의 라이선스 범위에서 표시, 인쇄" 만 허용합니다. 공개 사이트에서는 아이콘 이름만 보이고, 위쪽 안내에서 글꼴을 읽으면 그 브라우저에서만 그립니다.
 
 - "webapps 폴더 선택" (Chrome, Edge): webapps 폴더를 한 번 고르면 위 표의 경로에서 없는 글꼴을 모두 찾아 읽습니다.
-- "파일 선택 (여러 개)": 파일 이름(`3ds_fonticon`, `3ds-icon`, `icons`)으로 글꼴을 맞춥니다. `.woff2`, `.woff`, `.ttf` 를 받습니다.
+- "글꼴 파일 직접 고르기" (폴더 선택이 안 되는 브라우저에서는 "파일 선택 (여러 개)"): webapps 폴더 없이 글꼴 파일만 있을 때 씁니다. 파일 이름(`3ds_fonticon`, `3ds-icon`, `icons`)으로 글꼴을 맞춥니다. `.woff2`, `.woff`, `.ttf` 를 받습니다.
 - 읽은 글꼴은 브라우저(IndexedDB)에 기억해 다음에 열 때 다시 고르지 않아도 됩니다. "글꼴 지우기" 로 지웁니다.
 
 FontAwesome 4.3 글꼴(Dave Gandy, [SIL OFL 1.1](https://openfontlicense.org))은 다시 배포할 수 있어 사이트에 함께 올립니다.

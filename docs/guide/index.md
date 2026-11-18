@@ -57,9 +57,9 @@ ENOVIA(3DEXPERIENCE) 는 개발 사양서를 제공하지 않고, webapps 소스
 | UI 구성 요소 | [UIComponentSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/UIComponentSample) |
 | JPO | [JPOSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/JPOSample) |
 | 트리거 | [TriggerSample](https://github.com/LeeOuHyoun/3d-docs/tree/main/TriggerSample) |
-| 공통 유틸 (DataGridView 보조 함수, 펼치는 검색 패널, 기본 위젯 레이아웃) | [CommonUtils](https://github.com/LeeOuHyoun/3d-docs/tree/main/CommonUtils) |
+| 공통 유틸 (DataGridView 보조 함수, 펼치는 검색 패널, 기본 위젯 레이아웃, 병합 헤더 그리드) | [CommonUtils](https://github.com/LeeOuHyoun/3d-docs/tree/main/CommonUtils) |
 
-- 서버에서 동작을 확인한 것은 DataGridViewSample 의 01 ~ 05 입니다. DataGridViewSample 11 ~ 16, TweakersSample 01 ~ 05, ControlsSample 04 ~ 06 · 08 ~ 10 은 ENOVIA 서버 없이 원본 webapps 를 내 PC 에서 띄워 동작을 확인했습니다 (관련 문서에 <Badge type="tip" text="로컬 실행 확인" />). 그 밖의 샘플은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.
+- 서버에서 동작을 확인한 것은 DataGridViewSample 의 01 ~ 05 입니다. DataGridViewSample 11 ~ 17, TweakersSample 01 ~ 05, ControlsSample 04 ~ 06 · 08 ~ 10 은 ENOVIA 서버 없이 원본 webapps 를 내 PC 에서 띄워 동작을 확인했습니다 (관련 문서에 <Badge type="tip" text="로컬 실행 확인" />). 그 밖의 샘플은 원본 소스 분석으로 작성했고 아직 서버에서 확인하지 않았습니다. 다르게 동작하면 원본 쪽이 맞습니다.
 - 화면 샘플(`*.html`)은 `<3DSpace>/webapps/` 아래에 폴더째 넣고 서버 주소로 엽니다. 형제 폴더의 `AmdLoader`, `Core` 등을 상대 경로로 불러오기 때문입니다.
 - 서버 샘플(`*.mql`, `*_mxJPO.java`)은 형식 예시입니다. 안의 이름은 가상의 이름이고 샘플마다 모양이 다릅니다 (SchemaSample `XXMyPart`, UIComponentSample · JPOSample `XX_MyPart`, TriggerSample 접두어 없는 `MyPart`). 프로젝트 규칙([객체 이름](/schema/conventions#객체-이름))에 맞게 바꿔서 씁니다.
 

@@ -2,7 +2,7 @@
 
 컬럼 헤더 줄과 행 머리(왼쪽 번호 칸)에 관한 설정을 한곳에 모았습니다. 헤더 높이, 헤더 숨기기, 헤더 글자와 아이콘, 헤더를 2단으로 묶기, 헤더를 직접 그리기를 다룹니다.
 
-샘플: [12_header.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/12_header.html)
+샘플: [12_header.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/12_header.html), [17_mergedHeader.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/DataGridViewSample/17_mergedHeader.html) (단독 컬럼과 그룹을 섞은 2단 헤더)
 
 ::: info 근거
 DataGridView.js 의 DataGridViewLayout (`_applyColumnHeaderHeight`, `getColumnHeaderHeight`, `getHeaderContainerHeight`, `_computeColumnHeadersHeight`, `setColumnOrGroupProperties`, `setColumnGroupExpandedFlag`), ColumnModel (`setColumns`, `_isColumnDisplayedByHierarchy`), DataGridViewColumnHeaderCell (`buildColumnGroupExpander`, `_applyCustomHeader`), DataGridView (`DefaultOnColumnHeaderRequest`, `getCellDefaultTooltip`). 헤더 밖의 `text` 사용: `_createFirstColumnsVisibilityContextualMenu`, `_buildMassUpdateDialogAttributes`, `getAsCSV`, DataGridViewCustomViewsDialog, 2026 DataGridViewContextualMenuBuilder `_createWrapTextInColumnContextualMenu`. 2026 도 같습니다. 호출부: CATFLCockpitWidget, DMUControls (컬럼 그룹), DocumentFiles (customHeader). 샘플은 원본 webapps 파일을 로컬에서 띄워 실행 확인 (3DSpace 서버에서는 미확인).
@@ -177,6 +177,17 @@ var columns = [
 - 그룹의 `dataIndex` 는 값과 연결되지 않습니다. `grid.getColumnOrGroup('sizeGroup')` 처럼 나중에 그룹을 찾을 때 쓰는 이름입니다.
 - `children` 안에 다시 `children` 을 넣어 3단 이상으로 만들 수 있습니다.
 - 헤더 줄 번호는 맨 아래 줄이 `rowID` -1, 그 위가 -2 입니다.
+
+### 단독 컬럼과 섞을 때 (세로 병합 없음)
+
+그룹 헤더는 아래 줄 컬럼 수만큼 가로로 병합되지만, 두 줄을 세로로 합치는 기능(rowspan)은 없습니다. 그룹이 아닌 컬럼을 섞으면 그리드가 그 컬럼 위에 이름 없는 그룹을 자동으로 끼워 단 수를 맞춥니다(Utilities `createBalancedTree`). 그래서 헤더 이름은 아래 줄에 나오고 위 줄은 빈칸이 됩니다.
+
+이름을 위 줄에 두려면 단독 컬럼도 같은 이름의 그룹으로 감싸고 아래 줄 컬럼의 `text` 를 비웁니다.
+
+<<< @/../DataGridViewSample/17_mergedHeader.html#columns{js}
+
+- 위 줄에 이름, 아래 줄은 빈칸으로 나옵니다. 두 칸이 하나로 합쳐지지는 않습니다.
+- 그룹의 `dataIndex` 는 아래 줄 컬럼과 겹치지 않게 다른 이름(예: `noGroup`)을 씁니다.
 
 ### 그룹 접고 펼치기
 
