@@ -69,11 +69,9 @@ define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
     }
   ];
 
-  const toColumn = (header) => (header.children
-    ? header
-    : { text: header.text, dataIndex: `${header.dataIndex}Group`, children: [{ ..._.omit(header, 'text'), text: '' }] });
-
-  const toColumns = (headers) => (_.some(headers, 'children') ? _.map(headers, toColumn) : headers);
+  const toColumns = (headers) => (_.some(headers, 'children')
+    ? _.map(headers, (header) => (header.children ? header : { text: '', dataIndex: `${header.dataIndex}Group`, children: [header] }))
+    : headers);
 
   const toTreeDocument = (rows) => {
     const treeDocument = new TreeDocument();
