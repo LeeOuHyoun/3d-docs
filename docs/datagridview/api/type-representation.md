@@ -79,7 +79,7 @@ Tweakers/assets/defaultTypeRepresentations.json, typeTemplates.json
 
 | typeRepresentation | 편집기(Tweaker) | displayStyle | 기본 semantics | 설명 |
 | --- | --- | --- | --- | --- |
-| <code>url / urlBlock</code> | <code>TweakerURLObject</code> | <code>clickableLabel(Block)</code> | - | 클릭 가능한 링크. 값은 <code>{ label, url }</code> 객체 (문자열이면 빈 칸) |
+| <code>url / urlBlock</code> | <code>TweakerURLObject</code> | <code>clickableLabel(Block)</code> | - | 클릭 가능한 링크. 값은 <code>{ label, url }</code> 또는 <code>{ label, func }</code> 객체 (문자열이면 빈 칸, [모든 행에 링크](/datagridview/cell-types#모든-행에-링크)) |
 | <code>urlAsCard</code> <Badge type="warning" text="2026" /> | <code>TweakerURLObject</code> | <code>card</code> (한 줄 모양은 <code>inlinedCard</code>) | - | 링크를 카드 모양으로. 화면은 <code>DS/TweakersEx/ControlsExViewModules</code> 의 Cards / InlinedCards. 앱 호출부 없음 |
 | <code>user / detailedUser</code> | <code>TweakerURLObject</code> | <code>user</code> | - | 사용자 표시 |
 | <code>detailedInfo / card</code> | <code>TweakerURLObject</code> | <code>detailedInfo / card</code> | - | 상세 정보 / 카드 |

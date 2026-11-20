@@ -292,7 +292,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 485개�
 | <code>height</code> | [그리드 옵션 › 데이터](/datagridview/api/grid-options#데이터) | 그리드 높이 |
 | <code>hide</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeNodeModel](/datagridview/api/data#treenodemodel) | 행 보이기 / 숨기기 |
 | <code>hideGroupedColumns</code> | [하위 옵션 객체 › rowGroupingOptions](/datagridview/api/sub-options#rowgroupingoptions) | 묶은 기준 컬럼 숨김 (tree 컬럼 제외). 그룹에서 빠지면 다시 보이게 함 |
-| <code>hyperlinkTarget</code> | [컬럼 옵션 › 표시 / 기능 on-off](/datagridview/api/column-options#표시-기능-on-off) | url 타입 링크 열기 대상 |
+| <code>hyperlinkTarget</code> | [컬럼 옵션 › 표시 / 기능 on-off](/datagridview/api/column-options#표시-기능-on-off) | url 타입 링크 열기 대상. 없으면 '_blank'. 링크 값의 <code>target</code> 이 우선 |
 
 ## I
 

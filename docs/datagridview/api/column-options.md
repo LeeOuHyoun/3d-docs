@@ -75,7 +75,7 @@ DataGridView.js 의 ColumnModel (`_defaultColumnDef` 기본값과 컬럼 정의 
 | <code>massUpdateAllowedFlag</code> | <code>boolean</code> | <code>true</code> | <code>true &#124; false</code> | 여러 행 일괄 수정 허용 |
 | <code>className</code> | <code>string</code> | <code>''</code> | CSS 클래스명 | 이 컬럼의 데이터 셀에 붙일 CSS 클래스. 헤더 칸에는 붙지 않음. 컬럼 함수 `getCellClassName` 을 넣으면 쓰이지 않음 ([헤더 칸에 CSS 클래스 주기](/datagridview/header#헤더-칸에-css-클래스-주기)) |
 | <code>allowUnsafeHTMLContent</code> | <code>boolean</code> | <code>false</code> | <code>true &#124; false</code> | 셀 값을 HTML 로 렌더링 (보안 주의) |
-| <code>hyperlinkTarget</code> | <code>string</code> | - | '_blank' 등 | url 타입 링크 열기 대상 |
+| <code>hyperlinkTarget</code> | <code>string</code> | - | '_blank' 등 | url 타입 링크 열기 대상. 없으면 '_blank'. 링크 값의 <code>target</code> 이 우선 |
 
 ## 편집
 
