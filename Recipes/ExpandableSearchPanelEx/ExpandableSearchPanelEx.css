@@ -97,10 +97,9 @@ label.espx-label {
 
 .espx-actions {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   margin-left: 12px;
-  padding: 2px 0 2px 12px;
-  border-left: 1px solid var(--COLOR_OUTLINE_DARK_GRAY, #d1d4d4);
+  padding: 0 0 2px 12px;
 }
 
 .espx-expander {
