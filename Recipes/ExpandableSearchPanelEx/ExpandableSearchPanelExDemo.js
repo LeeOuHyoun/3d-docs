@@ -68,7 +68,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
     ExpandableSearchPanelEx.attachToGrid(grid, {
       rows: createRows,
       rowSteps: [1, 2, 4, 12],
-      onSearch: _.partial(handleSearch, grid)
+      onSearch: (values) => handleSearch(grid, values)
     });
   };
 
