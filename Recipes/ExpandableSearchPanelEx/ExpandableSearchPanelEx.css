@@ -41,13 +41,13 @@
   column-gap: 16px;
 }
 
-@container (max-width: 870px) {
+@container (max-width: 960px) {
   .espx-fields {
     --espx-columns: 2;
   }
 }
 
-@container (max-width: 580px) {
+@container (max-width: 640px) {
   .espx-fields {
     --espx-columns: 1;
   }
@@ -63,7 +63,7 @@
 }
 
 .espx-label {
-  flex: 0 0 90px;
+  flex: 0 0 120px;
   font-size: 12px;
   color: var(--COLOR_DARK_GRAY, #3d3d3d);
 }
@@ -78,6 +78,13 @@ label.espx-label {
   min-width: 0;
 }
 
+.espx-editor > *,
+.espx-editor .wux-controls-datepicker,
+.espx-editor .wux-controls-lineeditor,
+.espx-editor .wux-controls-lineeditor input {
+  width: 100%;
+}
+
 .espx-date-range {
   display: flex;
   flex-wrap: wrap;
@@ -86,7 +93,8 @@ label.espx-label {
 }
 
 .espx-date {
-  flex: none;
+  flex: 1 1 120px;
+  min-width: 0;
 }
 
 .espx-date-separator {
