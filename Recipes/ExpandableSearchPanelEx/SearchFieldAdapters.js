@@ -54,12 +54,20 @@ define('DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters', [
     };
   };
 
-  const select = (options) => {
-    const combo = new ComboBox({
-      elementsList: options.items,
+  const createCombo = (options, comboOptions) => {
+    const combo = new ComboBox(_.assign({
+      elementsList: _.defaultTo(options.items, []),
       placeholder: _.defaultTo(options.placeholder, ''),
       enableSearchFlag: false
-    });
+    }, comboOptions));
+    if (options.onPreDropdown) {
+      combo.addEventListener('preDropdown', () => options.onPreDropdown(combo));
+    }
+    return combo;
+  };
+
+  const select = (options) => {
+    const combo = createCombo(options);
     return {
       content: combo,
       getValue: () => _.defaultTo(combo.value, ''),
@@ -70,12 +78,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters', [
   };
 
   const multiSelect = (options) => {
-    const combo = new ComboBox({
-      elementsList: options.items,
-      placeholder: _.defaultTo(options.placeholder, ''),
-      enableSearchFlag: false,
-      multiSelFlag: true
-    });
+    const combo = createCombo(options, { multiSelFlag: true });
     return {
       content: combo,
       getValue: () => _.castArray(_.defaultTo(combo.value, [])),

@@ -12,10 +12,16 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
   const createField = (field) => UWA.createElement('div', {
     'class': 'espx-field',
     html: [
-      { tag: 'label', 'class': 'espx-label', text: field.label },
+      _.isString(field.label)
+        ? { tag: 'label', 'class': 'espx-label', text: field.label }
+        : { 'class': 'espx-label', html: [field.label.content] },
       { 'class': 'espx-editor', html: [field.editor.content] }
     ]
   });
+
+  const getFieldValue = (field) => (_.isString(field.label)
+    ? field.editor.getValue()
+    : { label: field.label.getValue(), value: field.editor.getValue() });
 
   const createRow = (rowConfig) => {
     const element = UWA.createElement('div', {
@@ -36,11 +42,12 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
   const create = (options) => {
     const validate = _.defaultTo(options.validate, _.stubTrue);
     const rows = _.map(options.rows, createRow);
+    const rowSteps = _.defaultTo(options.rowSteps, ROW_STEPS);
     let stepIndex = 0;
 
     const getValues = () => _.fromPairs(_.map(
-      _.flatMap(_.take(rows, ROW_STEPS[stepIndex]), 'fields'),
-      (field) => [field.id, field.editor.getValue()]
+      _.flatMap(_.take(rows, rowSteps[stepIndex]), 'fields'),
+      (field) => [field.id, getFieldValue(field)]
     ));
 
     const searchButton = new Button({ label: '검색', emphasize: 'primary' });
@@ -51,7 +58,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
       }
     });
 
-    const lastStepIndex = ROW_STEPS.length - 1;
+    const lastStepIndex = rowSteps.length - 1;
 
     const createExpanderPart = (direction) => UWA.createElement('div', {
       'class': `espx-expander-part espx-expander-part--${direction}`,
@@ -63,7 +70,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
     const expander = UWA.createElement('div', { 'class': 'espx-expander', html: [collapsePart, expandPart] });
 
     const applyStep = () => {
-      const visibleCount = ROW_STEPS[stepIndex];
+      const visibleCount = rowSteps[stepIndex];
       _.forEach(rows, (row, index) => {
         const open = index < visibleCount;
         if (!open) {
@@ -108,7 +115,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
     return { element, getValues };
   };
 
-  const attachToGrid = (grid, options) => {
+  const attach = (grid, options) => {
     const gridElement = grid.getContent();
     const panel = create(options);
     panel.element.setStyle('flex', 'none');
@@ -129,6 +136,10 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
     };
     return panel;
   };
+
+  const attachToGrid = (grid, options) => (_.isFunction(options.rows)
+    ? Promise.resolve(options.rows()).then((rows) => attach(grid, _.defaults({ rows }, options)))
+    : attach(grid, options));
 
   return { create, attachToGrid };
 });

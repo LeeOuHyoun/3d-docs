@@ -12,6 +12,12 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
 
   const OPTION_ITEMS = ['옵션A', '옵션B', '옵션C'];
 
+  const fetchLater = (value) => new Promise((resolve) => _.delay(resolve, 300, value));
+
+  const loadOptionItems = _.once(async (combo) => {
+    combo.elementsList = await fetchLater(OPTION_ITEMS);
+  });
+
   const handleSearch = (values) => {
     console.log('검색', values);
   };
@@ -30,9 +36,13 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
 
   const textField = (id) => ({ id, label: id, editor: Adapters.text() });
 
-  const createRows = () => {
+  const createRows = async () => {
     const rowFields = [
-      [textField('item1'), { id: 'select', label: '드롭다운', editor: Adapters.select({ items: OPTION_ITEMS, placeholder: '선택' }) }],
+      [
+        textField('item1'),
+        { id: 'select', label: '드롭다운', editor: Adapters.select({ onPreDropdown: loadOptionItems, placeholder: '선택' }) },
+        { id: 'keyword', label: Adapters.select({ items: ['품번', '품명'] }), editor: Adapters.text() }
+      ],
       [textField('item2'), { id: 'dateRange', label: '날짜 범위', editor: Adapters.dateRange() }],
       [textField('item3'), { id: 'checkboxGroup', label: '체크박스 그룹', editor: Adapters.checkboxGroup({ items: OPTION_ITEMS }) }],
       [textField('item4'), { id: 'checkbox', label: '체크박스', editor: Adapters.checkbox({ label: '포함' }) }],
@@ -45,7 +55,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
       [textField('item11')],
       [textField('item12')]
     ];
-    return _.map(rowFields, (fields) => ({ fields }));
+    return fetchLater(_.map(rowFields, (fields) => ({ fields })));
   };
 
   const render = (parent) => {
@@ -61,7 +71,8 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
     }).inject(gridContainer);
 
     ExpandableSearchPanelEx.attachToGrid(grid, {
-      rows: createRows(),
+      rows: createRows,
+      rowSteps: [1, 2, 4, 12],
       onSearch: handleSearch
     });
   };
