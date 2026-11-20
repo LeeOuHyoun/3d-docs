@@ -3,11 +3,11 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
   'DS/lodash-4.18.1/lodash',
   'DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx',
   'DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters',
-  'DS/Recipes/DataGridViewUtils',
+  'DS/Recipes/DataGridViewUtils2',
   'DS/DataGridView/DataGridView',
   'DS/TreeModel/TreeDocument',
   'UWA/Element'
-], (UWA, _, ExpandableSearchPanelEx, Adapters, DataGridViewUtils, DataGridView, TreeDocument) => {
+], (UWA, _, ExpandableSearchPanelEx, Adapters, DataGridViewUtils2, DataGridView, TreeDocument) => {
   'use strict';
 
   const OPTION_ITEMS = ['옵션A', '옵션B', '옵션C'];
@@ -26,7 +26,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
 
   const searchParts = (values) => fetchLater(_.filter(PARTS, (part) => _.includes(`${part.label} ${part.title}`, values.keyword.value)));
 
-  const handleSearch = (grid, values) => DataGridViewUtils.loadRows(grid, searchParts(values));
+  const handleSearch = (grid, values) => DataGridViewUtils2.loadRows(grid, searchParts(values));
 
   const textField = (id) => ({ id, label: id, editor: Adapters.text() });
 
@@ -63,7 +63,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
         { text: '상태', dataIndex: 'status', width: 120 }
       ]
     }).inject(gridContainer);
-    DataGridViewUtils.setRows(grid, PARTS);
+    DataGridViewUtils2.loadRows(grid, PARTS);
 
     ExpandableSearchPanelEx.attachToGrid(grid, {
       rows: createRows,
