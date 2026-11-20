@@ -11,7 +11,7 @@
  *
  * @module DS/Recipes/DataGridViewUtils
  */
-define('DS/Recipes/DataGridViewUtils', ['DS/lodash', 'DS/DataGridView/DataGridView', 'DS/TreeModel/TreeDocument', 'DS/TreeModel/TreeNodeModel'], (_, DataGridView, TreeDocument, TreeNodeModel) => {
+define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridView/DataGridView', 'DS/TreeModel/TreeDocument', 'DS/TreeModel/TreeNodeModel'], (_, DataGridView, TreeDocument, TreeNodeModel) => {
   'use strict';
 
   /**

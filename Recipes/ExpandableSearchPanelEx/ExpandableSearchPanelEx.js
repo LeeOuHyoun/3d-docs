@@ -1,6 +1,6 @@
 define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
   'UWA/Core',
-  'DS/lodash',
+  'DS/lodash-4.18.1/lodash',
   'DS/Controls/Button',
   'UWA/Element',
   'css!DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx.css'

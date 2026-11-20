@@ -1,6 +1,6 @@
 define('DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters', [
   'UWA/Core',
-  'DS/lodash',
+  'DS/lodash-4.18.1/lodash',
   'DS/Controls/LineEditor',
   'DS/Controls/Toggle',
   'DS/Controls/ButtonGroup',

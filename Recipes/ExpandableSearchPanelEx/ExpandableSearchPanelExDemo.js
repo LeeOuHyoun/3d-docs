@@ -1,6 +1,6 @@
 define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
   'UWA/Core',
-  'DS/lodash',
+  'DS/lodash-4.18.1/lodash',
   'DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx',
   'DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters',
   'DS/DataGridView/DataGridView',

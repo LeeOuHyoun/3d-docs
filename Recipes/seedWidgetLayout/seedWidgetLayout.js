@@ -1,6 +1,6 @@
 define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
   'UWA/Core',
-  'DS/lodash',
+  'DS/lodash-4.18.1/lodash',
   'DS/CoreEvents/ModelEvents',
   'DS/ENOXTriptych/js/ENOXTriptych',
   'DS/ENOXWelcomePanel/js/ENOXWelcomePanel',

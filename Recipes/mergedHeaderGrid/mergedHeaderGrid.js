@@ -1,6 +1,6 @@
 define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
   'UWA/Core',
-  'DS/lodash',
+  'DS/lodash-4.18.1/lodash',
   'DS/DataGridView/DataGridView',
   'DS/TreeModel/TreeDocument',
   'DS/TreeModel/TreeNodeModel',

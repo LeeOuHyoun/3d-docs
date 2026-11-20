@@ -138,7 +138,7 @@ npm run samples -- <webapps 폴더 경로>
 
 저장소 옆의 `../enovia2025/3dspace/webapps` 와 `*Sample` 폴더를 한 서버로 묶어 `http://127.0.0.1:8080/webapps/DataGridViewSample/index.html` 같은 주소로 열 수 있게 합니다. ENOVIA 서버 없이 DataGridView 같은 화면 컨트롤이 실제로 동작합니다. 3DSpace 서버를 부르는 부분(WAFData 등)과 위젯 객체(`widget`)가 필요한 샘플은 동작하지 않습니다. 포트는 `PORT=9000 npm run samples` 로 바꿉니다.
 
-Recipes 는 띄우지 않습니다. 현장 경로의 `DS/lodash` 를 불러 쓰는데 원본 webapps 에는 이 모듈이 없어서, 띄워도 동작하지 않습니다.
+Recipes 는 띄우지 않습니다. 현장 경로의 `DS/lodash-4.18.1/lodash` 를 불러 쓰는데 원본 webapps 에는 이 모듈이 없어서, 띄워도 동작하지 않습니다.
 
 ## 내 PC 에서 미리 보기
 

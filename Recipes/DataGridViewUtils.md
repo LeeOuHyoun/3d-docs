@@ -13,7 +13,7 @@ define('DS/MyApp/PartListView', ['DS/Recipes/DataGridViewUtils'], (GridUtils) =>
 });
 ```
 
-- 모듈 이름 `DS/Recipes/DataGridViewUtils` 와 의존 모듈 `DS/lodash` 의 루트는 현장 경로로 바꿔서 씁니다.
+- 모듈 이름 `DS/Recipes/DataGridViewUtils` 와 의존 모듈 `DS/lodash-4.18.1/lodash` 의 루트는 현장 경로로 바꿔서 씁니다.
 - 그 밖의 의존 모듈: `DS/DataGridView/DataGridView`, `DS/TreeModel/TreeDocument`, `DS/TreeModel/TreeNodeModel`
 
 ## 2. 첫 인자 target
