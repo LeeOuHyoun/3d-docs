@@ -41,13 +41,13 @@
   column-gap: 16px;
 }
 
-@container (max-width: 1260px) {
+@container (max-width: 960px) {
   .espx-fields {
     --espx-columns: 2;
   }
 }
 
-@container (max-width: 840px) {
+@container (max-width: 640px) {
   .espx-fields {
     --espx-columns: 1;
   }
@@ -63,7 +63,7 @@
 }
 
 .espx-label {
-  flex: 0 0 220px;
+  flex: 0 0 180px;
   font-size: 12px;
   color: var(--COLOR_DARK_GRAY, #3d3d3d);
 }
