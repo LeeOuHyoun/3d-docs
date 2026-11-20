@@ -425,6 +425,11 @@ export default defineConfig({
   base: '/3d-docs/',
   cleanUrls: true,
   lastUpdated: true,
+  vite: {
+    define: {
+      __DOCS_UPDATED__: JSON.stringify(new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }))
+    }
+  },
   markdown: {
     anchor: { slugify: slugifyHeading },
     config: (md) => {

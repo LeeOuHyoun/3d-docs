@@ -3,14 +3,20 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
   'DS/lodash-4.18.1/lodash',
   'DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx',
   'DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters',
+  'DS/Recipes/DataGridViewUtils2',
   'DS/DataGridView/DataGridView',
   'DS/TreeModel/TreeDocument',
-  'DS/TreeModel/TreeNodeModel',
   'UWA/Element'
-], (UWA, _, ExpandableSearchPanelEx, Adapters, DataGridView, TreeDocument, TreeNodeModel) => {
+], (UWA, _, ExpandableSearchPanelEx, Adapters, DataGridViewUtils2, DataGridView, TreeDocument) => {
   'use strict';
 
   const OPTION_ITEMS = ['옵션A', '옵션B', '옵션C'];
+
+  const PARTS = [
+    { label: 'PRT-0001', title: '브라켓', status: '작업중' },
+    { label: 'PRT-0002', title: '샤프트', status: '검토중' },
+    { label: 'PRT-0003', title: '하우징', status: '승인' }
+  ];
 
   const fetchLater = (value) => new Promise((resolve) => _.delay(resolve, 300, value));
 
@@ -18,21 +24,9 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
     combo.elementsList = await fetchLater(OPTION_ITEMS);
   });
 
-  const handleSearch = (values) => {
-    console.log('검색', values);
-  };
+  const searchParts = (values) => fetchLater(_.filter(PARTS, (part) => _.includes(`${part.label} ${part.title}`, values.keyword.value)));
 
-  const createTreeDocument = () => {
-    const treeDocument = new TreeDocument();
-    treeDocument.prepareUpdate();
-    _.forEach([
-      { label: 'PRT-0001', grid: { title: '브라켓', status: '작업중' } },
-      { label: 'PRT-0002', grid: { title: '샤프트', status: '검토중' } },
-      { label: 'PRT-0003', grid: { title: '하우징', status: '승인' } }
-    ], (row) => treeDocument.addRoot(new TreeNodeModel(row)));
-    treeDocument.pushUpdate();
-    return treeDocument;
-  };
+  const handleSearch = (grid, values) => DataGridViewUtils2.loadRows(grid, searchParts(values));
 
   const textField = (id) => ({ id, label: id, editor: Adapters.text() });
 
@@ -62,18 +56,19 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
     const gridContainer = UWA.createElement('div', { styles: { height: 400 } }).inject(parent);
 
     const grid = new DataGridView({
-      treeDocument: createTreeDocument(),
+      treeDocument: new TreeDocument(),
       columns: [
         { text: '품번', dataIndex: 'tree', width: 130 },
         { text: '품명', dataIndex: 'title', width: 160 },
         { text: '상태', dataIndex: 'status', width: 120 }
       ]
     }).inject(gridContainer);
+    DataGridViewUtils2.loadRows(grid, PARTS);
 
     ExpandableSearchPanelEx.attachToGrid(grid, {
       rows: createRows,
       rowSteps: [1, 2, 4, 12],
-      onSearch: handleSearch
+      onSearch: (values) => handleSearch(grid, values)
     });
   };
 
