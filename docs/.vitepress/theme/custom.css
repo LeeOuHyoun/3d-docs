@@ -32,7 +32,13 @@
 .vp-doc th,
 .vp-doc td {
   min-width: 7em;
+  font-size: 15px;
   word-break: keep-all;
+}
+
+.vp-doc th code,
+.vp-doc td code {
+  font-size: 14px;
 }
 
 .vp-doc th {
