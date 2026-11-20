@@ -16,7 +16,7 @@
 </head>
 <body>
   <div class="page">
-    <h2>02. 셀 타입 모음 (콤보 싱글/멀티, 버튼그룹, 프로그레스, 체크, 날짜, 숫자, 색상, 링크, 여러 줄 문자열)</h2>
+    <h2>02. 셀 타입 모음 (콤보 싱글/멀티, 버튼그룹, 프로그레스, 체크, 날짜, 숫자, 색상, 링크, 링크 가공, 여러 줄 문자열)</h2>
     <p>
       편집 가능한 셀은 클릭(또는 더블클릭)하면 편집기가 열립니다.
       <button id="btnDump">현재 데이터 보기</button>
@@ -193,11 +193,68 @@
           // #region colorLink
           { text: '색상', dataIndex: 'color', width: 90, typeRepresentation: 'color', editableFlag: true },
           { text: '링크 (url)', dataIndex: 'url', width: 160, typeRepresentation: 'url' },
-          { text: '비고 (여러 줄)', dataIndex: 'note', width: 160, typeRepresentation: 'multilineString', editableFlag: true }
+          { text: '비고 (여러 줄)', dataIndex: 'note', width: 160, typeRepresentation: 'multilineString', editableFlag: true },
           // #endregion colorLink
+
+          /*
+           * 모든 행에 링크 (값 가공 + 이동 / 함수 호출)
+           *   데이터에 링크 값이 없어도 getCellValue 가 행 값을 가공해 { label, url } 또는 { label, func } 를 돌려주면 된다.
+           *   dataIndex 는 데이터에 없는 키여도 되지만 컬럼마다 달라야 한다. (같으면 앞 컬럼 셀이 그려지지 않음, 로컬 실행 확인)
+           *
+           *   url + parameters : href 는 url + parameters. 열기 대상은 값의 target → 컬럼 hyperlinkTarget → '_blank' 순
+           *   func             : 누르면 func({ context }) 호출. context 는 그 셀의 cellInfos 라 context.nodeModel 이 그 행
+           *   (Tweakers.js TweakerURLObject, DataGridView.js 가 semantics.executionContext 에 cellInfos 를 넣음)
+           *
+           *   링크를 누르면 그리드 click 이벤트도 같이 발생한다.
+           */
+          // #region linkCell
+          linkColumn({ text: '도면 (url 가공)', dataIndex: 'drawingLink', width: 150, hyperlinkTarget: '_self' }, drawingLabel, function (node) {
+            return { url: '#part=', parameters: encodeURIComponent(node.options.label) };
+          }),
+          linkColumn({ text: '열기 (func)', dataIndex: 'openAction', width: 130 }, openLabel, function () {
+            return { func: openRow };
+          })
+          // #endregion linkCell
         ]
       });
       grid.inject(document.getElementById('grid'));
+
+      /*
+       * 링크 컬럼 보조 함수
+       *   값이 객체라서 정렬할 값(getCellValueForSort)과 내보낼 글자(getCellValueForExport)를 따로 돌려준다.
+       *     getCellValueForSort 는 cellInfos 가 아니라 (nodeModel, dataIndex) 를 받는다.
+       *     getCellValueForExport 는 getAsCSV 가 머리글 행에도 부르고 이때 nodeModel 이 없다.
+       *     문자열이 아닌 값을 돌려주면 머리글은 컬럼 text 를 쓴다. (DataGridView.js getAsCSV)
+       *     넣지 않으면 정렬할 값이 없고, 내보내기는 { label, url } 객체를 JSON 문자열로 쓴다.
+       *   찾기(Ctrl+F)는 따로 넣지 않아도 셀에 보이는 label 로 찾는다.
+       */
+      // #region linkHelpers
+      function linkColumn(column, getLabel, getLink) {
+        return Object.assign({
+          typeRepresentation: 'url',
+          getCellValue: function (cellInfos) {
+            return Object.assign({ label: getLabel(cellInfos.nodeModel) }, getLink(cellInfos.nodeModel));
+          },
+          getCellValueForSort: getLabel,
+          getCellValueForExport: function (cellInfos) {
+            return cellInfos.nodeModel ? getLabel(cellInfos.nodeModel) : undefined;
+          }
+        }, column);
+      }
+
+      function drawingLabel(node) {
+        return '도면 ' + node.options.label.replace('PRT-', 'DRW-');
+      }
+
+      function openLabel(node) {
+        return node.getAttributeValue('title') + ' 열기';
+      }
+
+      function openRow(args) {
+        const node = args.context.nodeModel;
+        document.getElementById('dump').textContent = '열기: ' + node.options.label + ' / ' + node.getAttributeValue('title');
+      }
+      // #endregion linkHelpers
 
       /*
        * [3] 편집 결과 확인용 (그리드 설정과는 무관)
