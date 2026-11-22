@@ -1,4 +1,6 @@
 <script setup>
+import { ref, watch } from 'vue'
+import { useData } from 'vitepress'
 import HolographicCard from './HolographicCard.vue'
 import RuleSysMark from './RuleSysMark.vue'
 
@@ -7,10 +9,22 @@ const rows = [
   { label: '최종 갱신', value: __DOCS_UPDATED__ },
 ]
 const scopes = ['3DSpace', 'webapps']
+
+const { isDark } = useData()
+const lang = ref(null)
+
+watch(isDark, () => {
+  lang.value = null
+})
+
+const handleLangToggle = () => {
+  const isKo = lang.value ? lang.value === 'ko' : !isDark.value
+  lang.value = isKo ? 'en' : 'ko'
+}
 </script>
 
 <template>
-  <div class="home-info-card">
+  <div class="home-info-card" :data-lang="lang ?? undefined">
     <HolographicCard>
       <div class="app-info-card">
         <div class="app-info-card-bg" aria-hidden="true"></div>
@@ -66,7 +80,12 @@ const scopes = ['3DSpace', 'webapps']
               </div>
             </div>
           </div>
-          <p class="credit">Created with ✨ by <span class="mode-swap"><span class="dark-only">Lee Ou Hyoun</span><span class="credit-ko light-only">이우현</span></span></p>
+          <div class="card-foot">
+            <p class="credit">Created with ✨ by <span class="mode-swap"><span class="dark-only">Lee Ou Hyoun</span><span class="credit-ko light-only">이우현</span></span></p>
+            <button class="info-lang-btn" type="button" title="한/영 전환" aria-label="한/영 전환" @click="handleLangToggle">
+              <span class="mode-swap"><span class="light-only">EN</span><span class="dark-only">한</span></span>
+            </button>
+          </div>
         </div>
       </div>
     </HolographicCard>
@@ -303,6 +322,22 @@ const scopes = ['3DSpace', 'webapps']
   visibility: hidden;
 }
 
+.home-info-card[data-lang='ko'] .light-only {
+  visibility: visible;
+}
+
+.home-info-card[data-lang='ko'] .dark-only {
+  visibility: hidden;
+}
+
+.home-info-card[data-lang='en'] .light-only {
+  visibility: hidden;
+}
+
+.home-info-card[data-lang='en'] .dark-only {
+  visibility: visible;
+}
+
 .link-icon {
   flex: 0 0 auto;
   margin-left: 5px;
@@ -397,11 +432,59 @@ const scopes = ['3DSpace', 'webapps']
   font-weight: 600;
 }
 
+.card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .credit {
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.625;
   text-align: left;
   color: var(--info-label);
+}
+
+.info-lang-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid var(--info-chip-border);
+  border-radius: 5px;
+  background: var(--info-chip-bg);
+  color: var(--info-chip-text);
+  font-family: inherit;
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.14s ease,
+    border-color 0.14s ease,
+    color 0.14s ease,
+    transform 0.14s ease;
+}
+
+.info-lang-btn .mode-swap {
+  justify-items: center;
+}
+
+.info-lang-btn:hover {
+  background: rgb(255 255 255 / 0.28);
+  border-color: rgb(255 255 255 / 0.65);
+  color: #fff;
+  transform: translateY(-0.5px);
+}
+
+.dark .info-lang-btn:hover {
+  background: rgb(116 195 255 / 0.22);
+  border-color: rgb(116 195 255 / 0.55);
+  color: #fff;
 }
 </style>

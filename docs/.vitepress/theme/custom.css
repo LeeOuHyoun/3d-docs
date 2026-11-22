@@ -52,7 +52,7 @@
 }
 
 .VPHome .VPHero.has-image {
-  padding-bottom: 8px;
+  padding-bottom: 28px;
 }
 
 .VPHome .VPHero.has-image .image {
@@ -87,7 +87,7 @@
 
 @media (min-width: 960px) {
   .VPHome .VPHero.has-image {
-    padding-bottom: 0;
+    padding-bottom: 32px;
   }
 
   .VPHome .VPHero.has-image .image {
