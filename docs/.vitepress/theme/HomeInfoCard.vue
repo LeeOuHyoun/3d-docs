@@ -3,7 +3,7 @@ import HolographicCard from './HolographicCard.vue'
 import RuleSysMark from './RuleSysMark.vue'
 
 const rows = [
-  { label: '테스트 환경', value: 'R2025x · R2026x' },
+  { label: '분석한 소스', value: 'R2025x · R2026x' },
   { label: '최종 갱신', value: __DOCS_UPDATED__ },
 ]
 const scopes = ['3DSpace', 'webapps']
@@ -401,6 +401,7 @@ const scopes = ['3DSpace', 'webapps']
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.625;
+  text-align: left;
   color: var(--info-label);
 }
 </style>
