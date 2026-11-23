@@ -53,6 +53,13 @@ Tweakers.js 의 GeneratedToolbar, TweakerFunction, TypeEnums. Utilities.js 의 a
 
 <<< @/../TweakersSample/ToolbarActions.js#zoom{js}
 
+::: warning argument 는 객체로 넘깁니다
+버튼은 Utilities.js 의 `attachSimpleCallback` 으로 함수를 부릅니다. 모듈에서 함수를 찾은 뒤 `argument` 복사본에 `context`, `dsModel` 을 합치고 부르므로, `argument` 가 문자열(객체 id 등)이면 합치는 단계에서 `Uncaught (in promise) TypeError: Cannot create property 'dsModel' on string '...'` 이 납니다. `argument: { id: '...' }` 처럼 객체로 감싸고 함수에서 `e.id` 로 읽습니다. (2025, 2026 동일)
+
+- 모듈을 불러오지 못하거나 `func` 이름의 함수가 없으면 오류 없이 아무 일도 일어나지 않습니다. 동작하지 않으면 모듈 경로와 함수 이름 철자부터 확인합니다.
+- 함수는 모듈 객체의 메서드로 부르지 않으므로 안에서 `this` 로 같은 모듈의 다른 함수를 부를 수 없습니다.
+:::
+
 ::: warning action 에 함수를 넣으면 동작하지 않습니다
 `action` 은 안의 키(`module`, `func`, `argument`)를 복사해서 쓰므로 `action: function () {}` 은 아무것도 연결되지 않습니다. 함수는 `value` 에 넣습니다. (2025, 2026 동일)
 :::
