@@ -82,6 +82,15 @@ const SERVER_SIDEBAR = [
           { text: 'Context, 트랜잭션, 권한 전환', link: '/jpo/transaction-context' },
           { text: '다국어, 예외, 로그', link: '/jpo/i18n-exception' }
         ]
+      },
+      {
+        text: 'API 레퍼런스',
+        items: [
+          { text: '객체 조회', link: '/jpo/api/read' },
+          { text: '객체 생성, 수정', link: '/jpo/api/write' },
+          { text: '객체 삭제, 연결 끊기', link: '/jpo/api/delete' },
+          { text: '유틸리티', link: '/jpo/api/utilities' }
+        ]
       }
     ]
   },
@@ -474,6 +483,7 @@ export default defineConfig({
               { text: 'UI settings', link: '/ui-components/settings' },
               { text: 'URL 파라미터', link: '/ui-components/url-parameters' },
               { text: 'JPO 인자 구조', link: '/jpo/args' },
+              { text: 'JPO 메서드', link: '/jpo/api/read' },
               { text: 'JPO 유틸리티', link: '/jpo/utils' },
               { text: '트리거 JPO 인자', link: '/trigger/jpo-args' }
             ]

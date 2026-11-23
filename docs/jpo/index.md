@@ -17,6 +17,8 @@ enovia2025 `jpo/` 바로 아래의 `*_mxJPO.java` 1,615 개 (그중 `*Base_mxJPO
 | 편집한 값을 저장하기 | `paramMap.get("New Value")` | [저장](/jpo/args#저장-update-function) |
 | 생성 화면에서 객체를 만들고 후처리하기 | `createJPO`, `postProcessJPO` | [생성 폼](/jpo/args#생성-폼-createjpo-postprocessjpo) |
 | 객체 값 읽기, 쓰기, 연결 | `getInfo`, `setAttributeValue`, `DomainRelationship.connect` | [DomainObject](/jpo/domain-object) |
+| 메서드의 인자와 반환을 찾아보기 | 조회, 생성 / 수정, 삭제, 유틸리티 레퍼런스 | [객체 조회](/jpo/api/read) |
+| 객체를 지우거나 관계를 끊기 | `deleteObject`, `DomainRelationship.disconnect` | [객체 삭제, 연결 끊기](/jpo/api/delete) |
 | 여러 변경을 함께 되돌릴 수 있게 묶기 | `ContextUtil.startTransaction` | [트랜잭션](/jpo/transaction-context#트랜잭션) |
 | 사용자 권한 밖의 작업 | `ContextUtil.pushContext` / `popContext` | [슈퍼유저로 바꾸기](/jpo/transaction-context#슈퍼유저로-바꾸기-pushcontext) |
 | MQL 명령 실행 | `MqlUtil.mqlCommand(context, "... $1", 값)` | [MqlUtil](/jpo/mql-util) |
@@ -351,6 +353,10 @@ emxCommonMigrationBase_mxJPO.java:93 (`new BufferedWriter(new MatrixWriter(conte
 | [자주 쓰는 유틸리티](/jpo/utils) | 빈 값 검사, HTML 이스케이프, 현재 사용자, 날짜, 타입 / 상태 이름, 캐시 |
 | [Context, 트랜잭션, 권한 전환](/jpo/transaction-context) | 트랜잭션 시작 / 끝, `pushContext` |
 | [다국어, 예외, 로그](/jpo/i18n-exception) | 문자열 리소스 읽기, 예외로 실패 알리기, 서버 로그 |
+| [객체 조회](/jpo/api/read) | 레퍼런스. `getInfo`, `getRelatedObjects`, `findObjects` 의 인자와 반환, select 상수 |
+| [객체 생성, 수정](/jpo/api/write) | 레퍼런스. 생성, 개정, 값 수정, 상태 바꾸기, 연결, 관계 수정 |
+| [객체 삭제, 연결 끊기](/jpo/api/delete) | 레퍼런스. `deleteObject`, `deleteObjects`, `DomainRelationship.disconnect` |
+| [유틸리티](/jpo/api/utilities) | 레퍼런스. 인자, 문자열, 목록, 스키마 이름, MQL, 트랜잭션, 사용자, 날짜, 다국어 |
 
 ## 샘플
 
@@ -358,6 +364,7 @@ emxCommonMigrationBase_mxJPO.java:93 (`new BufferedWriter(new MatrixWriter(conte
 | --- | --- |
 | [XX_MyPartUI_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/JPOSample/XX_MyPartUI_mxJPO.java) | 표 program, 구조 펼치기, 열 function, 접근, 범위, 저장 (객체 / 관계) |
 | [XX_MyPartAction_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/JPOSample/XX_MyPartAction_mxJPO.java) | 트랜잭션 안에서 생성 + 연결, `pushContext`, `MqlUtil`, 다국어 메시지 |
+| [XX_ObjectApi_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/JPOSample/XX_ObjectApi_mxJPO.java) | API 레퍼런스의 예: 조회, 여러 객체 조회, 검색, 생성 + 연결, 수정, 상태 바꾸기, 개정, 삭제, 연결 끊기, 유틸리티 |
 
 ::: warning
 샘플의 타입, 관계, 속성 (`type_MyPart`, `relationship_MyPartDocument` ...) 은 예시 이름입니다. 실제 스키마의 심볼릭 이름으로 바꿔야 합니다. 원본 소스 분석으로 작성했고 서버에서 컴파일 확인을 하지 않았습니다.
