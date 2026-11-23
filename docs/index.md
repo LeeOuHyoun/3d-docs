@@ -42,7 +42,7 @@ features:
 | --- | --- | --- |
 | 데이터 모델 / MQL | type, attribute, policy, relationship, role. MQL 문법과 조회 | [개요](/schema/) · [Admin 객체](/schema/admin) · [Policy](/schema/policy) · [MQL 문법](/schema/mql) · [mql 폴더 규칙](/schema/conventions) |
 | UI 구성 요소 | command, menu, table, webform, portal, channel 로 화면 조립 | [개요](/ui-components/) · [command, menu](/ui-components/command-menu) · [table](/ui-components/table) · [webform](/ui-components/webform) · [portal, channel](/ui-components/portal-channel) · [URL 파라미터](/ui-components/url-parameters) · [settings](/ui-components/settings) |
-| JPO | 화면과 트리거에서 부르는 서버 Java 코드 | [개요](/jpo/) · [인자 구조](/jpo/args) · [DomainObject, select](/jpo/domain-object) · [MqlUtil](/jpo/mql-util) · [유틸리티](/jpo/utils) · [트랜잭션, 권한 전환](/jpo/transaction-context) · [다국어, 예외](/jpo/i18n-exception) |
+| JPO | 화면과 트리거에서 부르는 서버 Java 코드 | [개요](/jpo/) · [인자 구조](/jpo/args) · [DomainObject, select](/jpo/domain-object) · [MqlUtil](/jpo/mql-util) · [유틸리티](/jpo/utils) · [트랜잭션, 권한 전환](/jpo/transaction-context) · [다국어, 예외](/jpo/i18n-exception) · [메서드 레퍼런스](/jpo/api/read) |
 | 트리거 | 생성, 수정, promote 때 실행되는 검사와 후처리 | [개요](/trigger/) · [등록](/trigger/register) · [JPO 인자](/trigger/jpo-args) · [라이프사이클](/trigger/lifecycle) · [채번기](/trigger/generator) |
 | properties | 다국어 문자열과 시스템 설정 | [개요](/properties/) · [문자열 리소스](/properties/string-resource) · [시스템 설정](/properties/system-settings) |
 | 서버 Java | JPO 밖의 서버 코드. REST 주소, 배치, 외부 DB, 메일 | [개요](/server-java/) · [커스텀 REST 서비스](/server-java/rest-service) · [스케줄러](/server-java/scheduler) · [외부 DB](/server-java/external-db) · [메일](/server-java/mail) |
@@ -155,6 +155,7 @@ features:
 | [settings 레퍼런스](/ui-components/settings) | command, table column, webform field 의 setting 키 |
 | [URL 파라미터](/ui-components/url-parameters) | emxIndentedTable.jsp, emxForm.jsp 등 화면 JSP 파라미터 |
 | [JPO 인자 구조](/jpo/args) | 호출 종류별 programMap 구조와 반환 형식 |
+| [JPO 조회](/jpo/api/read) · [생성, 수정](/jpo/api/write) · [삭제](/jpo/api/delete) · [유틸리티](/jpo/api/utilities) | OOTB JPO 가 쓰는 메서드의 하는 일, 인자, 반환 |
 | [트리거 JPO 인자](/trigger/jpo-args) | 트리거 메서드 형태, macro, 이벤트별 값 |
 | [REST 엔드포인트](/rest-api/catalog) | `resources/v1/modeler/*` 목록 |
 | [widget 객체](/widget/widget-api) · [PlatformAPI](/widget/platform-api) | 위젯 함수, 이벤트, 플랫폼 함수 |

@@ -217,6 +217,7 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | 생성 후처리에서 엉뚱한 객체를 수정 | `paramMap.objectId` 는 새 객체, `requestMap.objectId` 는 부모 | [postProcessJPO](/jpo/args#postprocessjpo) |
 | "JPO Access Program Returns NULL" | 접근 함수는 `null` 대신 `false` 를 돌려줌 | [검사 순서](/jpo/args#검사-순서) |
 | 표 열이 느림 | 행마다 `getInfo` 하지 말고 id 배열로 `DomainObject.getInfo` 한 번 | [표 열 function](/jpo/args#표-열-function) |
+| 관계가 반대 방향으로 연결됨 | `DomainRelationship.connect(context, obj, rel, true, ids)` 는 `obj` 가 from, `obj.connect(context, rel, other, true)` 와 `createAndConnect(..., other, true)` 는 `other` 가 from | [연결](/jpo/api/write#연결) |
 | 내보내기 / 인쇄에 HTML 이 섞임 | `reportFormat`, `exportFormat` 이 있으면 글자만 돌려줌 | [표 열 function](/jpo/args#표-열-function) |
 | 이름에 `<` 나 따옴표가 든 객체에서 표가 깨짐 | HTML 열 값은 `XSSUtil.encodeForHTML` 로 감쌈 | [HTML 이스케이프](/jpo/utils#html-이스케이프) |
 | commit 에서 엉뚱한 오류 | 앞에서 예외를 삼켜 트랜잭션이 aborting 상태. 로그를 남겨도 다시 던짐 | [예외](/jpo/i18n-exception#많이-쓰는-형태), [트랜잭션](/jpo/transaction-context#중첩-호출은-참조-카운트로-처리) |
