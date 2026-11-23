@@ -29,6 +29,7 @@
 | type | 객체의 종류. 상속 구조를 가짐 | [type](/schema/admin#type) |
 | attribute | type 이나 relationship 에 붙는 값 | [attribute](/schema/admin#attribute) |
 | relationship | 두 객체를 잇는 연결. from 쪽과 to 쪽이 있음 | [relationship](/schema/admin#relationship) |
+| 관계 id | 연결 하나하나에 붙는 id. select `id[connection]` 으로 읽고, 관계 속성을 고치거나 관계를 끊을 때 넘김 | [API 레퍼런스](/jpo/api/#_1-객체는-id-로-관계는-관계-id-로-가리킵니다) |
 | policy | type 의 상태 흐름과 상태별 권한을 정한 것 | [policy](/schema/policy) |
 | state, current | policy 안의 상태. 객체의 지금 상태가 `current` | [정의](/schema/policy#정의) |
 | promote, demote | 다음 상태로 올리기, 이전 상태로 내리기 | [트리거 수명 주기](/trigger/lifecycle) |

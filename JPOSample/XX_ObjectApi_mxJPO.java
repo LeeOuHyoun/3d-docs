@@ -39,11 +39,11 @@ public class XX_ObjectApi_mxJPO {
     public Map getPartInfo(Context context, String[] args) throws Exception {
         Map programMap = (Map) JPO.unpackArgs(args);
         DomainObject part = DomainObject.newInstance(context, (String) programMap.get("objectId"));
-        Map info = part.getInfo(context, StringList.create(DomainConstants.SELECT_NAME, DomainConstants.SELECT_REVISION,
-                DomainConstants.SELECT_CURRENT, DomainObject.getAttributeSelect(schema(context, SYM_ATTR_MY_STATUS))));
-        info.put("documentIds", part.getInfoList(context, "from[" + schema(context, SYM_REL_MY_PART_DOCUMENT) + "].to.id"));
-        info.put("isMyPart", Boolean.valueOf(part.isKindOf(context, schema(context, SYM_TYPE_MY_PART))));
-        return info;
+        String documentIds = "from[" + schema(context, SYM_REL_MY_PART_DOCUMENT) + "].to.id";
+        return part.getInfo(context,
+                StringList.create(DomainConstants.SELECT_NAME, DomainConstants.SELECT_REVISION, DomainConstants.SELECT_CURRENT,
+                        DomainObject.getAttributeSelect(schema(context, SYM_ATTR_MY_STATUS)), documentIds),
+                StringList.create(documentIds));
     }
 
     public MapList getChildParts(Context context, String[] args) throws Exception {
@@ -54,7 +54,7 @@ public class XX_ObjectApi_mxJPO {
                 StringList.create(DomainConstants.SELECT_RELATIONSHIP_ID,
                         DomainRelationship.getAttributeSelect(schema(context, SYM_ATTR_MY_QUANTITY))),
                 false, true, (short) 1, null, null, 0);
-        children.sort(DomainConstants.SELECT_NAME, "ascending", "String");
+        children.sort(DomainConstants.SELECT_NAME, "ascending", "string");
         return children;
     }
 
@@ -78,20 +78,20 @@ public class XX_ObjectApi_mxJPO {
         DomainObject document = DomainObject.newInstance(context);
         Map attributes = new HashMap();
         attributes.put(schema(context, SYM_ATTR_TITLE), (String) programMap.get("title"));
+        Map result = new HashMap();
         ContextUtil.startTransaction(context, true);
         try {
             DomainRelationship rel = document.createAndConnect(context, schema(context, SYM_TYPE_MY_DOCUMENT),
                     schema(context, SYM_REL_MY_PART_DOCUMENT), part, true);
             document.setAttributeValues(context, attributes);
-            ContextUtil.commitTransaction(context);
-            Map result = new HashMap();
             result.put("id", document.getId(context));
             result.put("relId", rel.getName());
-            return result;
+            ContextUtil.commitTransaction(context);
         } catch (Exception e) {
             ContextUtil.abortTransaction(context);
             throw e;
         }
+        return result;
     }
 
     public void updatePart(Context context, String[] args) throws Exception {
@@ -99,8 +99,15 @@ public class XX_ObjectApi_mxJPO {
         DomainObject part = DomainObject.newInstance(context, (String) programMap.get("objectId"));
         Map attributes = new HashMap();
         attributes.put(schema(context, SYM_ATTR_MY_STATUS), (String) programMap.get("status"));
-        part.setAttributeValues(context, attributes);
-        part.setDescription(context, (String) programMap.get("description"));
+        ContextUtil.startTransaction(context, true);
+        try {
+            part.setAttributeValues(context, attributes);
+            part.setDescription(context, (String) programMap.get("description"));
+            ContextUtil.commitTransaction(context);
+        } catch (Exception e) {
+            ContextUtil.abortTransaction(context);
+            throw e;
+        }
     }
 
     public void updateQuantity(Context context, String[] args) throws Exception {
