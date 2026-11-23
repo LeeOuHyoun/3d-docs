@@ -46,6 +46,6 @@ Tweakers.js 의 GeneratedToolbar
 | <code>dataElements.label / tooltip / displayLabel</code> | 항목 | - | 문자열 / 문자열 / boolean | 글자 / 툴팁 / 라벨 표시 여부 |
 | <code>dataElements.icon</code> | 항목 | - | <code>{ iconName: 'plus', fontIconFamily: 1 }</code> | 아이콘 (1 = 3DS 폰트) |
 | <code>dataElements.value / possibleValues / placeholder</code> (입력칸, 콤보) | 항목 | - | 값 / 배열 / 문자열 | 초기값, 콤보 목록, 안내 문구 |
-| <code>dataElements.action</code> | 항목 | - | <code>{ module: 'DS/...', func: '...', argument }</code> | 버튼 클릭 시 호출. 인자 e.context.executionContext = 그리드. 함수를 넣으면 동작하지 않음 → 함수는 <code>dataElements.value</code> 에 |
+| <code>dataElements.action</code> | 항목 | - | <code>{ module: 'DS/...', func: '...', argument }</code> | 버튼 클릭 시 호출. 인자 e.context.executionContext = 그리드. <code>argument</code> 는 객체 (문자열이면 <code>Cannot create property 'dsModel' on string</code> 오류). 함수를 넣으면 동작하지 않음 → 함수는 <code>dataElements.value</code> 에 |
 | <code>dataElements.value</code> (버튼일 때) | 항목 | - | <code>function (e)</code> | 버튼 타입에서는 초기값이 아니라 클릭 시 호출하는 함수. 인자 e.context 는 action 과 같음 |
 | <code>dataElements.visibleFlag / disabled / readOnly</code> | 항목 | <code>true / false / false</code> | <code>boolean</code> | 표시 / 비활성 / 읽기전용 |
