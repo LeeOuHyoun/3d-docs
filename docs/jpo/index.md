@@ -17,7 +17,7 @@ enovia2025 `jpo/` 바로 아래의 `*_mxJPO.java` 1,615 개 (그중 `*Base_mxJPO
 | 편집한 값을 저장하기 | `paramMap.get("New Value")` | [저장](/jpo/args#저장-update-function) |
 | 생성 화면에서 객체를 만들고 후처리하기 | `createJPO`, `postProcessJPO` | [생성 폼](/jpo/args#생성-폼-createjpo-postprocessjpo) |
 | 객체 값 읽기, 쓰기, 연결 | `getInfo`, `setAttributeValue`, `DomainRelationship.connect` | [DomainObject](/jpo/domain-object) |
-| 메서드의 인자와 반환을 찾아보기 | 조회, 생성 / 수정, 삭제, 유틸리티 레퍼런스 | [객체 조회](/jpo/api/read) |
+| 메서드가 받는 값과 돌려주는 값을 찾아보기 | 조회, 생성 / 수정, 삭제, 유틸리티 레퍼런스 | [API 레퍼런스](/jpo/api/) |
 | 객체를 지우거나 관계를 끊기 | `deleteObject`, `DomainRelationship.disconnect` | [객체 삭제, 연결 끊기](/jpo/api/delete) |
 | 여러 변경을 함께 되돌릴 수 있게 묶기 | `ContextUtil.startTransaction` | [트랜잭션](/jpo/transaction-context#트랜잭션) |
 | 사용자 권한 밖의 작업 | `ContextUtil.pushContext` / `popContext` | [슈퍼유저로 바꾸기](/jpo/transaction-context#슈퍼유저로-바꾸기-pushcontext) |
@@ -336,7 +336,7 @@ emxCommonMigrationBase_mxJPO.java:93 (`new BufferedWriter(new MatrixWriter(conte
 | 폼 저장 값은 `programMap.get("New Value")` | `programMap` 안의 `paramMap` 에 있음 | [저장](/jpo/args#저장-update-function) |
 | `mqlCommand(context, cmd, true, ...)` 의 `true` 는 결과 옵션 | 슈퍼유저로 실행 (`pushContext`) | [MqlUtil](/jpo/mql-util#boolean-인자) |
 | `startTransaction` 을 부르면 항상 새 트랜잭션 | 이미 열려 있으면 참조 카운트만 올림. 가장 바깥에서만 commit | [트랜잭션](/jpo/transaction-context#트랜잭션) |
-| 값이 여러 개인 select 는 항상 StringList | 하나면 String, 여럿이면 StringList 로 섞여 옴 | [DomainObject](/jpo/domain-object#여러-값-select) |
+| 값이 여러 개인 select 도 `getInfo` 로 다 받는다 | 읽는 메서드마다 다름. `getInfo` 는 첫 값만, 여러 객체 `getInfo` 와 `findObjects` 는 `\u0007` 로 이은 문자열, `getRelatedObjects` 는 여럿일 때만 `StringList`. 전부 받으려면 `getInfoList` 나 `multiSelects` | [값이 여러 개인 select](/jpo/api/read#값이-여러-개인-select) |
 | 접근 함수가 `null` 을 돌려도 숨김 처리 | "JPO Access Program Returns NULL" 오류 | [접근](/jpo/args#접근-access-function) |
 | 저장 함수에는 언제나 이전 값 (`Old value`) 이 옴 | 편집 폼만 넘김. 표 셀 저장과 생성 폼에는 없음 | [저장](/jpo/args#저장-update-function) |
 | `UIUtil.isNullOrEmpty` 뒤에 `"null"` 도 따로 검사 | `"null"` (대소문자 무시) 과 공백도 이미 빈 값으로 봄 | [빈 값과 문자열](/jpo/utils#빈-값과-문자열) |
@@ -353,6 +353,7 @@ emxCommonMigrationBase_mxJPO.java:93 (`new BufferedWriter(new MatrixWriter(conte
 | [자주 쓰는 유틸리티](/jpo/utils) | 빈 값 검사, HTML 이스케이프, 현재 사용자, 날짜, 타입 / 상태 이름, 캐시 |
 | [Context, 트랜잭션, 권한 전환](/jpo/transaction-context) | 트랜잭션 시작 / 끝, `pushContext` |
 | [다국어, 예외, 로그](/jpo/i18n-exception) | 문자열 리소스 읽기, 예외로 실패 알리기, 서버 로그 |
+| [API 레퍼런스 개요](/jpo/api/) | 레퍼런스. 먼저 알아 둘 것, 하고 싶은 일로 찾기, 샘플 JPO 전체 소스 |
 | [객체 조회](/jpo/api/read) | 레퍼런스. `getInfo`, `getRelatedObjects`, `findObjects` 의 인자와 반환, select 상수 |
 | [객체 생성, 수정](/jpo/api/write) | 레퍼런스. 생성, 개정, 값 수정, 상태 바꾸기, 연결, 관계 수정 |
 | [객체 삭제, 연결 끊기](/jpo/api/delete) | 레퍼런스. `deleteObject`, `deleteObjects`, `DomainRelationship.disconnect` |

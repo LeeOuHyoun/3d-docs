@@ -86,6 +86,7 @@ const SERVER_SIDEBAR = [
       {
         text: 'API 레퍼런스',
         items: [
+          { text: '개요 (하고 싶은 일로 찾기)', link: '/jpo/api/' },
           { text: '객체 조회', link: '/jpo/api/read' },
           { text: '객체 생성, 수정', link: '/jpo/api/write' },
           { text: '객체 삭제, 연결 끊기', link: '/jpo/api/delete' },
@@ -483,7 +484,7 @@ export default defineConfig({
               { text: 'UI settings', link: '/ui-components/settings' },
               { text: 'URL 파라미터', link: '/ui-components/url-parameters' },
               { text: 'JPO 인자 구조', link: '/jpo/args' },
-              { text: 'JPO 메서드', link: '/jpo/api/read' },
+              { text: 'JPO 메서드', link: '/jpo/api/' },
               { text: 'JPO 유틸리티', link: '/jpo/utils' },
               { text: '트리거 JPO 인자', link: '/trigger/jpo-args' }
             ]

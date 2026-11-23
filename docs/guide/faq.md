@@ -198,7 +198,7 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | 언어를 바꿨더니 위젯만 다시 읽히고 계정 언어는 그대로 | `I18n.setCurrentLanguage` 는 Me 설정 창 전용 (쿠키 + 2025 는 다시 읽기) | [I18n](/widget/i18n-preferences#ds-uwpclientcode-i18n) |
 | 2026 에서 형식 언어가 `undefined`, 바꿔도 반영 안 됨 | `WUX.currentFormatsLanguage` 가 없어지고 `LanguageUtils.regionalFormatLanguage` 로 바뀜 | [2026](/widget/i18n-preferences#_2026) |
 | 꺼진 Me 설정이 켜진 것처럼 동작 | `readPreferences` 값은 `'false'` 같은 문자열 | [Me 환경설정 읽기](/widget/i18n-preferences#me-환경설정-읽기) |
-| select 결과가 String 이었다 StringList 였다 함 | 값이 하나면 String, 여럿이면 StringList | [여러 값 select](/jpo/domain-object#여러-값-select) |
+| select 결과가 String 이었다 StringList 였다 함, 여러 값인데 하나만 옴 | 읽는 메서드마다 다름. `getInfo` 는 첫 값만, 여러 객체 `getInfo` 와 `findObjects` 는 `\u0007` 로 이은 문자열, `getRelatedObjects` 는 여럿일 때만 StringList. 전부 받으려면 `getInfoList` 나 `multiSelects` | [값이 여러 개인 select](/jpo/api/read#값이-여러-개인-select) |
 | attribute 값이 계속 비어 있음 | 이름 오타도 예외 없이 빈 값. MQL `print bus ... select ... dump` 로 확인 | [관계](/jpo/domain-object#관계) |
 | 저장 함수에서 이전 값이 `null` | 이전 값 (`Old value`) 은 편집 폼만 넘김. 표 셀 저장과 생성 폼은 저장 전에 직접 읽음 | [저장](/jpo/args#저장-update-function) |
 | 표 / 폼의 range 표시 이름이 안 나옴 | 폼은 `RangeDisplayValues`, 표는 `RangeDisplayValue` | [표 (Structure Browser)](/jpo/args#표-structure-browser) |
@@ -217,6 +217,7 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | 생성 후처리에서 엉뚱한 객체를 수정 | `paramMap.objectId` 는 새 객체, `requestMap.objectId` 는 부모 | [postProcessJPO](/jpo/args#postprocessjpo) |
 | "JPO Access Program Returns NULL" | 접근 함수는 `null` 대신 `false` 를 돌려줌 | [검사 순서](/jpo/args#검사-순서) |
 | 표 열이 느림 | 행마다 `getInfo` 하지 말고 id 배열로 `DomainObject.getInfo` 한 번 | [표 열 function](/jpo/args#표-열-function) |
+| `FrameworkUtil.split` 결과에 구분자 글자가 섞여 나옴 | 구분자는 한 글자만 씀. 구분자 문자열의 글자 하나하나를 구분자로 봄 | [빈 값, 문자열](/jpo/api/utilities#빈-값-문자열) |
 | 관계가 반대 방향으로 연결됨 | `DomainRelationship.connect(context, obj, rel, true, ids)` 는 `obj` 가 from, `obj.connect(context, rel, other, true)` 와 `createAndConnect(..., other, true)` 는 `other` 가 from | [연결](/jpo/api/write#연결) |
 | 내보내기 / 인쇄에 HTML 이 섞임 | `reportFormat`, `exportFormat` 이 있으면 글자만 돌려줌 | [표 열 function](/jpo/args#표-열-function) |
 | 이름에 `<` 나 따옴표가 든 객체에서 표가 깨짐 | HTML 열 값은 `XSSUtil.encodeForHTML` 로 감쌈 | [HTML 이스케이프](/jpo/utils#html-이스케이프) |

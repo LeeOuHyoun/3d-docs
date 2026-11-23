@@ -69,13 +69,16 @@ String status = (String) info.get("attribute[" + attrStatus + "]");
 
 ### 여러 값 select
 
-`from[X].to.id` 처럼 값이 여러 개일 수 있는 select 는 결과 형이 섞입니다.
+`from[X].to.id` 처럼 값이 여러 개일 수 있는 select 는 **읽는 메서드에 따라 결과가 다릅니다**.
 
-| 값 개수 | `getInfo(StringList)`, `getRelatedObjects` 결과 |
-| --- | --- |
-| 0 | `null` 또는 키 없음 |
-| 1 | `String` |
-| 2 이상 | `StringList`. 구분자 `\u0007` (`SelectConstants.cSelectDelimiter`) 로 이어 붙인 `String` 으로 오는 경우도 있습니다 (OOTB 는 `cSelectDelimiter` 나 `"\\a"` 로 자름) |
+| 읽는 방법 | 값이 하나일 때 | 값이 여러 개일 때 |
+| --- | --- | --- |
+| `obj.getInfo(context, select)`, `obj.getInfo(context, selects)` | `String` | `String`. 첫 값만 옴 |
+| `obj.getInfoList(context, select)`, `multiSelects` 인자에 넣은 select | `StringList` | `StringList` |
+| `DomainObject.getInfo(context, ids, selects)`, `findObjects` | `String` | `String`. 값들을 `\u0007` (`SelectConstants.cSelectDelimiter`) 로 이어 붙임 |
+| `getRelatedObjects` | `String` | `StringList` |
+
+값이 없으면 `null` 이거나 키가 없습니다. 어떤 형으로 와도 목록으로 바꾸려면 아래처럼 받습니다.
 
 ```java
 Object value = map.get(select);
@@ -83,15 +86,15 @@ StringList ids = value instanceof StringList ? (StringList) value
         : value == null ? new StringList() : FrameworkUtil.split((String) value, SelectConstants.cSelectDelimiter);
 ```
 
-- 값 하나만 필요하면 `getInfoList` 를 씁니다. 항상 `StringList` 입니다.
-- `getInfo(context, selects, multiSelects)` 의 세 번째 인자에 넣은 select 는 항상 `StringList` 로 옵니다.
+- 처음부터 전부 받으려면 `getInfoList` 를 쓰거나 `multiSelects` 인자에 그 select 를 넣습니다. 항상 `StringList` 입니다.
+- 메서드별 표와 근거는 [값이 여러 개인 select](/jpo/api/read#값이-여러-개인-select) 에 있습니다.
 
 ::: warning DomainObject.MULTI_VALUE_LIST 는 쓰지 않습니다
-예전 코드는 static 목록 `DomainObject.MULTI_VALUE_LIST` 에 select 를 넣었다 뺐습니다 (130 건). 서버 전체가 함께 쓰는 목록이라 동시에 실행되는 다른 요청에 영향을 줍니다. 지금 OOTB 코드도 이 줄을 주석으로 막고 `multiValueSelects` 인자를 씁니다.
+예전 코드는 static 목록 `DomainObject.MULTI_VALUE_LIST` 에 select 를 넣었다 뺐습니다 (130 건). 서버 전체가 함께 쓰는 목록이라 동시에 실행되는 다른 요청에 영향을 줍니다. 지금 OOTB 코드도 이 줄을 주석으로 막고 `multiValueSelects` 인자를 씁니다. 분석한 버전의 `DomainObject`, `FrameworkUtil` 은 이 목록을 읽지도 않아서 넣어도 결과가 바뀌지 않습니다.
 :::
 
 ::: info 근거
-`instanceof StringList` 180 건 (예: emxECPartBase_mxJPO.java 의 `SELECT_FORMAT_HASFILE` 처리). `MULTI_VALUE_LIST` 주석 처리 후 `SelectList multiValueSelects` 사용 사례: emxECPartBase_mxJPO.java (`relationship[...].from.current`). eMatrixServletRMI.jar `SelectConstants.cSelectDelimiter` = `"\u0007"`. `String` 이면 이 구분자로 자르는 사례: emxPartMarkupBase_mxJPO.java (`getListValue`), emxECOBase_mxJPO.java (`DomainObject.getInfo` 여러 id 결과를 `StringUtils.split(id, "\\a")`. m1jsystem.jar `StringUtils.split` 은 정규식이라 `\a` 가 `\u0007`)
+`instanceof StringList` 180 건 (예: emxECPartBase_mxJPO.java 의 `SELECT_FORMAT_HASFILE` 처리). `MULTI_VALUE_LIST` 주석 처리 후 `SelectList multiValueSelects` 사용 사례: emxECPartBase_mxJPO.java (`relationship[...].from.current`). eMatrixServletRMI.jar `SelectConstants.cSelectDelimiter` = `"\u0007"`. `String` 이면 이 구분자로 자르는 사례: emxPartMarkupBase_mxJPO.java (`getListValue`), emxECOBase_mxJPO.java (`DomainObject.getInfo` 여러 id 결과를 `StringUtils.split(id, "\\a")`. m1jsystem.jar `StringUtils.split` 은 정규식이라 `\a` 가 `\u0007`). xerinfra.jar `DomainObject`, `FrameworkUtil`, `DomainRelationship` 바이트코드는 `NEW_MULTI_VALUE_LIST` 만 읽고 `MULTI_VALUE_LIST` 는 읽지 않음 (참조 0 건)
 :::
 
 ## 관계 따라가기 (getRelatedObjects)
@@ -314,7 +317,7 @@ String stateRelease = PropertyUtil.getSchemaProperty(context, "policy", policyNa
 add property attribute_MyStatus on program eServiceSchemaVariableMapping.tcl to attribute "My Status";
 ```
 
-- 등록하지 않은 심볼릭 이름은 빈 문자열이 옵니다. 그 값으로 `getRelatedObjects` 를 부르면 아무것도 안 나와서 원인을 찾기 어렵습니다.
+- 등록하지 않은 심볼릭 이름은 빈 문자열이 옵니다. 오류가 나지 않아 원인을 찾기 어렵습니다. `getRelatedObjects` 는 관계 패턴이 빈 값이면 `"*"` 로 바꿔 모든 관계를 따라갑니다.
 - OOTB 상수 (`DomainConstants.TYPE_PART`, `RELATIONSHIP_EBOM`, `ATTRIBUTE_TITLE` ...) 도 클래스가 처음 로드될 때 같은 방법으로 채워집니다. 사용자 정의 스키마는 상수 클래스를 따로 만들어 같은 방식으로 둡니다.
 
 ::: info 근거
