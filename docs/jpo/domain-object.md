@@ -40,7 +40,7 @@ DomainObject plain = new DomainObject(objectId);
 :::
 
 ::: info 근거
-xerinfra.jar `DomainObject.newInstance(Context, String)` 바이트코드: id 에 타입 정보가 없으면 `FrameworkUtil.getType(context, new BusinessObject(id))` (`open` → `getBusinessType` → `close`) 로 타입을 읽고, `FrameworkUtil.lookupObject(context, "type", 타입, DomainObject.class, app)` 로 찾은 클래스를 `String` 생성자로 만듦. 못 찾으면 `DomainObject`
+xerinfra.jar `DomainObject.newInstance(Context, String)` 바이트코드: id 에 타입 정보가 없으면 `FrameworkUtil.getType(context, new BusinessObject(id))` (`open` → `getBusinessType` → `close`) 로 타입을 읽고, `FrameworkUtil.lookupObject(context, "type", 타입, DomainObject.class, app)` 로 찾은 클래스를 `String` 생성자로 만듦. 매핑 파일에 그 타입이 없으면 상위 타입으로 다시 찾고, 끝까지 못 찾으면 `DomainObject` ([newInstance](/jpo/api/domain-object#newinstance))
 :::
 
 ## 정보 읽기
@@ -49,7 +49,7 @@ xerinfra.jar `DomainObject.newInstance(Context, String)` 바이트코드: id 에
 | --- | --- | --- |
 | `getInfo(context, String select)` | `String` | 값 하나 |
 | `getInfo(context, StringList selects)` | `Map` | 값 여러 개. 키는 select 문자열 그대로 |
-| `getInfo(context, StringList selects, StringList multiSelects)` | `Map` | 여러 값 select 를 항상 `StringList` 로 받음 |
+| `getInfo(context, StringList selects, Collection multiSelects)` | `Map` | 여러 값 select 를 항상 `StringList` 로 받음 |
 | `getInfoList(context, String select)` | `StringList` | 여러 값 select 하나 (`from[X].to.id` 등) |
 | `DomainObject.getInfo(context, String[] ids, StringList selects)` | `MapList` | 여러 객체를 한 번에. 열 function 에서 씀 |
 | `BusinessObject.getSelectBusinessObjectData(context, String[] ids, StringList selects)` | `BusinessObjectWithSelectList` | 위와 같은 일을 하는 하위 API (OOTB 168 건). 값은 `list.getElement(i).getSelectData(select)`, 여러 값은 `getSelectDataList(select)` |
@@ -127,7 +127,7 @@ MapList list = obj.getRelatedObjects(context,
 | 8 | 단계 | `short` | `1` 바로 아래, `0` 끝까지 |
 | 9 | 객체 where | `String` | `"current==Release"` 같은 식. 없으면 `null` / `""` |
 | 10 | 관계 where | `String` | 관계 조건 |
-| 11 | 개수 제한 | `int` | `0` 이면 제한 없음 |
+| 11 | 개수 제한 | `int` | `0` 이면 제한 없음. 안에서 `short` 로 바꾸므로 32767 까지 |
 
 결과는 `MapList` 이고 Map 마다 아래 키가 있습니다.
 
@@ -137,7 +137,7 @@ MapList list = obj.getRelatedObjects(context,
 | `level` | 시작 객체로부터의 단계 (`"1"`, `"2"` ...) |
 | `relationship` | 관계 이름 |
 
-- 10 개 인자 (개수 제한 없음), 13 / 14 개 인자 (`Pattern` 으로 결과를 한 번 더 거르는 형태) 도 있습니다.
+- 10 개 인자 (개수 제한 없음) 형태와 13 개 인자 형태는 <Badge type="warning" text="폐기" /> 되었습니다. 11 개 인자에 `0`, 14 개 인자 (`Pattern` 으로 결과를 한 번 더 거르는 형태) 를 씁니다. 형태 9 개의 인자 비교는 [getRelatedObjects](/jpo/api/domain-object#getrelatedobjects) 에 있습니다.
 - 자식 목록 (예: BOM 아래 부품) 은 `getTo=false, getFrom=true` 입니다. 상위 목록 (Where Used) 은 반대입니다.
 - 화면(webapps)에서 관계를 따라갈 때는 [관계 탐색 (enorelnav)](/rest-api/navigate) 를 봅니다.
 
@@ -156,7 +156,7 @@ xerinfra.jar `DomainObject.getRelatedObjects` 오버로드 9 개. 인자 개수�
 | `setAttributeValue(context, attr, value)` | 속성 하나 |
 | `setAttributeValues(context, Map)` | 속성 여러 개 한 번에 (속성 이름 → 값) |
 | `setDescription(context, text)`, `setOwner(context, user)` | 기본 항목 |
-| `setState(context, state)` | 상태를 바로 지정 |
+| `setState(context, state)` | 목표 상태가 될 때까지 promote / demote 를 되풀이 |
 | `promote(context)`, `demote(context)` | 다음 / 이전 상태 |
 | `createObject(context, type, name, rev, policy, vault)` | 생성 |
 | `deleteObject(context)`, `DomainObject.deleteObjects(context, String[])` | 삭제 |
@@ -179,12 +179,12 @@ doc.createObject(context, type, null, null, null, null);
 String newId = doc.getId(context);
 ```
 
-| 인자 | `null` / `""` 이면 |
+| 인자 | `null` 이면 |
 | --- | --- |
-| name | `getUniqueName` 으로 고유 이름 생성 |
+| name (`""`, 공백뿐도) | `getUniqueName` 으로 고유 이름 생성 |
 | revision | 정책의 첫 리비전 |
 | policy | 타입의 기본 정책 |
-| vault | 기본 vault |
+| vault | 로그인 context 의 vault |
 
 `createObject` 는 안에서 트랜잭션을 열고 닫습니다. 바깥에 이미 트랜잭션이 있으면 그 안에 묶입니다 ([트랜잭션](/jpo/transaction-context#트랜잭션)).
 
@@ -198,7 +198,7 @@ xerinfra.jar `DomainObject.createObject(Context, String, String, String, String,
 | --- | --- |
 | `DomainRelationship.connect(context, fromObj, relName, toObj)` | `DomainRelationship` 을 돌려줌 |
 | `DomainRelationship.connect(context, fromId, relName, toId, preserve)` | id 로 연결. `preserve=true` 면 MQL `connect ... preserve` 로 실행 (수정 일자를 바꾸지 않는 옵션으로 보입니다 <Badge type="danger" text="검증 필요" />) |
-| `obj.connectTo(context, relName, toObj)` / `connectFrom(...)` | 이 객체 기준 |
+| `obj.connectTo(context, relName, toObj)` / `connectFrom(...)` <Badge type="warning" text="폐기" /> | 이 객체 기준. 안에서 `DomainRelationship.connect(context, from, rel, to)` 를 부르므로 그것을 씀 |
 | `obj.addToObject(context, new RelationshipType(rel), id)` / `addFromObject(...)` | 생성 화면 프레임워크가 쓰는 형태 |
 | `DomainRelationship.disconnect(context, relId)` | 관계 id 로 끊기. 여러 개는 `String[]` |
 | `DomainRelationship.modifyTo(context, relId, newToObj)` | 관계의 to 쪽 바꾸기 |
@@ -227,7 +227,7 @@ MapList found = DomainObject.findObjects(context, type, "*", whereExpr, new Stri
 | where | 조건식 |
 | selects | 결과 select |
 
-이름 / 리비전 / 소유자까지 받는 9 ~ 12 개 인자 형태도 있습니다. 결과가 많을 수 있으므로 where 를 꼭 좁힙니다.
+개수 제한과 정렬을 더한 6 ~ 8 개 인자 형태, 이름 / 리비전 / 소유자까지 받는 9 ~ 15 개 인자 형태도 있습니다 ([findObjects](/jpo/api/domain-object#findobjects)). 결과가 많을 수 있으므로 where 를 꼭 좁힙니다.
 
 ## select 문법
 

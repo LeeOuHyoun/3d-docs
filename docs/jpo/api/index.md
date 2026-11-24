@@ -14,6 +14,7 @@ enovia2025 `jpo/` 바로 아래 `*_mxJPO.java` 1,615 개에서 호출 수를 세
 | [객체 생성, 수정](/jpo/api/write) | 만들기, 개정, 값과 상태 바꾸기, 연결, 트랜잭션 |
 | [객체 삭제, 연결 끊기](/jpo/api/delete) | 객체 지우기, 관계 끊기 |
 | [유틸리티](/jpo/api/utilities) | 인자, 문자열, 목록, 이름 변환, MQL, 사용자, 날짜, 화면 문자열 |
+| [DomainObject 메서드 사양](/jpo/api/domain-object) | `DomainObject` 에 선언된 메서드 전부 (폐기 메서드와 대체 포함), 샘플 `XX_DomainObjectApi` |
 
 ## 먼저 알아 둘 다섯 가지
 
@@ -131,7 +132,7 @@ DomainObject part = DomainObject.newInstance(context, objectId);
 
 ## 샘플 JPO
 
-[XX_ObjectApi_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/JPOSample/XX_ObjectApi_mxJPO.java) 하나에 이 섹션의 패턴을 메서드별로 담았습니다. 모든 메서드는 `JPO.unpackArgs(args)` 로 꺼낸 Map (`programMap`) 에서 값을 읽습니다.
+[XX_ObjectApi_mxJPO.java](https://github.com/LeeOuHyoun/3d-docs/blob/main/JPOSample/XX_ObjectApi_mxJPO.java) 하나에 이 섹션의 패턴을 메서드별로 담았습니다. 모든 메서드는 `JPO.unpackArgs(args)` 로 꺼낸 Map (`programMap`) 에서 값을 읽습니다. 여기 없는 `DomainObject` 메서드 (`isKindOf`, `getRelatedObject`, `addRelatedObjects`, `cloneObject` ...) 는 [XX_DomainObjectApi_mxJPO.java](/jpo/api/domain-object#샘플-jpo) 에 있습니다.
 
 | 메서드 | 받는 값 (`programMap` 의 키) | 돌려주는 값 | 보여 주는 것 |
 | --- | --- | --- | --- |

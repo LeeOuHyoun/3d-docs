@@ -33,13 +33,13 @@ DomainObject.newInstance(context, objectId).deleteObject(context);
 DomainObject.deleteObjects(context, ids);
 ```
 
-- 실패하면 예외가 납니다. 삭제 권한이 없거나 트리거가 막은 경우입니다.
-- `delete(context)` 는 `deleteObject(context)` 와 같습니다.
+- 실패하면 예외가 납니다. 삭제 권한이 없거나 트리거가 막은 경우입니다. `deleteObject` 는 지우다 실패하면 메시지만 담은 `java.lang.Exception` 을 던지므로 `catch (FrameworkException e)` 로는 잡히지 않습니다 ([deleteObject](/jpo/api/domain-object#deleteobject)).
+- <Badge type="warning" text="폐기" /> 된 `delete(context)` 는 `deleteObject(context)` 와 같습니다.
 - 바깥에 트랜잭션이 있으면 그 안에 묶여서, 바깥이 취소되면 삭제도 되돌아갑니다 ([여러 변경을 한 묶음으로](/jpo/api/write#여러-변경을-한-묶음으로)).
 - id 목록이 `StringList` 면 `list.toStringArray()` 로 배열로 바꿔 넘깁니다.
 
 ::: info 근거
-xerinfra.jar `DomainObject.deleteObject(context)` → `deleteObject(context, false)`: `openObject`, `startTransaction(context, true)`, `confirmDelete` 로 지울 목록을 만들고, 목록이 하나면 `remove(context)`, 여럿이면 목록마다 MQL `delete bus $1`, `commitTransaction`. 실패하면 `abortTransaction` 후 예외. `deleteObjects(context, String[])` 은 `ContextUtil.startTransaction` 한 번 안에서 id 마다 `setId` + `deleteObject`, 실패하면 `abortTransaction`. `delete(context)` → `deleteObject(context)`
+xerinfra.jar `DomainObject.deleteObject(context)` → `deleteObject(context, false)`: `openObject`, `startTransaction(context, true)`, `confirmDelete` 로 지울 목록을 만들고, 목록이 하나면 `remove(context)`, 여럿이면 목록마다 MQL `delete bus $1`, `commitTransaction`. 실패하면 `abortTransaction` 후 `new Exception(e.getMessage())`. `deleteObjects(context, String[])` 은 `ContextUtil.startTransaction` 한 번 안에서 id 마다 `setId` + `deleteObject`, 실패하면 `abortTransaction`. `delete(context)` → `deleteObject(context)`
 :::
 
 ## 연결 끊기

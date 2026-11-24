@@ -58,7 +58,7 @@ DomainObject found = new DomainObject(id);
 | --- | --- | --- |
 | `obj.getInfo(context, select)` | select 하나의 값을 읽음 | `String` |
 | `obj.getInfo(context, selects)` | select 여러 개 (`StringList`) 를 한 번에 읽음 | `Map`. 키는 넣은 select 문자열, 값은 `String`. 넣지 않아도 `id`, `type` 이 함께 들어 있음 |
-| `obj.getInfo(context, selects, multiSelects)` | 위와 같고, `multiSelects` 에도 넣은 select 는 값을 목록으로 받음 | `Map`. `multiSelects` 의 select 는 `StringList`, 나머지는 `String` |
+| `obj.getInfo(context, selects, multiSelects)` | 위와 같고, `multiSelects` 에도 넣은 select 는 값을 목록으로 받음 | `Map`. `multiSelects` 와 `NEW_MULTI_VALUE_LIST` 의 select 는 `StringList`, 나머지는 `String`. `id`, `type` 은 더하지 않음 |
 | `obj.getInfoList(context, select)` | 값이 여러 개인 select 하나를 읽음 | `StringList`. 값이 없으면 빈 목록 |
 
 ```java
@@ -77,7 +77,7 @@ String status = (String) info.get(DomainObject.getAttributeSelect(attrStatus));
 
 - 값을 여러 개 읽을 때는 `getInfo(context, select)` 를 여러 번 부르지 말고 `selects` 로 한 번에 읽습니다. 부를 때마다 서버를 다녀옵니다.
 - 연결이 없는 `from[관계].to.id` 처럼 값이 없을 수 있는 select 는 결과가 `null` 일 수 있으니 확인하고 씁니다.
-- `getName(context)`, `getType(context)` 같은 getter 도 부를 때마다 객체를 엽니다. 값이 둘 이상 필요하면 `getInfo(context, selects)` 를 씁니다.
+- `getName(context)`, `getType(context)` 같은 getter 는 <Badge type="warning" text="폐기" /> 되었고 부를 때마다 객체를 엽니다. 대신 `getInfo(context, DomainConstants.SELECT_NAME)` 처럼 읽고, 값이 둘 이상 필요하면 `getInfo(context, selects)` 를 씁니다 ([기본 정보](/jpo/api/domain-object#기본-정보)).
 
 ### 값이 여러 개인 select
 
@@ -96,7 +96,7 @@ String status = (String) info.get(DomainObject.getAttributeSelect(attrStatus));
 
 ```java
 String select = "from[" + relPartDocument + "].to.id";
-StringList docIds = part.getInfoList(context, select);
+StringList docIdList = part.getInfoList(context, select);
 
 Map info = part.getInfo(context, StringList.create(DomainConstants.SELECT_NAME, select), StringList.create(select));
 StringList sameDocIds = (StringList) info.get(select);
@@ -110,7 +110,7 @@ StringList docIdsOfFirst = (StringList) ((Map) rows.get(0)).get(select);
 - `state`, `format.file.name`, `grantee` 같은 몇몇 select 는 `multiSelects` 에 넣지 않아도 `getInfo(context, selects)`, 여러 객체 `getInfo`, `findObjects` 에서 `StringList` 로 옵니다. `DomainConstants.NEW_MULTI_VALUE_LIST` 에 미리 들어 있기 때문입니다.
 
 ::: info 근거
-서버가 준 값은 `ObjectWithSelectDataHolder` 에 select → 문자열로 들어가고, 값이 여러 개면 `\u0007` 로 이어져 있음 (`getSelectData` 는 그대로, `getSelectDataList` 는 `SelectConstants.parseToStringList` 로 자름). `DomainObject.getInfo(Context, StringList, Collection, boolean)` 은 `multiSelects` 와 `NEW_MULTI_VALUE_LIST` 에 없는 키의 값을 목록의 첫 요소 (`get(0)`) 로 바꾸고, `getInfo(Context, String)` 은 `multiSelects` 자리에 `null` 을 넘김. `getInfo(Context, StringList)` 는 select 목록에 `id`, `type` 을 더해 부름. `FrameworkUtil.toMap(BusinessObjectWithSelect, Collection)` (여러 객체 `getInfo`) 과 `toMapList(QueryIterator, Collection)` (`findObjects`) 은 `multiSelects` 에 있으면 `getSelectDataList`, 없으면 `getSelectData`. `getRelatedObjects` 는 `ExpandParams.setIsList(false)` 로 펼쳐서 `getHashtable` 이 `\u0007` 이 든 값만 `StringList` 로 바꿈. `getInfoList` 는 결과가 `null` 이면 `new StringList()`. OOTB 가 `FrameworkUtil.split(값, "\7")` 로 자르는 곳 17 건
+서버가 준 값은 `ObjectWithSelectDataHolder` 에 select → 문자열로 들어가고, 값이 여러 개면 `\u0007` 로 이어져 있음 (`getSelectData` 는 그대로, `getSelectDataList` 는 `SelectConstants.parseToStringList` 로 자름). `DomainObject.getInfo(Context, StringList, Collection, boolean)` 은 `multiSelects` 와 `NEW_MULTI_VALUE_LIST` 에 없는 키의 값을 목록의 첫 요소 (`get(0)`) 로 바꾸고 (`multiSelects` 가 `null` 이면 `NEW_MULTI_VALUE_LIST` 도 합치지 않음), `getInfo(Context, String)` 은 `multiSelects` 자리에 `null` 을 넘김. `getInfo(Context, StringList)` 는 select 목록에 `id`, `type` 을 더해 부름. `FrameworkUtil.toMap(BusinessObjectWithSelect, Collection)` (여러 객체 `getInfo`) 과 `toMapList(QueryIterator, Collection)` (`findObjects`) 은 `multiSelects` 에 있으면 `getSelectDataList`, 없으면 `getSelectData`. `getRelatedObjects` 는 `ExpandParams.setIsList(false)` 로 펼쳐서 `getHashtable` 이 `\u0007` 이 든 값만 `StringList` 로 바꿈. `getInfoList` 는 결과가 `null` 이면 `new StringList()`. OOTB 가 `FrameworkUtil.split(값, "\7")` 로 자르는 곳 17 건
 :::
 
 ### 속성 읽기
@@ -118,8 +118,8 @@ StringList docIdsOfFirst = (StringList) ((Map) rows.get(0)).get(select);
 | 메서드 | 하는 일 | 돌려받는 것 |
 | --- | --- | --- |
 | `obj.getAttributeValue(context, 속성이름)` | 속성 하나의 값. `getInfo(context, "attribute[속성이름]")` 과 같음 | `String` |
-| `obj.getAttributeMap(context)` | 객체의 모든 속성 | `Map` (속성 이름 → 값) |
-| `obj.getAttributeMap(context, true)` | 위와 같고 여러 값 속성만 목록으로 | `Map` (여러 값 속성은 `StringList`) |
+| `obj.getAttributeMap(context)` | 객체의 모든 속성 | `Map` (속성 이름 → 값. 여러 값 속성은 `StringList`) |
+| `obj.getAttributeMap(context, true)` | 위와 같음. 서버에서 읽는 호출 (`getAttributeValues(context, true)`) 만 다름 ([getAttributeMap](/jpo/api/domain-object#getattributemap)) | 위와 같음 |
 
 ```java
 String status = part.getAttributeValue(context, attrStatus);
@@ -183,7 +183,7 @@ for (Object o : rows) {
 | `obj.isLastRevision(context)` | 최신 리비전인지 | `boolean` |
 | `obj.getLastRevision(context)` | 최신 리비전 | `BusinessObject` |
 | `obj.getPreviousRevision(context)`, `obj.getNextRevision(context)` | 이전, 다음 리비전 | `BusinessObject` |
-| `obj.getRevisionsInfo(context, selects, new StringList())` | 모든 리비전의 select 값. 세 번째 인자는 OOTB 도 빈 목록을 넘김 | `MapList` |
+| `obj.getRevisionsInfo(context, selects, new StringList())` | 모든 리비전의 select 값. 세 번째 인자는 값을 `StringList` 로 받을 select 이고, 없으면 빈 목록을 넘김 (`null` 이면 예외). 정책에 major 순서만 있으면 major 리비전마다 한 행 ([getRevisionsInfo](/jpo/api/domain-object#getrevisionsinfo)) | `MapList` |
 
 ```java
 if (part.isKindOf(context, typePart) && !part.isLastRevision(context)) {
@@ -247,7 +247,7 @@ MapList list = obj.getRelatedObjects(context, relPattern, typePattern, objectSel
 | `getFrom` | `boolean` | `true` 면 자식 쪽으로 따라감 |
 | `level` | `short` | 몇 단계까지. `(short) 1` 은 바로 연결된 것만, `(short) 0` 은 끝까지 |
 | `objectWhere`, `relWhere` | `String` | 조건식 (`"current==Release"`). 없으면 `null` |
-| `limit` | `int` | 최대 개수. `0` 이면 제한 없음 |
+| `limit` | `int` | 최대 개수. `0` 이면 제한 없음. 안에서 `short` 로 바꾸므로 32767 까지 |
 
 방향은 아래처럼 고릅니다.
 
@@ -295,7 +295,8 @@ for (Object o : children) {
 
 - 객체 값과 관계 값은 한 Map 에 같이 담깁니다. 키가 같으면 관계 값이 덮어쓰므로 관계의 id 와 이름은 `id[connection]`, `name[connection]` 으로 읽습니다.
 - `typePattern` 에는 `"*"` 를 넣습니다. `null` 이나 `""` 를 전체로 바꿔 주는 처리는 `emxFramework.enableTypePattern_NULL_as_ALL` 설정이 `true` 일 때만 하는데, 분석한 properties 에는 이 설정이 없습니다. `relPattern` 은 `null` 이나 `""` 면 `"*"` 로 바뀝니다.
-- 패턴으로 결과를 한 번 더 거르는 13, 14 개 인자 형태는 [관계 따라가기](/jpo/domain-object#관계-따라가기-getrelatedobjects) 에 있습니다.
+- OOTB 에 가장 많은 10 개 인자 형태 (`limit` 없음) 는 <Badge type="warning" text="폐기" /> 되었습니다. 11 개 형태에 `limit` `0` 을 넘깁니다.
+- 패턴으로 결과를 한 번 더 거르는 14 개 인자 형태와 나머지 형태는 [getRelatedObjects](/jpo/api/domain-object#getrelatedobjects) 에 있습니다.
 
 ### 한 개만, id 만
 
@@ -325,7 +326,7 @@ xerinfra.jar `DomainObject.getRelatedObjects` 는 인자 개수가 다른 형태
 | `where` | `String` | 조건식 (`"current==Release"`, `"revision==last"`). 없으면 `""` 또는 `null` |
 | `expandType` | `boolean` | `true` 면 하위 타입까지 찾음. 5 개 형태는 항상 `true` |
 | `selects` | `StringList` | 찾은 객체에서 읽을 select |
-| `limit` | `short` | 최대 개수. `0` 이면 제한 없음. 5 개, 9 개 형태는 `0` |
+| `limit` | `short` | 최대 개수. 5 개, 9 개 형태는 `0`. `0` 은 `matrix.db.Query` 의 기본값과 같은 값이고 OOTB 는 개수를 제한하지 않을 때 넘김. 32767 까지 |
 | `queryName` | `String` | 저장된 query 이름. 보통 `null` |
 
 결과는 `MapList` 이고 찾은 객체 하나가 행 Map 하나입니다. 키는 `selects` 에 넣은 select 문자열이고, `type` 은 넣지 않아도 들어 있습니다.
