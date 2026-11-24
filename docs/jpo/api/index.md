@@ -67,7 +67,7 @@ String typePart = PropertyUtil.getSchemaProperty(context, "type_Part");
 | 값 | 형식 |
 | --- | --- |
 | 숫자 | 숫자를 적은 문자열 (`"2"`) |
-| 날짜 | `MM/dd/yyyy hh:mm:ss a` 형식 문자열 (`"11/23/2026 02:30:00 PM"`). 변환은 [날짜](/jpo/api/utilities#날짜-ematrixdateformat) |
+| 날짜 | `MM/dd/yyyy hh:mm:ss a` 형식 문자열 (`"11/23/2026 02:30:00 PM"`). 변환은 [날짜](/jpo/api/util/date) |
 | 참 / 거짓 | `"TRUE"`, `"True"` 같은 문자열. `"true".equalsIgnoreCase(값)` 으로 비교 |
 | 값이 여러 개 | 읽는 메서드에 따라 다름. [값이 여러 개인 select](/jpo/api/read#값이-여러-개인-select) |
 
@@ -94,14 +94,14 @@ String typePart = PropertyUtil.getSchemaProperty(context, "type_Part");
 | 여러 변경을 함께 되돌릴 수 있게 묶기 | `ContextUtil.startTransaction` | [여러 변경을 한 묶음으로](/jpo/api/write#여러-변경을-한-묶음으로) |
 | 객체 지우기 | `obj.deleteObject`, `DomainObject.deleteObjects` | [객체 삭제](/jpo/api/delete#객체-삭제) |
 | 관계 끊기 | `DomainRelationship.disconnect` | [연결 끊기](/jpo/api/delete#연결-끊기) |
-| 넘어온 인자 꺼내기 | `JPO.unpackArgs` | [인자](/jpo/api/utilities#인자-jpo) |
-| 빈 값 확인, 문자열 자르기 | `UIUtil.isNullOrEmpty`, `FrameworkUtil.split` | [빈 값, 문자열](/jpo/api/utilities#빈-값-문자열) |
-| 결과 목록 정렬하기 | `mapList.sort` | [목록](/jpo/api/utilities#목록-stringlist-maplist) |
-| 심볼릭 이름을 실제 이름으로 | `PropertyUtil.getSchemaProperty` | [스키마 이름](/jpo/api/utilities#스키마-이름) |
-| MQL 명령 실행하기 | `MqlUtil.mqlCommand` | [MQL](/jpo/api/utilities#mql-mqlutil) |
-| 로그인 사용자 알아내기 | `context.getUser()`, `PersonUtil` | [사용자](/jpo/api/utilities#사용자-personutil) |
-| 날짜 값 바꾸기 | `eMatrixDateFormat` | [날짜](/jpo/api/utilities#날짜-ematrixdateformat) |
-| HTML 에 값 넣기, 다국어 문구 읽기 | `XSSUtil`, `EnoviaResourceBundle` | [화면 문자열](/jpo/api/utilities#화면-문자열-xssutil-enoviaresourcebundle) |
+| 넘어온 인자 꺼내기 | `JPO.unpackArgs` | [인자](/jpo/api/util/args-id) |
+| 빈 값 확인, 문자열 자르기 | `UIUtil.isNullOrEmpty`, `FrameworkUtil.split` | [빈 값, 문자열](/jpo/api/util/string-list) |
+| 결과 목록 정렬하기 | `mapList.sort` | [목록](/jpo/api/util/string-list) |
+| 심볼릭 이름을 실제 이름으로 | `PropertyUtil.getSchemaProperty` | [스키마 이름](/jpo/api/util/schema) |
+| MQL 명령 실행하기 | `MqlUtil.mqlCommand` | [MQL](/jpo/api/util/mql) |
+| 로그인 사용자 알아내기 | `context.getUser()`, `PersonUtil` | [사용자](/jpo/api/util/person) |
+| 날짜 값 바꾸기 | `eMatrixDateFormat` | [날짜](/jpo/api/util/date) |
+| HTML 에 값 넣기, 다국어 문구 읽기 | `XSSUtil`, `EnoviaResourceBundle` | [화면 문자열](/jpo/api/util/html-json) |
 
 ## 예제에서 쓰는 변수
 
@@ -147,7 +147,7 @@ DomainObject part = DomainObject.newInstance(context, objectId);
 | `revisePart` | `objectId` | `String` (새 리비전의 id) | `reviseObject` ([생성](/jpo/api/write#생성)) |
 | `deleteParts` | `objectIds` (쉼표로 이은 id) | 없음 | `deleteObjects` ([객체 삭제](/jpo/api/delete#객체-삭제)) |
 | `removeDocuments` | `objectId` | 없음 | 관계 id 를 읽어 `disconnect` ([연결 끊기](/jpo/api/delete#연결-끊기)) |
-| `getModifiedLabel` | `objectId` | `String` | 빈 값 확인, 사용자 이름, 날짜, HTML 이스케이프 ([유틸리티](/jpo/api/utilities#샘플)) |
+| `getModifiedLabel` | `objectId` | `String` | 빈 값 확인, 사용자 이름, 날짜, HTML 이스케이프 ([유틸리티](/jpo/api/util/date)) |
 
 ### 불러 보기
 

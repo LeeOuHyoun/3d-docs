@@ -24,10 +24,10 @@ String icon = EnoviaResourceBundle.getProperty(context, "emxFramework.smallIcon.
 | `getProperty(context, 리소스파일, Locale, 키)` | 지정한 문자열 리소스 | `"emxEngineeringCentralStringResource"`, `context.getLocale()` |
 | `getProperty(context, suite, 키, 언어)` | 시스템 설정 `<suite>.StringResourceFileId`, 없으면 `eServiceSuite<suite>.StringResourceFileId` 값 (예: `eServiceSuiteFramework.StringResourceFileId = emxFrameworkStringResource`) 을 리소스 파일 이름으로 써서 읽음 | `"Framework"`, `"ProgramCentral"`, `"EngineeringCentral"` |
 | `getProperty(context, 키)` | 시스템 설정 (`emxSystem.properties` 등). 언어 없음 | `"emxFramework.securityMode"` |
-| `getFrameworkStringResourceProperty(context, 키, Locale)` | `emxFrameworkStringResource` 단축 | |
+| `getFrameworkStringResourceProperty(context, 키, Locale)` | `emxFrameworkStringResource` 에서 읽음. 회사 이름을 붙인 키 (`키.회사이름`) 를 먼저 찾음 | |
 
 - 리소스 파일은 `properties/` 폴더에 언어별로 있습니다. 한국어는 `_ko.properties` (128 개) 이고 값은 `회` 같은 유니코드 이스케이프입니다.
-- 사용자 언어에 키가 없으면 영어 값을 찾고, 어디에도 없으면 **키 문자열을 그대로** 돌려줍니다. 예외는 나지 않습니다. 화면에 `emxMyApp.Error.NoPart` 같은 키가 그대로 보이면 키 이름이나 리소스 파일 이름이 틀린 것입니다.
+- 사용자 언어에 키가 없으면 영어 값을 찾고, 어디에도 없으면 **키 문자열을 그대로** 돌려줍니다. 키가 없어도 예외는 나지 않습니다. 다만 `locale` 이나 키가 `null` 이면 `NullPointerException` 이 납니다. 화면에 `emxMyApp.Error.NoPart` 같은 키가 그대로 보이면 키 이름이나 리소스 파일 이름이 틀린 것입니다.
 - 생성 후처리는 `Message` 를 번역해 보고, 결과가 비면 원문을 그대로 씁니다.
 
 ### 스키마 이름 번역
@@ -51,7 +51,7 @@ String icon = EnoviaResourceBundle.getProperty(context, "emxFramework.smallIcon.
 | --- | --- |
 | 표 열 function | `paramList.get("languageStr")` |
 | 폼, 범위, 저장 | `paramMap.get("languageStr")` 또는 `requestMap.get("languageStr")` |
-| 어디서나 | `context.getSession().getLanguage()`, `context.getLocale()` |
+| 어디서나 | `context.getLocale()`. 언어 문자열은 `context.getLocale().getLanguage()`. `context.getSession().getLanguage()` 는 `ko-KR,ko;q=0.9` 같은 브라우저 헤더 값이 그대로 올 수 있음 |
 
 ::: info 근거
 xerinfra.jar `EnoviaResourceBundle` 의 `getProperty` 오버로드 4 개와 `get*I18NString` 메서드. 사용 예: emxECPartBase_mxJPO.java:10520-10530 (`getProperty(context, "emxEngineeringCentralStringResource", context.getLocale(), ...)`), `getProperty(context, "ProgramCentral", strKey, strLanguage)` 567 건, `getProperty(context,"emxFramework.smallIcon." + ...)`. common/emxCreateProcess.jsp:344-352. 동작은 바이트코드 기준: `getProperty(Context, String, String, String)` 은 언어를 `Locale` 로 바꿔 `getProperty(Context, String, String, Locale)` 를 부르고, 이 메서드가 `<suite>.StringResourceFileId` → `eServiceSuite<suite>.StringResourceFileId` 설정을 읽음 (properties/emxSystem.properties:773 `eServiceSuiteFramework.StringResourceFileId`). `getProperty(Context, String, Locale, String)` 은 테넌트 문자열 리소스에서 찾고, 없으면 `en` 으로 다시 찾고, 그래도 없으면 `ResourceBundle.getString`, 이것이 실패하면 키를 돌려줌
@@ -114,7 +114,7 @@ xerinfra.jar `FrameworkException` (상위 `matrix.util.MatrixException`), eMatri
 | `e.printStackTrace()` | 1,940 | 서버 표준 출력 / 오류 로그 |
 | `System.out.println` | 1,409 | 서버 표준 출력 로그 |
 | `DebugUtil.debug(msg)` | 413 | `DebugUtil.setDebug(true)` 일 때만 표준 출력 |
-| slf4j `Logger` / `XLogger` | 25 개 파일 (import 기준) | 서버의 로그 설정을 따름 |
+| slf4j `Logger` / `XLogger` | 9 개 파일 (import 기준) | 서버의 로그 설정을 따름 |
 
 ```java
 import org.slf4j.Logger;
@@ -130,5 +130,5 @@ public class XX_MyPartUI_mxJPO {
 - 열 function 처럼 행 수만큼 도는 곳에서 행마다 로그를 찍지 않습니다.
 
 ::: info 근거
-xerinfra.jar `DebugUtil.debug` 바이트코드 (`_debug` 확인 후 `System.out.println`). ENOGLSFormulationTypeUIBase_mxJPO.java:28-32 (`XLoggerFactory.getXLogger`). `import org.slf4j.Logger` 17 개 파일, `org.slf4j.ext.XLogger` 8 개 파일. 3dspace/WEB-INF/lib 의 `slf4j-api.jar`, `slf4j-ext.jar`, `logback-classic.jar`, `logback-core.jar`
+xerinfra.jar `DebugUtil.debug` 바이트코드 (`_debug` 확인 후 `System.out.println`). ENOGLSFormulationTypeUIBase_mxJPO.java:28-32 (`XLoggerFactory.getXLogger`). `import org.slf4j.Logger` 1 개 파일 (emxCommonDocumentBase_mxJPO.java), `org.slf4j.ext.XLogger` 8 개 파일. 3dspace/WEB-INF/lib 의 `slf4j-api.jar`, `slf4j-ext.jar`, `logback-classic.jar`, `logback-core.jar`
 :::
