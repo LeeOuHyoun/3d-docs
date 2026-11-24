@@ -8,11 +8,11 @@ import matrix.db.Context;
 import matrix.db.JPO;
 import matrix.util.StringList;
 
-public class XX_LatestHistory_mxJPO {
+public class XX_HistoryUtil_mxJPO {
 
     private static final String[] HISTORY_KEYS = { "time", "user", "action", "state", "description" };
 
-    public XX_LatestHistory_mxJPO(Context context, String[] args) throws Exception {
+    public XX_HistoryUtil_mxJPO(Context context, String[] args) throws Exception {
     }
 
     private static String last(StringList values) {
