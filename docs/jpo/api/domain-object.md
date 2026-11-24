@@ -1558,7 +1558,7 @@ xerinfra.jar `DomainObject` 바이트코드 (javap). `createObject(6 개)`: `nam
 | `obj.setAttributeValue(context, attr, value)` | `attr`: 속성의 실제 이름. `value`: 새 값 (문자열) | `void` |
 
 - `Attribute` 하나를 담은 `AttributeList` 로 `BusinessObject.setAttributes` 를 한 번 부릅니다.
-- 속성 둘 이상은 [setAttributeValues](#setattributevalues) 로 한 번에 넘깁니다. 날짜 값 형식은 [날짜](/jpo/api/utilities#날짜-ematrixdateformat) 에 있습니다.
+- 속성 둘 이상은 [setAttributeValues](#setattributevalues) 로 한 번에 넘깁니다. 날짜 값 형식은 [날짜](/jpo/api/util/date) 에 있습니다.
 
 ### setAttributeValues
 

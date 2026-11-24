@@ -84,7 +84,7 @@ boolean isLeader = PersonUtil.hasAssignment(context, PropertyUtil.getSchemaPrope
 | `PersonUtil.getPersonObjectID(context)` | `String` | 216 | 로그인 사용자의 Person 객체 id. `(context, 사용자이름)` 형태도 있음 |
 | `PersonUtil.getFullName(context)` | `String` | 155 | 화면에 보이는 이름. `(context, 사용자이름)` 형태도 있음 |
 | `PersonUtil.hasAssignment(context, 역할)` | `boolean` | 48 | 그 역할이나 그 하위 역할을 가졌는지 |
-| `PersonUtil.getAssignments(context)` | `Vector` | 34 | 가진 역할 (assignment) 이름 목록 |
+| `PersonUtil.getAssignments(context)` | `Vector` | 34 | 가진 역할, 그룹, `ctx::` 보안 컨텍스트 역할과 사용자 이름 자신 (서버가 담아 둔 `Vector` 그대로) |
 | `PersonUtil.getActiveSecurityContext(context)` | `String` | 19 | 지금 보안 컨텍스트. `context.getRole()` 에서 앞의 `ctx::` 를 뗀 값 |
 | `PersonUtil.getActiveOrganization(context)`, `getActiveProject(context)` | `String` | 12, 16 | 지금 보안 컨텍스트의 조직, 협업공간 |
 | `PersonUtil.getDefaultOrganization(context, 사용자이름)` | `String` | 19 | 기본 조직 |
@@ -142,7 +142,7 @@ String dbInput = eMatrixDateFormat.getFormattedInputDate(context, userValue, tz,
 | `getFormattedInputDateTime(context, 날짜, 시간, tz, locale)` | 43 | 날짜와 시간 입력 → DB 형식 |
 
 - `timeZone` 은 폼과 생성 / 편집 처리에서는 `requestMap`, 표 열 function 에서는 `paramList` 에서 꺼냅니다 (`get("timeZone")` 145 건).
-- `localeObj` 는 `Locale` 객체입니다 (`get("localeObj")` 91 건). 없으면 `context.getLocale()` 을 씁니다.
+- `localeObj` 는 보통 `Locale` 객체이지만 `emxCreate.jsp` 처럼 문자열을 넣는 화면도 있어 `instanceof Locale` 로 확인합니다 (`get("localeObj")` 91 건). 없으면 `context.getLocale()` 을 씁니다.
 
 ::: info 근거
 properties/emxSystem.properties:1278-1279, 1290. xerinfra.jar `eMatrixDateFormat.setEMatrixDateFormat(Context)` 가 `eServiceSuites.eMatrixDateFormat`, `eServiceSuites.eMatrixInputDateFormat`, `emxFramework.DateTime.DisplayFormat` (`SHORT` / `MEDIUM` / `LONG` / `FULL`), `emxFramework.DateTime.DisplayTime` 을 읽고, `getEMatrixDisplayDateFormat()` 은 그 결과 `int` 를 돌려줌. jpo 폴더: `new SimpleDateFormat(eMatrixDateFormat.getEMatrixDateFormat(), Locale.US)` 67 건, `(new Double((String) requestMap.get("timeZone"))).doubleValue()` 형태의 시간대 변환, `(Locale) requestMap.get("localeObj")`
@@ -196,9 +196,9 @@ xerinfra.jar `CacheUtil.setCacheObject(Context, String, Object)`: `_lock` 으로
 | 클래스 / 메서드 | 건수 | 내용 |
 | --- | --- | --- |
 | `BusinessObject.getSelectBusinessObjectData` | 168 | 여러 객체의 select 를 한 번에 ([DomainObject](/jpo/domain-object#정보-읽기)) |
-| `DomainAccess.createObjectOwnership` / `deleteObjectOwnership` | 132 / 57 | 객체에 사람별 접근 (`COMMENT_MULTIPLE_OWNERSHIP`) 을 붙이고 뗌 |
+| `DomainAccess.createObjectOwnership` / `deleteObjectOwnership` | 132 / 57 | 객체를 다른 조직·협업공간, 사람과 함께 쓰게 하거나 다른 객체의 소유권을 물려받게 하고, 그 항목을 뗌 ([소유권 공유, 접근 권한](/jpo/api/util/access)) |
 | `MailUtil.sendNotification`, `sendMessage` | 12, 13 | OOTB 알림. 이 프로젝트는 메일을 SMTP 로 직접 보냄 ([메일](/server-java/mail)) |
-| `FrameworkProperties.getProperty(context, 키)` | 137 | 안에서 `EnoviaResourceBundle.getProperty(context, 키)` 를 그대로 부름 |
+| `FrameworkProperties.getProperty(context, 키)` <Badge type="warning" text="폐기" /> | 137 | 안에서 `EnoviaResourceBundle.getProperty(context, 키)` 를 그대로 부름 |
 | `ComponentsUtil.i18nStringNow(키, 언어)` | 140 | context 없이 `i18nNow` 로 문자열 리소스를 읽는 예전 형태. 새 코드는 [EnoviaResourceBundle](/jpo/i18n-exception#문자열-리소스) |
 
 ::: info 근거

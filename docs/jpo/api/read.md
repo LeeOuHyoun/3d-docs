@@ -192,7 +192,7 @@ if (part.isKindOf(context, typePart) && !part.isLastRevision(context)) {
 ```
 
 - 받은 `BusinessObject` 의 id 는 `getObjectId(context)` 로 꺼냅니다.
-- 객체 없이 타입 이름만 있으면 `mxType.isOfParentType(context, 타입, 상위타입)` 을 씁니다 ([스키마 이름](/jpo/api/utilities#스키마-이름)).
+- 객체 없이 타입 이름만 있으면 `mxType.isOfParentType(context, 타입, 상위타입)` 을 씁니다 ([스키마 이름](/jpo/api/util/schema)).
 - select 로도 읽을 수 있습니다: `type.kindof[타입]`, `last.id`, `previous.id`, `next.id`, `revisions`.
 
 ::: info 근거
@@ -376,4 +376,4 @@ MapList rels = DomainRelationship.getInfo(context, relIds,
 ]
 ```
 
-MQL 로 읽을 때는 `MqlUtil.mqlCommand(context, "print connection $1 select $2 dump", relId, "to.id")` 를 씁니다 ([MQL](/jpo/api/utilities#mql-mqlutil)).
+MQL 로 읽을 때는 `MqlUtil.mqlCommand(context, "print connection $1 select $2 dump", relId, "to.id")` 를 씁니다 ([MQL](/jpo/api/util/mql)).

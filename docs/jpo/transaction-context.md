@@ -66,7 +66,7 @@ try {
 :::
 
 ::: warning commit 이 실패할 수 있습니다
-가장 바깥 `commitTransaction` 은 먼저 MQL `print transaction` 으로 상태를 확인합니다. 트랜잭션 중간에 MQL 오류가 나서 "aborting" 상태면 `emxFramework.ContextUtil.ErrorCommit` 문구로 `FrameworkException` 을 던집니다. catch 에서 오류를 삼키고 계속 진행하면 이 지점에서 실패합니다.
+가장 바깥 `commitTransaction` 은 먼저 MQL `print transaction` 으로 상태를 확인합니다. 트랜잭션 중간에 MQL 오류가 나서 "aborting" 상태면 `emxFramework.ContextUtil.ErrorCommit` 문구로 `FrameworkException` 을 던집니다 (쓰기 트랜잭션일 때). 이때 열린 횟수를 줄이지 않으므로 catch 에서 꼭 `abortTransaction` 을 부릅니다. catch 에서 오류를 삼키고 계속 진행하면 이 지점에서 실패합니다.
 :::
 
 ::: info 근거
@@ -109,7 +109,7 @@ try {
 | `ContextUtil.popContext(context)` | 바로 전 사용자로 복귀 |
 
 - 바꾸기 전 사용자를 context 의 `"context-stack"` 에 쌓습니다. `push` 를 두 번 하면 `pop` 도 두 번 해야 합니다.
-- 처음 바꿀 때 원래 사용자 이름을 RPE `MX_LOGGED_IN_USER_NAME` 에 남깁니다. 슈퍼유저로 실행 중인 트리거에서 실제 사용자를 알아야 할 때 이 값을 읽습니다 (`PropertyUtil.getGlobalRPEValue(context, "MX_LOGGED_IN_USER_NAME")`).
+- global RPE `MX_LOGGED_IN_USER_NAME` 이 비어 있을 때만 지금 사용자 이름을 넣습니다. `popContext` 는 이 값을 지우지 않으므로 그 세션에서 처음 바꿀 때의 사용자가 남습니다. 슈퍼유저로 실행 중인 트리거에서 실제 사용자를 알아야 할 때 이 값을 읽습니다 (`PropertyUtil.getRPEValue(context, "MX_LOGGED_IN_USER_NAME", true)`).
 - 단일 MQL 명령만 슈퍼유저로 하려면 `MqlUtil.mqlCommand(context, cmd, true, ...)` 를 씁니다 ([MqlUtil](/jpo/mql-util#boolean-인자)).
 
 ::: warning popContext 는 꼭 finally 에서
@@ -128,4 +128,4 @@ xerinfra.jar `ContextUtil.pushContext(Context)` → `pushContext(context, getSup
 
 - `JPO.invoke(context, ...)` 로 다른 JPO 를 부르면 **같은 context** 를 넘깁니다. 같은 사용자, 같은 트랜잭션입니다.
 - `pushContext` 안에서 다른 JPO 를 부르면 그 JPO 도 슈퍼유저로 실행됩니다.
-- 백그라운드 작업처럼 사용자 없이 돌릴 때는 `ContextUtil.runInAnonymousContext` / `getAnonymousContext` 가 있습니다 (7 건). 일반 화면 JPO 에서는 쓸 일이 거의 없습니다.
+- 사용자 없이 돌리는 `ContextUtil.runInAnonymousContext` 가 있습니다. JPO 안에서 부르면 새 context 가 아니라 JPO 가 받은 context 를 그대로 씁니다. `getAnonymousContext` 는 폐기입니다 ([트랜잭션, 권한 전환](/jpo/api/util/transaction)).

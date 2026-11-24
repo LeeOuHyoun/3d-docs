@@ -32,20 +32,22 @@ xerinfra.jar `MqlUtil` 의 private `mqlCommand(Context, String, boolean, boolean
 
 | 시그니처 | 설명 |
 | --- | --- |
-| `mqlCommand(Context, String cmd)` | 인자 없는 명령 |
+| `mqlCommand(Context, String cmd)` <Badge type="warning" text="폐기" /> | 인자 없는 명령. 대신 `mqlCommand(context, cmd, false, false)` |
 | `mqlCommand(Context, String cmd, String... args)` | `$1` 채우기. 가장 많이 씀 |
 | `mqlCommand(Context, String cmd, List args)` | 인자를 List 로 |
-| `mqlCommand(Context, String cmd, boolean push)` | 슈퍼유저로 실행 |
+| `mqlCommand(Context, String cmd, boolean push)` <Badge type="warning" text="폐기" /> | 슈퍼유저로 실행. 대신 `mqlCommand(context, cmd, true, false)` |
 | `mqlCommand(Context, String cmd, boolean push, String... args)` | 슈퍼유저 + `$1` |
-| `mqlCommand(Context, MQLCommand, String cmd)` | MQLCommand 객체 재사용 |
-| `mqlCommandStream(Context, String cmd)` | 결과가 클 때 `Reader` 로 받음 |
+| `mqlCommand(Context, MQLCommand, String cmd)` <Badge type="warning" text="폐기" /> | MQLCommand 객체 재사용. 대신 `mqlCommand(context, cmd, ...)` |
+| `mqlCommandStream(Context, String cmd)` | 결과를 `Reader` 로 받음. 실패해도 예외 없이 `null` 을 돌려주고 OOTB 는 쓰지 않음 |
+
+쓸 형태와 폐기 형태의 대체는 [MQL 실행, 환경 변수](/jpo/api/util/mql) 에 정리했습니다.
 
 ### boolean 인자
 
 `String` 바로 뒤의 `boolean` 은 **`ContextUtil.pushContext` 로 슈퍼유저가 되어 실행할지** 입니다. `true` 면 실행 전에 `pushContext(context)`, 끝나면 (예외가 나도) `popContext(context)` 합니다.
 
 ```java
-MqlUtil.mqlCommand(context, "trigger off", true);
+MqlUtil.mqlCommand(context, "trigger off", true, false);
 MqlUtil.mqlCommand(context, "list role $1", true, "*");
 ```
 
@@ -123,10 +125,10 @@ emxContextUtilBase_mxJPO.java:192-226 (`mqlError`, `mqlNotice`, `mqlWarning` 이
 ```java
 ContextUtil.pushContext(context);
 try {
-    MqlUtil.mqlCommand(context, "trigger off");
+    MqlUtil.mqlCommand(context, "trigger off", false, false);
     MqlUtil.mqlCommand(context, "modify bus $1 $2 $3", objectId, attrName, value);
 } finally {
-    MqlUtil.mqlCommand(context, "trigger on");
+    MqlUtil.mqlCommand(context, "trigger on", false, false);
     ContextUtil.popContext(context);
 }
 ```
@@ -141,7 +143,7 @@ try {
 
 | 메서드 | 실행 명령 |
 | --- | --- |
-| `PropertyUtil.setRPEValue(context, name, value, global)` | `set env $1 $2` / `set env global $1 $2` |
+| `PropertyUtil.setRPEValue(context, name, value, global)` | `set env $1 $2` / `set env global $1 $2`. 값이 `null` 이나 `""` 면 아무것도 안 함 |
 | `PropertyUtil.getRPEValue(context, name, global)` | `get env $1` / `get env global $1` |
 | `PropertyUtil.setGlobalRPEValue(context, name, value)` | `setRPEValue(..., true)` |
 | `MqlUtil.mqlCommand(context, "get env $1", "OBJECTID")` | 트리거 안에서 매크로 값 읽기 |
@@ -160,4 +162,4 @@ xerinfra.jar `PropertyUtil.setRPEValue` / `getRPEValue` 바이트코드 (`"set e
 | 관계 하나의 정보 (`print connection`) | `DomainRelationship.getInfo` 또는 MqlUtil |
 | 정책 / 타입 / 역할 같은 관리 객체 정보 | MqlUtil (`print policy`, `list role`) |
 | 트리거 / 히스토리 끄기, 환경 변수 | MqlUtil |
-| 큰 결과 | `mqlCommandStream` 또는 `getRelatedObjects` 의 개수 제한 |
+| 큰 결과 | `getRelatedObjects`, `findObjects` 의 개수 제한 |

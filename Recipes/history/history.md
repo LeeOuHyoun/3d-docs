@@ -1,6 +1,6 @@
 # JPO 의 history 구현 정리 (조사 메모)
 
-JPO 에서 객체 history 를 읽고, 해석하고, 쓰는 OOTB 구현을 조사한 메모와 예제입니다. 가장 최근 기록을 읽는 방법을 찾다가 시작했습니다. VitePress 문서에 옮기기 전 단계라서 서버에서 확인하지 못한 항목이 남아 있습니다.
+JPO 에서 객체 history 를 읽고, 해석하고, 쓰는 OOTB 구현을 조사한 메모와 예제입니다. 가장 최근 기록을 읽는 방법을 찾다가 시작했습니다. VitePress 문서에 옮기기 전 단계라서 서버에서 확인하지 못한 항목이 남아 있습니다. 정리본은 VitePress 문서의 JPO > API 레퍼런스 > 유틸리티 > history 에 있습니다.
 
 - 예제: `XX_HistoryUtil_mxJPO.java` (같은 폴더). enovia2025 jar 로 컴파일은 확인했고 서버에서 실행해 보지는 않았습니다.
 - 근거: enovia2025 `3dspace/WEB-INF/lib` 의 jar 를 `javap` 로 읽은 바이트코드와 `jpo/` 의 OOTB JPO (`emx*`, `eno*`, `ENO*`).
@@ -24,9 +24,9 @@ JPO 에서 객체 history 를 읽고, 해석하고, 쓰는 OOTB 구현을 조사
 | 구현 | 내용 |
 | --- | --- |
 | `UINavigatorUtil.getHistoryData(context, id)` (xerinfra.jar) | `HashMap` 으로 돌려줌. 기록이 많으면 최근 기록만 읽음 (아래) |
-| `UINavigatorUtil.getHistoryData` 3, 4 개 인자 형태 | 3 개는 id 로, 4 개는 타입, 이름, 리비전으로 `print bus ... dump` 를 불러 `user:`, `time:`, `state:` 로 잘라 `time`, `user`, `state` 같은 키로 돌려줌. 나머지 인자의 뜻은 확인 못 함 |
+| `UINavigatorUtil.getHistoryData` 3, 4 개 인자 형태 | 3 개 형태의 세 번째 인자는 select 식. 다섯 select (`history.time` ...) 를 최대 건수 처리 없이 모두 읽고, `print bus $1 select <select> dump` 결과를 잘라 덧붙임. 키는 `time`, `user`, `action`, `state`, `description`. 4 개 형태는 타입, 이름, 리비전으로 `print bus $1 $2 $3 select $4 dump $5` 를 부름 |
 | `BusinessObject.getHistory(context)` (eMatrixServletRMI.jar) | `StringList` |
-| `BusinessObject.getFilteredHistory(context, StringList, boolean, String, long, long, boolean, String, boolean, int)` | `HistoryList`. 원소 `matrix.db.History` 는 `getTime()`, `getUser()`, `getEvent()`, `getState()`, `getInfo()`. 사용 예 `emxPlayButtonSummaryBase_mxJPO.java` (`null, false, null, 0, 0, false, null, true, 0`). 인자는 서버로 그대로 넘어가서 뜻은 확인 못 함 |
+| `BusinessObject.getFilteredHistory(context, StringList, boolean, String, long, long, boolean, String, boolean, int)` | `HistoryList`. 원소 `matrix.db.History` 는 `getTime()`, `getUser()`, `getEvent()`, `getState()`, `getInfo()`. 사용 예 `emxPlayButtonSummaryBase_mxJPO.java` (`null, false, null, 0, 0, false, null, true, 0`). 인자는 서버로 보내는 XML 이름으로 `events, excludeEvents, user, fromDate, toDate, last, state, descending, limit` (`limit` 은 0 이하나 5000 초과면 5000). 실제 동작은 확인 못 함 |
 | `Relationship.getHistory`, `getFilteredHistory` | 관계의 history. select 는 `DomainRelationship.SELECT_HISTORY` = `"history[connection]"` |
 | 이벤트별 select | `history.changeowner`, `history.connect`, `history.checkin`, `history.custom`, `history.changeproject`, `history.changeorganization` 을 `getInfoList` 나 `print bus ... dump` 로 읽음 |
 | `ChangeUtil.getHistory(context, id, select)` (enterprisechangemgt.jar) | 안에서 `print bus $1 select $2 dump` |

@@ -275,10 +275,10 @@ Map result = (Map) JPO.invoke(context, "XX_MyPartAction", null, "createDocumentF
 
 | 시그니처 | 반환 |
 | --- | --- |
-| `invoke(Context, String 프로그램, String[] 생성자인자, String 메서드, String[] 인자, Class 반환형)` | `Object` (반환형으로 캐스팅) |
+| `invoke(Context, String 프로그램, String[] 생성자인자, String 메서드, String[] 인자, Class 반환형)` | `Object`. 반환형 `Class` 인자는 읽지 않으므로 받는 쪽에서 캐스팅 |
 | `invoke(Context, String, String[], String, String[])` | `int` (`mxMain` 형태) |
 | `invokeLocal(...)` | 같은 형태 |
-| `packArgs(Object)` / `unpackArgs(String[])` | 직렬화 / 역직렬화 |
+| `packArgs(Object)` / `unpackArgs(String[])` | 직렬화하지 않고 지금 스레드의 저장소에 객체를 맡긴 뒤 열쇠만 넘김 / 그 열쇠로 객체를 꺼냄 ([인자, JPO 호출, id](/jpo/api/util/args-id)) |
 
 ::: warning 받는 쪽 인자 형태를 맞춥니다
 UI 용 메서드를 다른 곳에서 부를 때는 UI 가 넘기는 Map 모양 (`objectList`, `paramList`, `paramMap` ...)을 그대로 만들어야 합니다. 키 하나가 빠지면 받는 쪽에서 `NullPointerException` 이 납니다.

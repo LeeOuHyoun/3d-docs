@@ -73,7 +73,7 @@ xerinfra.jar `DomainObject.createObject`: 이름이 `null` 이거나 trim 해서
 | `obj.setName(context, 이름)` | 이름을 바꿈. 지금 이름과 같으면 아무것도 안 하고, `null` 이면 예외. `""` 는 검사하지 않으므로 미리 확인 | `void` |
 | `obj.setPolicy(context, 정책이름)` | 정책을 바꿈. 폐기된 `changePolicy` 도 같은 일 | `void` |
 | `obj.setVault(context, vault이름)` | vault 를 바꿈 | `void` |
-| `MqlUtil.mqlCommand(context, "modify bus $1 $2 $3", id, 속성이름, 값)` | MQL 로 직접 바꿈 ([MQL](/jpo/api/utilities#mql-mqlutil)) | `String` |
+| `MqlUtil.mqlCommand(context, "modify bus $1 $2 $3", id, 속성이름, 값)` | MQL 로 직접 바꿈 ([MQL](/jpo/api/util/mql)) | `String` |
 
 ```java
 Map attrs = new HashMap();
@@ -84,7 +84,7 @@ part.setOwner(context, context.getUser());
 ```
 
 - 속성을 둘 이상 바꿀 때는 `setAttributeValue` 를 여러 번 부르지 말고 `setAttributeValues` 로 한 번에 넘깁니다.
-- 날짜 속성에는 `MM/dd/yyyy hh:mm:ss a` 형식 문자열을 넘깁니다 ([날짜](/jpo/api/utilities#날짜-ematrixdateformat)).
+- 날짜 속성에는 `MM/dd/yyyy hh:mm:ss a` 형식 문자열을 넘깁니다 ([날짜](/jpo/api/util/date)).
 - 로그인 사용자에게 수정 권한이 없으면 예외가 납니다. 시스템이 대신 바꿔야 하면 [pushContext](/jpo/transaction-context#슈퍼유저로-바꾸기-pushcontext) 로 감쌉니다.
 
 ::: info 근거
@@ -197,9 +197,9 @@ try {
 
 | 메서드 | 하는 일 |
 | --- | --- |
-| `ContextUtil.startTransaction(context, true)` | 쓰기 트랜잭션을 시작함. 이미 열려 있으면 횟수만 셈 |
+| `ContextUtil.startTransaction(context, true)` | 쓰기 트랜잭션을 시작함. `ContextUtil` 로 이미 열려 있으면 횟수만 셈. 다른 방법으로 연 트랜잭션 안이면 아무것도 안 함 |
 | `ContextUtil.commitTransaction(context)` | 변경을 확정함. 가장 바깥에서 부른 것만 실제로 확정 |
-| `ContextUtil.abortTransaction(context)` | 시작 뒤의 변경을 모두 되돌림 |
+| `ContextUtil.abortTransaction(context)` | 변경을 되돌림. 횟수가 0 이 되는 가장 바깥 호출만 실제로 되돌리고, 안쪽은 횟수만 줄임 |
 
 - `catch` 에서 되돌린 뒤 예외를 다시 던져야 부른 쪽도 실패를 압니다.
 - 생성 폼, 편집 폼처럼 화면 처리 JSP 가 이미 트랜잭션을 열고 JPO 를 부르는 경우도 있습니다. 그때 JPO 가 예외를 던지면 화면 처리 전체가 취소됩니다 ([트랜잭션](/jpo/transaction-context#트랜잭션)).

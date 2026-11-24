@@ -90,8 +90,26 @@ const SERVER_SIDEBAR = [
           { text: '객체 조회', link: '/jpo/api/read' },
           { text: '객체 생성, 수정', link: '/jpo/api/write' },
           { text: '객체 삭제, 연결 끊기', link: '/jpo/api/delete' },
-          { text: '유틸리티', link: '/jpo/api/utilities' },
           { text: 'DomainObject 메서드 사양', link: '/jpo/api/domain-object' }
+        ]
+      },
+      {
+        text: '유틸리티 (기능별)',
+        items: [
+          { text: '개요 (하고 싶은 일로 찾기)', link: '/jpo/api/utilities' },
+          { text: '문자열, 목록', link: '/jpo/api/util/string-list' },
+          { text: '인자, JPO 호출, id', link: '/jpo/api/util/args-id' },
+          { text: '스키마 이름, 타입·정책·속성', link: '/jpo/api/util/schema' },
+          { text: '설정값, 다국어 문구', link: '/jpo/api/util/resource' },
+          { text: 'MQL 실행, 환경 변수', link: '/jpo/api/util/mql' },
+          { text: '트랜잭션, 권한 전환', link: '/jpo/api/util/transaction' },
+          { text: '사용자, 조직, 보안 컨텍스트', link: '/jpo/api/util/person' },
+          { text: '소유권 공유, 접근 권한', link: '/jpo/api/util/access' },
+          { text: '날짜', link: '/jpo/api/util/date' },
+          { text: 'HTML, URL, JSON', link: '/jpo/api/util/html-json' },
+          { text: '메일, 알림', link: '/jpo/api/util/mail' },
+          { text: 'history', link: '/jpo/api/util/history' },
+          { text: '이름 채번, 캐시, 로그, 서버 환경', link: '/jpo/api/util/etc' }
         ]
       }
     ]
