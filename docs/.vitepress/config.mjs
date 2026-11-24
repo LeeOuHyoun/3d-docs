@@ -90,7 +90,8 @@ const SERVER_SIDEBAR = [
           { text: '객체 조회', link: '/jpo/api/read' },
           { text: '객체 생성, 수정', link: '/jpo/api/write' },
           { text: '객체 삭제, 연결 끊기', link: '/jpo/api/delete' },
-          { text: '유틸리티', link: '/jpo/api/utilities' }
+          { text: '유틸리티', link: '/jpo/api/utilities' },
+          { text: 'DomainObject 메서드 사양', link: '/jpo/api/domain-object' }
         ]
       }
     ]
