@@ -261,6 +261,18 @@ off();
 - 선택은 그리드 옵션 `rowSelection` 이 `'single'` 또는 `'multiple'` 일 때만 됩니다. `'single'` 에서 여러 행을 넘기면 마지막 행만 선택되고, `add` 는 `'multiple'` 에서만 뜻이 있습니다.
 - 접혀 있어 보이지 않는 하위 행도 선택됩니다.
 - `onSelectionChange` 의 콜백은 한 번의 조작에 한 번만, 선택이 다 바뀐 뒤에 불립니다. 원본 `getXSO().onChange` 는 행 3개를 한꺼번에 선택하면 여러 번 불립니다.
+- 그리드 옵션 `showSelectionCheckBoxesFlag: true` 로 보이는 행 체크박스는 선택과 같은 것입니다. 체크된 행은 `getSelectedNodes` / `getSelectedRows` 로 읽고, 위 함수로 체크하고 풉니다.
+
+모두 선택과 행 하나 선택 풀기는 그리드 함수를 그대로 씁니다. 이 모듈에는 따로 두지 않았습니다.
+
+```js
+GridUtils.getGrid('partGrid').selectAll();
+GridUtils.getNodeById('partGrid', 'a1b2').unselect();
+GridUtils.getNodes('partGrid', { status: '폐기' }).forEach(function (node) { node.unselect(); });
+```
+
+- `selectAll()` 은 `rowSelection: 'multiple'` 일 때만 동작합니다 ([선택](/datagridview/api/grid-methods#선택)).
+- [행 그룹핑](#행-그룹핑과-같이-쓸-때) 중에 `selectAll()` 을 부르면 그룹 행도 선택됩니다. 선택된 행은 원본 `treeDocument.getSelectedNodes()` 대신 이 모듈의 `getSelectedNodes` 로 읽습니다. 이쪽은 그룹 행을 뺍니다.
 
 ### 펼칠 때 하위 행 불러오기
 
