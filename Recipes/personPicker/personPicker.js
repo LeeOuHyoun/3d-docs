@@ -186,7 +186,7 @@ define('DS/Recipes/personPicker/personPicker', [
 
     control.getContent().setStyle('width', '100%');
     const element = UWA.createElement('div', {
-      styles: { display: 'flex', alignItems: 'center', gap: '2px' },
+      styles: { display: 'flex', alignItems: 'center', gap: '4px' },
       html: [{ styles: { flex: '1', minWidth: '0' }, html: [control] }, searchButton]
     });
 
