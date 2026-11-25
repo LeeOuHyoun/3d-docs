@@ -25,6 +25,7 @@
   - [ ] `17_mergedHeader.html` → `datagridview/header` : 단독 컬럼을 같은 이름의 그룹으로 감싼 모양(위 줄 이름, 아래 줄 빈칸)이 괜찮은지, 빈칸 테두리를 지워 한 칸처럼 보이게 할지
 - [ ] TweakersSample 01 ~ 05 를 ENOVIA 서버에서 실행. 로컬 실행으로는 확인함 (배지 "로컬 실행 확인"). 로컬에서 확인하지 못한 것: 슬라이더 끌기 이벤트, 달력에서 범위 밖 날짜 표시, 툴바 `onViewFocus` / `giveFocusTo` / 넘침 드롭다운, `chevronMenuIcon`, 직접 만든 편집기를 툴바에서 쓰기
 - [ ] DataGridViewSample 02 를 서버에서 다시 확인: 여러 개 선택 컬럼을 `string` 타입으로, 링크 값을 `{ label, url }` 로 바꿈 (2026-11-12, 로컬 실행으로 기존 방식의 오류를 찾음). 같은 방식으로 바꾼 05 의 "담당자 (멀티)" 컬럼도 함께 확인
+- [ ] Recipes 의 `DataGridViewUtils.js` 를 ENOVIA 서버에서 실행 → `datagridview/utils`. 원본 webapps (2025, 2026) 를 로컬에서 띄워 함수 39개는 확인함 (배지 "로컬 실행 확인"). 서버에서도 같으면 배지를 "서버 확인" 으로 변경. 로컬에서 확인하지 못한 것: 3DDashboard 위젯 안에서의 동작, 터치 모드, `dataSource` 그리드, 현장에 넣어 둔 lodash 모듈 이름(`DS/lodash-4.18.1/lodash`)으로 불러오기
 - [ ] ControlsSample 04 ~ 06 (다이얼로그 안 그리드, 창 묶기 / 위치 저장, DockingElement) 을 3DDashboard 위젯 안에서 실행. 로컬 실행으로는 확인함 (배지 "로컬 실행 확인"). 로컬에서 확인하지 못한 것: DockingElement `COLLAPSER_STYLE.MOVABLE` 접기 단추가 보이는 조건, `addContent` 탭 방식, 위젯 iframe 안에서 localStorage 위치 저장
 - [ ] 확인 안 된 샘플을 서버에서 실행: EventsSample, UWASample, ControlsSample, WidgetSample. 확인한 샘플을 링크하는 페이지는 배지를 "서버 확인"으로 변경하고 `guide/index.md` 의 "샘플 소스" 설명도 수정
 - [ ] `WidgetSample/TransientSample.html` : 넘기는 값을 `SelectedItem` 배열 모양으로 바꿨음. 서버에서 physicalid 를 넣어 OOTB 정보 앱(ENOLCMT_AP)이 열리는지 확인
