@@ -372,6 +372,12 @@ const WEBAPPS_SIDEBAR = [
         ]
       },
       {
+        text: '실무 레시피',
+        items: [
+          { text: '보조 함수 모음 (DataGridViewUtils)', link: '/datagridview/utils' }
+        ]
+      },
+      {
         text: 'API 레퍼런스',
         items: [
           { text: '이름 색인 (A-Z)', link: '/datagridview/api/key-index' },

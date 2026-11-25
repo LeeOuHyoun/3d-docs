@@ -38,12 +38,18 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
    */
 
   /**
-   * 대상 행 지정. 행, 행 배열, 또는 RowPredicate
+   * 대상 행 지정. 행, 행 배열, 또는 RowPredicate. null, undefined 는 "대상 없음" 이다
    * @typedef {TreeNodeModel|TreeNodeModel[]|RowPredicate} NodeSelector
    */
 
   const NODE_KEYS = ['label', 'icons', 'badges', 'data'];
   const NON_GRID_KEYS = [...NODE_KEYS, 'children'];
+
+  const toRowKey = (dataIndex) => (dataIndex === 'tree' ? 'label' : dataIndex);
+
+  const toList = (value) => _.compact(_.castArray(value));
+
+  const isModelNode = (node) => node.getNodeSource() === TreeNodeModel.NODE_SOURCE.MODEL;
 
   const isGridEl = (node) => node.dsModel instanceof DataGridView;
 
@@ -103,7 +109,7 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
    * @param {string} dataIndex
    * @returns {*}
    */
-  const getValue = (node, dataIndex) => node.getAttributeValue(dataIndex === 'tree' ? 'label' : dataIndex);
+  const getValue = (node, dataIndex) => node.getAttributeValue(toRowKey(dataIndex));
 
   /**
    * 행을 평범한 객체로 바꾼다. { label, ...컬럼 값 }
@@ -118,18 +124,19 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
   };
 
   const byKeys = (ids, key) => {
-    const list = _.castArray(ids);
-    return (row) => _.includes(list, row[key]);
+    const list = _.reject(_.castArray(ids), _.isNil);
+    const rowKey = toRowKey(key);
+    return (row) => _.includes(list, row[rowKey]);
   };
 
   /**
-   * 행 목록. 하위 행과 접힌 행도 포함한다.
+   * 행 목록. 하위 행과 접힌 행도 포함한다. 행 그룹핑이 만든 그룹 행은 넣지 않는다.
    * @param {DocTarget} target
    * @param {RowPredicate} [predicate] 없으면 전체
    * @returns {TreeNodeModel[]}
    */
   const getNodes = (target, predicate) => {
-    const nodes = getDoc(target).getAllDescendants();
+    const nodes = _.filter(getDoc(target).getAllDescendants(), isModelNode);
     return predicate ? _.filter(nodes, toMatcher(predicate)) : nodes;
   };
 
@@ -159,19 +166,22 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
   const getNodeById = (target, id, key = 'id') => findNode(target, byKeys(id, key));
 
   /**
-   * 키 컬럼 값을 키로 하는 행 사전.
+   * 키 컬럼 값을 키로 하는 행 사전. 키 컬럼 값이 없는 행은 넣지 않는다.
    * @param {DocTarget} target
    * @param {string} [key='id'] 키 컬럼 dataIndex
    * @returns {Object<string, TreeNodeModel>}
    */
-  const keyNodesBy = (target, key = 'id') => _.keyBy(getNodes(target), (node) => getValue(node, key));
+  const keyNodesBy = (target, key = 'id') => {
+    const keyOf = (node) => getValue(node, key);
+    return _.keyBy(_.reject(getNodes(target), _.flow(keyOf, _.isNil)), keyOf);
+  };
 
   /**
-   * 선택된 행. 원본 선택 배열의 복사본을 돌려준다.
+   * 선택된 행. 원본 선택 배열이 아니라 새 배열을 돌려주고, 그룹 행은 넣지 않는다.
    * @param {DocTarget} target
    * @returns {TreeNodeModel[]}
    */
-  const getSelectedNodes = (target) => [...getDoc(target).getSelectedNodes()];
+  const getSelectedNodes = (target) => _.filter(getDoc(target).getSelectedNodes(), isModelNode);
 
   /**
    * 선택된 행 데이터.
@@ -181,14 +191,15 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
   const getSelectedRows = (target) => _.map(getSelectedNodes(target), getRow);
 
   /**
-   * 활성 셀(포커스)이 있는 행.
+   * 활성 셀(포커스)이 있는 행. 활성 셀이 없거나 그룹 행에 있으면 undefined
    * @param {GridTarget} target
    * @returns {TreeNodeModel|undefined}
    */
   const getActiveNode = (target) => {
     const grid = getGrid(target);
     const cellID = grid.getActiveCellID();
-    return cellID < 0 ? undefined : grid.getNodeModelAt(cellID);
+    const node = cellID < 0 ? undefined : grid.getNodeModelAt(cellID);
+    return node && isModelNode(node) ? node : undefined;
   };
 
   /**
@@ -211,22 +222,23 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
   )));
 
   /**
-   * 행을 추가한다.
+   * 행을 추가한다. 하위 행(children)은 부모를 붙인 뒤에 차례로 붙여서, 변경 트랜잭션 모드에서 하위 행도 "추가" 로 기록된다.
    * @param {DocTarget} target
-   * @param {Row|Row[]} rows
+   * @param {Row|Row[]} rows 없으면(null, undefined) 아무것도 추가하지 않는다
    * @param {TreeNodeModel} [parent] 있으면 그 행의 하위로, 없으면 최상위로 추가
-   * @returns {TreeNodeModel[]} 추가된 행
+   * @returns {TreeNodeModel[]} 추가된 행 (rows 와 같은 순서. 하위 행은 넣지 않는다)
    */
-  const addRows = (target, rows, parent) => batch(target, (doc) => _.map(_.castArray(rows), (row) => {
-    const node = toNode(row);
+  const addRows = (target, rows, parent) => batch(target, (doc) => _.map(toList(rows), (row) => {
+    const node = toNode(_.isEmpty(row.children) ? row : _.omit(row, 'children'));
     parent ? parent.addChild(node) : doc.addRoot(node);
+    addRows(doc, row.children, node);
     return node;
   }));
 
   /**
    * 모든 행을 rows 로 바꾼다. 변경 트랜잭션 모드여도 변경 기록 없이 새 데이터로 시작한다.
    * @param {DocTarget} target
-   * @param {Row[]} rows
+   * @param {Row[]} rows 없으면(null, undefined) 모든 행을 지우기만 한다
    * @returns {TreeNodeModel[]} 추가된 최상위 행
    */
   const setRows = (target, rows) => {
@@ -264,15 +276,16 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
   };
 
   /**
-   * 키 컬럼 값이 같은 행을 찾아 값을 바꾼다. 서버 저장 결과를 반영할 때 쓴다.
+   * 키 컬럼 값이 같은 행을 모두 찾아 값을 바꾼다. 서버 저장 결과를 반영할 때 쓴다.
    * @param {DocTarget} target
    * @param {Row|Row[]} rows 키 컬럼 값을 가진 행 데이터
    * @param {string} [key='id'] 키 컬럼 dataIndex
    * @returns {Row[]} 일치하는 행이 없어 반영하지 못한 행 데이터
    */
   const updateRows = (target, rows, key = 'id') => {
-    const nodeByKey = keyNodesBy(target, key);
-    return batch(target, () => _.reject(_.castArray(rows), (row) => nodeByKey[row[key]] && updateNode(nodeByKey[row[key]], row)));
+    const rowKey = toRowKey(key);
+    const nodesByKey = _.groupBy(getNodes(target, (row) => !_.isNil(row[rowKey])), (node) => getValue(node, key));
+    return batch(target, () => _.reject(toList(rows), (row) => _.forEach(nodesByKey[row[rowKey]], (node) => updateNode(node, row))));
   };
 
   /**
@@ -284,7 +297,7 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
    */
   const upsertRows = (target, rows, key = 'id') => batch(target, () => addRows(target, updateRows(target, rows, key)));
 
-  const resolveNodes = (target, selector) => (selector instanceof TreeNodeModel || _.isArray(selector) ? _.concat([], selector) : getNodes(target, selector));
+  const resolveNodes = (target, selector) => (selector instanceof TreeNodeModel || _.isArray(selector) || _.isNil(selector) ? toList(selector) : getNodes(target, selector));
 
   /**
    * 행을 지운다. 변경 트랜잭션 모드에서는 삭제 표시만 하고 acceptChanges() 때 실제로 지워진다.
@@ -357,13 +370,13 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
   /**
    * 행이 화면 가운데 보이도록 스크롤하고 깜빡여 표시한다. 접힌 부모는 펼친다.
    * @param {GridTarget} target
-   * @param {TreeNodeModel|RowPredicate} selector 행 또는 행 조건 (조건이면 첫 행)
+   * @param {NodeSelector} selector 행 또는 행 조건 (여러 행이면 첫 행)
    * @param {boolean} [select=true] 그 행을 선택할지
    * @returns {TreeNodeModel|undefined} 대상 행
    */
   const revealNode = (target, selector, select = true) => {
     const grid = getGrid(target);
-    const node = selector instanceof TreeNodeModel ? selector : findNode(grid, selector);
+    const node = _.head(resolveNodes(grid, selector));
     if (node) {
       grid.ensureNodeModelVisible(node, true, true, 0.5, true);
       select && grid.selectNodeModel(node);
@@ -402,7 +415,7 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
   const showRowsWhere = (target, predicate) => {
     const match = toMatcher(predicate);
     const apply = (node) => {
-      const visible = _.filter(node.getChildren(), apply).length > 0 || match(node);
+      const visible = _.filter(node.getChildren(), apply).length > 0 || (isModelNode(node) && match(node));
       visible ? node.show() : node.hide();
       return visible;
     };
@@ -423,12 +436,12 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
    * @param {Object<string, (string|Object)>} filters { dataIndex: filterId } 또는 { dataIndex: { filterId, ... } }
    */
   const setFilters = (target, filters) => getDoc(target).setFilterModel(_.mapValues(
-    _.mapKeys(filters, (value, key) => (key === 'tree' ? 'label' : key)),
+    _.mapKeys(filters, (value, key) => toRowKey(key)),
     (value) => (_.isString(value) ? { filterId: value } : value)
   ));
 
   /**
-   * 정렬을 바꾼다. spec 을 빼면 정렬을 해제한다.
+   * 정렬을 바꾼다. spec 을 빼면 정렬을 해제한다. 해제해도 행 순서는 마지막으로 정렬된 그대로 남는다.
    * @param {GridTarget} target
    * @param {string|Array<{dataIndex: string, sort: string}>} [spec] dataIndex 또는 sortModel 배열
    * @param {('asc'|'desc')} [sort='asc'] spec 이 dataIndex 일 때 방향
@@ -485,7 +498,7 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
   const run = (task) => Promise.resolve().then(() => (_.isFunction(task) ? task() : task));
 
   /**
-   * 작업이 끝날 때까지 그리드에 로딩 표시를 덮는다.
+   * 작업이 끝날 때까지 그리드에 로딩 표시를 덮는다. 로딩 표시는 띄울 때와 같은 문구로 지워야 없어진다.
    * @template T
    * @param {GridTarget} target
    * @param {Promise<T>|function(): (T|Promise<T>)} task
@@ -495,7 +508,7 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
   const withLoader = (target, task, text) => {
     const grid = getGrid(target);
     grid.displayModalLoader(text);
-    return run(task).finally(() => grid.removeModalLoader());
+    return run(task).finally(() => grid.removeModalLoader(text));
   };
 
   /**
@@ -512,11 +525,17 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
    * @param {GridTarget} target
    * @param {string} [fileName='export.csv']
    * @param {Object} [options] getAsCSV 옵션 (onlySelectedRows, columnKeys, allColumns, columnSeparator, forceQuotes)
+   * @returns {boolean} 내려받았으면 true. onlySelectedRows 인데 선택한 행이 없으면 내려받지 않고 false
    */
   const downloadCSV = (target, fileName = 'export.csv', options) => {
-    const url = URL.createObjectURL(new Blob([getGrid(target).getAsCSV(options)], { type: 'text/csv;charset=utf-8' }));
+    const csv = getGrid(target).getAsCSV(options);
+    if (_.isNil(csv)) {
+      return false;
+    }
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
     _.assign(document.createElement('a'), { href: url, download: fileName }).click();
     setTimeout(() => URL.revokeObjectURL(url));
+    return true;
   };
 
   return {

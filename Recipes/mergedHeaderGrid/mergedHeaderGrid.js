@@ -76,8 +76,8 @@ define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
   const toTreeDocument = (rows) => {
     const treeDocument = new TreeDocument();
     treeDocument.prepareUpdate();
-    _.forEach(rows, (row, index) => {
-      treeDocument.addRoot(new TreeNodeModel({ label: String(index + 1), grid: row }));
+    _.forEach(rows, (row) => {
+      treeDocument.addRoot(new TreeNodeModel({ label: row.partCode, grid: row }));
     });
     treeDocument.pushUpdate();
     return treeDocument;
@@ -86,6 +86,7 @@ define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
   const create = (options) => {
     const host = UWA.createElement('div', { 'class': 'mhg' }).inject(options.container);
     const treeDocument = toTreeDocument(options.rows);
+    treeDocument.setFilterModel({ ...treeDocument.getFilterManager()?.filterModel, partCode: { filterId: 'string' } });
     const grid = new DataGridView({
       treeDocument,
       columnSelection: 'none',

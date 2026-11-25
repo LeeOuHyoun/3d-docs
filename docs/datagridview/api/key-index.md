@@ -15,7 +15,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 485개�
 
 | 이름 | 있는 곳 | 설명 |
 | --- | --- | --- |
-| <code>action</code> | [툴바 (setToolbar)](/datagridview/api/toolbar) | 버튼 클릭 시 호출. 인자 e.context.executionContext = 그리드. 함수를 넣으면 동작하지 않음 → 함수는 <code>dataElements.value</code> 에 |
+| <code>action</code> | [툴바 (setToolbar)](/datagridview/api/toolbar) | 버튼 클릭 시 호출. 인자 e.context.executionContext = 그리드. <code>argument</code> 는 객체 (문자열이면 <code>Cannot create property 'dsModel' on string</code> 오류). 함수를 넣으면 동작하지 않음 → 함수는 <code>dataElements.value</code> 에 |
 | <code>activeCellChange</code> | [이벤트 › 그리드 자체 이벤트 (DataGridView / CollectionView 가 fire)](/datagridview/api/events#그리드-자체-이벤트-datagridview-collectionview-가-fire) | 현재 셀: grid.getCellInfosAt(grid.getActiveCellID()) |
 | <code>addCellCoordinates</code> | [layoutOptions › 그 밖](/datagridview/api/layout-options#그-밖) | 셀 DOM 에 좌표 속성 추가 (테스트 자동화용) |
 | <code>addChild</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeNodeModel](/datagridview/api/data#treenodemodel) | 하위 행 추가. index 를 주면 그 순번에 넣음. 이미 다른 부모에 달린 행을 넘기면 그쪽에서 떼어 옮김 |
@@ -125,7 +125,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 485개�
 | <code>disabled</code> | [툴바 (setToolbar)](/datagridview/api/toolbar) | 표시 / 비활성 / 읽기전용 |
 | <code>disableRowReordering</code> | [그리드 메서드 › 드래그앤드롭](/datagridview/api/grid-methods#드래그앤드롭) | 행 순서 바꾸기를 잠시 끄기 / 되돌리기. 횟수를 세므로 끈 만큼 켜야 함. 그룹핑 중에는 그리드가 스스로 끔 |
 | <code>displayLabel</code> | [툴바 (setToolbar)](/datagridview/api/toolbar) | 글자 / 툴팁 / 라벨 표시 여부 |
-| <code>displayModalLoader</code> | [그리드 메서드 › 로딩 표시](/datagridview/api/grid-methods#로딩-표시) | 그리드 위에 로딩 표시를 덮음 |
+| <code>displayModalLoader</code> | [그리드 메서드 › 로딩 표시](/datagridview/api/grid-methods#로딩-표시) | 그리드 위에 로딩 표시를 덮음. `text` 를 빼면 번역된 기본 문구 (한국어 화면 `로드 중...`) |
 | <code>documentClassForServerSide</code> | [그리드 옵션 › 데이터](/datagridview/api/grid-options#데이터) | <code>dataSource</code> 그리드가 안에서 만드는 TreeDocument 의 클래스 |
 | <code>domId</code> | [그리드 옵션 › 공통 (Controls/Abstract, CollectionView)](/datagridview/api/grid-options#공통-controls-abstract-collectionview) | 최상위 DOM id |
 | <code>drag</code> | [이벤트 › 일반 DOM 이벤트 (그리드 영역)](/datagridview/api/events#일반-dom-이벤트-그리드-영역) | 보통은 리스너 대신 onDropCell 같은 옵션 콜백을 씀 (콜백의 cellInfos 에만 draggedNodes, dropPosition, droppedNodes 가 붙음). [드래그앤드롭](/datagridview/drag-and-drop) |
@@ -435,7 +435,7 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 485개�
 | <code>remove</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeNodeModel](/datagridview/api/data#treenodemodel) | 이 행 제거 (최상위 행에도 사용 가능) |
 | <code>removeColumnOrGroup</code> | [그리드 메서드 › 컬럼](/datagridview/api/grid-methods#컬럼) | 컬럼 삭제. `key` 는 getColumnOrGroup 과 같음 |
 | <code>removeEventListener</code> | [이벤트 › 등록 / 해제](/datagridview/api/events#등록-해제) | ※ 원래 fn 이 아니라 addEventListener 의 반환값으로 해제해야 한다 |
-| <code>removeModalLoader</code> | [그리드 메서드 › 로딩 표시](/datagridview/api/grid-methods#로딩-표시) | 로딩 표시 제거 |
+| <code>removeModalLoader</code> | [그리드 메서드 › 로딩 표시](/datagridview/api/grid-methods#로딩-표시) | 로딩 표시 제거. `displayModalLoader` 에 준 것과 같은 문구를 넘겨야 지워짐 |
 | <code>removeRoot</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeDocument](/datagridview/api/data#treedocument) | 최상위 행 추가 / 삭제 |
 | <code>requestDelayedModelData</code> | [그리드 메서드 › 행을 나눠 불러오기](/datagridview/api/grid-methods#행을-나눠-불러오기) | 그리드 옵션 <code>onDelayedModelDataRequest</code> 콜백을 지금 부르게 함 (6). <code>allRows: true</code> 면 범위가 전체 행 (전체 컬럼). <code>context</code> 를 생략하면 콜백의 <code>info.context</code> 는 <code>undefined</code> |
 | <code>resetRowHeight</code> | [레이아웃 메서드 (grid.layout) › 높이](/datagridview/api/layout-methods#높이) | 행 하나만 다시 계산. 음수를 주면 헤더 줄 |

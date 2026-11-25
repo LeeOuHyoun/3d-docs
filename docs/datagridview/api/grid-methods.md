@@ -167,20 +167,24 @@ grid.onReady(function () {
 
 | 함수 | 반환 | 설명 |
 | --- | --- | --- |
-| <code>displayModalLoader(text?)</code> | - | 그리드 위에 로딩 표시를 덮음 |
-| <code>removeModalLoader()</code> | - | 로딩 표시 제거 |
+| <code>displayModalLoader(text?)</code> | - | 그리드 위에 로딩 표시를 덮음. `text` 를 빼면 번역된 기본 문구 (한국어 화면 `로드 중...`) |
+| <code>removeModalLoader(text?)</code> | - | 로딩 표시 제거. `displayModalLoader` 에 준 것과 같은 문구를 넘겨야 지워짐 |
 
 ```js
-grid.displayModalLoader('Loading...');
+grid.displayModalLoader('불러오는 중...');
 loadRows().then(function (rows) {
   const doc = grid.getTreeDocument();
   doc.prepareUpdate();
   rows.forEach(function (row) { doc.addRoot(new TreeNodeModel(row)); });
   doc.pushUpdate();
 }).finally(function () {
-  grid.removeModalLoader();
+  grid.removeModalLoader('불러오는 중...');
 });
 ```
+
+::: warning 띄울 때와 같은 문구로 지웁니다
+`displayModalLoader('불러오는 중...')` 뒤에 `removeModalLoader()` 처럼 문구를 빼고 부르면 로딩 표시가 지워지지 않고 남습니다. 문구를 양쪽 다 빼면 같은 기본 문구가 쓰여서 지워집니다 ([Loader, ModalLoader](/controls/webux-controls#loader-modalloader)). 이 과정을 묶은 함수는 [보조 함수 모음](/datagridview/utils#로딩-표시-csv-내려받기) 의 `withLoader` 입니다. (로컬 실행 확인)
+:::
 
 ## 행을 나눠 불러오기
 

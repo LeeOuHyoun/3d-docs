@@ -29,7 +29,7 @@ define('DS/Recipes/DataGridViewUtils2', ['DS/lodash-4.18.1/lodash', 'DS/TreeMode
     return Promise.resolve()
       .then(() => (_.isFunction(task) ? task() : task))
       .then((rows) => setRows(grid.getTreeDocument(), rows))
-      .finally(() => grid.removeModalLoader());
+      .finally(() => grid.removeModalLoader(text));
   };
 
   return { loadRows };

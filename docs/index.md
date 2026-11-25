@@ -60,7 +60,7 @@ features:
 | 화면 컨트롤 | 버튼, 입력칸, 다이얼로그, 알림, 메뉴, 자동완성, 속성 패널, 3단 화면 | [개요](/controls/) · [WebUX 컨트롤](/controls/webux-controls) · [다이얼로그](/controls/dialog) · [UIKIT](/controls/uikit) · [알림](/controls/notifications) · [메뉴](/controls/menu) · [자동완성](/controls/autocomplete) · [속성 패널](/controls/properties-panel) · [ENOVIA 공용 화면 틀](/controls/enox-components) · [API](/controls/api/webux-controls) |
 | 이벤트 | 위젯 간 연동, 선택, 끌어 놓기 | [개요](/events/) · [PubSub](/events/pubsub) · [선택](/events/selection) · [끌어 놓기](/events/drag-and-drop) |
 | REST API | 3DSpace REST 호출 규칙과 엔드포인트, 성숙도 변경, 타입 정보, 객체 정보, 관계 탐색 | [공통 규칙](/rest-api/) · [보안 컨텍스트](/rest-api/security-context) · [엔드포인트 목록](/rest-api/catalog) · [documents](/rest-api/documents) · [성숙도 변경, 개정](/rest-api/lifecycle) · [타입, 속성 정보](/rest-api/dictionary) · [e6w](/rest-api/e6w) · [관계 탐색](/rest-api/navigate) |
-| DataGridView | 트리 / 표 그리드 | [개요](/datagridview/) · [기본 그리드](/datagridview/getting-started) · [셀 타입](/datagridview/cell-types) · [편집](/datagridview/editing) · [저장 후 반영](/datagridview/save-and-reflect) · [헤더](/datagridview/header) · [행 높이](/datagridview/row-height) · [정렬, 필터](/datagridview/sort-filter) · [행 그룹핑](/datagridview/row-grouping) · [툴바](/datagridview/toolbar) · [트리](/datagridview/tree) · [나눠 불러오기](/datagridview/server-side) · [컬럼 함수](/datagridview/cell-functions) · [우클릭 메뉴](/datagridview/context-menu) · [드래그앤드롭](/datagridview/drag-and-drop) · [셀 직접 그리기](/datagridview/custom-cell) · [상태바](/datagridview/status-bar) · [사용자 뷰](/datagridview/custom-views) · [이름 색인](/datagridview/api/key-index) · [API](/datagridview/api/grid-options) |
+| DataGridView | 트리 / 표 그리드 | [개요](/datagridview/) · [기본 그리드](/datagridview/getting-started) · [셀 타입](/datagridview/cell-types) · [편집](/datagridview/editing) · [저장 후 반영](/datagridview/save-and-reflect) · [헤더](/datagridview/header) · [행 높이](/datagridview/row-height) · [정렬, 필터](/datagridview/sort-filter) · [행 그룹핑](/datagridview/row-grouping) · [툴바](/datagridview/toolbar) · [트리](/datagridview/tree) · [나눠 불러오기](/datagridview/server-side) · [컬럼 함수](/datagridview/cell-functions) · [우클릭 메뉴](/datagridview/context-menu) · [드래그앤드롭](/datagridview/drag-and-drop) · [셀 직접 그리기](/datagridview/custom-cell) · [상태바](/datagridview/status-bar) · [사용자 뷰](/datagridview/custom-views) · [보조 함수 모음](/datagridview/utils) · [이름 색인](/datagridview/api/key-index) · [API](/datagridview/api/grid-options) |
 | Tweakers | 셀, 툴바, 폼의 편집기 | [개요](/tweakers/) · [단독 사용](/tweakers/standalone) · [사용자 타입](/tweakers/custom-type) · [GeneratedToolbar](/tweakers/generated-toolbar) · [API](/tweakers/api/tweaker) |
 
 ## 하고 싶은 일로 찾기
@@ -119,6 +119,7 @@ features:
 | 사용자가 바꾼 그리드 컬럼 너비, 순서를 기억하고 싶다 | [사용자 뷰와 화면 상태 저장](/datagridview/custom-views) |
 | 그리드 옵션 이름은 아는데 어느 페이지인지 모르겠다 | [이름 색인 (A-Z)](/datagridview/api/key-index) |
 | 그리드 셀을 직접 그리거나 아래에 행 수를 보여주고 싶다 | [셀 직접 그리기](/datagridview/custom-cell) · [상태바](/datagridview/status-bar) |
+| 그리드 행 넣기, 찾기, 선택, 저장 결과 반영 코드를 줄이고 싶다 | [보조 함수 모음 (DataGridViewUtils)](/datagridview/utils) |
 | 확인 다이얼로그, 알림 메시지를 띄우고 싶다 | [다이얼로그](/controls/dialog) · [알림](/controls/notifications) |
 | 다른 앱(속성, 변경 조치)을 지금 화면 위에 창으로 열고 싶다 | [TransientWidget](/widget/transient-widget) |
 | 객체 속성을 OOTB 화면 그대로 내 위젯 안에서 보이고 편집하고 싶다 | [속성 패널 (EditPropWidget)](/controls/properties-panel) |
