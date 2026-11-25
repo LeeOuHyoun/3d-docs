@@ -183,6 +183,7 @@ define('DS/Recipes/personPicker/personPicker', [
       tooltipInfos: { shortHelp: '3DSearch 에서 찾기' },
       onClick: openSearch
     });
+    searchButton.getContent().getElement('.wux-ui-3ds-search').setStyles({ fontSize: '11px', color: '#3d3d3d' });
 
     control.getContent().setStyle('width', '100%');
     const element = UWA.createElement('div', {
