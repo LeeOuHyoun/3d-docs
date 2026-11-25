@@ -130,7 +130,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters', [
 
   const person = (options) => {
     const picker = personPicker.create(options);
-    return { content: picker.control, getValue: picker.getValue, reset: picker.clear, add: picker.add };
+    return { content: picker.element, getValue: picker.getValue, reset: picker.clear, add: picker.add };
   };
 
   return { text, checkbox, checkboxGroup, select, multiSelect, date, dateRange, person };
