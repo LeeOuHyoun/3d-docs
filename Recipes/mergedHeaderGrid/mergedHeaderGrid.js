@@ -14,7 +14,7 @@ define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
   const HEADERS = [
     { text: 'No', dataIndex: 'no', width: 50 },
     { text: 'Source', dataIndex: 'source', width: 90 },
-    { text: 'Part Code', dataIndex: 'partCode', width: 120 },
+    { text: 'Part Code', dataIndex: 'partCode', width: 120, filterId: 'string' },
     { text: 'Part Name', dataIndex: 'partName', width: 140 },
     { text: 'Part Spec', dataIndex: 'partSpec', width: 140 },
     { text: 'SOP', dataIndex: 'sop', width: 100 },
@@ -73,6 +73,11 @@ define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
     ? _.map(headers, (header) => (header.children ? header : { text: '', dataIndex: `${header.dataIndex}Group`, children: [header] }))
     : headers);
 
+  const toFilterModel = (headers) => _.mapValues(
+    _.keyBy(_.filter(_.flatMap(headers, (header) => header.children || header), 'filterId'), 'dataIndex'),
+    ({ filterId }) => ({ filterId })
+  );
+
   const toTreeDocument = (rows) => {
     const treeDocument = new TreeDocument();
     treeDocument.prepareUpdate();
@@ -86,6 +91,7 @@ define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
   const create = (options) => {
     const host = UWA.createElement('div', { 'class': 'mhg' }).inject(options.container);
     const treeDocument = toTreeDocument(options.rows);
+    treeDocument.setFilterModel(toFilterModel(options.headers));
     const grid = new DataGridView({
       treeDocument,
       columnSelection: 'none',
