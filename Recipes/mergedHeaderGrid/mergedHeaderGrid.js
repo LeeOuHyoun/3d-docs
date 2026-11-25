@@ -74,7 +74,7 @@ define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
     : headers);
 
   const toFilterModel = (headers) => _.mapValues(
-    _.keyBy(_.filter(_.flatMap(headers, (header) => header.children || header), 'filterId'), 'dataIndex'),
+    _.keyBy(_.filter(_.flatMap(headers, (header) => header.children || header), 'filterId'), ({ dataIndex }) => (dataIndex === 'tree' ? 'label' : dataIndex)),
     ({ filterId }) => ({ filterId })
   );
 
