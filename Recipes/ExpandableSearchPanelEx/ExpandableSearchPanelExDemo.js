@@ -4,15 +4,16 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
   'DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx',
   'DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters',
   'DS/Recipes/DataGridViewUtils2',
-  'DS/Recipes/personPicker/personPicker',
   'DS/DataGridView/DataGridView',
   'DS/TreeModel/TreeDocument',
   'DS/PlatformAPI/PlatformAPI',
   'UWA/Element'
-], (UWA, _, ExpandableSearchPanelEx, Adapters, DataGridViewUtils2, personPicker, DataGridView, TreeDocument, PlatformAPI) => {
+], (UWA, _, ExpandableSearchPanelEx, Adapters, DataGridViewUtils2, DataGridView, TreeDocument, PlatformAPI) => {
   'use strict';
 
   const OPTION_ITEMS = ['옵션A', '옵션B', '옵션C'];
+
+  const PERSON_TOPIC = 'xx.person.add';
 
   const PARTS = [
     { label: 'PRT-0001', title: '브라켓', status: '작업중' },
@@ -34,7 +35,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
 
   const createRows = async () => {
     const owner = Adapters.person();
-    PlatformAPI.subscribe(personPicker.TOPIC, owner.add);
+    PlatformAPI.subscribe(PERSON_TOPIC, owner.add);
     const rowFields = [
       [
         textField('item1'),
