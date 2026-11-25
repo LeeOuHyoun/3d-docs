@@ -81,8 +81,8 @@ define('DS/Recipes/mergedHeaderGrid/mergedHeaderGrid', [
   const toTreeDocument = (rows) => {
     const treeDocument = new TreeDocument();
     treeDocument.prepareUpdate();
-    _.forEach(rows, (row, index) => {
-      treeDocument.addRoot(new TreeNodeModel({ label: String(index + 1), grid: row }));
+    _.forEach(rows, (row) => {
+      treeDocument.addRoot(new TreeNodeModel({ label: row.partCode, grid: row }));
     });
     treeDocument.pushUpdate();
     return treeDocument;
