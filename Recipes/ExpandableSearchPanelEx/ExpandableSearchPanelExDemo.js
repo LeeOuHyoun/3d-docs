@@ -4,10 +4,12 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
   'DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx',
   'DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters',
   'DS/Recipes/DataGridViewUtils2',
+  'DS/Recipes/personPicker/personPicker',
   'DS/DataGridView/DataGridView',
   'DS/TreeModel/TreeDocument',
+  'DS/PlatformAPI/PlatformAPI',
   'UWA/Element'
-], (UWA, _, ExpandableSearchPanelEx, Adapters, DataGridViewUtils2, DataGridView, TreeDocument) => {
+], (UWA, _, ExpandableSearchPanelEx, Adapters, DataGridViewUtils2, personPicker, DataGridView, TreeDocument, PlatformAPI) => {
   'use strict';
 
   const OPTION_ITEMS = ['옵션A', '옵션B', '옵션C'];
@@ -31,14 +33,24 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelExDemo', [
   const textField = (id) => ({ id, label: id, editor: Adapters.text() });
 
   const createRows = async () => {
+    const owner = Adapters.person();
+    PlatformAPI.subscribe(personPicker.TOPIC, owner.add);
     const rowFields = [
       [
         textField('item1'),
         { id: 'select', label: '드롭다운', editor: Adapters.select({ onPreDropdown: loadOptionItems, placeholder: '선택' }) },
         { id: 'keyword', label: Adapters.select({ items: ['품번', '품명'] }), editor: Adapters.text() }
       ],
-      [textField('item2'), { id: 'dateRange', label: '날짜 범위', editor: Adapters.dateRange() }],
-      [textField('item3'), { id: 'checkboxGroup', label: '체크박스 그룹', editor: Adapters.checkboxGroup({ items: OPTION_ITEMS }) }],
+      [
+        textField('item2'),
+        { id: 'dateRange', label: '날짜 범위', editor: Adapters.dateRange() },
+        { id: 'owner', label: '담당자(멀티)', editor: owner }
+      ],
+      [
+        textField('item3'),
+        { id: 'checkboxGroup', label: '체크박스 그룹', editor: Adapters.checkboxGroup({ items: OPTION_ITEMS }) },
+        { id: 'approver', label: '담당자', editor: Adapters.person({ multiple: false }) }
+      ],
       [textField('item4'), { id: 'checkbox', label: '체크박스', editor: Adapters.checkbox({ label: '포함' }) }],
       [textField('item5'), { id: 'multiSelect', label: '드롭다운(멀티)', editor: Adapters.multiSelect({ items: OPTION_ITEMS, placeholder: '선택' }) }],
       [textField('item6'), { id: 'date', label: '날짜', editor: Adapters.date() }],

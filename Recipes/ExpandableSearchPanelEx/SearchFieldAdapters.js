@@ -6,8 +6,9 @@ define('DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters', [
   'DS/Controls/ButtonGroup',
   'DS/Controls/ComboBox',
   'DS/Tweakers/TweakerDate',
+  'DS/Recipes/personPicker/personPicker',
   'UWA/Element'
-], (UWA, _, LineEditor, Toggle, ButtonGroup, ComboBox, TweakerDate) => {
+], (UWA, _, LineEditor, Toggle, ButtonGroup, ComboBox, TweakerDate, personPicker) => {
   'use strict';
 
   const formatDate = (date) => (_.isDate(date)
@@ -127,5 +128,24 @@ define('DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters', [
     };
   };
 
-  return { text, checkbox, checkboxGroup, select, multiSelect, date, dateRange };
+  const person = (options = {}) => {
+    const container = UWA.createElement('div');
+    const picker = personPicker.create({
+      container,
+      placeholder: options.placeholder,
+      multiple: options.multiple,
+      search: _.defaultTo(options.search, personPicker.searchPersons)
+    });
+    return {
+      content: container,
+      getValue: () => {
+        const ids = picker.getIds(options.key);
+        return picker.multiple ? ids : _.defaultTo(_.head(ids), '');
+      },
+      reset: picker.clear,
+      add: picker.add
+    };
+  };
+
+  return { text, checkbox, checkboxGroup, select, multiSelect, date, dateRange, person };
 });

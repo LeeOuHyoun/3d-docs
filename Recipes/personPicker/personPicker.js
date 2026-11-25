@@ -15,10 +15,13 @@ define('DS/Recipes/personPicker/personPicker', [
 
   const toItem = (person) => ({ label: `${person.name} (${person.identifier})`, value: person.identifier, grid: person });
 
+  const toNode = (person) => new TreeNodeModel(toItem(person));
+
   const create = (options) => {
+    const multiple = options.multiple ?? true;
     const control = new AutoComplete({
       placeholder: options.placeholder ?? '이름이나 아이디 3글자 이상',
-      multiSearchMode: true,
+      multiSearchMode: multiple,
       allowFreeInputFlag: false,
       keepSearchResultsFlag: false,
       minLengthBeforeSearch: 3,
@@ -27,14 +30,15 @@ define('DS/Recipes/personPicker/personPicker', [
       elementsTree: (text) => options.search(text).then((persons) => _.map(_.differenceBy(persons, getPersons(), 'id'), toItem))
     }).inject(options.container);
 
-    const getPersons = () => _.map(control.selectedItems, 'options.grid');
+    const getPersons = () => _.map(_.compact(_.castArray(control.selectedItems)), 'options.grid');
 
     const getIds = (key = 'id') => _.map(getPersons(), key);
 
     const add = (persons) => {
-      const fresh = _.differenceBy(_.uniqBy(_.castArray(persons), 'id'), getPersons(), 'id');
+      const incoming = _.uniqBy(_.castArray(persons), 'id');
+      const fresh = _.differenceBy(multiple ? incoming : _.take(incoming, 1), getPersons(), 'id');
       if (!_.isEmpty(fresh)) {
-        control.selectedItems = _.concat(_.toArray(control.selectedItems), _.map(fresh, (person) => new TreeNodeModel(toItem(person))));
+        control.selectedItems = _.map(multiple ? _.concat(getPersons(), fresh) : fresh, toNode);
       }
     };
 
@@ -42,7 +46,7 @@ define('DS/Recipes/personPicker/personPicker', [
       control.selectedItems = [];
     };
 
-    return { control, add, clear, getPersons, getIds };
+    return { control, multiple, add, clear, getPersons, getIds };
   };
 
   const tenant = () => widget.getValue('x3dPlatformId') || 'OnPremise';
