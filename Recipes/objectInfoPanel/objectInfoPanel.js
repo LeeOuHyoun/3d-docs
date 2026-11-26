@@ -87,7 +87,8 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
       selectionType: EditPropConstants.NO_SELECTION,
       readOnly: false,
       extraNotif: true,
-      facets: _.cloneDeep(FACETS)
+      facets: _.cloneDeep(FACETS),
+      actions: [{ name: 'action_close_panel', text: '닫기', icon: 'close', handler: () => modelEvents.publish({ event: 'information-panel-close' }) }]
     });
     panel.inject(container);
     panel.initDatas([]);
@@ -113,7 +114,7 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
   const initTriptych = (triptych, options, left, main, right) => {
     const modelEvents = options.modelEvents || new ModelEvents();
     const container = right || UWA.createElement('div', { styles: { height: '100%' } });
-    triptych.init({ ...options, modelEvents, right: _.defaults({}, options.right, { originalSize: 400, minWidth: 250 }) }, left, main, container);
+    triptych.init({ ...options, modelEvents, right: _.defaults({}, options.right, { originalSize: 400, minWidth: 250, withClose: false }) }, left, main, container);
     create({ modelEvents, container });
     return triptych;
   };
