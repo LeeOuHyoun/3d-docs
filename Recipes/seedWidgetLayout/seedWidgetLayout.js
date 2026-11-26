@@ -13,7 +13,6 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
 
   const LEFT_SIZE_EXPANDED = 300;
   const LEFT_SIZE_COLLAPSED = 40;
-  const RIGHT_SIZE = 400;
   const MOBILE_WIDTH = 550;
 
   const PAGE_PATH = 'DS/Recipes/seedWidgetLayout/pages/';
@@ -49,11 +48,10 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
     const frame = UWA.createElement('div', { 'class': 'swl' }).inject(options.container);
     const left = UWA.createElement('div', { 'class': 'swl-left' });
     const middle = UWA.createElement('div', { 'class': 'swl-middle' });
-    const right = UWA.createElement('div', { 'class': 'swl-right' });
     const toolbarHost = UWA.createElement('div', { 'class': 'swl-toolbar' }).inject(middle);
     const content = UWA.createElement('div', { 'class': 'swl-content' }).inject(middle);
 
-    new ENOXTriptych().init({
+    objectInfoPanel.initTriptych(new ENOXTriptych(), {
       modelEvents,
       container: frame,
       borderLeft: true,
@@ -64,11 +62,8 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
         originalState: frame.offsetWidth < MOBILE_WIDTH ? 'close' : 'open',
         overMobile: true,
         withClose: false
-      },
-      right: { resizable: true, minWidth: 250, originalSize: RIGHT_SIZE }
-    }, left, middle, right);
-
-    objectInfoPanel.create({ modelEvents, container: right });
+      }
+    }, left, middle, null);
 
     const toolbar = new PageToolBar({ modelEvents, withWelcomePanelButton: true, withInformationButton: true });
     toolbar.render().inject(toolbarHost);

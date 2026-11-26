@@ -14,10 +14,6 @@
   border: none;
 }
 
-.swl-right {
-  height: 100%;
-}
-
 .swl-middle {
   display: flex;
   flex-direction: column;

@@ -47,10 +47,13 @@ define('DS/Recipes/objectInfoPanel/AttachmentsFacet', [
 });
 
 define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
+  'UWA/Core',
   'DS/lodash-4.18.1/lodash',
+  'DS/CoreEvents/ModelEvents',
   'DS/EditPropWidget/EditPropWidget',
-  'DS/EditPropWidget/constants/EditPropConstants'
-], (_, EditPropWidget, EditPropConstants) => {
+  'DS/EditPropWidget/constants/EditPropConstants',
+  'UWA/Element'
+], (UWA, _, ModelEvents, EditPropWidget, EditPropConstants) => {
   'use strict';
 
   const FACETS = [
@@ -107,5 +110,13 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
     current.modelEvents.publish({ event: 'information-panel-open' });
   };
 
-  return { create, show };
+  const initTriptych = (triptych, options, left, main, right) => {
+    const modelEvents = options.modelEvents || new ModelEvents();
+    const container = right || UWA.createElement('div', { styles: { height: '100%' } });
+    triptych.init({ ...options, modelEvents, right: _.defaults({}, options.right, { originalSize: 400, minWidth: 250 }) }, left, main, container);
+    create({ modelEvents, container });
+    return triptych;
+  };
+
+  return { initTriptych, create, show };
 });
