@@ -68,7 +68,7 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
       right: { resizable: true, minWidth: 250, originalSize: RIGHT_SIZE }
     }, left, middle, right);
 
-    const info = objectInfoPanel.create({ modelEvents, container: right });
+    objectInfoPanel.create({ modelEvents, container: right });
 
     const toolbar = new PageToolBar({ modelEvents, withWelcomePanelButton: true, withInformationButton: true });
     toolbar.render().inject(toolbarHost);
@@ -105,7 +105,7 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
         currentPage?.destroy?.();
         content.empty();
         currentPage = page;
-        page.render(content, { modelEvents, id, showInfo: info.show });
+        page.render(content, { modelEvents, id });
       });
     };
 

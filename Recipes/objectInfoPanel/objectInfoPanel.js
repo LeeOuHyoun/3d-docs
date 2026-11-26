@@ -76,6 +76,8 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
     'triptych-panel-hidden': 'information-panel-hidden'
   };
 
+  let current;
+
   const create = ({ modelEvents, container }) => {
     const panel = new EditPropWidget({
       typeOfDisplay: EditPropConstants.ALL,
@@ -94,13 +96,16 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
       }
     }));
 
-    const show = (physicalId) => {
-      panel.initDatas([{ objectId: physicalId, metatype: 'businessobject' }], EditPropConstants.FACET_PROPERTIES);
-      modelEvents.publish({ event: 'information-panel-open' });
-    };
-
-    return { show };
+    current = { panel, modelEvents };
   };
 
-  return { create };
+  const show = (physicalId) => {
+    if (!current) {
+      return;
+    }
+    current.panel.initDatas([{ objectId: physicalId, metatype: 'businessobject' }], EditPropConstants.FACET_PROPERTIES);
+    current.modelEvents.publish({ event: 'information-panel-open' });
+  };
+
+  return { create, show };
 });
