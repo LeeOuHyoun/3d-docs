@@ -16,7 +16,7 @@ define('DS/Recipes/objectInfoPanel/AttachmentsFacet', [
       onComplete: (result) => resolve(_.defaults({}, _.isArray(result) ? _.head(result) : result, { platformId: getPlatformId() })),
       onFailure: reject
     })),
-    new Promise((resolve, reject) => SCServices.getInstance({ tenant: getPlatformId() }).getSecurityContext({
+    new Promise((resolve, reject) => SCServices.getInstance({ tenant: getPlatformId() }).getValidSecurityContext({
       onSuccess: (result) => resolve(result.SecurityContext),
       onFailure: reject
     }))
@@ -57,7 +57,7 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
   'use strict';
 
   const FACETS = [
-    EditPropConstants.FACET_PROPERTIES,
+    { id: EditPropConstants.FACET_PROPERTIES, alwaysVisible: true },
     {
       require: 'DS/Recipes/objectInfoPanel/AttachmentsFacet',
       alwaysVisible: true,
@@ -87,7 +87,7 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
       selectionType: EditPropConstants.NO_SELECTION,
       readOnly: false,
       extraNotif: true,
-      facets: FACETS
+      facets: _.cloneDeep(FACETS)
     });
     panel.inject(container);
     panel.initDatas([]);
@@ -106,7 +106,7 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
     if (!current) {
       return;
     }
-    current.panel.initDatas([{ objectId: physicalId, metatype: 'businessobject' }], EditPropConstants.FACET_PROPERTIES);
+    current.panel.initDatas([{ objectId: physicalId, metatype: 'businessobject' }]);
     current.modelEvents.publish({ event: 'information-panel-open' });
   };
 
