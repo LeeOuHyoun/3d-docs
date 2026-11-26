@@ -52,8 +52,9 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
   'DS/CoreEvents/ModelEvents',
   'DS/EditPropWidget/EditPropWidget',
   'DS/EditPropWidget/constants/EditPropConstants',
+  'DS/WidgetServices/securityContextServices/SecurityContextServices',
   'UWA/Element'
-], (UWA, _, ModelEvents, EditPropWidget, EditPropConstants) => {
+], (UWA, _, ModelEvents, EditPropWidget, EditPropConstants, SCServices) => {
   'use strict';
 
   const FACETS = [
@@ -79,19 +80,28 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
     'triptych-panel-hidden': 'information-panel-hidden'
   };
 
+  const getSecurityContext = () => new Promise((resolve) => SCServices.getInstance({ tenant: widget.getValue('x3dPlatformId') }).getSecurityContext({
+    onSuccess: (result) => resolve(_.pick(result, 'SecurityContext')),
+    onFailure: () => resolve()
+  }));
+
   let current;
 
   const create = ({ modelEvents, container }) => {
-    const panel = new EditPropWidget({
-      typeOfDisplay: EditPropConstants.ALL,
-      selectionType: EditPropConstants.NO_SELECTION,
-      readOnly: false,
-      extraNotif: true,
-      facets: _.cloneDeep(FACETS),
-      actions: [{ name: 'action_close_panel', text: '닫기', icon: 'close', handler: () => modelEvents.publish({ event: 'information-panel-close' }) }]
+    current = getSecurityContext().then((securityContext) => {
+      const panel = new EditPropWidget({
+        typeOfDisplay: EditPropConstants.ALL,
+        selectionType: EditPropConstants.NO_SELECTION,
+        readOnly: false,
+        extraNotif: true,
+        context: { getSecurityContext: _.constant(securityContext) },
+        facets: _.cloneDeep(FACETS),
+        actions: [{ name: 'action_close_panel', text: '닫기', icon: 'close', handler: () => modelEvents.publish({ event: 'information-panel-close' }) }]
+      });
+      panel.inject(container);
+      panel.initDatas([]);
+      return { panel, modelEvents };
     });
-    panel.inject(container);
-    panel.initDatas([]);
 
     _.forEach(COMMANDS, (command, event) => modelEvents.subscribe({ event }, () => modelEvents.publish({ event: command, data: 'right' })));
     _.forEach(NOTICES, (notice, event) => modelEvents.subscribe({ event }, (side) => {
@@ -99,17 +109,12 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
         modelEvents.publish({ event: notice });
       }
     }));
-
-    current = { panel, modelEvents };
   };
 
-  const show = (physicalId) => {
-    if (!current) {
-      return;
-    }
-    current.panel.initDatas([{ objectId: physicalId, metatype: 'businessobject' }]);
-    current.modelEvents.publish({ event: 'information-panel-open' });
-  };
+  const show = (physicalId) => current?.then(({ panel, modelEvents }) => {
+    panel.initDatas([{ objectId: physicalId, metatype: 'businessobject' }]);
+    modelEvents.publish({ event: 'information-panel-open' });
+  });
 
   const initTriptych = (triptych, options, left, main, right) => {
     const modelEvents = options.modelEvents || new ModelEvents();
