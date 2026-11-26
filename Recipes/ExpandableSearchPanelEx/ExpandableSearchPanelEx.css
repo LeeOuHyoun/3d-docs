@@ -59,6 +59,10 @@ label.espx-label {
   text-overflow: ellipsis;
 }
 
+div.espx-label > * {
+  width: 100%;
+}
+
 .espx-editor {
   flex: 1;
   min-width: 0;
