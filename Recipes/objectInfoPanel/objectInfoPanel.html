@@ -13,6 +13,7 @@
     .module > .moduleHeader, .moduleFooter { display: none; }
   </style>
   <script type="text/javascript">
+  //<![CDATA[
     require([
       'UWA/Core',
       'DS/CoreEvents/ModelEvents',
@@ -34,6 +35,7 @@
         UWA.createElement('button', { text: '정보 보기', events: { click: function () { info.show('<physicalid>'); } } }).inject(middle);
       });
     });
+  //]]>
   </script>
 </head>
 <body></body>
