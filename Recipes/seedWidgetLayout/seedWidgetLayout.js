@@ -5,13 +5,15 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
   'DS/ENOXTriptych/js/ENOXTriptych',
   'DS/ENOXWelcomePanel/js/ENOXWelcomePanel',
   'DS/ENOXPageToolBar/js/PageToolBar',
+  'DS/Recipes/objectInfoPanel/objectInfoPanel',
   'UWA/Element',
   'css!DS/Recipes/seedWidgetLayout/seedWidgetLayout.css'
-], (UWA, _, ModelEvents, ENOXTriptych, ENOXWelcomePanel, PageToolBar) => {
+], (UWA, _, ModelEvents, ENOXTriptych, ENOXWelcomePanel, PageToolBar, objectInfoPanel) => {
   'use strict';
 
   const LEFT_SIZE_EXPANDED = 300;
   const LEFT_SIZE_COLLAPSED = 40;
+  const RIGHT_SIZE = 400;
   const MOBILE_WIDTH = 550;
 
   const PAGE_PATH = 'DS/Recipes/seedWidgetLayout/pages/';
@@ -47,6 +49,7 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
     const frame = UWA.createElement('div', { 'class': 'swl' }).inject(options.container);
     const left = UWA.createElement('div', { 'class': 'swl-left' });
     const middle = UWA.createElement('div', { 'class': 'swl-middle' });
+    const right = UWA.createElement('div', { 'class': 'swl-right' });
     const toolbarHost = UWA.createElement('div', { 'class': 'swl-toolbar' }).inject(middle);
     const content = UWA.createElement('div', { 'class': 'swl-content' }).inject(middle);
 
@@ -61,10 +64,13 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
         originalState: frame.offsetWidth < MOBILE_WIDTH ? 'close' : 'open',
         overMobile: true,
         withClose: false
-      }
-    }, left, middle, null);
+      },
+      right: { resizable: true, minWidth: 250, originalSize: RIGHT_SIZE }
+    }, left, middle, right);
 
-    const toolbar = new PageToolBar({ modelEvents, withWelcomePanelButton: true, withInformationButton: false });
+    const info = objectInfoPanel.create({ modelEvents, container: right });
+
+    const toolbar = new PageToolBar({ modelEvents, withWelcomePanelButton: true, withInformationButton: true });
     toolbar.render().inject(toolbarHost);
     const title = UWA.createElement('span', { 'class': 'swl-title' }).inject(toolbar.getBodyContent());
 
@@ -99,7 +105,7 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
         currentPage?.destroy?.();
         content.empty();
         currentPage = page;
-        page.render(content, { modelEvents, id });
+        page.render(content, { modelEvents, id, showInfo: info.show });
       });
     };
 
