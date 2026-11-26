@@ -13,9 +13,65 @@
     .module > .moduleHeader, .moduleFooter { display: none; }
   </style>
   <script type="text/javascript">
-    require(['DS/Recipes/objectInfoPanel/objectInfoPanel'], function (objectInfoPanel) {
+    require([
+      'UWA/Core',
+      'DS/lodash-4.18.1/lodash',
+      'DS/CoreEvents/ModelEvents',
+      'DS/ENOXTriptych/js/ENOXTriptych',
+      'DS/ENOXPageToolBar/js/PageToolBar',
+      'DS/DataGridView/DataGridView',
+      'DS/TreeModel/TreeDocument',
+      'DS/TreeModel/TreeNodeModel',
+      'DS/Recipes/objectInfoPanel/objectInfoPanel'
+    ], function (UWA, _, ModelEvents, ENOXTriptych, PageToolBar, DataGridView, TreeDocument, TreeNodeModel, objectInfoPanel) {
+      const ROWS = [
+        { name: 'PRT-0001', type: 'Part', physicalid: '<Part physicalid>' },
+        { name: 'user01', type: 'Person', physicalid: '<Person physicalid>' }
+      ];
+
       widget.addEvent('onLoad', function () {
-        objectInfoPanel.render(widget.body);
+        const modelEvents = new ModelEvents();
+        const frame = UWA.createElement('div', { styles: { position: 'relative', height: '100%' } }).inject(widget.body);
+        const middle = UWA.createElement('div', { styles: { display: 'flex', flexDirection: 'column', height: '100%' } });
+        const right = UWA.createElement('div', { styles: { height: '100%' } });
+
+        new ENOXTriptych().init({
+          modelEvents: modelEvents,
+          container: frame,
+          withtransition: true,
+          right: { resizable: true, minWidth: 250, originalSize: 400 }
+        }, null, middle, right);
+
+        const info = objectInfoPanel.create({ modelEvents: modelEvents, container: right });
+
+        new PageToolBar({ modelEvents: modelEvents }).render().inject(UWA.createElement('div', { styles: { flex: 'none', height: '40px' } }).inject(middle));
+
+        const treeDocument = new TreeDocument();
+        _.forEach(ROWS, function (row) {
+          treeDocument.addRoot(new TreeNodeModel({ label: row.name, grid: row }));
+        });
+
+        new DataGridView({
+          treeDocument: treeDocument,
+          columns: [
+            { text: '이름', dataIndex: 'tree', width: 160 },
+            { text: '타입', dataIndex: 'type', width: 120 },
+            {
+              text: '정보',
+              dataIndex: 'info',
+              width: 120,
+              typeRepresentation: 'url',
+              getCellValue: function () {
+                return {
+                  label: '정보 보기',
+                  func: function (args) {
+                    info.show(args.context.nodeModel.options.grid.physicalid);
+                  }
+                };
+              }
+            }
+          ]
+        }).inject(UWA.createElement('div', { styles: { position: 'relative', flex: '1 1 0', minHeight: 0 } }).inject(middle));
       });
     });
   </script>
