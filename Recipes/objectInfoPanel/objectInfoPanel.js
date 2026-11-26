@@ -53,7 +53,8 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
   'DS/EditPropWidget/EditPropWidget',
   'DS/EditPropWidget/constants/EditPropConstants',
   'DS/WidgetServices/securityContextServices/SecurityContextServices',
-  'UWA/Element'
+  'UWA/Element',
+  'css!DS/Recipes/objectInfoPanel/objectInfoPanel.css'
 ], (UWA, _, ModelEvents, EditPropWidget, EditPropConstants, SCServices) => {
   'use strict';
 
@@ -90,13 +91,13 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
   const create = ({ modelEvents, container }) => {
     current = getSecurityContext().then((securityContext) => {
       const panel = new EditPropWidget({
+        className: 'oip-panel',
         typeOfDisplay: EditPropConstants.ALL,
         selectionType: EditPropConstants.NO_SELECTION,
         readOnly: false,
         extraNotif: true,
         context: { getSecurityContext: _.constant(securityContext) },
-        facets: _.cloneDeep(FACETS),
-        actions: [{ name: 'action_close_panel', text: '닫기', icon: 'close', handler: () => modelEvents.publish({ event: 'information-panel-close' }) }]
+        facets: _.cloneDeep(FACETS)
       });
       panel.inject(container);
       panel.initDatas([]);
@@ -112,14 +113,14 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
   };
 
   const show = (physicalId) => current?.then(({ panel, modelEvents }) => {
-    panel.initDatas([{ objectId: physicalId, metatype: 'businessobject' }]);
+    panel.initDatas([{ objectId: physicalId, metatype: 'businessobject' }], EditPropConstants.FACET_PROPERTIES);
     modelEvents.publish({ event: 'information-panel-open' });
   });
 
   const initTriptych = (triptych, options, left, main, right) => {
     const modelEvents = options.modelEvents || new ModelEvents();
     const container = right || UWA.createElement('div', { styles: { height: '100%' } });
-    triptych.init({ ...options, modelEvents, right: _.defaults({}, options.right, { originalSize: 400, minWidth: 250, withClose: false }) }, left, main, container);
+    triptych.init({ ...options, modelEvents, right: _.defaults({}, options.right, { originalSize: 400, minWidth: 250 }) }, left, main, container);
     create({ modelEvents, container });
     return triptych;
   };
