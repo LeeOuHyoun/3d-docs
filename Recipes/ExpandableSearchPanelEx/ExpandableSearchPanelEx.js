@@ -21,7 +21,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/ExpandableSearchPanelEx', [
 
   const getFieldValue = (field) => (_.isString(field.label)
     ? field.editor.getValue()
-    : { label: field.label.getValue(), value: field.editor.getValue() });
+    : { type: field.label.getValue(), value: field.editor.getValue() });
 
   const createRow = (rowConfig) => {
     const element = UWA.createElement('div', {
