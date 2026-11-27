@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
 <head>
-  <title>Async Combo Column</title>
+  <title>Async Column</title>
   <meta name="autoRefresh" content="-1" />
   <link rel="stylesheet" type="text/css" href="../../c/UWA/assets/css/standalone.css" />
   <script type="text/javascript" src="../../AmdLoader/AmdLoader.js"></script>
@@ -13,9 +13,9 @@
     .module > .moduleHeader, .moduleFooter { display: none; }
   </style>
   <script type="text/javascript">
-    require(['DS/Recipes/asyncComboColumn/asyncComboColumn'], function (asyncComboColumn) {
+    require(['DS/Recipes/asyncColumn/asyncColumn'], function (asyncColumn) {
       widget.addEvent('onLoad', function () {
-        asyncComboColumn.render(widget.body);
+        asyncColumn.render(widget.body);
       });
     });
   </script>

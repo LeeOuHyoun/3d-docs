@@ -388,22 +388,31 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
    * 행을 펼칠 때 하위 행을 불러오게 한다.
    * TreeDocument 는 useAsyncPreExpand: true 로 만들고, 불러올 행은 children: [] 로 넣어 둔다.
    * 하위 행이 이미 있으면 다시 부르지 않고, 실패해도 preExpandDone() 을 불러 "펼치는 중" 에서 멈추지 않게 한다.
+   * 불러오는 중인 행을 다시 펼쳐도 loader 를 또 부르지 않는다. (또 부르면 하위 행이 두 번 들어간다)
    * onPreExpand 는 하나만 등록되므로 다시 부르면 이전 loader 를 대체한다.
    * @param {DocTarget} target
    * @param {function(TreeNodeModel, Row): (Row[]|Promise<Row[]>)} loader 펼치는 행과 그 행 데이터를 받아 하위 행 데이터를 돌려준다
    */
   const setChildrenLoader = (target, loader) => {
     const doc = getDoc(target);
+    const loading = new WeakSet();
     doc.onPreExpand((e) => {
       const node = e.target;
+      if (loading.has(node)) {
+        return;
+      }
       if (node.hasChildren()) {
         node.preExpandDone();
         return;
       }
+      loading.add(node);
       Promise.resolve()
         .then(() => loader(node, getRow(node)))
         .then((rows) => addRows(doc, rows, node))
-        .finally(() => node.preExpandDone());
+        .finally(() => {
+          loading.delete(node);
+          node.preExpandDone();
+        });
     });
   };
 
@@ -511,14 +520,22 @@ define('DS/Recipes/DataGridViewUtils', ['DS/lodash-4.18.1/lodash', 'DS/DataGridV
     return run(task).finally(() => grid.removeModalLoader(text));
   };
 
+  const loadSeqByDoc = new WeakMap();
+
   /**
    * 로딩 표시를 덮은 채로 행 데이터를 불러와 모든 행을 바꾼다.
+   * 끝나기 전에 다시 부르면 마지막에 부른 것만 반영한다. (먼저 부른 쪽 응답이 늦게 와도 새 결과를 덮지 않는다)
    * @param {GridTarget} target
    * @param {Promise<Row[]>|function(): (Row[]|Promise<Row[]>)} task
    * @param {string} [text] 로딩 문구
-   * @returns {Promise<TreeNodeModel[]>} 추가된 최상위 행
+   * @returns {Promise<TreeNodeModel[]>} 추가된 최상위 행. 나중에 부른 것에 밀려 반영되지 않았으면 빈 배열
    */
-  const loadRows = (target, task, text) => withLoader(target, () => run(task).then((rows) => setRows(target, rows)), text);
+  const loadRows = (target, task, text) => {
+    const doc = getDoc(target);
+    const seq = (loadSeqByDoc.get(doc) || 0) + 1;
+    loadSeqByDoc.set(doc, seq);
+    return withLoader(target, () => run(task).then((rows) => (loadSeqByDoc.get(doc) === seq ? setRows(doc, rows) : [])), text);
+  };
 
   /**
    * 그리드 내용을 CSV 파일로 내려받는다. getAsCSV 결과에 BOM 이 있어 엑셀에서 한글이 깨지지 않는다.
