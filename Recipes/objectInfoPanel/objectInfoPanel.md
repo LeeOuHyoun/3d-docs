@@ -197,12 +197,18 @@ modelEvents.subscribe({ event: 'information-panel-hidden' }, () => console.log('
 
 ### 4.4 보안 컨텍스트
 
-패널을 만들기 전에 사용자의 기본 보안 컨텍스트를 한 번 받아 `EditPropWidget` 에 넘깁니다. 속성, 첨부를 비롯한 패널의 요청이 모두 그 값으로 나갑니다.
+패널을 만들기 전에 보안 컨텍스트(자격)를 한 번 정해 `EditPropWidget` 에 넘깁니다. 속성, 첨부를 비롯한 패널의 요청이 모두 그 값으로 나갑니다. 찾는 순서는 OOTB Change 앱(`ENOChgServices` 의 `populateSecurityContext`)과 같습니다.
 
-- 받는 곳은 `SecurityContextServices.getSecurityContext` (3DSpace 의 `/resources/pno/person/getsecuritycontext`) 입니다.
+| 순서 | 어디서 | 비고 |
+| --- | --- | --- |
+| 1 | 위젯 값 `SC` | 값이 있으면 그대로 씀 |
+| 2 | 위젯 자격 환경설정 `xPref_CREDENTIAL` | 위젯 설정에서 사용자가 고른 자격. `ENOXWidgetPreferences` 가 만드는 키 |
+| 3 | 3DSpace `/resources/pno/person/getsecuritycontext` | 사용자가 정해 둔 기본 자격 (`SecurityContextServices.getSecurityContext`) |
+
+- 셋 다 없으면 값을 넘기지 않고 패널을 만듭니다. 이때는 `EditPropWidget` 의 기본 동작대로 사용자에게 할당된 **첫 번째** 자격을 씁니다.
+- 위젯이 쓰는 자격과 패널의 자격이 다르면, 위젯에서는 보이는 객체가 패널에서는 "이 콘텐츠는 더 이상 액세스할 수 없거나 삭제되었을 수 있습니다." 로 나오거나 속성이 비어 보입니다. 서버(`facets/available`)가 그 자격으로는 객체를 볼 수 없다고 답한 경우입니다. 개발자도구 Network 에서 그 요청의 `SecurityContext` 헤더를 위젯의 다른 요청과 비교해 보세요.
+- 위젯이 자격을 다른 곳에 둔다면 `objectInfoPanel.js` 의 `getWidgetSecurityContext` 에 그 값을 더합니다. `역할.조직.협업공간` 모양이면 되고, 앞의 `ctx::` 는 있어도 없어도 됩니다.
 - 이 조회가 끝난 뒤에 패널이 만들어지므로 `initTriptych` 직후에는 오른쪽 칸이 잠깐 비어 있습니다.
-- 조회에 실패하면 값을 넘기지 않고 패널을 만듭니다. 이때는 `EditPropWidget` 의 기본 동작대로 사용자에게 할당된 첫 번째 자격을 씁니다.
-- 위젯에 자격을 고르는 설정이 따로 있다면 그 값을 넘기도록 `objectInfoPanel.js` 의 `getSecurityContext` 를 바꿉니다. `{ SecurityContext: 'ctx::역할.조직.협업공간' }` 모양으로 끝나는 `Promise` 를 돌려주면 됩니다.
 
 ## 5. 주의
 

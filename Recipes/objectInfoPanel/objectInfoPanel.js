@@ -81,10 +81,19 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
     'triptych-panel-hidden': 'information-panel-hidden'
   };
 
-  const getSecurityContext = () => new Promise((resolve) => SCServices.getInstance({ tenant: widget.getValue('x3dPlatformId') }).getSecurityContext({
-    onSuccess: (result) => resolve(_.pick(result, 'SecurityContext')),
-    onFailure: () => resolve()
-  }));
+  const getWidgetSecurityContext = () => _.find([widget.getValue('SC'), widget.getValue('xPref_CREDENTIAL')]);
+
+  const getSecurityContext = () => new Promise((resolve) => {
+    const preferred = getWidgetSecurityContext();
+    if (preferred) {
+      resolve({ SecurityContext: preferred });
+      return;
+    }
+    SCServices.getInstance({ tenant: widget.getValue('x3dPlatformId') }).getSecurityContext({
+      onSuccess: (result) => resolve(_.pick(result, 'SecurityContext')),
+      onFailure: () => resolve()
+    });
+  });
 
   let current;
 
