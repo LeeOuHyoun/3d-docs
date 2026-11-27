@@ -5,15 +5,19 @@ define('DS/Recipes/asyncComboColumn/asyncComboColumn', [
 ], (DataGridView, TreeDocument, TreeNodeModel) => {
   'use strict';
 
-  const requestOwners = () => new Promise((resolve) => {
-    setTimeout(() => resolve([
-      { label: '김철수', value: 'kcs' },
-      { label: '이영희', value: 'lyh' },
-      { label: '박민수', value: 'pms' }
-    ]), 300);
+  const OWNERS_BY_PART = {
+    'P-001': [{ label: '김철수', value: 'kcs' }, { label: '이영희', value: 'lyh' }],
+    'P-002': [{ label: '박민수', value: 'pms' }, { label: '최지훈', value: 'cjh' }],
+    'P-003': [{ label: '이영희', value: 'lyh' }, { label: '박민수', value: 'pms' }, { label: '최지훈', value: 'cjh' }]
+  };
+
+  const requestOwners = (partId) => new Promise((resolve) => {
+    setTimeout(() => resolve(OWNERS_BY_PART[partId]), 300);
   });
 
   const render = (container) => {
+    const ownersByNode = new WeakMap();
+
     const treeDocument = new TreeDocument();
     [
       { id: 'P-001', owners: ['kcs'] },
@@ -32,16 +36,18 @@ define('DS/Recipes/asyncComboColumn/asyncComboColumn', [
           typeRepresentation: 'string',
           editableFlag: true,
           editionPolicy: 'EditionOnClick',
-          semantics: { allowMultipleValuesFlag: true }
+          getCellEditableState: ({ nodeModel }) => ownersByNode.has(nodeModel),
+          getCellSemantics: ({ nodeModel }) => ({ allowMultipleValuesFlag: true, possibleValues: ownersByNode.get(nodeModel) })
         }
       ]
     });
     grid.inject(container);
 
-    requestOwners().then((possibleValues) => {
-      const column = grid.getColumnOrGroup('owners');
-      column.semantics = { ...column.semantics, possibleValues };
-      grid.layout.applyColumns();
+    treeDocument.getRoots().forEach((nodeModel) => {
+      requestOwners(nodeModel.options.grid.id).then((possibleValues) => {
+        ownersByNode.set(nodeModel, possibleValues);
+        grid.updateView({ updateCellContent: true });
+      });
     });
 
     return grid;
