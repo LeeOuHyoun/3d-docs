@@ -90,4 +90,14 @@ getCellTooltip: function (cellInfos) {
 
 ## 함수가 참조하는 값이 바뀌었을 때
 
-컬럼 함수는 셀을 그릴 때 호출됩니다. 행 값(`updateOptions`, 셀 편집)이 바뀌면 그리드가 다시 그리지만, 함수가 **행 데이터가 아닌 바깥 변수**를 참조하고 그 변수만 바뀌었다면 다시 그려지지 않습니다. 이때는 `grid.updateView()` 로 다시 그리게 합니다 ([그리드 메서드](/datagridview/api/grid-methods#화면-갱신)).
+컬럼 함수는 셀을 그릴 때 호출됩니다. 행 값(`updateOptions`, 셀 편집)이 바뀌면 그리드가 다시 그리지만, 함수가 **행 데이터가 아닌 바깥 변수**를 참조하고 그 변수만 바뀌었다면 다시 그려지지 않습니다. 이때는 그 컬럼을 다시 그리게 합니다 ([그리드 메서드](/datagridview/api/grid-methods#화면-갱신)).
+
+```js
+grid.updateColumnView(grid.layout.getColumnIndex('amount'), { updateCellContent: true });
+```
+
+::: warning updateCellContent: true 를 꼭 넣습니다
+`grid.updateView()` 처럼 옵션 없이 부르면 셀 **내용**은 다시 읽지 않습니다. `getCellClassName` 의 CSS 클래스만 다시 계산되고, `getCellValue`, `getCellSemantics` 의 결과는 화면에 반영되지 않습니다. `{ updateCellContent: true }` 를 넘겨야 내용이 바뀝니다. (로컬 실행 확인)
+:::
+
+바깥 변수가 서버 응답으로 채워지는 경우(콤보 목록, 권한)의 타이밍 문제는 [API 로 받아 넣기](/datagridview/async-values) 에 정리했습니다.

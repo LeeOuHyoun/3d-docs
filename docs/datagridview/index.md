@@ -100,6 +100,7 @@ require([
 | 인쇄 | `grid.openPrintableViewWindow()`, `printableFlag` | 그리드 메서드, 컬럼 옵션 | [인쇄](/datagridview/find-and-print#인쇄) |
 | 여러 행 값을 한 번에 바꾸기 | `grid.showModelMassUpdateDialog()`, `massUpdateAllowedFlag` | 그리드 메서드, 컬럼 옵션 | [일괄 수정](/datagridview/find-and-print#일괄-수정) |
 | 행 넣기, 키로 찾기, 저장 결과 반영, 변경 모으기를 함수 한 줄로 | `GridUtils.loadRows(...)`, `GridUtils.updateRows(...)` 등 | 보조 모듈 (원본 아님) | [보조 함수 모음](/datagridview/utils) |
+| 셀 값, 콤보 목록, 편집 권한을 API 로 받아 나중에 넣기 | `nodeModel.updateOptions(...)`, `grid.updateColumnView(...)` | 행, 그리드 메서드 | [API 로 받아 넣기](/datagridview/async-values) |
 
 ### 기능
 
@@ -162,6 +163,7 @@ enovia2025 webapps 에서 DataGridView 를 쓰는 앱 파일 119개를 기준으
 | [셀 직접 그리기](/datagridview/custom-cell) | `onCellRequest` 와 셀 내용 재사용 |
 | [상태바](/datagridview/status-bar) | `grid.buildStatusBar([...])` 로 행 수, 선택 수 표시 |
 | [보조 함수 모음 (DataGridViewUtils)](/datagridview/utils) | 자주 하는 행 처리를 함수로 묶은 보조 모듈 (원본 아님). 사용법과 전체 소스 |
+| [API 로 받아 넣기 (비동기와 타이밍)](/datagridview/async-values) | 서버 응답이 늦게, 순서 없이 와도 맞게 들어가는 자리. 패턴 7 가지와 입력 중 응답, 늦게 온 응답 처리 |
 | [이름 색인 (A-Z)](/datagridview/api/key-index) | 옵션, 함수, 이벤트 이름을 알파벳 순으로 찾기 |
 | [그리드 옵션](/datagridview/api/grid-options) · [그리드 메서드](/datagridview/api/grid-methods) · [layoutOptions](/datagridview/api/layout-options) · [레이아웃 메서드](/datagridview/api/layout-methods) | 그리드 레퍼런스 |
 | [컬럼 옵션](/datagridview/api/column-options) · [컬럼 함수](/datagridview/api/column-functions) · [typeRepresentation](/datagridview/api/type-representation) · [하위 옵션 객체](/datagridview/api/sub-options) | 컬럼 레퍼런스 |

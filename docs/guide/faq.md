@@ -178,6 +178,12 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | 그리드 행을 rowID 로 다시 찾으니 다른 행 | rowID 는 펼침, 정렬, 필터로 바뀜. `nodeModel` 을 보관 | [cellID 와 rowID](/datagridview/api/grid-methods#먼저-알아-둘-것-cellid-와-rowid) |
 | 그리드 컬럼 함수에서 `nodeModel` 이 undefined | 컬럼 헤더 셀(rowID -1)에도 호출됨. `cellInfos.nodeModel` 을 먼저 확인 | [nodeModel 이 있는지 확인하기](/datagridview/cell-functions#먼저-nodemodel-이-있는지-확인하기) |
 | 직접 그린 그리드 셀에 다른 행의 모양이 섞임 | 꺼낸 셀 내용에 이전 행 값이 남아 있음. 글자, 속성, 스타일을 매번 모두 다시 넣음 | [onCellRequest](/datagridview/custom-cell#oncellrequest) |
+| 변수를 바꾸고 `grid.updateView()` 를 불러도 그리드 셀이 그대로 | 옵션 없이 부르면 셀 내용을 다시 읽지 않음. `{ updateCellContent: true }` 를 넘기고, 범위가 좁은 `updateColumnView` 를 씀 | [화면 갱신](/datagridview/api/grid-methods#화면-갱신) |
+| 그리드 셀에 `{}` 가 보임, 막은 셀이 항상 편집됨 | 컬럼 함수에 `async` 를 붙임 (Promise 를 돌려줌). 컬럼 함수는 받아 둔 값을 읽기만 함 | [세 가지 규칙](/datagridview/async-values#세-가지-규칙) |
+| 서버 응답이 올 때마다 그리드에 입력하던 글자가 지워짐 | 응답마다 `updateView({ updateCellContent: true })`, 행 추가, 정렬을 부름. 값은 `updateOptions`, 목록은 그 컬럼의 `updateColumnView` 로 반영 | [응답이 왔을 때 사용자가 입력 중이면](/datagridview/async-values#응답이-왔을-때-사용자가-입력-중이면) |
+| 그리드 콤보 셀에 값 대신 `Default` 가 보임 | `customEnumMember` 컬럼에 `possibleValues` 가 없음. 목록이 오기 전에는 빈 배열을 줌 | [컬럼 전체의 콤보 목록](/datagridview/async-values#패턴-1-컬럼-전체의-콤보-목록) |
+| 조회를 연달아 하면 그리드에 이전 결과가 남음 | 느린 응답이 나중에 와서 덮어씀. 요청 번호를 비교하거나 `GridUtils.loadRows` 를 씀 | [조회를 다시 할 때](/datagridview/async-values#조회를-다시-할-때-늦게-온-응답) |
+| 나중에 채운 값 때문에 손대지 않은 그리드 행이 "변경됨" | 변경 트랜잭션 모드에서 이미 있는 키를 채움. 키를 미리 넣지 않거나 기록을 잠시 끔 | [변경 트랜잭션 모드와 같이 쓸 때](/datagridview/async-values#변경-트랜잭션-모드와-같이-쓸-때) |
 | 2026 에서 툴바 layout 값의 `.value` 가 `undefined` | 2025 는 객체, 2026 은 문자열로 옴. `data.value || data` 로 읽음 | [보기 전환](/tweakers/generated-toolbar#보기-전환-layout-typeenums) |
 | 숫자 편집기 decimals 0 인데 값에 소수가 남음 | `decimals` 는 화면 자릿수일 뿐. 정수로 저장하려면 `valueType: 'integer'` | [숫자](/tweakers/editors#숫자) |
 | 그리드에서 `node.remove()` 해도 행이 남음 | 변경 트랜잭션 모드에서는 삭제 표시만 함. `acceptChanges()` 때 제거 | [행의 변경 상태](/datagridview/save-and-reflect#행의-변경-상태) |

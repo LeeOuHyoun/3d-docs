@@ -4,7 +4,7 @@ title: 이름 색인 (A-Z)
 
 # 이름 색인 (A-Z)
 
-DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 485개를 알파벳 순으로 모았습니다. 이름은 아는데 어느 페이지에 있는지 모를 때 씁니다.
+DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 486개를 알파벳 순으로 모았습니다. 이름은 아는데 어느 페이지에 있는지 모를 때 씁니다.
 
 - "있는 곳" 은 그 이름이 설명된 페이지와 절입니다. 넣는 자리(그리드 옵션, `layoutOptions`, 컬럼 옵션)도 여기서 알 수 있습니다.
 - 이름의 일부만 기억나면 상단 검색(<kbd>Ctrl</kbd> + <kbd>K</kbd>)에 `HeaderHeight` 처럼 넣습니다.
@@ -570,10 +570,11 @@ DataGridView 레퍼런스에 나오는 옵션, 함수, 이벤트 이름 485개�
 | <code>unselectColumnOrGroup</code> | [그리드 메서드 › 컬럼](/datagridview/api/grid-methods#컬럼) | 컬럼 그룹의 하위 컬럼을 한 번에 선택 / 해제. 인자는 컬럼 정의 객체 |
 | <code>unselectNodeModel</code> | [그리드 메서드 › 선택](/datagridview/api/grid-methods#선택) | 행 선택 해제 (`node.unselect()` 와 같음) |
 | <code>unsubscribe</code> | [그리드 메서드 › 준비 시점과 크기](/datagridview/api/grid-methods#준비-시점과-크기) | 위 함수들이 돌려준 구독 토큰으로 해제 |
+| <code>updateCellView</code> | [그리드 메서드 › 화면 갱신](/datagridview/api/grid-methods#화면-갱신) | 셀 하나만 다시 그림 |
 | <code>updateColumnView</code> | [그리드 메서드 › 화면 갱신](/datagridview/api/grid-methods#화면-갱신) | 컬럼 하나의 보이는 셀만 다시 그림 (`updateRenderedColumn` 과 같음) |
 | <code>updateOptions</code> | [데이터 (TreeDocument / TreeNodeModel) › TreeNodeModel](/datagridview/api/data#treenodemodel) | 셀 값 바꾸기 (화면 자동 반영) |
 | <code>updateRowView</code> | [그리드 메서드 › 화면 갱신](/datagridview/api/grid-methods#화면-갱신) | 행 하나만 다시 그림 (`updateRenderedRow` 와 같음) |
-| <code>updateView</code> | [그리드 메서드 › 화면 갱신](/datagridview/api/grid-methods#화면-갱신) | 보이는 영역을 다시 그림 |
+| <code>updateView</code> | [그리드 메서드 › 화면 갱신](/datagridview/api/grid-methods#화면-갱신) | 보이는 영역을 다시 그림. 옵션을 빼면 셀 내용은 다시 읽지 않음 |
 | <code>useAsyncPreExpand</code> | [그리드 옵션 › 드래그 / 그룹](/datagridview/api/grid-options#드래그-그룹) | 트리 펼치기 비동기 처리 ([트리 구조](/datagridview/tree#펼칠-때-하위-행-불러오기)) |
 | <code>useAsyncPreExpand</code> | [데이터 (TreeDocument / TreeNodeModel) › new TreeDocument({ ... }) — 데이터 묶음](/datagridview/api/data#new-treedocument-—-데이터-묶음) | 펼칠 때 <code>node.preExpandDone()</code> 이 불릴 때까지 기다림. 하위 행 지연 로딩용 ([트리 구조](/datagridview/tree#펼칠-때-하위-행-불러오기)) |
 | <code>useLastColumnWidthAutoFlag</code> | [layoutOptions › 컬럼 너비](/datagridview/api/layout-options#컬럼-너비) | 마지막 컬럼이 남은 너비를 채움 |

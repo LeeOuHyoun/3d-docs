@@ -374,7 +374,8 @@ const WEBAPPS_SIDEBAR = [
       {
         text: '실무 레시피',
         items: [
-          { text: '보조 함수 모음 (DataGridViewUtils)', link: '/datagridview/utils' }
+          { text: '보조 함수 모음 (DataGridViewUtils)', link: '/datagridview/utils' },
+          { text: 'API 로 받아 넣기 (비동기와 타이밍)', link: '/datagridview/async-values' }
         ]
       },
       {
