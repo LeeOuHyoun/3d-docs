@@ -98,6 +98,7 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
   let current;
 
   const create = ({ modelEvents, container }) => {
+    container.classList.add('oip-host');
     current = getSecurityContext().then((securityContext) => {
       const panel = new EditPropWidget({
         className: 'oip-panel',
@@ -128,7 +129,7 @@ define('DS/Recipes/objectInfoPanel/objectInfoPanel', [
 
   const initTriptych = (triptych, options, left, main, right) => {
     const modelEvents = options.modelEvents || new ModelEvents();
-    const container = right || UWA.createElement('div', { styles: { height: '100%' } });
+    const container = right || UWA.createElement('div');
     triptych.init({ ...options, modelEvents, right: _.defaults({}, options.right, { originalSize: 400, minWidth: 250 }) }, left, main, container);
     create({ modelEvents, container });
     return triptych;

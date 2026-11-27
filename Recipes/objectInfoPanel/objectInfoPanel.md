@@ -108,7 +108,7 @@ define('DS/MyApp/PartList', [
 | `options` | `ENOXTriptych` 의 `init` 옵션 그대로 (`container`, `left`, `right`, `withtransition`, `borderLeft` ...) |
 | `options.modelEvents` | 툴바와 함께 쓸 `ModelEvents`. 안 넘기면 안에서 새로 만들지만 밖에서 받을 방법이 없으므로 넘기는 쪽을 권합니다 |
 | `left`, `main` | 왼쪽 칸, 가운데 칸에 넣을 요소. 왼쪽 칸이 없으면 `null` |
-| `right` | 생략할 수 있습니다. 생략하면 높이 100% 인 `div` 를 만들어 오른쪽 칸에 넣고 그 안에 패널을 붙입니다 |
+| `right` | 생략할 수 있습니다. 생략하면 `div` 를 만들어 오른쪽 칸에 넣고 그 안에 패널을 붙입니다 |
 
 - 돌려받는 값: 넘긴 `triptych`.
 - `options.right` 를 안 주면 너비 400, 최소 너비 250 으로 엽니다. 준 값이 있으면 그 값이 우선합니다.
@@ -142,7 +142,7 @@ Triptych 를 이미 직접 만들어 쓰는 화면에서 패널만 붙일 때 �
 | 넘기는 값 | 내용 |
 | --- | --- |
 | `modelEvents` | Triptych 와 툴바가 쓰는 `ModelEvents` |
-| `container` | 패널을 넣을 요소. Triptych 의 오른쪽 칸에 넣은 요소 |
+| `container` | 패널을 넣을 요소. Triptych 의 오른쪽 칸에 넣은 요소. `oip-host` 클래스가 붙어 부모 높이를 채웁니다 |
 
 ```js
 const right = UWA.createElement('div', { styles: { height: '100%' } });
@@ -212,6 +212,17 @@ modelEvents.subscribe({ event: 'information-panel-hidden' }, () => console.log('
 
 ## 5. 주의
 
+- 패널은 넣은 요소의 높이를 채우는 구조입니다(`EditPropWidget` 의 내용 영역이 `position:absolute`). 넣은 요소에서 위로 Triptych 오른쪽 칸까지 높이가 이어지지 않으면 머리글만 보이고 아래 내용이 접힙니다(높이 2px). `create` 가 넣은 요소에 `height:100%` 를 주지만, 그 위에 높이 없는 요소가 또 있으면 그 요소에도 `height:100%` 를 줍니다. 어디서 끊겼는지는 개발자도구 Console 에서 아래로 확인합니다. 위젯이 iframe 안에 있으면 Console 위의 실행 대상(top)을 위젯 프레임으로 바꾼 뒤 실행합니다.
+
+```js
+let el = document.querySelector('.triptych-right .IDCardInnerBottomArea');
+while (el && el !== document.body) {
+  console.log(el.offsetHeight, el.tagName, el.className);
+  el = el.parentElement;
+}
+```
+
+  숫자가 갑자기 작아지는 첫 요소가 높이가 끊긴 곳입니다.
 - 패널에서 속성을 편집할 수 있습니다 (`readOnly: false`). 보기만 하게 하려면 `objectInfoPanel.js` 의 `readOnly` 를 `true` 로 바꿉니다.
 - 화면을 다시 그리면서 `initTriptych` 를 다시 부르면 새 패널이 만들어지고 `show` 는 새 패널에 띄웁니다. 앞의 패널은 지우지 않으므로 앞의 화면 요소는 부르는 쪽에서 비웁니다.
 - 첨부 탭이 쓰는 플랫폼 주소와 보안 컨텍스트는 페이지에서 한 번만 받습니다. 처음 받을 때 실패하면 새로 고칠 때까지 첨부 탭이 빈 채로 남습니다.
