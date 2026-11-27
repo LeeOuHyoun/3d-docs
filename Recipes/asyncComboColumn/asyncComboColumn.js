@@ -1,12 +1,16 @@
-define('DS/Recipes/asyncComboColumn/asyncComboColumn', [], () => (grid, dataIndex, requestOptions) => {
+define('DS/Recipes/asyncComboColumn/asyncComboColumn', [], () => (requestOptions) => {
   const optionsByNode = new WeakMap();
-  grid.getColumnOrGroup(dataIndex).getCellSemantics = ({ nodeModel }) => ({
-    possibleValues: optionsByNode.get(nodeModel) || [nodeModel.options.grid[dataIndex]].filter(Boolean)
-  });
-  grid.addEventListener('show', async (e, cellInfos) => {
-    const nodeModel = cellInfos?.nodeModel;
-    if (!nodeModel || optionsByNode.has(nodeModel) || grid.layout.getDataIndexFromColumnIndex(cellInfos.columnID) !== dataIndex) return;
-    optionsByNode.set(nodeModel, await requestOptions(nodeModel));
-    grid.updateCellView(cellInfos.cellID, { updateCellContent: true });
-  });
+  return function ({ nodeModel, columnID, cellID }) {
+    const dataIndex = this.layout.getDataIndexFromColumnIndex(columnID);
+    if (!optionsByNode.has(nodeModel) && this.isCellInEdition(cellID)) {
+      optionsByNode.set(nodeModel, null);
+      requestOptions(nodeModel, dataIndex)
+        .then((options) => {
+          optionsByNode.set(nodeModel, options);
+          this.updateCellView(cellID, { updateCellContent: true });
+        })
+        .catch(() => optionsByNode.delete(nodeModel));
+    }
+    return { possibleValues: optionsByNode.get(nodeModel) || [nodeModel.options.grid[dataIndex]].filter(Boolean) };
+  };
 });
