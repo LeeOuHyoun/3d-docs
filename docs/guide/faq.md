@@ -182,6 +182,8 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | 그리드 셀에 `{}` 가 보임, 막은 셀이 항상 편집됨 | 컬럼 함수에 `async` 를 붙임 (Promise 를 돌려줌). 컬럼 함수는 받아 둔 값을 읽기만 함 | [세 가지 규칙](/datagridview/async-values#세-가지-규칙) |
 | 서버 응답이 올 때마다 그리드에 입력하던 글자가 지워짐 | 응답마다 `updateView({ updateCellContent: true })`, 행 추가, 정렬을 부름. 값은 `updateOptions`, 목록은 그 컬럼의 `updateColumnView` 로 반영 | [응답이 왔을 때 사용자가 입력 중이면](/datagridview/async-values#응답이-왔을-때-사용자가-입력-중이면) |
 | 그리드 콤보 셀에 값 대신 `Default` 가 보임 | `customEnumMember` 컬럼에 `possibleValues` 가 없음. 목록이 오기 전에는 빈 배열을 줌 | [컬럼 전체의 콤보 목록](/datagridview/async-values#패턴-1-컬럼-전체의-콤보-목록) |
+| 그리드 콤보에서 첫 항목을 골라도 저장되지 않음, 고르지 않은 첫 항목이 셀에 보임 | 셀 값이 `''`, `null` 이거나 목록에 없음. 빈 값은 `undefined` 로, 지금 값은 목록에 넣음 | [콤보 셀의 값이 비었거나 목록에 없을 때](/datagridview/async-values#콤보-셀의-값이-비었거나-목록에-없을-때) |
+| 그리드 드롭다운을 열 때 서버에서 목록을 받고 싶음 | 하나 선택은 `preDropdown` 이벤트에서 요청하고 그 컬럼을 다시 그림. 여러 개 선택은 `possibleValues` 에 함수. 묶어 둔 도우미 `lazyComboColumn` | [드롭다운을 열 때 목록 받기](/datagridview/async-values#패턴-5-드롭다운을-열-때-목록-받기) |
 | 조회를 연달아 하면 그리드에 이전 결과가 남음 | 느린 응답이 나중에 와서 덮어씀. 요청 번호를 비교하거나 `GridUtils.loadRows` 를 씀 | [조회를 다시 할 때](/datagridview/async-values#조회를-다시-할-때-늦게-온-응답) |
 | 나중에 채운 값 때문에 손대지 않은 그리드 행이 "변경됨" | 변경 트랜잭션 모드에서 이미 있는 키를 채움. 키를 미리 넣지 않거나 기록을 잠시 끔 | [변경 트랜잭션 모드와 같이 쓸 때](/datagridview/async-values#변경-트랜잭션-모드와-같이-쓸-때) |
 | 2026 에서 툴바 layout 값의 `.value` 가 `undefined` | 2025 는 객체, 2026 은 문자열로 옴. `data.value || data` 로 읽음 | [보기 전환](/tweakers/generated-toolbar#보기-전환-layout-typeenums) |

@@ -6,10 +6,10 @@ title: API 로 받아 넣기 (비동기와 타이밍)
 
 셀 값, 콤보 목록, 편집 가능 여부를 서버(API)에서 받아 넣는 방법입니다. 응답은 그리드를 만든 **뒤에**, **순서 없이**, 사용자가 화면을 **만지는 중에** 도착합니다. 그래서 받은 것을 "언제 도착해도 맞게 들어가는 자리" 에 넣어야 합니다. 이 페이지는 그 자리와, 자리를 잘못 골랐을 때 생기는 문제를 정리합니다.
 
-샘플: [asyncColumn.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/Recipes/asyncColumn/asyncColumn.js) ([전체 소스](#전체-소스)). 그리드 하나에 패턴 1 ~ 4 를 같이 넣었습니다.
+샘플: [asyncColumn.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/Recipes/asyncColumn/asyncColumn.js) (그리드 하나에 패턴 1 ~ 4), [lazyComboColumn.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/Recipes/lazyComboColumn/lazyComboColumn.js) (패턴 5 를 컬럼 한 줄로 쓰는 도우미). 둘 다 [전체 소스](#전체-소스) 에 있습니다.
 
 ::: info 근거
-CollectionView.js 의 updateView / `_renderViewport` (옵션 기본값 `updateCellContent: false`) / updateCellView / `_setEditionMode` / isCellInEdition, `_listenToTreeDocument` (행 값이 바뀌면 그 행만 다시 그리고, 편집 중인 활성 셀은 `ignoreActiveCell` 로 건너뜀). DataGridView.js 의 updateRowView / updateColumnView / `_setTweakerForCell` (행에 키가 없으면 편집기를 만들지 않음) / getCellEditableState / `_getCellSemantics` / requestDelayedModelData / reapplySortModel / reapplyRowGrouping. TreeModel.js 의 TreeNodeModel.updateOptions / setAttribute / notifyModelUpdate (변경 기록 조건), TreeDocument.setUseChangeTransactionMode, FilterManager.reapplyPropertyFilterModel. Utilities.js 의 Utils.extendObjectInstanceWithNewInside (`options.grid` 를 새 객체로 바꿈). Tweakers.js 의 string 편집기 (minLengthBeforeSearch / typeDelayBeforeSearch). 호출부: ENXSBGridConnector, ENXNav, FolderEditor, IPClassifyNav (응답을 `withTransactionUpdate` 안에서 `updateOptions` 로 반영), ConfiguratorPanel (캐시 + `getCellValue` + `updateRenderedColumn`), ENOXDocumentControlUI (요청 번호 비교), ENOChgGovernanceUX (`possibleValues` 를 async 함수로), PCsBulkViewPresenter (`addColumnOrGroup`), IPClassifyUX (`Promise.all` 뒤에 그리드 생성). 동작은 2025, 2026 원본 webapps 를 내 PC 에서 띄워 실제 그리드로 확인했습니다 ([확인 상태](#확인-상태)).
+CollectionView.js 의 updateView / `_renderViewport` (옵션 기본값 `updateCellContent: false`) / updateCellView / `_setEditionMode` / isCellInEdition, `_listenToTreeDocument` (행 값이 바뀌면 그 행만 다시 그리고, 편집 중인 활성 셀은 `ignoreActiveCell` 로 건너뜀). DataGridView.js 의 updateRowView / updateColumnView / `_setTweakerForCell` (행에 키가 없으면 편집기를 만들지 않음) / getCellEditableState / `_getCellSemantics` / requestDelayedModelData / reapplySortModel / reapplyRowGrouping. TreeModel.js 의 TreeNodeModel.updateOptions / setAttribute / notifyModelUpdate (변경 기록 조건), TreeDocument.setUseChangeTransactionMode, FilterManager.reapplyPropertyFilterModel. Utilities.js 의 Utils.extendObjectInstanceWithNewInside (`options.grid` 를 새 객체로 바꿈). Tweakers.js 의 string 편집기 (minLengthBeforeSearch / typeDelayBeforeSearch), enum 편집기의 setValue (값이 목록에 없으면 선택 위치를 바꾸지 않음). Controls.js 의 ComboBox `_showPopup` (열기 직전에 `preDropdown` 을 냄). TweakersEx.js 의 AutoCompleteViewModuleTweakerString (`possibleValues` 가 함수면 그대로 `elementsTree` 로 넘김), WUXAutoComplete.js 의 `_applyValue` (값이 `{ label, value }` 객체면 칩에 label 을 씀). 호출부: ENXSBGridConnector, ENXNav, FolderEditor, IPClassifyNav (응답을 `withTransactionUpdate` 안에서 `updateOptions` 로 반영), ConfiguratorPanel (캐시 + `getCellValue` + `updateRenderedColumn`), ENOXDocumentControlUI (요청 번호 비교), ENOChgGovernanceUX (`possibleValues` 를 async 함수로), PCsBulkViewPresenter (`addColumnOrGroup`), IPClassifyUX (`Promise.all` 뒤에 그리드 생성). 동작은 2025, 2026 원본 webapps 를 내 PC 에서 띄워 실제 그리드로 확인했습니다 ([확인 상태](#확인-상태)).
 :::
 
 ## 세 가지 규칙
@@ -23,7 +23,7 @@ CollectionView.js 의 updateView / `_renderViewport` (옵션 기본값 `updateCe
 | 행마다 다른 **값** (재고, 이름, 권한) | 그 행의 데이터. `nodeModel.updateOptions({ grid: { ... } })` | 그리드가 알아서 그 행만 다시 그립니다. 입력 중인 셀은 건드리지 않습니다 |
 | **목록** (콤보 목록) | 변수. 컬럼 전체가 같으면 배열 하나, 행마다 다르면 `{ 키: 목록 }` | `grid.updateColumnView(컬럼 번호, { updateCellContent: true })` 로 그 컬럼만 |
 
-**3. 아직 안 온 것은 "없는 상태" 로 둡니다.** 값의 키는 미리 넣지 않고, 목록이 올 때까지는 `getCellEditableState` 로 그 셀의 편집을 막습니다.
+**3. 아직 안 온 것은 "없는 상태" 로 둡니다.** 값의 키는 미리 넣지 않고, 목록이 올 때까지는 `getCellEditableState` 로 그 셀의 편집을 막습니다. (드롭다운을 여는 순간에 목록을 받는 [패턴 5](#패턴-5-드롭다운을-열-때-목록-받기) 는 막지 않고 엽니다.)
 
 행을 가리킬 때는 `TreeNodeModel` 을 들고 있습니다. `rowID`, `cellID`, `nodeModel.options.grid` 객체는 응답을 기다리는 동안 달라질 수 있습니다 ([자주 겪는 문제](#자주-겪는-문제)).
 
@@ -61,12 +61,14 @@ Promise.all([requestStatuses(), requestParts()]).then(function (results) {
 | 행마다 값을 받아 채우기 (재고, 편집 권한) | [패턴 2](#패턴-2-행마다-값-채우기) |
 | 행마다 다른 콤보 목록 | [패턴 3](#패턴-3-행마다-다른-콤보-목록) |
 | 앞 칸에서 고른 값에 따라 달라지는 콤보 목록 | [패턴 4](#패턴-4-앞-칸-값에-따라-달라지는-콤보-목록) |
-| 행이 아주 많아서 화면에 보이는 행만 채우기 | [패턴 5](#패턴-5-보이는-행만-채우기) |
-| 목록이 너무 커서, 입력한 글자로 서버에서 찾기 | [패턴 6](#패턴-6-입력한-글자로-서버에서-찾기) |
-| 컬럼 자체를 받아서 만들기 | [패턴 7](#패턴-7-컬럼을-받아서-만들기) |
+| 드롭다운을 **여는 순간**에 서버에서 목록 받기 | [패턴 5](#패턴-5-드롭다운을-열-때-목록-받기) |
+| 행이 아주 많아서 화면에 보이는 행만 채우기 | [패턴 6](#패턴-6-보이는-행만-채우기) |
+| 목록이 너무 커서, 입력한 글자로 서버에서 찾기 | [패턴 7](#패턴-7-입력한-글자로-서버에서-찾기) |
+| 컬럼 자체를 받아서 만들기 | [패턴 8](#패턴-8-컬럼을-받아서-만들기) |
 | 조회 버튼을 연달아 눌러도 마지막 결과만 남기기 | [조회를 다시 할 때](#조회를-다시-할-때-늦게-온-응답) |
+| 콤보에서 첫 항목을 골라도 저장되지 않을 때 | [콤보 셀의 값이 비었거나 목록에 없을 때](#콤보-셀의-값이-비었거나-목록에-없을-때) |
 
-아래 예제에서 `requestParts()`, `requestStatuses()`, `requestStocks()`, `requestOwners()`, `requestItems()`, `requestPersons()`, `requestColumns()`, `requestPrice()` 는 이미 갖고 있는 서버 호출 함수이고 Promise 를 돌려준다고 가정합니다. `treeDocument` 에는 `{ id: 'P-001', title: '브라켓', status: 'WIP', owners: ['kcs'], category: 'BOLT', item: 'M6' }` 같은 행이 들어 있습니다.
+아래 예제에서 `requestParts()`, `requestStatuses()`, `requestAllowedStatuses()`, `requestStocks()`, `requestOwners()`, `requestItems()`, `requestPersons()`, `requestColumns()`, `requestPrice()` 는 이미 갖고 있는 서버 호출 함수이고 Promise 를 돌려준다고 가정합니다. `treeDocument` 에는 `{ id: 'P-001', title: '브라켓', status: 'WIP', owners: ['kcs'], category: 'BOLT', item: 'M6' }` 같은 행이 들어 있습니다.
 
 ## 패턴 1. 컬럼 전체의 콤보 목록
 
@@ -202,7 +204,7 @@ treeDocument.getAllDescendants().forEach(function (node) {
 ```
 
 - `ownerRequests` 는 같은 키를 두 번 요청하지 않게 합니다. lodash 가 있으면 `_.memoize` 한 줄로 같은 일을 합니다 (샘플의 `loadInto`).
-- 목록이 온 행부터 편집이 열립니다. 목록이 오기 전에 편집기를 열 수 있게 두면 빈 목록이 열리고, 열려 있는 목록은 응답이 와도 바뀌지 않습니다 (닫았다가 다시 열어야 보임).
+- 목록이 온 행부터 편집이 열립니다. 여러 개 선택(`allowMultipleValuesFlag`) 편집기는 열려 있는 동안 목록을 바꿔도 화면에 반영되지 않으므로(닫았다가 다시 열어야 보임), 이렇게 목록이 올 때까지 막아 둡니다. 미리 받지 않고 **여는 순간에** 받으려면 [패턴 5](#패턴-5-드롭다운을-열-때-목록-받기) 를 씁니다.
 - 행을 나중에 추가하면 그 행에 대해 `loadOwners` 를 부릅니다. 이미 받은 키면 요청 없이 바로 쓰입니다.
 - 요청이 실패하면 그 행은 계속 잠겨 있습니다. 다시 시도하게 하려면 `.catch` 에서 `delete ownerRequests[partId]` 로 지웁니다.
 - 응답이 200 개 따로 와서 `updateColumnView` 를 200 번 불러도 0.15 초 정도였습니다 (보이는 행 12 개 기준).
@@ -264,18 +266,135 @@ treeDocument.onNodeModelUpdate(function (e) {
   }
   loadItems(changed.category);
   if (!('item' in changed)) {
-    e.data.nodeModel.updateOptions({ grid: { item: '' } });
+    e.data.nodeModel.updateOptions({ grid: { item: undefined } });
   }
 });
 ```
 
 - 사용자가 분류를 바꾸면 그 행의 품목을 비우고 새 분류의 목록을 요청합니다. 목록이 오기 전까지 그 행의 품목 셀은 잠기고, 이미 받은 분류면 바로 열립니다.
+- 품목은 `''` 가 아니라 **`undefined`** 로 비웁니다. `''` 로 비우면 새 목록의 첫 항목을 골라도 저장되지 않습니다 ([콤보 셀의 값이 비었거나 목록에 없을 때](#콤보-셀의-값이-비었거나-목록에-없을-때)).
 - 같은 분류는 한 번만 요청합니다. 행이 500 개여도 분류가 3 가지면 요청은 3 번입니다.
 - 목록을 행에 넣는 방식(`node.updateOptions({ grid: { itemOptions: 목록 } })`)이면 "분류를 두 번 연달아 바꿨을 때 먼저 요청한 목록이 늦게 와서 덮어쓰는" 경우를 따로 막아야 합니다. 표에 두면 응답이 어느 순서로 와도 자기 분류 칸에만 들어갑니다.
 - `'item' in changed` 를 확인하는 이유: `cancelChanges()` 처럼 분류와 품목이 **같이** 되돌아오는 경우에는 품목을 비우면 안 되기 때문입니다.
 - 이 리스너 안에서 `category` 는 바꾸지 않습니다. 받는 값과 같은 값을 다시 바꾸면 끝없이 반복됩니다 ([이벤트 안에서 저장하지 않기](/datagridview/save-and-reflect#주의-이벤트-안에서-저장하지-않기)).
 
-## 패턴 5. 보이는 행만 채우기
+## 패턴 5. 드롭다운을 열 때 목록 받기
+
+목록을 미리 받지 않고, 사용자가 그 셀의 드롭다운을 **여는 순간**에 서버에 묻습니다. 행마다 목록이 다른데 행이 많아서 미리 받기 아까울 때, 열 때마다 최신 목록이어야 할 때 씁니다.
+
+하나만 고르는 드롭다운과 여러 개 고르는 칸은 편집기가 달라서 방법도 다릅니다.
+
+| | 하나 선택 (`customEnumMember`) | 여러 개 선택 (`string` + `allowMultipleValuesFlag`) |
+| --- | --- | --- |
+| 여는 순간을 아는 방법 | 그리드의 `preDropdown` 이벤트 | `possibleValues` 에 준 함수가 불림 |
+| 응답이 왔을 때 | 목록을 변수에 넣고 그 컬럼을 다시 그리면 **열려 있는 목록이 바로 바뀜** | 함수가 돌려준 Promise 가 끝나면 편집기가 목록을 띄움 |
+| 기다리는 동안 | 지금 값 하나만 든 목록이 열려 있음 | 편집기가 `로드 중...` 을 보여 줌 |
+
+### 하나 선택
+
+`preDropdown` 은 셀의 드롭다운이 열리기 직전에 납니다. 그때 요청을 보내고, 응답이 오면 패턴 3 과 똑같이 변수에 넣고 그 컬럼을 다시 그립니다.
+
+```js
+const statusesByPart = {};
+
+const grid = new DataGridView({
+  treeDocument: treeDocument,
+  columns: [
+    { text: '번호', dataIndex: 'id' },
+    {
+      text: '상태',
+      dataIndex: 'status',
+      typeRepresentation: 'customEnumMember',
+      editableFlag: true,
+      editionPolicy: 'EditionOnClick',
+      getCellSemantics: function (cellInfos) {
+        const row = cellInfos.nodeModel.options.grid;
+        return { possibleValues: statusesByPart[row.id] || [{ label: row.statusName, value: row.status }] };
+      }
+    }
+  ]
+});
+
+grid.addEventListener('preDropdown', function (event, cellInfos) {
+  if (!cellInfos || !cellInfos.nodeModel || grid.layout.getDataIndexFromColumnIndex(cellInfos.columnID) !== 'status') {
+    return;
+  }
+  const partId = cellInfos.nodeModel.options.grid.id;
+  requestAllowedStatuses(partId).then(function (statuses) {
+    statusesByPart[partId] = statuses;
+    grid.updateColumnView(grid.layout.getColumnIndex('status'), { updateCellContent: true });
+  });
+});
+```
+
+행은 `{ id: 'P-001', status: 'WIP', statusName: '작업중' }` 처럼 값과 표시 글자를 같이 갖고 있고, `requestAllowedStatuses` 는 `[{ label: '작업중', value: 'WIP' }, { label: '승인', value: 'DONE' }]` 을 돌려줍니다.
+
+- 목록을 받기 전에는 **지금 값 하나만 든 목록**을 줍니다. 그래야 셀에 `WIP` 대신 `작업중` 이 보입니다. 값과 표시 글자가 같으면 `[row.status]` 로 충분합니다.
+- 드롭다운은 바로 열리고(지금 값 하나), 응답이 오면 열린 채로 전체 목록으로 바뀝니다. 그 뒤에 고르면 값이 저장됩니다. 값이 비어 있는 셀은 응답이 올 때까지 목록이 보이지 않다가, 오면 나타납니다.
+- 열 때마다 요청합니다. 한 번 받은 목록을 다시 쓰려면 패턴 3 의 `ownerRequests` 처럼 요청을 키별로 보관합니다.
+- 반영은 꼭 **그리드를 거쳐서** (변수에 넣고 `updateColumnView`) 합니다. 이벤트에서 꺼낸 콤보 컨트롤의 `elementsList` 를 직접 바꾸면 목록은 보이지만, 고른 값이 행에 저장되지 않습니다.
+- 받은 목록에 지금 값이 없으면 지금 값도 목록에 넣어 줍니다. 빠져 있으면 [첫 항목 문제](#콤보-셀의-값이-비었거나-목록에-없을-때) 가 생깁니다.
+
+### 여러 개 선택
+
+여러 개 선택 편집기는 `possibleValues` 에 함수를 주면 여는 순간에 그 함수를 부릅니다 ([패턴 7](#패턴-7-입력한-글자로-서버에서-찾기) 과 같은 기능). 다만 함수를 주면 그리드가 목록을 미리 알 수 없어서, 값이 코드(`kcs`)면 셀과 칩에 코드가 그대로 보입니다. 이름을 보이게 하려면 두 가지를 더 합니다.
+
+- 편집 중이 아닐 때는 `possibleValues` 에 함수 대신 **지금 값들의 `{ label, value }` 배열**을 줍니다. 셀에 이름이 보입니다.
+- 편집 중일 때는 `getCellValue` 로 값을 **`{ label, value }` 객체 배열**로 넘깁니다. 칩에 이름이 보이고, 고른 결과는 코드 배열(`['kcs', 'lyh']`)로 저장됩니다.
+
+편집 중인지는 컬럼 함수 안에서 `this.isCellInEdition(cellInfos.cellID)` 로 압니다. 이 처리는 아래 도우미에 들어 있습니다.
+
+### 도우미: lazyComboColumn
+
+위 두 방법을 컬럼 한 줄로 쓰게 묶은 모듈입니다. ENOVIA 원본에 들어 있는 모듈이 **아닙니다.** `Recipes/lazyComboColumn/lazyComboColumn.js` 를 프로젝트 webapps 에 넣어서 씁니다 ([전체 소스](#전체-소스)). 돌려주는 값이 컬럼 옵션이라 컬럼 정의에 합치면 됩니다.
+
+```js
+const grid = new DataGridView({
+  treeDocument: treeDocument,
+  columns: [
+    { text: '번호', dataIndex: 'id' },
+    Object.assign({ text: '상태', dataIndex: 'status' }, lazyComboColumn(function (row) {
+      return requestAllowedStatuses(row.id);
+    }, { labelIndex: 'statusName' })),
+    Object.assign({ text: '담당자', dataIndex: 'owners' }, lazyComboColumn(function (row) {
+      return requestOwners(row.id);
+    }, { multiple: true, labelIndex: 'ownerNames' })),
+    Object.assign({ text: '품목', dataIndex: 'item' }, lazyComboColumn(function (row) {
+      return requestItems(row.category);
+    }))
+  ]
+});
+```
+
+`lazyComboColumn(request, options)` 이 받는 것:
+
+| 인자 | 설명 |
+| --- | --- |
+| `request(row, nodeModel, text)` | 목록을 돌려주는 함수. Promise 나 배열을 돌려줌. `row` 는 그 행의 **지금** 데이터라서 앞 칸 값(`row.category`)에 따라 다른 목록을 요청할 수 있음. `text` 는 여러 개 선택에서 입력한 글자 (열 때는 `''`) |
+| `options.multiple` | `true` 면 여러 개 선택. 빼면 하나 선택 |
+| `options.labelIndex` | 지금 값의 표시 글자가 들어 있는 행의 키. 목록을 받기 전에도 셀에 이름을 보여 줄 때 넣음. 여러 개 선택이면 값과 같은 순서의 배열 (`owners: ['kcs']`, `ownerNames: ['김철수']`). 빼면 값이 그대로 보임 |
+
+돌려주는 컬럼 옵션은 `typeRepresentation`, `editableFlag: true`, `editionPolicy: 'EditionOnClick'`, `getCellValue`, `getCellSemantics` 입니다. `editionPolicy` 를 바꾸려면 `Object.assign` 의 세 번째 인자로 덮어씁니다. 컬럼마다 따로 부릅니다 (한 번 부른 결과를 두 컬럼에 같이 쓰지 않음).
+
+- 목록은 `['M6', 'M8']` 또는 `[{ label: '작업중', value: 'WIP' }]` 모양입니다.
+- 열 때마다 `request` 를 부릅니다. 같은 조건이면 한 번만 부르게 하려면 `request` 를 `_.memoize` 로 감쌉니다. 이미 받은 목록이면 열자마자 전체 목록이 보입니다.
+
+```js
+const requestItemsOnce = _.memoize(function (row) {
+  return requestItems(row.category);
+}, function (row) {
+  return row.category;
+});
+```
+
+- 하나 선택에서 받은 목록에 지금 값이 없으면 목록 끝에 지금 값을 덧붙이고, 값이 `''` 나 `null` 이면 편집기에는 `undefined` 로 넘깁니다. 둘 다 [첫 항목 문제](#콤보-셀의-값이-비었거나-목록에-없을-때) 를 피하기 위해서입니다.
+- 같은 셀을 연달아 열어서 응답 순서가 뒤바뀌어도 마지막에 연 요청의 목록만 씁니다.
+- 여러 개 선택에서는 글자를 입력하면 입력이 멈춘 뒤에 `request` 가 그 글자와 함께 다시 불립니다. 글자를 무시하고 전체 목록을 돌려줘도 편집기가 입력한 글자로 걸러서 보여 줍니다.
+- 행에는 코드가 저장됩니다 (`status: 'DONE'`, `owners: ['kcs', 'lyh']`). `labelIndex` 로 준 키는 읽기만 하고 바꾸지 않습니다. 고른 뒤의 표시 글자는 받은 목록에서 찾습니다.
+- `request` 가 실패하면 목록은 지금 값만 든 채로 남습니다. 알림은 `request` 안의 `.catch` 에서 띄웁니다.
+- 다른 컬럼에서 입력 중이던 글자는 응답이 와도 그대로 남습니다 (그 컬럼만 다시 그리기 때문).
+
+## 패턴 6. 보이는 행만 채우기
 
 행이 수천 개인데 값 조회가 느리면, 화면에 보이는 행만 요청합니다. 그리드 옵션 `onDelayedModelDataRequest` 가 "지금 몇 번째 행부터 몇 번째 행까지 보인다" 를 알려 줍니다. 불리는 때와 `info` 의 내용은 [서버 사이드 데이터 › 예제 6](/datagridview/server-side#예제-6-대안-보이는-행의-값만-나중에-채우기) 에 있습니다.
 
@@ -318,7 +437,7 @@ const grid = new DataGridView({
 - 요청이 실패하면 `.catch` 에서 `requested.delete(node)` 로 표시를 지워야 다음에 다시 요청됩니다.
 - 정렬, 필터, CSV 내보내기는 **채워진 행의 값만** 씁니다 ([값이 다 온 뒤에](#값이-다-온-뒤에-정렬-필터-그룹-csv)).
 
-## 패턴 6. 입력한 글자로 서버에서 찾기
+## 패턴 7. 입력한 글자로 서버에서 찾기
 
 사람처럼 목록이 너무 커서 미리 받을 수 없으면, `possibleValues` 에 **함수**를 줍니다. 편집기가 열릴 때와 글자를 입력할 때 그 함수를 부르고, 돌려준 Promise 가 끝나면 목록을 띄웁니다. 기다리는 동안에는 편집기가 `로드 중...` 을 보여 줍니다. 타이밍 처리를 직접 할 것이 없습니다.
 
@@ -346,10 +465,10 @@ const grid = new DataGridView({
 
 - 함수는 편집기를 열 때 빈 문자열(`''`)로 한 번, 글자를 입력하면 입력이 멈춘 뒤에 그 글자로 다시 불립니다. 실제 앱(ENOChgGovernanceUX)은 3 글자 미만이면 서버를 부르지 않고 끝냅니다.
 - `typeRepresentation: 'string'` 에서만 됩니다. `customEnumMember` 컬럼에 함수를 주면 편집기를 열 때 `e.map is not a function` 오류가 납니다.
-- 그리드는 목록을 미리 알 수 없으므로 셀에는 **저장된 값이 그대로** 보입니다. `{ label: '김철수', value: 'kcs' }` 를 돌려주면 `kcs` 가 저장되고 셀에도 `kcs` 가 보입니다. 이름이 보여야 하면 이름 자체를 값으로 쓰거나(`['김철수', '이영희']` 를 돌려줌), `getCellValue` 로 표시 글자를 바꿉니다.
-- 행마다 다른 목록을 "편집기를 열 때" 받는 데도 쓸 수 있습니다. `getCellSemantics` 에서 그 행의 값을 넣은 함수를 돌려주면 됩니다. 다만 위와 같이 셀에는 값이 그대로 보입니다. 코드 대신 이름을 보여 줘야 하면 패턴 3 을 씁니다.
+- 그리드는 목록을 미리 알 수 없으므로 셀에는 **저장된 값이 그대로** 보입니다. `{ label: '김철수', value: 'kcs' }` 를 돌려주면 `kcs` 가 저장되고 셀에도 `kcs` 가 보입니다. 이름 자체를 값으로 쓰면(`['김철수', '이영희']` 를 돌려줌) 이 예제 그대로 이름이 보입니다.
+- 값은 코드로 저장하면서 이름을 보여 주려면 [패턴 5 의 여러 개 선택](#여러-개-선택) 방법을 씁니다 (`lazyComboColumn(request, { multiple: true })`).
 
-## 패턴 7. 컬럼을 받아서 만들기
+## 패턴 8. 컬럼을 받아서 만들기
 
 컬럼 정의가 서버에서 오면, 받은 뒤에 그리드를 만드는 것이 가장 단순합니다 ([먼저: 기다렸다가 만들 수 있으면](#먼저-기다렸다가-만들-수-있으면)). 그리드를 먼저 띄워야 하면 만든 뒤에 바꿉니다.
 
@@ -449,7 +568,7 @@ Promise.all([fillingStocks, fillingOwners]).then(function () {
 `fillingStocks`, `fillingOwners` 는 값을 채우는 호출이 돌려준 Promise 입니다 (패턴 2 의 `requestStocks(ids).then(...)` 결과).
 
 - 다시 정렬해서 행 순서가 바뀌면 입력 중이던 글자가 사라집니다 ([위 표](#응답이-왔을-때-사용자가-입력-중이면)). 응답마다 부르지 말고 다 온 뒤에 한 번만 부릅니다.
-- `grid.getAsCSV()` 는 부른 순간에 들어 있는 값만 내보냅니다. 아직 안 온 값은 빈 칸으로 나갑니다. 패턴 5 의 `'OnExport'` 도 콜백을 부르기만 하고 응답을 기다리지 않습니다.
+- `grid.getAsCSV()` 는 부른 순간에 들어 있는 값만 내보냅니다. 아직 안 온 값은 빈 칸으로 나갑니다. 패턴 6 의 `'OnExport'` 도 콜백을 부르기만 하고 응답을 기다리지 않습니다.
 
 ## 변경 트랜잭션 모드와 같이 쓸 때
 
@@ -470,7 +589,26 @@ treeDocument.setUseChangeTransactionMode(true);
 ```
 
 - 사용자가 이미 고친 키를 서버 값으로 다시 채우면 고친 값이 사라집니다. `node.hasReferenceValue('title')` 가 참이면 사용자가 고친 키이므로 건너뜁니다.
-- 패턴 3, 4 의 목록은 행 데이터가 아니라 변수에 있으므로 변경 기록과 관계가 없습니다.
+- 패턴 3, 4, 5 의 목록은 행 데이터가 아니라 변수에 있으므로 변경 기록과 관계가 없습니다.
+
+## 콤보 셀의 값이 비었거나 목록에 없을 때
+
+비동기와 관계없이 `customEnumMember` 콤보 셀에 있는 원본 동작입니다. 목록을 나중에 받으면 "지금 값이 목록에 없는" 순간이 생기기 쉬워서 여기에 적습니다. 목록이 `['N6', 'N8']` 인 콤보 셀에서 확인한 결과입니다.
+
+| 셀 값 | 셀에 보이는 것 | 첫 항목(`N6`)을 고르면 |
+| --- | --- | --- |
+| 목록에 있는 값 (`'N8'`) | `N8` | 저장됨 |
+| `undefined` (키는 있음) | 빈 칸 | 저장됨 |
+| `''` (빈 문자열) | 빈 칸 | **저장 안 됨.** 둘째 항목부터는 저장됨 |
+| `null` | 첫 항목 `N6` 이 보임 | 저장 안 됨 |
+| 목록에 없는 값 (`'M10'`) | 첫 항목 `N6` 이 보임 | 저장 안 됨 |
+
+콤보가 "첫 항목이 이미 골라져 있다" 고 여겨서, 첫 항목을 골라도 바뀐 것이 없다고 보기 때문입니다. 화면에는 고른 값이 보이지만 행 데이터는 그대로입니다.
+
+- 값을 비울 때는 `''` 가 아니라 `undefined` 를 넣습니다 (`node.updateOptions({ grid: { item: undefined } })`). 서버가 빈 문자열을 주면 행을 만들 때 `undefined` 로 바꿉니다.
+- `''` 를 그대로 둬야 하면 컬럼에 `allowResetToUndefinedByUIFlag: true` 를 주거나, 목록에 `{ label: '(없음)', value: '' }` 항목을 넣습니다. 둘 다 첫 항목이 저장됩니다.
+- 지금 값이 목록에 없을 수 있으면 목록에 지금 값을 덧붙여서 줍니다. 실제 앱(ENXSBGridConnector)도 `getCellSemantics` 에서 지금 값이 목록에 없으면 목록에 넣습니다.
+- 덧붙인 항목은 사용자가 다른 값을 고른 **직후에 바로 빼지 않습니다.** 고르는 동작 도중에 목록 내용이 바뀌면 원본 목록 화면에서 `Cannot read properties of null (reading 'options')` 오류가 납니다 (값은 저장됨). 다음에 목록을 새로 받을 때 정리합니다.
 
 ## 자주 겪는 문제
 
@@ -484,8 +622,10 @@ treeDocument.setUseChangeTransactionMode(true);
 | 값이 다른 행에 들어감 | 요청 전에 잡아 둔 `rowID`, `cellID` 로 넣음. 정렬, 필터, 펼침, 행 추가로 번호가 바뀜 | `nodeModel` 을 들고 있다가 `nodeModel.updateOptions(...)` |
 | 응답 뒤에 읽은 행 값이 옛 값 | 요청 전에 `const row = node.options.grid` 로 잡아 둠. `updateOptions` 는 `options.grid` 를 새 객체로 바꿈 | 응답 뒤에 `node.options.grid` 를 다시 읽음 |
 | 입력하던 글자가 지워짐 | 응답마다 `updateView({ updateCellContent: true })`, 행 추가, 정렬을 부름 | [위 표](#응답이-왔을-때-사용자가-입력-중이면) 의 "남음" 쪽으로 반영 |
-| `editableFlag: true` 인데 편집기가 안 열림 | 그 행에 그 컬럼의 키가 없음 | 값이 들어오면 열림. 빈 값으로도 편집하게 하려면 `''` 로 넣음 |
-| 연 콤보에 목록이 비어 있음 | 목록이 오기 전에 편집기를 엶. 열린 목록은 응답이 와도 안 바뀜 | 목록이 올 때까지 `getCellEditableState` 로 막음 |
+| `editableFlag: true` 인데 편집기가 안 열림 | 그 행에 그 컬럼의 키가 없음 | 값이 들어오면 열림. 빈 값으로도 편집하게 하려면 키를 넣어 둠 (글자 칸은 `''`, 콤보는 `undefined`) |
+| 콤보에서 첫 항목을 골라도 저장되지 않음, 셀에 고르지 않은 첫 항목이 보임 | 셀 값이 `''`, `null` 이거나 목록에 없음 | [콤보 셀의 값이 비었거나 목록에 없을 때](#콤보-셀의-값이-비었거나-목록에-없을-때) |
+| 여러 개 선택 칸을 열었는데 목록이 비어 있음 | 목록이 오기 전에 편집기를 엶. 이 편집기는 열린 동안 목록을 바꿔도 반영되지 않음 | 목록이 올 때까지 `getCellEditableState` 로 막거나(패턴 3), `possibleValues` 에 함수를 줌(패턴 5) |
+| 드롭다운을 열 때마다 서버에서 목록을 받고 싶음 | - | `preDropdown` 이벤트에서 요청하고 그 컬럼을 다시 그림 (패턴 5) |
 | 손대지 않은 행이 "변경됨" | 변경 트랜잭션 모드에서 이미 있는 키를 채움 | [변경 트랜잭션 모드와 같이 쓸 때](#변경-트랜잭션-모드와-같이-쓸-때) |
 | 값이 왔는데 정렬 순서, 필터 결과, 그룹이 안 맞음 | 값이 들어와도 다시 계산하지 않음 | [값이 다 온 뒤에](#값이-다-온-뒤에-정렬-필터-그룹-csv) 다시 적용 |
 | 행이 많을 때 채우는 동안 화면이 멈춤 | 행마다 `updateOptions` 를 따로 부름 | `withTransactionUpdate` 로 묶음. `grid.prepareUpdateView()` ~ `pushUpdateView()` 로는 빨라지지 않음 |
@@ -496,8 +636,10 @@ treeDocument.setUseChangeTransactionMode(true);
 
 - 2025, 2026 원본 webapps 를 ENOVIA 서버 없이 내 PC 에서 띄우고(Edge, 한국어 화면), 실제 DataGridView 에서 이 페이지의 예제와 표를 실행해 확인했습니다. 두 버전의 결과는 같았습니다. API 는 정해진 시간 뒤에 답하는 가짜 함수로 대신했습니다.
 - 샘플 `asyncColumn.js` 는 응답 순서를 바꿔 가며(목록이 행보다 먼저, 모두 동시에, 값이 목록보다 먼저) 실행해 마지막 화면이 같은지, 응답이 오는 동안 입력하던 글자가 남는지, 변경 트랜잭션 모드에서 채운 값이 변경으로 기록되지 않는지와 `cancelChanges()` 로 분류와 품목이 같이 돌아오는지를 확인했습니다.
+- 도우미 `lazyComboColumn.js` 는 하나 선택(값과 이름이 다른 목록, 글자 목록, 앞 칸에 따라 달라지는 목록), 여러 개 선택(칩 이름, 글자 입력 후 다시 요청, 저장되는 값)을 실제 마우스 조작으로 확인했습니다. 지금 값이 받은 목록에 없을 때와 빈 값일 때 첫 항목을 고르는 경우, 같은 셀을 연달아 열어 응답 순서가 뒤바뀌는 경우, 응답 전에 스크롤해서 그 행이 화면 밖으로 나간 경우, 응답이 오는 동안 다른 칸에 입력하는 경우, `_.memoize` 로 감싼 경우도 확인했습니다.
+- 콤보 셀의 첫 항목 문제는 비동기 없이 고정 목록으로도 두 버전에서 같게 나왔습니다.
 - 속도는 이 PC 에서 잰 값입니다 (3,000 행, 컬럼 2 개).
-- 확인하지 않은 것: ENOVIA 서버와 3DDashboard 위젯 안에서의 실행, 실제 3DSpace API 의 지연과 실패, 터치 모드, `dataSource` 로 행을 나눠 불러오는 그리드, 행 그룹핑 중의 패턴 1 ~ 4.
+- 확인하지 않은 것: ENOVIA 서버와 3DDashboard 위젯 안에서의 실행, 실제 3DSpace API 의 지연과 실패, 터치 모드, `dataSource` 로 행을 나눠 불러오는 그리드, 행 그룹핑 중의 패턴 1 ~ 5, 패턴 5 에서 키보드로 드롭다운을 여는 경우와 `editionPolicy` 가 `EditionOnOver`, `EditionInPlace` 인 경우.
 
 ## 같이 보기
 
@@ -514,5 +656,13 @@ treeDocument.setUseChangeTransactionMode(true);
 ::: details asyncColumn.js
 
 <<< @/../Recipes/asyncColumn/asyncColumn.js
+
+:::
+
+`lazyComboColumn.js` 는 `<3DSpace>/webapps/Recipes/lazyComboColumn/` 에 두고 `DS/Recipes/lazyComboColumn/lazyComboColumn` 으로 불러옵니다. 모듈이 돌려주는 것은 함수 하나(`lazyComboColumn(request, options)`)입니다. 실행해 볼 위젯 html 은 [lazyComboColumn.html](https://github.com/LeeOuHyoun/3d-docs/blob/main/Recipes/lazyComboColumn/lazyComboColumn.html) 입니다.
+
+::: details lazyComboColumn.js
+
+<<< @/../Recipes/lazyComboColumn/lazyComboColumn.js
 
 :::

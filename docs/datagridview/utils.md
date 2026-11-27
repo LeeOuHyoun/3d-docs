@@ -358,7 +358,7 @@ function handleSave() {
 - `cancelChanges()` 는 편집을 모두 버리고 원래 값으로 되돌립니다. 저장에 실패해도 편집을 남겨 두려면 부르지 않습니다.
 
 ::: warning 행에 없던 키는 변경으로 기록되지 않습니다
-행 데이터에 `remark` 키가 없는 행의 비고 칸을 사용자가 편집하면, 값은 들어가지만 `modified` 에 잡히지 않고 `cancelChanges()` 로도 되돌려지지 않습니다 (원본 TreeNodeModel 의 `setAttribute`, `updateOptions` 가 이미 있는 키만 기록함). 편집할 컬럼의 키는 값이 없어도 `''` 로 채워서 넣습니다.
+행 데이터에 `remark` 키가 없는 행의 비고 칸을 사용자가 편집하면, 값은 들어가지만 `modified` 에 잡히지 않고 `cancelChanges()` 로도 되돌려지지 않습니다 (원본 TreeNodeModel 의 `setAttribute`, `updateOptions` 가 이미 있는 키만 기록함). 편집할 컬럼의 키는 값이 없어도 `''` 로 채워서 넣습니다. 콤보(`customEnumMember`) 컬럼만은 `''` 대신 `undefined` 로 넣습니다. `''` 면 목록의 첫 항목을 골라도 저장되지 않습니다 ([콤보 셀의 값이 비었거나 목록에 없을 때](/datagridview/async-values#콤보-셀의-값이-비었거나-목록에-없을-때)). 키가 `undefined` 로라도 들어 있으면 변경은 기록됩니다.
 :::
 
 ### 이벤트
