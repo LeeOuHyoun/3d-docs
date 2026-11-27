@@ -301,10 +301,15 @@ state.value = 'RELEASED';
 | --- | --- |
 | <code>change</code> | 선택 변경 |
 | <code>preselectionChange</code> | 목록에서 키보드 / 마우스로 지나갈 때 |
+| <code>preDropdown</code> | 목록을 열기 직전. 이때 서버에서 목록을 받아 넣을 수 있음 |
 | <code>show</code> / <code>hide</code> | 목록 열림 / 닫힘 |
 | <code>uncommittedChange</code> | 검색 입력 중 |
 
 `icon` 에 점(`.`)이 없는 문자열을 주면 `{ iconName: ... }` 로 바뀝니다.
+
+::: warning 목록을 나중에 넣을 때
+`enableSearchFlag: false` 로 만든 콤보는 `elementsList` 를 넣는 순간 **첫 항목이 선택되고 `change` 가 납니다.** `placeholder` 를 줘도 같고, `selectedIndex = -1` 로 비워지지도 않습니다. `reachablePlaceholderFlag: true` 를 같이 넣으면 아무것도 선택되지 않은 채로 남습니다. 목록보다 먼저 넣은 `value` 는 버려지고, 목록을 바꾸면 선택이 "몇 번째" 로 남아 다른 항목이 선택됩니다. 서버에서 목록을 받아 넣는 방법은 [콤보박스에 서버 목록 넣기](/controls/combobox-list) 에 정리했습니다. (로컬 실행 확인)
+:::
 
 ## 날짜 (DatePicker, TweakerDate)
 

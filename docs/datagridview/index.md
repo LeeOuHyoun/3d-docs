@@ -100,6 +100,7 @@ require([
 | 인쇄 | `grid.openPrintableViewWindow()`, `printableFlag` | 그리드 메서드, 컬럼 옵션 | [인쇄](/datagridview/find-and-print#인쇄) |
 | 여러 행 값을 한 번에 바꾸기 | `grid.showModelMassUpdateDialog()`, `massUpdateAllowedFlag` | 그리드 메서드, 컬럼 옵션 | [일괄 수정](/datagridview/find-and-print#일괄-수정) |
 | 행 넣기, 키로 찾기, 저장 결과 반영, 변경 모으기를 함수 한 줄로 | `GridUtils.loadRows(...)`, `GridUtils.updateRows(...)` 등 | 보조 모듈 (원본 아님) | [보조 함수 모음](/datagridview/utils) |
+| 콤보 셀의 목록을 서버에서 받아 넣기 (가장 간단한 방법) | 컬럼 `semantics`, `grid.updateColumnView(...)` | 컬럼 옵션, 그리드 메서드 | [콤보박스에 서버 목록 넣기](/controls/combobox-list#그리드-셀-콤보) |
 | 셀 값, 콤보 목록, 편집 권한을 API 로 받아 나중에 넣기 | `nodeModel.updateOptions(...)`, `grid.updateColumnView(...)` | 행, 그리드 메서드 | [API 로 받아 넣기](/datagridview/async-values) |
 | 드롭다운을 여는 순간에 서버에서 목록 받기 | `preDropdown` 이벤트, `lazyComboColumn(...)` | 이벤트, 보조 모듈 (원본 아님) | [드롭다운을 열 때 목록 받기](/datagridview/async-values#패턴-5-드롭다운을-열-때-목록-받기) |
 

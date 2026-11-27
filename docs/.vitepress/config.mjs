@@ -273,6 +273,7 @@ const WEBAPPS_SIDEBAR = [
         text: '가이드',
         items: [
           { text: 'WebUX 컨트롤', link: '/controls/webux-controls' },
+          { text: '콤보박스에 서버 목록 넣기', link: '/controls/combobox-list' },
           { text: '입력 컨트롤 (숫자, 칩, 검색, 파일)', link: '/controls/input-controls' },
           { text: '자동완성 입력 (WUXAutoComplete)', link: '/controls/autocomplete' },
           { text: '메뉴 (DS/Menu)', link: '/controls/menu' },
@@ -375,6 +376,7 @@ const WEBAPPS_SIDEBAR = [
         text: '실무 레시피',
         items: [
           { text: '보조 함수 모음 (DataGridViewUtils)', link: '/datagridview/utils' },
+          { text: '콤보박스에 서버 목록 넣기', link: '/controls/combobox-list' },
           { text: 'API 로 받아 넣기 (비동기와 타이밍)', link: '/datagridview/async-values' }
         ]
       },

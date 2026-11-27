@@ -6,6 +6,10 @@ title: API 로 받아 넣기 (비동기와 타이밍)
 
 셀 값, 콤보 목록, 편집 가능 여부를 서버(API)에서 받아 넣는 방법입니다. 응답은 그리드를 만든 **뒤에**, **순서 없이**, 사용자가 화면을 **만지는 중에** 도착합니다. 그래서 받은 것을 "언제 도착해도 맞게 들어가는 자리" 에 넣어야 합니다. 이 페이지는 그 자리와, 자리를 잘못 골랐을 때 생기는 문제를 정리합니다.
 
+::: tip 콤보박스 목록만 넣으면 될 때
+콤보박스(단독, 그리드 셀)에 서버 목록을 넣는 가장 간단한 방법만 필요하면 [콤보박스에 서버 목록 넣기](/controls/combobox-list) 를 먼저 봅니다. 이 페이지는 값, 권한, 행마다 다른 목록까지 모든 경우를 다룹니다.
+:::
+
 샘플: [asyncColumn.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/Recipes/asyncColumn/asyncColumn.js) (그리드 하나에 패턴 1 ~ 4), [lazyComboColumn.js](https://github.com/LeeOuHyoun/3d-docs/blob/main/Recipes/lazyComboColumn/lazyComboColumn.js) (패턴 5 를 컬럼 한 줄로 쓰는 도우미). 둘 다 [전체 소스](#전체-소스) 에 있습니다.
 
 ::: info 근거

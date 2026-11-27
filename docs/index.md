@@ -107,6 +107,8 @@ features:
 | 위젯에 목록 그리드를 넣고 싶다 | [DataGridView](/datagridview/) → [기본 그리드](/datagridview/getting-started) |
 | 그리드 셀을 편집하고 서버에 저장하고 싶다 | [편집](/datagridview/editing) → [저장 후 화면 반영](/datagridview/save-and-reflect) |
 | 그리드 셀에 콤보, 날짜 같은 편집기를 넣고 싶다 | [셀 타입](/datagridview/cell-types) → [사용자 타입 등록](/tweakers/custom-type) |
+| 콤보박스(단독, 그리드 셀)의 목록을 서버에서 받아 넣고 싶다 | [콤보박스에 서버 목록 넣기](/controls/combobox-list) |
+| 그리드 셀 값, 콤보 목록, 편집 권한을 서버에서 받아 나중에 넣고 싶다 | [API 로 받아 넣기 (비동기와 타이밍)](/datagridview/async-values) |
 | 그리드에 툴바, 정렬, 필터를 넣고 싶다 | [툴바](/datagridview/toolbar) · [정렬과 필터](/datagridview/sort-filter) |
 | 그리드를 트리로 만들고, 펼칠 때 하위 행을 불러오고 싶다 | [트리 구조](/datagridview/tree) |
 | 그리드 행마다 콤보 목록, 편집 가능 여부, 색을 다르게 하고 싶다 | [컬럼 함수](/datagridview/cell-functions) |

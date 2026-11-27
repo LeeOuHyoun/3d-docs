@@ -178,6 +178,9 @@ ENOVIA 코드는 잘못 넣은 키나 이름을 **오류 없이 무시**하는 �
 | 그리드 행을 rowID 로 다시 찾으니 다른 행 | rowID 는 펼침, 정렬, 필터로 바뀜. `nodeModel` 을 보관 | [cellID 와 rowID](/datagridview/api/grid-methods#먼저-알아-둘-것-cellid-와-rowid) |
 | 그리드 컬럼 함수에서 `nodeModel` 이 undefined | 컬럼 헤더 셀(rowID -1)에도 호출됨. `cellInfos.nodeModel` 을 먼저 확인 | [nodeModel 이 있는지 확인하기](/datagridview/cell-functions#먼저-nodemodel-이-있는지-확인하기) |
 | 직접 그린 그리드 셀에 다른 행의 모양이 섞임 | 꺼낸 셀 내용에 이전 행 값이 남아 있음. 글자, 속성, 스타일을 매번 모두 다시 넣음 | [onCellRequest](/datagridview/custom-cell#oncellrequest) |
+| 콤보박스에 목록을 넣었더니 고르지 않은 첫 항목이 선택되고 `change` 가 남, `selectedIndex = -1` 로 비워지지 않음 | `enableSearchFlag: false` 콤보는 "선택 없음" 을 허용하지 않음. `reachablePlaceholderFlag: true` 를 같이 넣음 | [콤보박스에 서버 목록 넣기](/controls/combobox-list#꼭-알아-둘-세-가지) |
+| 콤보박스에 `value` 를 넣었는데 선택되지 않음 | 목록(`elementsList`)보다 먼저 넣은 값은 버려짐. 목록을 넣은 뒤에 값을 넣음 | [콤보박스에 서버 목록 넣기](/controls/combobox-list#꼭-알아-둘-세-가지) |
+| 콤보박스 목록을 바꿨더니 엉뚱한 항목이 선택됨 | 선택이 값이 아니라 "몇 번째" 로 남음. 바꾼 뒤에 `combo.value` 를 다시 넣음 | [콤보박스에 서버 목록 넣기](/controls/combobox-list#꼭-알아-둘-세-가지) |
 | 변수를 바꾸고 `grid.updateView()` 를 불러도 그리드 셀이 그대로 | 옵션 없이 부르면 셀 내용을 다시 읽지 않음. `{ updateCellContent: true }` 를 넘기고, 범위가 좁은 `updateColumnView` 를 씀 | [화면 갱신](/datagridview/api/grid-methods#화면-갱신) |
 | 그리드 셀에 `{}` 가 보임, 막은 셀이 항상 편집됨 | 컬럼 함수에 `async` 를 붙임 (Promise 를 돌려줌). 컬럼 함수는 받아 둔 값을 읽기만 함 | [세 가지 규칙](/datagridview/async-values#세-가지-규칙) |
 | 서버 응답이 올 때마다 그리드에 입력하던 글자가 지워짐 | 응답마다 `updateView({ updateCellContent: true })`, 행 추가, 정렬을 부름. 값은 `updateOptions`, 목록은 그 컬럼의 `updateColumnView` 로 반영 | [응답이 왔을 때 사용자가 입력 중이면](/datagridview/async-values#응답이-왔을-때-사용자가-입력-중이면) |
