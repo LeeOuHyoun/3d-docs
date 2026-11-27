@@ -59,6 +59,7 @@ define('DS/Recipes/ExpandableSearchPanelEx/SearchFieldAdapters', [
     const combo = new ComboBox(_.assign({
       elementsList: _.defaultTo(options.items, []),
       placeholder: _.defaultTo(options.placeholder, ''),
+      reachablePlaceholderFlag: !_.isEmpty(options.placeholder),
       enableSearchFlag: false
     }, comboOptions));
     if (options.onPreDropdown) {
