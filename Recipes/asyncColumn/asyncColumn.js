@@ -134,7 +134,7 @@ define('DS/Recipes/asyncColumn/asyncColumn', [
         return;
       }
       loadItems(data.attributes.category);
-      _.has(data.attributes, 'item') || data.nodeModel.updateOptions({ grid: { item: '' } });
+      _.has(data.attributes, 'item') || data.nodeModel.updateOptions({ grid: { item: undefined } });
     });
 
     requestStatuses().then((result) => {

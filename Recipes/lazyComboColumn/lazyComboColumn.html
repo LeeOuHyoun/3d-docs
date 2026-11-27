@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
+<head>
+  <title>Lazy Combo Column</title>
+  <meta name="autoRefresh" content="-1" />
+  <link rel="stylesheet" type="text/css" href="../../c/UWA/assets/css/standalone.css" />
+  <script type="text/javascript" src="../../AmdLoader/AmdLoader.js"></script>
+  <script type="text/javascript" src="../../c/UWA/js/UWA_Standalone_Alone.js"></script>
+  <style type="text/css">
+    html, body, .moduleWrapper, .moduleContent { height: 100%; margin: 0; }
+    .module { width: 100%; height: 100%; margin: 0; }
+    .module > .moduleHeader, .moduleFooter { display: none; }
+  </style>
+  <script type="text/javascript">
+    require([
+      'DS/DataGridView/DataGridView',
+      'DS/TreeModel/TreeDocument',
+      'DS/TreeModel/TreeNodeModel',
+      'DS/Recipes/lazyComboColumn/lazyComboColumn'
+    ], function (DataGridView, TreeDocument, TreeNodeModel, lazyComboColumn) {
+      var PARTS = [
+        { id: 'P-001', status: 'WIP', statusName: '작업중', owners: ['kcs'], ownerNames: ['김철수'], category: 'BOLT', item: 'M6' },
+        { id: 'P-002', status: 'REVIEW', statusName: '검토중', owners: [], ownerNames: [], category: 'NUT', item: undefined },
+        { id: 'P-003', status: 'DONE', statusName: '승인', owners: ['lyh', 'pms'], ownerNames: ['이영희', '박민수'], category: 'BOLT', item: 'M8' }
+      ];
+      var STATUSES_BY_PART = {
+        'P-001': [{ label: '작업중', value: 'WIP' }, { label: '검토중', value: 'REVIEW' }],
+        'P-002': [{ label: '검토중', value: 'REVIEW' }, { label: '승인', value: 'DONE' }, { label: '작업중', value: 'WIP' }],
+        'P-003': [{ label: '승인', value: 'DONE' }, { label: '폐기', value: 'OBSOLETE' }]
+      };
+      var OWNERS = [{ label: '김철수', value: 'kcs' }, { label: '이영희', value: 'lyh' }, { label: '박민수', value: 'pms' }, { label: '최지훈', value: 'cjh' }];
+      var ITEMS_BY_CATEGORY = { BOLT: ['M6', 'M8', 'M10'], NUT: ['N6', 'N8'], WASHER: ['W6', 'W8', 'W10'] };
+
+      function respond(value) {
+        return new Promise(function (resolve) {
+          setTimeout(function () { resolve(value); }, 700);
+        });
+      }
+
+      function requestStatuses(row) {
+        return respond(STATUSES_BY_PART[row.id]);
+      }
+
+      function requestOwners() {
+        return respond(OWNERS);
+      }
+
+      function requestItems(row) {
+        return respond(ITEMS_BY_CATEGORY[row.category]);
+      }
+
+      widget.addEvent('onLoad', function () {
+        var treeDocument = new TreeDocument();
+        PARTS.forEach(function (part) {
+          treeDocument.addRoot(new TreeNodeModel({ label: part.id, grid: part }));
+        });
+        new DataGridView({
+          treeDocument: treeDocument,
+          columns: [
+            { text: '번호', dataIndex: 'id', width: 90 },
+            Object.assign({ text: '상태 (열 때 받기)', dataIndex: 'status', width: 150 }, lazyComboColumn(requestStatuses, { labelIndex: 'statusName' })),
+            Object.assign({ text: '담당자 (열 때 받기)', dataIndex: 'owners', width: 260 }, lazyComboColumn(requestOwners, { multiple: true, labelIndex: 'ownerNames' })),
+            {
+              text: '분류',
+              dataIndex: 'category',
+              width: 110,
+              typeRepresentation: 'customEnumMember',
+              editableFlag: true,
+              editionPolicy: 'EditionOnClick',
+              semantics: { possibleValues: Object.keys(ITEMS_BY_CATEGORY) }
+            },
+            Object.assign({ text: '품목 (열 때 받기)', dataIndex: 'item', width: 150 }, lazyComboColumn(requestItems))
+          ]
+        }).inject(widget.body);
+      });
+    });
+  </script>
+</head>
+<body></body>
+</html>
