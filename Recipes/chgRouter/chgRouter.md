@@ -1,9 +1,9 @@
 # ChgRouter 로 Change Action 상세 화면 열기 (조사 메모)
 
-Change 앱(`ENOChgGovernanceUX`) 위에 만든 위젯에서, 그리드의 링크로 Change Action(커스텀 하위 type `sdxECChangeAction` 포함) 상세 화면으로 넘어가는 방법을 조사한 메모입니다.
+Change 앱(`ENOChgGovernanceUX`) 위에 만든 위젯에서, 그리드의 링크로 Change Action(커스텀 하위 type `sdxECChangeAction` 포함) 상세 화면으로 넘어가는 방법을 조사한 메모입니다. Change 앱이 아닌 **다른 위젯** 의 링크로 Change 앱의 상세 화면을 여는 방법은 [6 절](#6-다른-위젯에서-change-앱의-상세-화면-열기) 입니다.
 
-- 근거: enovia2025 / 2026 webapps 원본 (`ENOChgRouter5`, `ENOChgGovernanceUX`, `ENOChgServices`). 2025 와 2026 이 같습니다.
-- **실제 화면에서는 돌려 보지 않았습니다.** 확인할 것은 [6 절](#6-확인-필요) 에 있습니다.
+- 근거: enovia2025 / 2026 webapps 원본 (`ENOChgRouter5`, `ENOChgGovernanceUX`, `ENOChgServices`, `ENOChangeActionUX`). 2025 와 2026 이 같습니다.
+- **실제 화면에서는 돌려 보지 않았습니다.** 확인할 것은 [7 절](#7-확인-필요) 에 있습니다.
 
 ## 1. ChgRouter 는 무엇인가
 
@@ -30,7 +30,7 @@ Change 앱(`ENOChgGovernanceUX`) 위에 만든 위젯에서, 그리드의 링크
   | `xChangeApp` | 앱 객체 (`showIDCard`, `openIDCard`, `clearContent`, `deactivateWP` ...) |
   | `landingpage` | 첫 화면 컨테이너 |
 
-- 싱글턴이라 어느 모듈에서 불러도 같은 라우터입니다. 단 Change 앱이 `initialize` 하기 전에는 `navigate` · `getDependency` 가 실패합니다. **Change 앱 위젯 안에서만** 씁니다.
+- 싱글턴이라 어느 모듈에서 불러도 같은 라우터입니다. 단 Change 앱이 `initialize` 하기 전에는 `navigate` · `getDependency` 가 실패합니다. **Change 앱 위젯 안에서만** 씁니다. 다른 위젯에서는 [6 절](#6-다른-위젯에서-change-앱의-상세-화면-열기) 처럼 앱을 열어 넘깁니다.
 
 ## 2. Change Action 상세 라우트
 
@@ -131,8 +131,85 @@ define('DS/MyApp/openChangeAction', [
 }
 ```
 
-## 6. 확인 필요
+## 6. 다른 위젯에서 Change 앱의 상세 화면 열기
 
+### 6.1 직접 부를 수 없습니다
+
+위젯마다 iframe 이 따로라서, 다른 위젯에서는 `ChgRouter` 나 `displayObjectInfoInsideIDcard` 를 부를 수 없습니다. 모듈을 `require` 해도 그 위젯 안에서 만든 화면이 없는 빈 객체를 받습니다. 부르면 아래처럼 실패합니다 (`ENOChgGovernanceUX.js`).
+
+| 실패 지점 | 이유 |
+| --- | --- |
+| `ChgGovPropertiesPanel.start` 의 `n[1].children` | `document.querySelectorAll('.gov-triptych-wrapper')` 가 비어 있음 (3단 화면은 앱 첫 화면이 만듦) |
+| `buildIDCardViewForCA` 의 `appendChild` | `.cogov-content-wrapper` 가 없음 |
+| `displayObjectInfoInsideIDcard` | 앱이 `initialize` 한 라우터가 없음 |
+
+### 6.2 앱을 열면서 id 를 넘깁니다
+
+OOTB 도 이 방식입니다. `ENOChangeActionUX` 에서 대상 Change Action 링크(`.Realized-change-targetCA-value-span`)를 누르면 실행되는 코드입니다.
+
+```js
+require(['DS/TransientWidget/TransientWidget'], (TransientWidget) => {
+  const open = (appId, physicalId) => TransientWidget.showWidget(appId, '', {
+    X3DContentId: JSON.stringify({
+      protocol: '3DXContent',
+      source: widget.name,
+      data: { items: [{ envId: platformId, serviceId: '3DSpace', objectId: physicalId }] }
+    }),
+    x3dPlatformId: platformId
+  }, { mode: 'panel', width: 650, height: 800 });
+
+  open('ENOWCHG_AP', '<physicalid>');
+});
+```
+
+| 값 | 설명 |
+| --- | --- |
+| `appId` | 열 앱의 3DDashboard 앱 ID. `ENOWCHG_AP` 는 Change Governance, `ENOWCHA_AP` 는 Change Execution |
+| `platformId` | `widget.getValue('x3dPlatformId')`. OOTB 는 `ChgServiceGlobalVariable` 의 `tenant` |
+| `objectId` | physicalid |
+| `mode: 'panel'`, `width`, `height` | OOTB 값 그대로 (창으로 뜸). `showWidget` 자체는 [TransientWidget](/widget/transient-widget) 에 있음 |
+
+### 6.3 받는 쪽이 하는 일
+
+`ENOChgGovernanceUX` 의 `loadGovWidget` 이 앱을 시작할 때 처리합니다.
+
+1. 위젯 값 `X3DContentId` 를 읽어 `data.items` 의 **마지막 항목** `objectId` 를 꺼냅니다.
+2. `getObjectTypeInformation(id)` (`ENOChgServices`)로 type 을 서버에 묻습니다 (`/resources/v2/e6w/service/ApplicabilityTypeInfo/<id>` 응답의 `applicabilityType`).
+3. 값이 `"Change Order"`, `"Change Request"`, `"Change Action"`, `"Investigation Request"` 중 하나면 `openWithIDCard` 가 `launchPropertyPanelContext({ context: id })` 와 그 type 의 `displayObjectInfoInsideIDcard(id)` 를 부릅니다.
+4. 그 밖의 값이면 "접근할 수 없는 객체" 알림과 함께 첫 화면으로 갑니다.
+
+Change Execution 앱(`ENOWCHA_AP`)은 2025 에서 `X3DContentId` 의 마지막 항목 또는 `TransientCAPid` 값을 읽고 `IsChangeAction(id)` 가 참이면 ID 카드를 엽니다. 2026 에서는 이 받는 코드를 찾지 못했습니다.
+
+### 6.4 주소로 열기
+
+OOTB 의 "링크 복사" 가 만드는 주소입니다 (`ENOChgServices` 의 `makeCopyLinkObject`).
+
+```text
+<3DDashboard 주소>#app:<앱 ID>/content:X3DContentId=<encodeURIComponent(JSON)>
+```
+
+JSON 은 `{ protocol: '3DXContent', data: { items: [{ envId, objectId, openLink: true }] } }` 입니다. Compass 의 "다른 앱으로 열기" 도 같은 `X3DContentId` 를 붙여 엽니다 ([Compass 에 선택 객체 알리기](/widget/compass-pubsub#compass-가-객체로-하는-일)).
+
+### 6.5 복사해서 만든 커스텀 앱 (예: `sdxENOChgGovernanceUX`)
+
+OOTB 앱을 복사해 이름만 바꾼 앱은 위 방법에서 앱 ID 만 바꾸면 같은 흐름으로 동작합니다. 받는 쪽 `loadGovWidget` 을 OOTB 그대로 두었다면 고칠 것이 없습니다.
+
+- 커스텀 앱이 **3DDashboard 에 앱으로 등록되어 앱 ID 가 있어야** 합니다. `ENOWCHG_AP` 를 열면 OOTB 앱이 뜹니다.
+- 복사본의 `openWithIDCard` 가 OOTB 와 같으면 `launchPropertyPanelContext` 에 `type` 을 넘기지 않습니다. 정보 패널이 하위 type(`sdxECChangeAction`)을 알아야 한다면 복사본에서 `{ context: id, type: '<하위 type>' }` 로 고칩니다.
+- 앱 ID 를 직접 비교하는 OOTB 코드는 커스텀 앱 ID 를 모릅니다.
+
+| 위치 | 비교 | 커스텀 앱 ID 일 때 |
+| --- | --- | --- |
+| `ENOChgServices` 의 라이선스 확인 | `appId == 'ENOWCHA_AP'` 면 `CExecution`, 아니면 `CGovernance` | Governance 로 확인 |
+| `ENOChangeActionUX` 의 링크 | `appId == 'ENOWCHG_AP'` 면 그 앱, 아니면 `ENOWCHA_AP` 를 엶 | OOTB Change Execution 앱이 열림 |
+| `ENOChgGovernanceUX` 시작 화면 제목 | `appId == 'ENOWCHA_AP'` 면 Change Execution 제목 | 기본 제목 (Change Governance) |
+| `ENOChgProbes` 사용 기록 | `ENOWCHA_AP` / `ENOWCHG_AP` 로 이름을 정함 | 둘 다 아니라서 이름이 비어 있음 |
+
+## 7. 확인 필요
+
+- 커스텀 앱 ID 로 `showWidget` 을 불렀을 때 창이 뜨고 ID 카드가 열리는지 ([6 절](#6-다른-위젯에서-change-앱의-상세-화면-열기)).
+- `sdxECChangeAction` 객체의 `ApplicabilityTypeInfo/<id>` 응답 `applicabilityType` 이 `"Change Action"` 인지. 다른 값이면 6.3 의 4 번으로 갑니다.
+- 복사본의 `loadGovWidget`, `openWithIDCard` 가 OOTB 와 같은지 (난독화되어 눈으로 비교하기 어려우면 `getValue("X3DContentId")` 를 읽는지만 봄).
 - `GET /resources/v1/chguxservices/changeaction/<id>` 가 `sdxECChangeAction` 도 돌려주는지 (Network 에서 200 과 `data`).
 - 넘기는 `id` 가 physicalid 인지.
 - 위젯 화면에서 Console 실행 대상을 위젯 프레임으로 바꾸고 아래가 상세 화면을 여는지. 열리면 그리드 링크도 동작합니다.
