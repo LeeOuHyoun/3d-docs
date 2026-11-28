@@ -135,6 +135,7 @@ webapps 2025 전체에서 모듈 이름이 나오는 횟수입니다. 많이 쓰
 | 문서 | 내용 |
 | --- | --- |
 | [WebUX 컨트롤](/controls/webux-controls) | 공통 사용법, Button, Toggle, ButtonGroup, LineEditor, Editor, ComboBox, DatePicker, TweakerDate, Label, Expander, Popup, ProgressBar, Loader |
+| [콤보박스에 서버 목록 넣기](/controls/combobox-list) | 콤보박스 목록을 API 에서 받아 넣는 가장 간단한 방법. 단독 콤보박스와 그리드 셀 콤보, 화면을 열 때 받기와 드롭다운을 열 때 받기, 꼭 알아 둘 세 가지 |
 | [입력 컨트롤](/controls/input-controls) | SpinBox, Slider, SelectionChips, SelectionChipsEditor, Find, FilePicker, 터치 키패드(Decorator), 예전 UWA 컨트롤 |
 | [레이아웃 컨트롤](/controls/layout) | Accordeon, Tab, TabBar, Toolbar, Breadcrumb, GroupBox, Flyout, Scroller, Stack, LayerSet, Deck, Stepper, DropdownButton, ModeChooser |
 | [색상, 표시 컨트롤](/controls/display-controls) | ColorPicker, ColorChooser, ColorPalette, Gauge, Timeline, Tooltip, 2026 툴팁 화면과 UserCard |

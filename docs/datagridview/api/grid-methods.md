@@ -134,13 +134,24 @@ grid.selectNodeModel(target);
 | 함수 | 반환 | 설명 |
 | --- | --- | --- |
 | <code>prepareUpdateView()</code> / <code>pushUpdateView()</code> | - | 화면 갱신을 묶기. 짝을 맞춰 부르고 마지막 push 때 한 번 다시 그림 |
-| <code>updateView(options?)</code> | - | 보이는 영역을 다시 그림 |
+| <code>updateView(options?)</code> | - | 보이는 영역을 다시 그림. 옵션을 빼면 셀 내용은 다시 읽지 않음 |
 | <code>updateRowView(rowID, options?)</code> | - | 행 하나만 다시 그림 (`updateRenderedRow` 와 같음) |
 | <code>updateColumnView(columnID, options?)</code> | - | 컬럼 하나의 보이는 셀만 다시 그림 (`updateRenderedColumn` 과 같음) |
+| <code>updateCellView(cellID, options?)</code> | - | 셀 하나만 다시 그림 |
 | <code>invalidateLayout(options?)</code> | - | 너비, 높이 계산을 다시 하고 그림 |
 | <code>subscribeOnceToAllCellsRendered(fn)</code> | - | 다음 렌더링이 끝나면 한 번만 `fn` 실행 |
 
 `options` 는 `{ updateCellContent, updateCellLayout, updateCellAttributes }` (각 `true | false`) 입니다.
+
+| 키 | 다시 하는 일 |
+| --- | --- |
+| `updateCellContent` | 셀 내용. 컬럼 함수 `getCellValue`, `getCellSemantics`, `onCellRequest` 를 다시 불러 값과 편집기를 다시 넣음 |
+| `updateCellLayout` | 셀 위치와 크기, CSS 클래스 (`getCellClassName`) |
+| `updateCellAttributes` | 선택, 활성, 편집 중 같은 셀 상태 표시 |
+
+::: warning 내용을 바꾸려면 updateCellContent: true
+`updateView()` 와 `invalidateLayout()` 은 옵션을 빼면 `updateCellContent` 가 `false` 라서 셀 내용을 다시 읽지 않습니다. `updateRowView`, `updateColumnView`, `updateCellView` 는 옵션을 빼면 아무것도 하지 않습니다. 컬럼 함수가 읽는 바깥 변수를 바꾼 뒤에는 `{ updateCellContent: true }` 를 넘깁니다. 이때 그 범위 안에서 입력 중이던 셀의 글자는 원래 값으로 돌아가므로, 범위가 가장 좁은 함수를 씁니다 ([응답이 왔을 때 사용자가 입력 중이면](/datagridview/async-values#응답이-왔을-때-사용자가-입력-중이면)). (로컬 실행 확인)
+:::
 
 ## 준비 시점과 크기
 

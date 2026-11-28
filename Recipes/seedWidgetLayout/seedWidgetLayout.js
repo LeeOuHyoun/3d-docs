@@ -5,9 +5,10 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
   'DS/ENOXTriptych/js/ENOXTriptych',
   'DS/ENOXWelcomePanel/js/ENOXWelcomePanel',
   'DS/ENOXPageToolBar/js/PageToolBar',
+  'DS/Recipes/objectInfoPanel/objectInfoPanel',
   'UWA/Element',
   'css!DS/Recipes/seedWidgetLayout/seedWidgetLayout.css'
-], (UWA, _, ModelEvents, ENOXTriptych, ENOXWelcomePanel, PageToolBar) => {
+], (UWA, _, ModelEvents, ENOXTriptych, ENOXWelcomePanel, PageToolBar, objectInfoPanel) => {
   'use strict';
 
   const LEFT_SIZE_EXPANDED = 300;
@@ -50,7 +51,7 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
     const toolbarHost = UWA.createElement('div', { 'class': 'swl-toolbar' }).inject(middle);
     const content = UWA.createElement('div', { 'class': 'swl-content' }).inject(middle);
 
-    new ENOXTriptych().init({
+    objectInfoPanel.initTriptych(new ENOXTriptych(), {
       modelEvents,
       container: frame,
       borderLeft: true,
@@ -64,7 +65,7 @@ define('DS/Recipes/seedWidgetLayout/seedWidgetLayout', [
       }
     }, left, middle, null);
 
-    const toolbar = new PageToolBar({ modelEvents, withWelcomePanelButton: true, withInformationButton: false });
+    const toolbar = new PageToolBar({ modelEvents, withWelcomePanelButton: true, withInformationButton: true });
     toolbar.render().inject(toolbarHost);
     const title = UWA.createElement('span', { 'class': 'swl-title' }).inject(toolbar.getBodyContent());
 

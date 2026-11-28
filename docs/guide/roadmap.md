@@ -43,7 +43,7 @@ ENOVIA 개발이 처음이라면 아래 순서로 읽습니다. 화면 하나는
 | 2 | [위젯과 플랫폼](/widget/) | `widget` 객체, 설정, 3DSpace 주소와 보안 컨텍스트 얻기 |
 | 3 | [UWA 개요](/uwa/) | 기반 라이브러리와 자주 틀리는 동작 |
 | 4 | [서버 호출](/uwa/request) → [REST API](/rest-api/) | WAFData 로 3DSpace REST 호출, CSRF 토큰 |
-| 5 | [화면 컨트롤](/controls/) | 버튼, 입력칸, 다이얼로그, 알림 |
+| 5 | [화면 컨트롤](/controls/) → [콤보박스에 서버 목록 넣기](/controls/combobox-list) | 버튼, 입력칸, 다이얼로그, 알림. 콤보박스 목록을 API 에서 받아 넣는 기본 방법 |
 | 6 | [DataGridView](/datagridview/) | 목록 / 트리 그리드 |
 | 7 | [Tweakers](/tweakers/) | 셀, 툴바, 폼에 쓰이는 편집기와 사용자 타입 |
 | 8 | [이벤트, 선택, 끌어 놓기](/events/) | 위젯 간 연동, 다른 위젯에서 끌어 온 객체 받기 |

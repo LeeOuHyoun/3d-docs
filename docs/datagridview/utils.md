@@ -137,6 +137,8 @@ GridUtils.clearRows('partGrid');
 | `clearRows(target)` | 모든 행을 지움 | 없음 |
 
 - `task` 가 실패하면 기존 행은 그대로 두고 로딩 표시만 지웁니다. 실패는 돌려받은 Promise 로 전달되므로 `.catch` 에서 알림을 띄웁니다.
+- `loadRows` 가 끝나기 전에 다시 부르면(조회 버튼을 연달아 누른 경우) **마지막에 부른 것만** 반영합니다. 먼저 부른 쪽 응답이 더 늦게 와도 새 결과를 덮어쓰지 않고, 그 Promise 는 빈 배열로 끝납니다.
+- 행을 넣은 뒤에 셀 값이나 콤보 목록을 따로 받아 채우는 방법은 [API 로 받아 넣기](/datagridview/async-values) 에 있습니다.
 - 행 데이터가 `null`, `undefined` 면 빈 그리드가 됩니다.
 - `setRows` 는 [변경 트랜잭션 모드](#편집을-모아서-한-번에-저장) 가 켜져 있어도 변경 기록 없이 새 데이터로 시작합니다. 저장 안 된 변경은 버려집니다.
 
@@ -287,6 +289,7 @@ GridUtils.setChildrenLoader(treeDocument, function (node, row) {
 - `useAsyncPreExpand: true`, 불러올 행의 `children: []`, `setChildrenLoader` 세 가지를 같이 씁니다. 원본 함수로 직접 쓰는 방법은 [트리 구조](/datagridview/tree#펼칠-때-하위-행-불러오기) 에 있습니다.
 - loader 는 펼치는 행(TreeNodeModel)과 그 행 데이터를 받아 하위 행 데이터 배열이나 그 Promise 를 돌려줍니다. 돌려준 하위 행 데이터에 `children: []` 를 넣으면 그 행도 펼칠 때 불러옵니다.
 - 하위 행이 이미 있는 행은 다시 불러오지 않습니다.
+- 불러오는 중인 행을 다시 펼쳐도 loader 는 한 번만 부릅니다. (다시 부르면 하위 행이 두 번 들어갑니다)
 - 불러오기가 실패해도 행이 "펼치는 중" 에서 멈추지 않습니다. 하위 행 없이 펼쳐진 상태가 되고, 접었다가 다시 펼치면 loader 를 다시 부릅니다. 실패 알림은 loader 안의 `.catch` 에서 띄웁니다.
 - `onPreExpand` 는 하나만 등록되므로 `setChildrenLoader` 를 다시 부르면 이전 loader 를 대체합니다.
 
@@ -355,7 +358,7 @@ function handleSave() {
 - `cancelChanges()` 는 편집을 모두 버리고 원래 값으로 되돌립니다. 저장에 실패해도 편집을 남겨 두려면 부르지 않습니다.
 
 ::: warning 행에 없던 키는 변경으로 기록되지 않습니다
-행 데이터에 `remark` 키가 없는 행의 비고 칸을 사용자가 편집하면, 값은 들어가지만 `modified` 에 잡히지 않고 `cancelChanges()` 로도 되돌려지지 않습니다 (원본 TreeNodeModel 의 `setAttribute`, `updateOptions` 가 이미 있는 키만 기록함). 편집할 컬럼의 키는 값이 없어도 `''` 로 채워서 넣습니다.
+행 데이터에 `remark` 키가 없는 행의 비고 칸을 사용자가 편집하면, 값은 들어가지만 `modified` 에 잡히지 않고 `cancelChanges()` 로도 되돌려지지 않습니다 (원본 TreeNodeModel 의 `setAttribute`, `updateOptions` 가 이미 있는 키만 기록함). 편집할 컬럼의 키는 값이 없어도 `''` 로 채워서 넣습니다. 콤보(`customEnumMember`) 컬럼만은 `''` 대신 `undefined` 로 넣습니다. `''` 면 목록의 첫 항목을 골라도 저장되지 않습니다 ([콤보 셀의 값이 비었거나 목록에 없을 때](/datagridview/async-values#콤보-셀의-값이-비었거나-목록에-없을-때)). 키가 `undefined` 로라도 들어 있으면 변경은 기록됩니다.
 :::
 
 ### 이벤트
@@ -448,6 +451,7 @@ target 칸의 `Grid` 는 그리드, DOM 요소, DOM id 만 받습니다. `Doc` �
 
 - 2025, 2026 원본 webapps 를 ENOVIA 서버 없이 내 PC 에서 띄우고, 실제 DataGridView 에 함수 39개를 모두 실행해 이 페이지에 적은 동작을 확인했습니다 (Edge, 한국어 화면). lodash 는 4.18.1 배포 파일 `lodash.js` 를 `webapps/lodash-4.18.1/` 에 그대로 넣어 불렀습니다.
 - 하위 행이 없는 3,000 행에서 `setRows`, 조건으로 1,500 행 선택, `updateRows` 3,000 행은 각각 0.05 초 안쪽이었습니다. 하위 행이 9개씩 달린 3,000 행 트리의 `setRows` 는 0.15 초 안쪽이었습니다.
+- `loadRows` 를 겹쳐 불렀을 때(느린 요청 뒤에 빠른 요청, 그 반대, 앞 요청이 실패한 경우)와 `setChildrenLoader` 로 불러오는 중에 다시 펼쳤을 때, 실패한 뒤 다시 펼쳤을 때, 불러오는 중에 행을 통째로 바꿨을 때를 같은 방법으로 확인했습니다 (2026-11-27 에 이 두 함수를 고침).
 - 확인하지 않은 것: ENOVIA 서버와 3DDashboard 위젯 안에서의 실행, 터치 모드, `dataSource` 로 행을 나눠 불러오는 그리드 ([서버 사이드 데이터](/datagridview/server-side)).
 
 ## 전체 소스
