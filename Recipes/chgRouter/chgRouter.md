@@ -223,7 +223,8 @@ require(['DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices'], (Compass
 });
 ```
 
-- 대시보드 주소는 OOTB 와 같이 `widget.widgetDomain` 을 먼저 쓰고, 없으면 Compass 에 `3DDashboard` 주소를 묻습니다. `widget.widgetDomain` 값이 Copy Link 주소의 `#` 앞부분과 같은지 콘솔에서 확인합니다.
+- 앱 ID 는 사용자에게 부여된 앱이어야 합니다. 복사해서 등록한 커스텀 앱이면 6.5 를 봅니다.
+- 대시보드 주소는 OOTB 와 같이 `widget.widgetDomain` 을 먼저 쓰고, 없으면 Compass 에 `3DDashboard` 주소를 묻습니다.
 - Compass 응답을 기다린 뒤 `window.open` 을 부르면 클릭과 떨어져 있어 브라우저가 팝업으로 막을 수 있습니다. 그때는 주소를 미리 받아 둡니다.
 
 Compass 의 "다른 앱으로 열기" 도 같은 `X3DContentId` 를 붙여 엽니다 ([Compass 에 선택 객체 알리기](../../docs/widget/compass-pubsub.md#compass-가-객체로-하는-일)).
@@ -232,7 +233,8 @@ Compass 의 "다른 앱으로 열기" 도 같은 `X3DContentId` 를 붙여 엽�
 
 OOTB 앱을 복사해 이름만 바꾼 앱은 위 방법에서 앱 ID 만 바꾸면 같은 흐름으로 동작합니다. 받는 쪽 `loadGovWidget` 을 OOTB 그대로 두었다면 고칠 것이 없습니다.
 
-- 커스텀 앱이 **3DDashboard 에 앱으로 등록되어 앱 ID 가 있어야** 합니다. `ENOWCHG_AP` 를 열면 OOTB 앱이 뜹니다.
+- 커스텀 앱이 **3DDashboard 에 앱으로 등록되어 앱 ID 가 있어야** 합니다. 등록한 앱의 ID 는 OOTB ID 가 아니라 등록할 때 붙는 값(`MAP-XXXXXXXX` 모양)이라 서버마다 다를 수 있습니다. 그 앱 화면에서 Copy Link 를 하면 주소의 `#app:` 뒤에서 ID 를 볼 수 있습니다 (Copy Link 는 지금 위젯의 `widget.getValue('appId')` 를 씀).
+- `ENOWCHG_AP` 로 열면 OOTB 앱을 찾습니다. 사용자에게 그 앱이 부여되지 않았으면 새 탭이 원래 대시보드 화면으로 열리고 "앱을 검색하는 중 오류가 발생했습니다. 유효한 라이선스가 없습니다." 가 뜹니다. 개발 서버에서 겪었고, 등록한 앱 ID 로 바꾸자 ID 카드가 열렸습니다.
 - 복사본의 `openWithIDCard` 가 OOTB 와 같으면 `launchPropertyPanelContext` 에 `type` 을 넘기지 않습니다. 정보 패널이 하위 type(`sdxECChangeAction`)을 알아야 한다면 복사본에서 `{ context: id, type: '<하위 type>' }` 로 고칩니다.
 - 앱 ID 를 직접 비교하는 OOTB 코드는 커스텀 앱 ID 를 모릅니다.
 
@@ -245,8 +247,7 @@ OOTB 앱을 복사해 이름만 바꾼 앱은 위 방법에서 앱 ID 만 바꾸
 
 ## 7. 확인 필요
 
-- 커스텀 앱 ID 로 6.4 주소를 열었을 때 ID 카드가 열리는지. `ENOWCHG_AP` 는 개발 서버에서 열림을 확인함 ([6 절](#6-다른-위젯에서-change-앱의-상세-화면-열기)).
-- `widget.widgetDomain` 값이 Copy Link 주소의 대시보드 주소와 같은지.
+- 운영 서버에 등록한 커스텀 앱의 ID (개발 서버와 다를 수 있음). 6.4 주소는 개발 서버에서 등록한 앱 ID 로 ID 카드가 열림을 확인함 ([6 절](#6-다른-위젯에서-change-앱의-상세-화면-열기)).
 - 6.2 의 CORS 에러가 서버 설정을 바꾸면 없어지는지.
 - `sdxECChangeAction` 객체의 `ApplicabilityTypeInfo/<id>` 응답 `applicabilityType` 이 `"Change Action"` 인지. 다른 값이면 6.3 의 4 번으로 갑니다.
 - 복사본의 `loadGovWidget`, `openWithIDCard` 가 OOTB 와 같은지 (난독화되어 눈으로 비교하기 어려우면 `getValue("X3DContentId")` 를 읽는지만 봄).
