@@ -149,14 +149,17 @@ OOTB 도 이 방식입니다. `ENOChangeActionUX` 에서 대상 Change Action �
 
 ```js
 require(['DS/TransientWidget/TransientWidget'], (TransientWidget) => {
-  const open = (appId, physicalId) => TransientWidget.showWidget(appId, '', {
-    X3DContentId: JSON.stringify({
-      protocol: '3DXContent',
-      source: widget.name,
-      data: { items: [{ envId: platformId, serviceId: '3DSpace', objectId: physicalId }] }
-    }),
-    x3dPlatformId: platformId
-  }, { mode: 'panel', width: 650, height: 800 });
+  const open = (appId, physicalId) => {
+    const platformId = widget.getValue('x3dPlatformId');
+    TransientWidget.showWidget(appId, '', {
+      X3DContentId: JSON.stringify({
+        protocol: '3DXContent',
+        source: widget.name,
+        data: { items: [{ envId: platformId, serviceId: '3DSpace', objectId: physicalId }] }
+      }),
+      x3dPlatformId: platformId
+    }, { mode: 'panel', width: 650, height: 800 });
+  };
 
   open('ENOWCHG_AP', '<physicalid>');
 });
@@ -165,7 +168,7 @@ require(['DS/TransientWidget/TransientWidget'], (TransientWidget) => {
 | 값 | 설명 |
 | --- | --- |
 | `appId` | 열 앱의 3DDashboard 앱 ID. `ENOWCHG_AP` 는 Change Governance, `ENOWCHA_AP` 는 Change Execution |
-| `platformId` | `widget.getValue('x3dPlatformId')`. OOTB 는 `ChgServiceGlobalVariable` 의 `tenant` |
+| `platformId` | `widget.getValue('x3dPlatformId')`. 3DDashboard 가 넣어 주는 값이라 찾을 필요 없음. 온프레미스는 `'OnPremise'` 로 보임 ([플랫폼 id](/widget/space-url)). OOTB 는 `ChgServiceGlobalVariable` 의 `tenant` |
 | `objectId` | physicalid |
 | `mode: 'panel'`, `width`, `height` | OOTB 값 그대로 (창으로 뜸). `showWidget` 자체는 [TransientWidget](/widget/transient-widget) 에 있음 |
 
