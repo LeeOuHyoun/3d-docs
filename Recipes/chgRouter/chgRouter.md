@@ -219,11 +219,11 @@ require(['DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices'], (Compass
     });
   };
 
-  openByLink('ENOWCHG_AP', '<physicalid>');
+  openByLink('<앱 ID>', '<physicalid>');
 });
 ```
 
-- 앱 ID 는 사용자에게 부여된 앱이어야 합니다. 복사해서 등록한 커스텀 앱이면 6.5 를 봅니다.
+- `<앱 ID>` 에는 열 앱의 화면에서 Copy Link 한 주소의 `#app:` 뒤 값을 넣습니다. OOTB 앱이면 `ENOWCHG_AP`, 복사해서 등록한 커스텀 앱이면 등록할 때 붙은 ID 입니다 (6.5). 사용자에게 부여된 앱이어야 합니다.
 - 대시보드 주소는 OOTB 와 같이 `widget.widgetDomain` 을 먼저 쓰고, 없으면 Compass 에 `3DDashboard` 주소를 묻습니다.
 - Compass 응답을 기다린 뒤 `window.open` 을 부르면 클릭과 떨어져 있어 브라우저가 팝업으로 막을 수 있습니다. 그때는 주소를 미리 받아 둡니다.
 
