@@ -7,6 +7,12 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const WEBAPPS = resolve(process.argv[2] ?? join(ROOT, '..', 'enovia2025', '3dspace', 'webapps'))
 const PORT = Number(process.env.PORT ?? 8080)
 const SAMPLE_FOLDERS = readdirSync(ROOT).filter((name) => /Sample$/.test(name) && statSync(join(ROOT, name)).isDirectory())
+const LOCAL_FOLDERS = [...SAMPLE_FOLDERS, 'Recipes']
+const LODASH_PATH = '/webapps/lodash-4.18.1/lodash.js'
+const LODASH_FILE = join(ROOT, 'node_modules', 'lodash', 'lodash.js')
+const RECIPE_PAGES = readdirSync(join(ROOT, 'Recipes'))
+  .map((name) => `${name}/${name}.html`)
+  .filter((page) => existsSync(join(ROOT, 'Recipes', page)))
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.htm': 'text/html; charset=utf-8',
@@ -28,9 +34,10 @@ if (!existsSync(join(WEBAPPS, 'DataGridView', 'DataGridView.js'))) {
 }
 
 const locate = (pathname) => {
+  if (pathname === LODASH_PATH) return LODASH_FILE
   const [, folder, rest = ''] = pathname.match(/^\/webapps\/([^/]+)\/?(.*)$/) ?? []
   if (!folder) return undefined
-  const base = SAMPLE_FOLDERS.includes(folder) ? ROOT : WEBAPPS
+  const base = LOCAL_FOLDERS.includes(folder) ? ROOT : WEBAPPS
   const file = normalize(join(base, folder, rest))
   return file.startsWith(normalize(join(base, folder))) ? file : undefined
 }
@@ -53,5 +60,6 @@ server.listen(PORT, '127.0.0.1', () => {
   SAMPLE_FOLDERS.filter((folder) => existsSync(join(ROOT, folder, 'index.html'))).forEach((folder) =>
     console.log(`http://127.0.0.1:${PORT}/webapps/${folder}/index.html`)
   )
+  RECIPE_PAGES.forEach((page) => console.log(`http://127.0.0.1:${PORT}/webapps/Recipes/${page}`))
   console.log('종료: Ctrl + C')
 })

@@ -13,6 +13,7 @@
     "docs:icons": "node scripts/icon-catalog.mjs"
   },
   "devDependencies": {
+    "lodash": "4.18.1",
     "vitepress": "^1.6.3"
   }
 }
