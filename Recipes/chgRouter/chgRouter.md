@@ -168,9 +168,17 @@ require(['DS/TransientWidget/TransientWidget'], (TransientWidget) => {
 | 값 | 설명 |
 | --- | --- |
 | `appId` | 열 앱의 3DDashboard 앱 ID. `ENOWCHG_AP` 는 Change Governance, `ENOWCHA_AP` 는 Change Execution |
-| `platformId` | `widget.getValue('x3dPlatformId')`. 3DDashboard 가 넣어 주는 값이라 찾을 필요 없음. 온프레미스는 `'OnPremise'` 로 보임 ([플랫폼 id](/widget/space-url)). OOTB 는 `ChgServiceGlobalVariable` 의 `tenant` |
+| `platformId` | `widget.getValue('x3dPlatformId')`. 3DDashboard 가 넣어 주는 값이라 찾을 필요 없음. 온프레미스는 `'OnPremise'` 로 보임 ([플랫폼 id](../../docs/widget/space-url.md)). OOTB 는 `ChgServiceGlobalVariable` 의 `tenant` |
 | `objectId` | physicalid |
-| `mode: 'panel'`, `width`, `height` | OOTB 값 그대로 (창으로 뜸). `showWidget` 자체는 [TransientWidget](/widget/transient-widget) 에 있음 |
+| `mode: 'panel'`, `width`, `height` | OOTB 값 그대로 (창으로 뜸). `showWidget` 자체는 [TransientWidget](../../docs/widget/transient-widget.md) 에 있음 |
+
+> **창이 뜨지 않고 CORS 에러만 날 때**
+>
+> 개발 서버에서 `showWidget` 을 불렀더니 화면에 변화가 없고, 콘솔에 `.../ENOWCHG_AP.json?... blocked by CORS policy` 와 `net::ERR_FAILED` 가 났습니다. 3DDashboard 가 창을 열기 전에 앱 설정 파일 `3dspace/webapps/config/<앱 ID>.json` 을 읽는데, 대시보드와 3DSpace 의 주소가 달라 브라우저가 막은 것으로 보입니다. 이 요청을 보내는 대시보드 코드는 webapps 에 없어 추정입니다. 코드로는 고칠 수 없고 서버 설정 문제입니다. 같은 서버에서도 [6.4 주소로 열기](#64-주소로-열기) 는 됐습니다.
+>
+> - `ENOWCHG_AP`, `ENOWCHA_AP` 는 이 설정 파일이 있고, `ENOLCMT_AP` 는 없습니다.
+> - 콘솔의 `TopFrame#_onRightPanelStateChange is a @private and a @deprecated method.` 는 대시보드가 남기는 경고로, 이 문제와 상관없습니다.
+> - Chrome 확장 프로그램(Allow CORS)으로는 풀리지 않았습니다.
 
 ### 6.3 받는 쪽이 하는 일
 
@@ -185,13 +193,40 @@ Change Execution 앱(`ENOWCHA_AP`)은 2025 에서 `X3DContentId` 의 마지막 �
 
 ### 6.4 주소로 열기
 
-OOTB 의 "링크 복사" 가 만드는 주소입니다 (`ENOChgServices` 의 `makeCopyLinkObject`).
+OOTB 의 **Copy Link** 가 만드는 주소입니다. Change Governance 목록에서 행을 오른쪽 클릭하면 나오는 메뉴입니다 (`ENOChgServices` 의 `getCopyLink`, `makeCopyLinkObject`). 복사한 주소를 새 브라우저 탭에서 열면 그 객체의 ID 카드가 열리는 것을 개발 서버에서 확인했습니다.
 
 ```text
 <3DDashboard 주소>#app:<앱 ID>/content:X3DContentId=<encodeURIComponent(JSON)>
 ```
 
-JSON 은 `{ protocol: '3DXContent', data: { items: [{ envId, objectId, openLink: true }] } }` 입니다. Compass 의 "다른 앱으로 열기" 도 같은 `X3DContentId` 를 붙여 엽니다 ([Compass 에 선택 객체 알리기](/widget/compass-pubsub#compass-가-객체로-하는-일)).
+JSON 은 `{ protocol: '3DXContent', data: { items: [{ envId, objectId, openLink: true }] } }` 입니다. 내 위젯의 링크에서는 같은 주소를 만들어 새 탭으로 엽니다.
+
+```js
+require(['DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices'], (CompassPlatformServices) => {
+  const buildLink = (dashboardUrl, appId, physicalId) => `${dashboardUrl}#app:${appId}/content:X3DContentId=${encodeURIComponent(JSON.stringify({
+    protocol: '3DXContent',
+    data: { items: [{ envId: widget.getValue('x3dPlatformId'), objectId: physicalId, openLink: true }] }
+  }))}`;
+
+  const openByLink = (appId, physicalId) => {
+    if (widget.widgetDomain) {
+      window.open(buildLink(widget.widgetDomain, appId, physicalId), '_blank');
+      return;
+    }
+    CompassPlatformServices.getPlatformServices({
+      platformId: widget.getValue('x3dPlatformId'),
+      onComplete: (platform) => window.open(buildLink(platform['3DDashboard'], appId, physicalId), '_blank')
+    });
+  };
+
+  openByLink('ENOWCHG_AP', '<physicalid>');
+});
+```
+
+- 대시보드 주소는 OOTB 와 같이 `widget.widgetDomain` 을 먼저 쓰고, 없으면 Compass 에 `3DDashboard` 주소를 묻습니다. `widget.widgetDomain` 값이 Copy Link 주소의 `#` 앞부분과 같은지 콘솔에서 확인합니다.
+- Compass 응답을 기다린 뒤 `window.open` 을 부르면 클릭과 떨어져 있어 브라우저가 팝업으로 막을 수 있습니다. 그때는 주소를 미리 받아 둡니다.
+
+Compass 의 "다른 앱으로 열기" 도 같은 `X3DContentId` 를 붙여 엽니다 ([Compass 에 선택 객체 알리기](../../docs/widget/compass-pubsub.md#compass-가-객체로-하는-일)).
 
 ### 6.5 복사해서 만든 커스텀 앱 (예: `sdxENOChgGovernanceUX`)
 
@@ -210,7 +245,9 @@ OOTB 앱을 복사해 이름만 바꾼 앱은 위 방법에서 앱 ID 만 바꾸
 
 ## 7. 확인 필요
 
-- 커스텀 앱 ID 로 `showWidget` 을 불렀을 때 창이 뜨고 ID 카드가 열리는지 ([6 절](#6-다른-위젯에서-change-앱의-상세-화면-열기)).
+- 커스텀 앱 ID 로 6.4 주소를 열었을 때 ID 카드가 열리는지. `ENOWCHG_AP` 는 개발 서버에서 열림을 확인함 ([6 절](#6-다른-위젯에서-change-앱의-상세-화면-열기)).
+- `widget.widgetDomain` 값이 Copy Link 주소의 대시보드 주소와 같은지.
+- 6.2 의 CORS 에러가 서버 설정을 바꾸면 없어지는지.
 - `sdxECChangeAction` 객체의 `ApplicabilityTypeInfo/<id>` 응답 `applicabilityType` 이 `"Change Action"` 인지. 다른 값이면 6.3 의 4 번으로 갑니다.
 - 복사본의 `loadGovWidget`, `openWithIDCard` 가 OOTB 와 같은지 (난독화되어 눈으로 비교하기 어려우면 `getValue("X3DContentId")` 를 읽는지만 봄).
 - `GET /resources/v1/chguxservices/changeaction/<id>` 가 `sdxECChangeAction` 도 돌려주는지 (Network 에서 200 과 `data`).
